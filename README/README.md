@@ -65,6 +65,8 @@ Map API
 
 ### Mockups
 
+Mockups are developed with icluding functionality from the further releases. Current release will be focusing on the base functionality.
+
 #### Homepage
 
 ![](01-Homepage.png)
