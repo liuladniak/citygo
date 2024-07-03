@@ -1,55 +1,147 @@
 # Project Title
 
+IsTour
+
 ## Overview
 
-What is your app? Brief description in a couple of sentences.
+isTour is a web application designed for exploring the cultural landmarks across Istanbul. It provides users with a seamless experience to discover and enjoy guided tours in various locations within the city.
 
 ### Problem
 
-Why is your app needed? Background information around any pain points or other reasons.
+Tourists and locals often face difficulties in finding reliable and interesting city tours that meet their preferences. Information on available tours can be scattered, inconsistent, and often lacks user-friendly booking options. isTour addresses these pain points by consolidating tour options and providing detailed information. Checkout options are planned to be available in a future release.
 
 ### User Profile
 
-Who will use your app? How will they use it? Any special considerations that your app must take into account.
+- Tourists:
+  - Looking to explore different cities in Istanbul.
+  - Seeking reliable tour options.
+  - Wanting detailed information about tours.
+- Local residents:
+  - Interested in discovering hidden gems in their own city.
+  - Looking for curated tour experiences.
+- Tour operators:
+  - Offering city tours and seeking a platform to reach a wider audience.
 
 ### Features
 
-List the functionality that your app will include. These can be written as user stories or descriptions with related details. Do not describe _how_ these features are implemented, only _what_ needs to be implemented.
+- Tour Listings
+
+  -As a user, I want to browse available city tours in Istanbul.
+
+  - As a user, I want to filter tours based on category, duration, and price.
+
+- Tour Details
+
+  - As a user, I want to view detailed information about each tour, including itinerary
 
 ## Implementation
 
 ### Tech Stack
 
-List technologies that will be used in your app, including any libraries to save time or provide more functionality. Be sure to research any potential limitations.
+- React
+- react-router
+- axios
+- Node.js
+- Express
+- MySQL
+- knex
 
 ### APIs
 
-List any external sources of data that will be used in your app.
+Map API
 
 ### Sitemap
 
-List the pages of your app with brief descriptions. You can show this visually, or write it out.
+- Home Page:
+
+  - Overview of available tours and highlights.
+
+- Tour Listings Page:
+
+  - Filterable list of tours by category, price, and other criteria.
+
+- Tour Details Page:
+  - Detailed information about a selected tour, including itinerary
 
 ### Mockups
 
-Provide visuals of your app's screens. You can use tools like Figma or pictures of hand-drawn sketches.
+#### Homepage
+
+![](01-Homepage.png)
+
+#### All Tours Page
+
+![](02-ToursList.png)
+
+#### Tour Details Page
+
+![](03-OneTour.png)
+
+#### Login Page
+
+![](04-HomepageLogin.png)
+
+#### About Page
+
+![](05-About.png)
 
 ### Data
 
-Describe your data and the relationships between them. You can show this visually using diagrams, or write it out. 
+Tours:
+
+Tour ID
+Tour Name
+Neighborhood
+Description
+Itinerary
+Duration
+Activity Level
+Price
 
 ### Endpoints
 
-List endpoints that your server will implement, including HTTP methods, parameters, and example responses.
+**GET /tours**
+
+- Get list of tours with optional filters for city, date, duration, and price.
+
+**GET /tours/:id**
+
+- Get detailed information for a specific tour by ID.
 
 ### Auth
 
-Does your project include any login or user profile functionality? If so, describe how authentication/authorization will be implemented.
+Auth is planned for the further release.
 
 ## Roadmap
 
-Scope your project as a sprint. Break down the tasks that will need to be completed and map out timeframes for implementation. Think about what you can reasonably complete before the due date. The more detail you provide, the easier it will be to build.
+Sprint 1:
+
+Set up project structure for frontend and backend.
+Implement basic routing and layout for the frontend.
+Set up database and create initial tables.
+
+Sprint 2:
+
+Develop tour listing and detail pages.
+Integrate API for displaying tour details.
+Create endpoints for fetching tours.
+
+Sprint 3:
+
+Conduct user testing and gather feedback.
+Optimize and debug the application.
 
 ## Nice-to-haves
 
-Your project will be marked based on what you committed to in the above document. Under nice-to-haves, you can list any additional features you may complete if you have extra time, or after finishing.
+\_ Interactive map
+
+- Interactive date picker
+- Auth
+- Send a sign up confirmation email to the user
+- Creating a booking checkout and a booking listing
+- Manage my bookings functionality
+- Contact form
+- About us page
+- Subscribe to the newsletter
+- Travel guide with articles
+- Expanded DB with users, bookings, travel company information
