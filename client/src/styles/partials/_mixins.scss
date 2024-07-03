@@ -1,0 +1,21 @@
+@use "../../styles/partials/variables" as *;
+
+/* ************************** */
+/* STYLE MIXINS*/
+/* ************************** */
+
+/* ************************** */
+/* MEDIA MIXINS*/
+/* ************************** */ //Tablet breakpoint from 768px to 1279px:
+@mixin tablet-breakpoint {
+  @media screen and (min-width: $tablet-breakpoint) {
+    @content;
+  }
+}
+
+//Desktop breakpoint from 1280px onwards:
+@mixin desktop-breakpoint {
+  @media screen and (min-width: $desktop-breakpoint) {
+    @content;
+  }
+}

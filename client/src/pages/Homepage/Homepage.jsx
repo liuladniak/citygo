@@ -1,7 +1,12 @@
+import Hero from "../../components/Hero/Hero";
 import "./Homepage.scss";
 
 const Homepage = () => {
-  return <div>Homepage</div>;
+  return (
+    <>
+      <Hero />
+    </>
+  );
 };
 
 export default Homepage;
