@@ -17,6 +17,17 @@
     font-size: 2.4rem;
     margin: 2.4rem 0 1.6rem;
     font-weight: 600;
+
+    &-wrp {
+      display: flex;
+      gap: 2.4rem;
+      align-items: center;
+
+      & img {
+        width: 2.4rem;
+        height: 2.4rem;
+      }
+    }
   }
 }
 .guest {

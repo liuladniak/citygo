@@ -1,5 +1,10 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
 .tour-date-picker {
   position: relative;
+  font-family: Montserrat;
+
   .react-datepicker {
     border: none;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -7,10 +12,38 @@
     overflow: hidden;
     font-family: "Arial, sans-serif";
     font-size: 1.2rem;
-  }
+    padding: 2.4rem;
 
-  .react-datepicker__navigation {
-    top: 1rem;
+    &__navigation {
+      top: 3.8rem;
+
+      &-icon {
+        display: none;
+      }
+      &--previous {
+        background-image: url("../../assets/icons/chevron-left-thin.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        border: none;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        left: 3.8rem;
+      }
+
+      &--next {
+        background-image: url("../../assets/icons/chevron-right.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        border: none;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        right: 3.8rem;
+      }
+    }
   }
 
   .react-datepicker__header {
@@ -25,6 +58,7 @@
     font-weight: bold;
     font-size: 1.5rem;
     margin-bottom: 10px;
+    font-family: Montserrat;
   }
 
   .react-datepicker__day-names,
@@ -33,6 +67,7 @@
     justify-content: space-between;
     margin: 0;
     padding: 0 10px;
+    font-family: Montserrat;
   }
 
   .react-datepicker__day-name,
@@ -44,12 +79,11 @@
     cursor: pointer;
     border-radius: 50%;
     transition: background-color 0.2s, transform 0.2s;
-    font-size: 1.1rem;
-    color: #333;
+    font-size: 1.4rem;
+    color: black;
     position: relative;
   }
   .react-datepicker__day--selected {
-    background-color: rgba(170, 158, 158, 0.42);
     background-color: rgba(0, 128, 0, 0.302);
     color: black;
   }
@@ -60,8 +94,9 @@
     top: 2.4rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 0.8rem;
-    height: 0.8rem;
+    width: 0.4rem;
+    height: 0.4rem;
+
     background-color: green;
     border-radius: 50%;
   }
@@ -76,6 +111,17 @@
   .react-datepicker__day:hover {
     background-color: #f0f0f0;
     transform: scale(1.1);
+  }
+
+  .react-datepicker__day--past {
+    color: grey;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+      transform: none;
+      cursor: not-allowed;
+    }
   }
 }
 

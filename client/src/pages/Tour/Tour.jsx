@@ -1,25 +1,42 @@
-import "./Tour.scss";
-import tours from "../../data/data.json";
-
+import axios from "axios";
+import { API_URL } from "../../utils/api";
+// import tours from "../../data/data.json";
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import "./Tour.scss";
 import BookingForm from "../../components/BookingForm/BookingForm";
+import Map from "../../components/Map/Map";
 import WhyUs from "../../components/WhyUs/WhyUs";
-import { useEffect } from "react";
 import saveIcon from "../../assets/icons/heart.svg";
+import saveFilledIcon from "../../assets/icons/heart-filled.svg";
 import shareIcon from "../../assets/icons/share.svg";
 import checkIcon from "../../assets/icons/check.svg";
-import Map from "../../components/Map/Map";
 
 const Tour = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [tour, setTour] = useState({});
   const { id } = useParams();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const tour = tours.find((tour) => tour.id.toString() === id);
-  if (!tour) {
-    return <div>Tour not found</div>;
-  }
+  useEffect(() => {
+    const getOneTour = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/tours/${id}`);
+        console.log("TOUR DATA:", response.data);
+        setTour(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("There was an error fetching the tour data", error);
+        setIsLoading(false);
+      }
+    };
+    getOneTour();
+  }, [id]);
+
+  // const tour = tours.find((tour) => tour.id.toString() === id);
 
   const {
     tour_name,
@@ -40,7 +57,12 @@ const Tour = () => {
     longitude,
     latitude,
     images,
+    category,
   } = tour;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       <section className="tour">
@@ -60,10 +82,10 @@ const Tour = () => {
                     </div>
                     <div className="tour-duration">
                       <h4>Price</h4>
-                      <span>{price}</span>
+                      <span>USD {price}</span>
                     </div>
                     <div className="tour-duration">
-                      <h4>Physical Activity Level</h4>
+                      <h4>Activity Level</h4>
                       <span>{activity_level}</span>
                     </div>
                   </div>
@@ -146,6 +168,7 @@ const Tour = () => {
                   longitude={longitude}
                   latitude={latitude}
                   popupText="Meeting point"
+                  category={category}
                 />
               </div>
               <WhyUs />

@@ -18,6 +18,7 @@ function Header() {
   const closeDropdown = () => {
     setIsComponentVisible(false);
   };
+
   if (isLoading) {
     return null;
   }

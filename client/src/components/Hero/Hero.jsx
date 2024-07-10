@@ -48,6 +48,7 @@ const Hero = () => {
               className="btn--culinary"
               iconUrl={arrowUpRightIcon}
               iconClassName="btn--icon"
+              to="/tours?category=Guided tour"
             >
               Guided tours
             </Button>
@@ -60,6 +61,7 @@ const Hero = () => {
               className="btn--culinary"
               iconUrl={arrowUpRightIcon}
               iconClassName="btn--icon"
+              to="/tours?category=Culinary tour"
             >
               Culinary tours
             </Button>
@@ -72,6 +74,7 @@ const Hero = () => {
               className="btn--culinary"
               iconUrl={arrowUpRightIcon}
               iconClassName="btn--icon"
+              to="/tours?category=Experience"
             >
               Experiences
             </Button>

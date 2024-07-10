@@ -9,7 +9,6 @@ const TourDatePicker = ({ availableDates, onDateSelected }) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
   const [selectedDate, setSelectedDate] = useState(null);
-
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
   const handleDateClick = (event) => {
@@ -34,18 +33,17 @@ const TourDatePicker = ({ availableDates, onDateSelected }) => {
     if (isDateAvailable(date)) {
       setSelectedDate(date);
       onDateSelected(date);
-      if (isComponentVisible) {
-        setIsComponentVisible(false);
-      }
+      setIsComponentVisible(false);
     } else {
       setSelectedDate(date);
       setIsComponentVisible(true);
     }
   };
 
-  // const highlightWithRanges = availableDates.map(
-  //   (date) => new Date(date.replace(/-/g, "/"))
-  // );
+  const isPastDate = (date) => {
+    const today = new Date();
+    return date < today;
+  };
 
   return (
     <div className="tour-date-picker">
@@ -53,8 +51,13 @@ const TourDatePicker = ({ availableDates, onDateSelected }) => {
         selected={selectedDate}
         onChange={handleDateChange}
         onClick={handleDateClick}
+        filterDate={(date) => !isPastDate(date)}
         dayClassName={(date) =>
-          isDateAvailable(date) ? "react-datepicker__day--available" : ""
+          isPastDate(date)
+            ? "react-datepicker__day--past"
+            : isDateAvailable(date)
+            ? "react-datepicker__day--available"
+            : ""
         }
         inline
       />

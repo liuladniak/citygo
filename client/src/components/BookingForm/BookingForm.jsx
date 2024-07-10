@@ -3,6 +3,7 @@ import "./BookingForm.scss";
 import TourDatePicker from "../TourDatePicker/TourDatePicker";
 import Button from "../Button/Button";
 import useComponentVisible from "../../hooks/useComponentVisible";
+import calendarIcon from "../../assets/icons/calendar.svg";
 
 const BookingForm = ({ tourId, available_dates }) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
@@ -49,7 +50,10 @@ const BookingForm = ({ tourId, available_dates }) => {
 
   return (
     <div className="booking-form-wrp">
-      <h2 className="booking-form__heading">Available dates</h2>
+      <div className="booking-form__heading-wrp">
+        <h2 className="booking-form__heading">Available dates</h2>
+        <img src={calendarIcon} alt="calendar icon" />
+      </div>
       <TourDatePicker
         availableDates={available_dates}
         onDateSelected={handleDateSelected}

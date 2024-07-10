@@ -1,6 +1,8 @@
 import TourCard from "../TourCard/TourCard";
 import "./ToursIntroList.scss";
 import tours from "../../data/data.json";
+import arrowRightIcon from "../../assets/icons/chevron-right.svg";
+import { Link } from "react-router-dom";
 
 const ToursIntroList = () => {
   const selectedTours = tours.slice(0, 4);
@@ -20,6 +22,9 @@ const ToursIntroList = () => {
             category={tour.category}
           />
         ))}
+        <Link to="/tours" className="tour-intro-icon">
+          <img src={arrowRightIcon} alt="arrow right icon" />
+        </Link>
       </div>
     </div>
   );

@@ -19,6 +19,7 @@
   }
   &-wrp {
     display: flex;
+    flex-direction: column;
     margin-top: 3rem;
   }
   &-filter {
@@ -28,9 +29,27 @@
     }
     &-wrp {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       gap: 1rem;
       font-size: 1.6rem;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    &__select {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: #333;
+      background-color: #fff;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'><path fill='#333' d='M5 6.5L0 1.5 1.5 0 5 3.5 8.5 0 10 1.5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 0.65rem auto;
     }
   }
   &-list {

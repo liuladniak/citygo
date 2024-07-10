@@ -1,17 +1,32 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
-.tour-intro-list {
-  width: 100%;
-  margin-top: 3rem;
-  @include layout-constrain;
+.tour-intro {
+  &-list {
+    width: 100%;
+    margin-top: 3rem;
+    @include layout-constrain;
 
-  &__heading {
-    font-size: 3.2rem;
+    &__heading {
+      font-size: 3.2rem;
+    }
   }
-}
 
-.tour-intro-wrp {
-  display: flex;
-  gap: 3.2rem;
+  &-wrp {
+    display: flex;
+    gap: 3.2rem;
+  }
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35rem;
+
+    & img {
+      width: 4rem;
+      height: 4rem;
+      cursor: pointer;
+    }
+  }
 }
