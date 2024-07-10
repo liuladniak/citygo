@@ -1,0 +1,30 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.reservations {
+  width: 50rem;
+  height: 30rem;
+  background-color: rgba(0, 255, 255, 0.377);
+  @include border-radius;
+}
+
+.dashboard {
+  padding: 1rem;
+  min-height: 100vh;
+
+  &__title {
+    margin: 0 0 1rem;
+    padding: 0 0 0.5rem;
+  }
+
+  &__logout {
+    margin-top: 2rem;
+  }
+}
+
+.login-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  margin-top: 6rem;
+}

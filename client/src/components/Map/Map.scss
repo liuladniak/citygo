@@ -1,0 +1,16 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.map {
+  margin-top: 3rem;
+  height: 44rem;
+  width: 100%;
+  @include border-radius;
+  @include layout-constrain;
+  overflow: hidden;
+  transition: height 0.3s ease;
+
+  &-tour {
+    height: 30rem;
+  }
+}

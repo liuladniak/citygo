@@ -1,0 +1,19 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.why-us {
+  &-card {
+    width: calc((100% - 3.2rem) / 2);
+    display: flex;
+    gap: 1.6rem;
+  }
+  &-icon {
+    width: 4rem;
+    height: 4rem;
+  }
+  &-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

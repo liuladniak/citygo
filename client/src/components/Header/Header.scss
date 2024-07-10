@@ -1,16 +1,97 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
 .header {
   display: flex;
   justify-content: space-between;
+  @include layout-constrain;
+  padding: 2.4rem 0 0;
 }
 
 .nav {
+  display: flex;
+  flex-direction: column;
+
   &__list {
+    flex: 1;
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2rem;
     list-style: none;
     font-size: 1.4rem;
   }
 
   &__item-link {
     font-family: "Roboto";
+  }
+
+  &-hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    width: 1.6rem;
+  }
+}
+
+.logo {
+  & h2 {
+    font-size: 4.8rem;
+  }
+}
+
+.user {
+  &-avatar {
+    border-radius: 50%;
+    width: 3.2rem;
+    height: 3.2rem;
+    overflow: hidden;
+    border: 1px solid #dddddd;
+    & img {
+      position: relative;
+    }
+  }
+
+  &-notification {
+    background-color: darkred;
+    border: 1px solid white;
+    color: white;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    padding: 0 0.5rem;
+    height: 1.6rem;
+    position: absolute;
+    top: 0rem;
+    right: 0.3rem;
+    text-align: center;
+    border-radius: 50%;
+  }
+}
+
+.dropdown {
+  &-wrapper {
+    position: relative;
+  }
+
+  &-menu {
+    width: 16rem;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+  }
+  &--visible {
+    display: block;
+  }
+  &--hidden {
+    display: none;
+  }
+
+  &-item {
+    padding: 8px 12px;
+    cursor: pointer;
   }
 }

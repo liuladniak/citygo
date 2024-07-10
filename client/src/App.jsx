@@ -5,7 +5,9 @@ import AppLayout from "./components/AppLayout/AppLayout";
 import Homepage from "./pages/Homepage/Homepage";
 import Tours from "./pages/Tours/Tours";
 import Tour from "./pages/Tour/Tour";
-// import Cart from "./components/Cart/Cart";
+import Login from "./components/Login/Login";
+import Signup from "./components/Signup/Signup";
+import ManageBookings from "./pages/ManageBookings/ManageBookings";
 
 const router = createBrowserRouter([
   {
@@ -16,14 +18,22 @@ const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+      {
         path: "/tours",
         element: <Tours />,
       },
       {
-        path: "/tours/:tourId",
+        path: "/tours/:id",
         element: <Tour />,
       },
-      // { path: "/cart", element: <Cart /> },
+      { path: "/bookings", element: <ManageBookings /> },
     ],
   },
 ]);

@@ -19,3 +19,12 @@
     @content;
   }
 }
+
+@mixin border-radius {
+  border-radius: 2rem;
+}
+
+@mixin layout-constrain {
+  max-width: $max-width;
+  width: 100%;
+}

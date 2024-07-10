@@ -1,0 +1,69 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
+.booking-form-wrp {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.booking-form {
+  width: 30rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+
+  &__heading {
+    font-size: 2.4rem;
+    margin: 2.4rem 0 1.6rem;
+    font-weight: 600;
+  }
+}
+.guest {
+  &-section {
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__heading {
+    font-size: 2.4rem;
+    font-weight: 600;
+  }
+  &-details {
+    position: absolute;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    z-index: 999;
+    top: 2.1rem;
+    width: 100%;
+    left: 0;
+  }
+
+  &-details div {
+    margin-bottom: 10px;
+  }
+}
+.guests {
+  width: 100%;
+  margin-top: 0.8rem;
+  border: 1px solid #222222;
+  padding: 1rem 2rem;
+  @include border-radius;
+  cursor: pointer;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+label {
+  display: inline-block;
+  width: 100px;
+}
+
+input[type="number"] {
+  width: 60px;
+}

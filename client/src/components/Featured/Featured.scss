@@ -1,0 +1,32 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
+.featured-wrp {
+  margin-top: 3rem;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  background-color: rgba(211, 211, 211, 0.427);
+}
+.featured {
+  @include layout-constrain;
+  height: 20rem;
+  width: 100%;
+  margin-top: 3rem;
+  padding: 3.2rem;
+  display: flex;
+  gap: 3.2rem;
+
+  &-content {
+    flex: 1;
+  }
+  &-title {
+    font-size: 3.2rem;
+  }
+  &-img {
+    flex: 1;
+    background-color: bisque;
+    height: 100%;
+    @include border-radius;
+  }
+}
