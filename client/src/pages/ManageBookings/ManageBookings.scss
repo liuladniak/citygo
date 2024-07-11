@@ -11,6 +11,10 @@
 .dashboard {
   padding: 1rem;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  margin-top: 6rem;
 
   &__title {
     margin: 0 0 1rem;

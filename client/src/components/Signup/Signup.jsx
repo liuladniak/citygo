@@ -12,7 +12,7 @@ function Signup() {
     event.preventDefault();
 
     try {
-      await axios.post("http://localhost:8080/auth/signup", {
+      await axios.post("http://localhost:8080/auth/register", {
         first_name: event.target.first_name.value,
         last_name: event.target.last_name.value,
         phone: event.target.phone.value,

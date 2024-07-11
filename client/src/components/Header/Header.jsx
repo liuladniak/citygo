@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
 import "./Header.scss";
 import Button from "../Button/Button";
 import userAvatar from "../../assets/images/user-avatar.jpg";
 import HamburgerIcon from "../../assets/icons/burger-menu-svgrepo-com.svg";
-import { useAuth } from "../../contexts/AuthContext";
 import useComponentVisible from "../../hooks/useComponentVisible";
-
+import AuthContext from "../../contexts/AuthContext";
 function Header() {
-  const { user, isLoading, logout } = useAuth();
+  const { auth, setAuth } = useContext(AuthContext);
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
@@ -19,9 +19,11 @@ function Header() {
     setIsComponentVisible(false);
   };
 
-  if (isLoading) {
-    return null;
-  }
+  const logout = () => {
+    sessionStorage.removeItem("token");
+    setAuth({ isLoggedIn: false });
+    closeDropdown();
+  };
 
   return (
     <header className="header">
@@ -53,7 +55,7 @@ function Header() {
               USD
             </Link>
           </li>
-          {user ? (
+          {auth.isLoggedIn ? (
             <li className="nav__list-item manage-bookings">
               <div ref={ref} className="dropdown-wrapper">
                 <Button
@@ -84,14 +86,7 @@ function Header() {
                       </Link>
                     </li>
                     <li className="dropdown-item">
-                      <button
-                        onClick={() => {
-                          logout();
-                          closeDropdown();
-                        }}
-                      >
-                        Logout
-                      </button>
+                      <button onClick={logout}>Logout</button>
                     </li>
                   </ul>
                 )}

@@ -31,11 +31,11 @@ function ManageBookings() {
     setIsLoading(false);
   };
 
-  // const logout = () => {
-  //   sessionStorage.removeItem("token");
-  //   setUser(null);
-  //   setFailedAuth(true);
-  // };
+  const logout = () => {
+    sessionStorage.removeItem("token");
+    setUser(null);
+    setFailedAuth(true);
+  };
 
   useEffect(() => {
     login();
@@ -43,37 +43,40 @@ function ManageBookings() {
 
   if (failedAuth) {
     return (
-      <section className="login-dashboard">
-        <h1>You must be logged in to see this page.</h1>
-        <Button className="btn--login" to="/login">
-          Log in
-        </Button>
-      </section>
+      <main className="dashboard">
+        <h1 className="">You must be logged in to see this page.</h1>
+        <p>
+          <Button to="/login">Log in</Button>
+        </p>
+      </main>
     );
   }
 
   if (isLoading) {
     return (
-      <section className="dashboard">
+      <main className="dashboard">
         <p>Loading...</p>
-      </section>
+      </main>
     );
   }
 
   return (
-    <section className="dashboard">
-      <h1 className="dashboard__title">
+    <main className="dashboard">
+      <h1 className="dashboard__title">Dashboard</h1>
+
+      <p>
         Welcome back, {user.first_name} {user.last_name}
-      </h1>
+      </p>
 
-      <h2>Your reservations</h2>
+      <h2>My Profile</h2>
+      <p>Email: {user.email}</p>
+      <p>Phone: {user.phone}</p>
+      <p>Address: {user.address}</p>
 
-      <div className="reservations"></div>
-      {/* 
       <button className="dashboard__logout" onClick={logout}>
         Log out
-      </button> */}
-    </section>
+      </button>
+    </main>
   );
 }
 

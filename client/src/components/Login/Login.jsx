@@ -1,16 +1,18 @@
 import "./Login.scss";
 import Input from "../../components/Input/Input";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+// ****************************************************************
+import AuthContext from "../../contexts/AuthContext";
+// ****************************************************************
 
 function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login } = useAuth();
-  const from = location.state?.from?.pathname || "/";
+  // ****************************************************************
+  const { setAuth } = useContext(AuthContext);
+  // ****************************************************************
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,9 +23,12 @@ function Login() {
         password: event.target.password.value,
       });
 
-      // sessionStorage.setItem("token", response.data.token);
-      login(response.data.user, response.data.token);
-      navigate(from, { replace: true });
+      sessionStorage.setItem("token", response.data.token);
+      // ****************************************************************
+      setAuth({ isLoggedIn: true });
+      // ****************************************************************
+
+      navigate("/");
     } catch (error) {
       setError(error.response.data);
     }
