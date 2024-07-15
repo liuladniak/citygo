@@ -1,14 +1,14 @@
 # Project Title
 
-IsTour
+CityGo
 
 ## Overview
 
-isTour is a web application designed for exploring the cultural landmarks across Istanbul. It provides users with a seamless experience to discover and enjoy guided tours in various locations within the city.
+CityGo is a web application designed for exploring the cultural landmarks across Istanbul. It provides users with a seamless experience to discover and enjoy guided tours in various locations within the city.
 
 ### Problem
 
-Tourists and locals often face difficulties in finding reliable and interesting city tours that meet their preferences. Information on available tours can be scattered, inconsistent, and often lacks user-friendly booking options. isTour addresses these pain points by consolidating tour options and providing detailed information. Checkout options are planned to be available in a future release.
+Tourists and locals often face difficulties in finding reliable and interesting city tours that meet their preferences. Information on available tours can be scattered, inconsistent, and often lacks user-friendly booking options. CityGo addresses these pain points by consolidating tour options and providing detailed information. Checkout options are planned to be available in a future release.
 
 ### User Profile
 
@@ -93,9 +93,9 @@ Tours:
 
 Tour ID
 Tour Name
-Neighborhood
+Location
 Description
-Itinerary
+Highlights
 Duration
 Activity Level
 Price
@@ -144,6 +144,7 @@ Optimize and debug the application.
 - Manage my bookings functionality
 - Contact form
 - About us page
+- Profile page
 - Subscribe to the newsletter
 - Travel guide with articles
 - Expanded DB with users, bookings, travel company information
