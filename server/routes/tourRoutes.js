@@ -9,29 +9,48 @@ const router = express.Router();
 
 const getAllTours = async (req, res) => {
   try {
-    const tours = await knex("tours")
-      .select("tours.*")
-      .leftJoin("highlights", "tours.id", "highlights.tour_id")
-      .leftJoin("available_dates", "tours.id", "available_dates.tour_id")
-      .leftJoin("images", "tours.id", "images.tour_id")
-      .groupBy("tours.id")
-      .select(
-        knex.raw("GROUP_CONCAT(DISTINCT highlights.highlight) as highlights"),
-        knex.raw(
-          "GROUP_CONCAT(DISTINCT available_dates.date) as available_dates"
-        ),
-        knex.raw("GROUP_CONCAT(DISTINCT images.image_path) as images")
-      );
+    const tours = await knex("tours").select("*");
 
-    tours.forEach((tour) => {
-      tour.highlights = tour.highlights ? tour.highlights.split(",") : [];
-      tour.available_dates = tour.available_dates
-        ? tour.available_dates.split(",")
-        : [];
-      tour.images = tour.images ? tour.images.split(",") : [];
-    });
+    const highlights = await knex("highlights").select("tour_id", "highlight");
 
-    res.status(200).json(tours);
+    const available_dates = await knex("available_dates").select(
+      "tour_id",
+      "date"
+    );
+
+    const images = await knex("images")
+      .select("tour_id", "image_path")
+      .orderBy("id");
+
+    const highlightsByTourId = highlights.reduce(
+      (acc, { tour_id, highlight }) => {
+        if (!acc[tour_id]) acc[tour_id] = [];
+        acc[tour_id].push(highlight);
+        return acc;
+      },
+      {}
+    );
+
+    const datesByTourId = available_dates.reduce((acc, { tour_id, date }) => {
+      if (!acc[tour_id]) acc[tour_id] = [];
+      acc[tour_id].push(date);
+      return acc;
+    }, {});
+
+    const imagesByTourId = images.reduce((acc, { tour_id, image_path }) => {
+      if (!acc[tour_id]) acc[tour_id] = [];
+      acc[tour_id].push(image_path);
+      return acc;
+    }, {});
+
+    const result = tours.map((tour) => ({
+      ...tour,
+      highlights: highlightsByTourId[tour.id] || [],
+      available_dates: datesByTourId[tour.id] || [],
+      images: imagesByTourId[tour.id] || [],
+    }));
+
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -39,39 +58,36 @@ const getAllTours = async (req, res) => {
 };
 
 const getTourById = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    const tour = await knex("tours")
-      .select("tours.*")
-      .leftJoin("highlights", "tours.id", "highlights.tour_id")
-      .leftJoin("available_dates", "tours.id", "available_dates.tour_id")
-      .leftJoin("images", "tours.id", "images.tour_id")
-      .where("tours.id", id)
-      .groupBy("tours.id")
-      .first()
-      .select(
-        knex.raw("GROUP_CONCAT(DISTINCT highlights.highlight) as highlights"),
-        knex.raw(
-          "GROUP_CONCAT(DISTINCT available_dates.date) as available_dates"
-        ),
-        knex.raw("GROUP_CONCAT(DISTINCT images.image_path) as images")
-      );
+    const { id } = req.params;
 
+    const tour = await knex("tours").where({ id }).first();
     if (!tour) {
       return res.status(404).json({ message: "Tour not found" });
     }
 
-    tour.highlights = tour.highlights ? tour.highlights.split(",") : [];
-    tour.available_dates = tour.available_dates
-      ? tour.available_dates.split(",")
-      : [];
-    tour.images = tour.images ? tour.images.split(",") : [];
+    const images = await knex("images")
+      .where({ tour_id: id })
+      .orderBy("id")
+      .pluck("image_path");
+    tour.images = images;
 
-    res.status(200).json(tour);
+    const highlights = await knex("highlights")
+      .where({ tour_id: id })
+      .orderBy("id")
+      .pluck("highlight");
+    tour.highlights = highlights;
+
+    const available_dates = await knex("available_dates")
+      .where({ tour_id: id })
+      .orderBy("date")
+      .pluck("date");
+    tour.available_dates = available_dates;
+
+    res.json(tour);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error fetching tour:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

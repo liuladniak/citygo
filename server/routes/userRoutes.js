@@ -7,12 +7,13 @@ const knex = initKnex(configuration["development"]);
 
 const router = express.Router();
 
-router.get("/users", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const users = await db.select("*").from("users");
-    res.json(users);
+    const bookings = await knex.select("*").from("bookings");
+    res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
 export default router;

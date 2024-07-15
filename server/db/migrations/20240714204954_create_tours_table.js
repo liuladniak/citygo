@@ -2,7 +2,6 @@ export function up(knex) {
   return knex.schema.createTable("tours", (table) => {
     table.increments("id").primary();
     table.string("tour_name").notNullable();
-    table.string("tour_thumbnail").notNullable();
     table.string("duration").notNullable();
     table.string("category").notNullable();
     table.string("landmarks").notNullable();
