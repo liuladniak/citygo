@@ -3,16 +3,13 @@ import Input from "../../components/Input/Input";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// ****************************************************************
 import AuthContext from "../../contexts/AuthContext";
-// ****************************************************************
+import Button from "../Button/Button";
 
 function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  // ****************************************************************
   const { setAuth } = useContext(AuthContext);
-  // ****************************************************************
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,12 +20,16 @@ function Login() {
         password: event.target.password.value,
       });
 
-      sessionStorage.setItem("token", response.data.token);
-      // ****************************************************************
-      setAuth({ isLoggedIn: true });
-      // ****************************************************************
+      const token = response.data.token;
+      const expiresIn = response.data.expiresIn;
+      const expirationTime = new Date().getTime() + expiresIn * 1000;
 
-      navigate("/");
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("tokenExpiration", expirationTime);
+
+      setAuth({ isLoggedIn: true });
+
+      navigate("/bookings");
     } catch (error) {
       setError(error.response.data);
     }
@@ -42,13 +43,13 @@ function Login() {
         <Input type="text" name="email" label="Email" />
         <Input type="password" name="password" label="Password" />
 
-        <button className="login__button">Log in</button>
+        <Button className="btn btn--login">Log in</Button>
 
         {error && <div className="login__message">{error}</div>}
       </form>
 
-      <p>
-        Need an account? <Link to="/signup">Sign up</Link>
+      <p className="signup-cta">
+        Don't have an account? <Link to="/signup">Sign up</Link>
       </p>
     </main>
   );

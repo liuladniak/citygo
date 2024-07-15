@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./TourDatePicker.scss";
@@ -10,6 +10,12 @@ const TourDatePicker = ({ availableDates, onDateSelected }) => {
     useComponentVisible(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const [parsedDates, setParsedDates] = useState([]);
+
+  useEffect(() => {
+    const dates = availableDates.map((date) => date.split("T")[0]);
+    setParsedDates(dates);
+  }, [availableDates]);
 
   const handleDateClick = (event) => {
     const dayElement = event.target.closest(".react-datepicker__day");
@@ -26,7 +32,7 @@ const TourDatePicker = ({ availableDates, onDateSelected }) => {
 
   const isDateAvailable = (date) => {
     const formattedDate = date.toISOString().split("T")[0];
-    return availableDates.includes(formattedDate.replace(/-/g, "/"));
+    return parsedDates.includes(formattedDate);
   };
 
   const handleDateChange = (date) => {
@@ -42,6 +48,7 @@ const TourDatePicker = ({ availableDates, onDateSelected }) => {
 
   const isPastDate = (date) => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     return date < today;
   };
 

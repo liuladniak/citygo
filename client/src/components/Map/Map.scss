@@ -2,7 +2,7 @@
 @use "../../styles/partials/mixins" as *;
 
 .map {
-  margin-top: 3rem;
+  margin-top: $space-large;
   height: 44rem;
   width: 100%;
   @include border-radius;

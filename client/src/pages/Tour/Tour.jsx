@@ -1,6 +1,5 @@
 import axios from "axios";
 import { API_URL } from "../../utils/api";
-// import tours from "../../data/data.json";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Tour.scss";
@@ -8,13 +7,18 @@ import BookingForm from "../../components/BookingForm/BookingForm";
 import Map from "../../components/Map/Map";
 import WhyUs from "../../components/WhyUs/WhyUs";
 import saveIcon from "../../assets/icons/heart.svg";
-import saveFilledIcon from "../../assets/icons/heart-filled.svg";
 import shareIcon from "../../assets/icons/share.svg";
 import checkIcon from "../../assets/icons/check.svg";
+import ImageSlider from "../../components/ImageSlider/ImageSlider";
+import Modal from "../../components/Modal/Modal";
+import timeIcon from "../../assets/icons/icon-time.svg";
+import { formatPrice } from "../../utils/formatPrice";
 
 const Tour = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tour, setTour] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { id } = useParams();
 
   useEffect(() => {
@@ -25,7 +29,6 @@ const Tour = () => {
     const getOneTour = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/tours/${id}`);
-        console.log("TOUR DATA:", response.data);
         setTour(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -36,11 +39,17 @@ const Tour = () => {
     getOneTour();
   }, [id]);
 
-  // const tour = tours.find((tour) => tour.id.toString() === id);
+  const openModal = (index) => {
+    setSelectedImageIndex(index);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const {
     tour_name,
-    tour_thumbnail,
     duration,
     price,
     activity_level,
@@ -57,20 +66,28 @@ const Tour = () => {
     longitude,
     latitude,
     images,
-    category,
   } = tour;
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  const mainImage = images[0];
+  const additionalImages = images.slice(1, 4);
+
   return (
     <>
       <section className="tour">
         <div className="tour-wrp">
           <div className="tour-hero">
             <div className="tour__img-main">
-              <img src={tour_thumbnail} alt="tour image" />
+              <img
+                src={`${API_URL}/${mainImage}`}
+                alt="tour image"
+                onClick={() => openModal(0)}
+              />
             </div>
+
             <div className="tour-content">
               <div className="tour-text">
                 <h1 className="tour__heading">{tour_name}</h1>
@@ -78,15 +95,22 @@ const Tour = () => {
                   <div className="tour-tags--l">
                     <div className="tour-duration">
                       <h4 className="tour-duration__title">Duration</h4>
-                      <span className="tour-duration__hour">{duration}</span>
+                      <div className="tour-duration-time">
+                        <img src={timeIcon} alt="icon clock" />
+                        <p className="tour-duration__hour">{duration}</p>
+                      </div>
                     </div>
                     <div className="tour-duration">
                       <h4>Price</h4>
-                      <span>USD {price}</span>
+                      <div className="tour-duration-price">
+                        <p>USD {formatPrice(price)}</p>
+                      </div>
                     </div>
                     <div className="tour-duration">
                       <h4>Activity Level</h4>
-                      <span>{activity_level}</span>
+                      <div className="tour-duration-price">
+                        <p>{activity_level}</p>
+                      </div>
                     </div>
                   </div>
                   <div className="tour-tags--r">
@@ -102,13 +126,25 @@ const Tour = () => {
                 </div>
               </div>
               <div className="tour-hero__img-wrp">
-                <div className="tour-hero__img"></div>
-                <div className="tour-hero__img"></div>
-                <div className="tour-hero__img"></div>
+                {additionalImages.map((image, index) => (
+                  <div className="tour-hero__img-link" key={index}>
+                    <img
+                      src={`${API_URL}/${image}`}
+                      alt={`tour image ${index}`}
+                      onClick={() => openModal(index + 1)}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
+          <Modal isOpen={modalOpen} onClose={closeModal}>
+            <ImageSlider
+              images={images.map((image) => `${API_URL}/${image}`)}
+              startIndex={selectedImageIndex}
+            />
+          </Modal>
           <div className="tour-details-wrp">
             <div className="tour-details">
               <div className="tour-overview">
@@ -164,19 +200,21 @@ const Tour = () => {
                 </div>
 
                 <Map
-                  className="map-tour"
                   longitude={longitude}
                   latitude={latitude}
-                  popupText="Meeting point"
-                  category={category}
+                  popupText="Tour Location"
                 />
               </div>
-              <WhyUs />
             </div>
-            <BookingForm available_dates={available_dates} />
+
+            <div className="tour-summary__dates">
+              <BookingForm available_dates={available_dates} />
+            </div>
           </div>
         </div>
       </section>
+
+      <WhyUs />
     </>
   );
 };

@@ -2,9 +2,8 @@
 @use "../../styles/partials/mixins" as *;
 
 .tour-card {
-  height: 35rem;
   @include border-radius;
-  flex-basis: calc(($max-width - 3.2rem * 2) / 3);
+  flex-basis: calc(($max-width - $space-large * 2) / 3);
   overflow: hidden;
   box-shadow: 0px 2px 10px rgb(0, 0, 0, 0.1);
   display: flex;
@@ -13,7 +12,7 @@
   &__img-wrp {
     height: 20rem;
     overflow: hidden;
-
+    flex: 1;
     & img {
       object-fit: cover;
       height: 100%;
@@ -23,14 +22,15 @@
 
   &__content {
     flex: 1;
-    padding: 1.6rem;
+    padding: 0 2.4rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 1.6rem;
   }
 
   &__heading {
     font-size: 1.6rem;
+    margin-top: 2.4rem;
   }
 
   &__highlights {
@@ -69,6 +69,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 2.4rem;
   }
 
   &__duration-hour {

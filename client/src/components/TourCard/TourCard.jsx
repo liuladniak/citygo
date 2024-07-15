@@ -3,6 +3,7 @@ import "./TourCard.scss";
 import Button from "../Button/Button";
 import timeIcon from "../../assets/icons/time-icon-red.png";
 import chevronRightIcon from "../../assets/icons/chevron-right.svg";
+import { API_URL } from "../../utils/api";
 const TourCard = ({
   id,
   tour_name,
@@ -28,9 +29,9 @@ const TourCard = ({
   };
   return (
     <Link className="tour-card" to={`/tours/${id}`}>
-      <div className="tour-card">
+      <div>
         <div className="tour-card__img-wrp">
-          <img src={tour_thumbnail} alt="tour image" />
+          <img src={`${API_URL}/${tour_thumbnail}`} alt="tour image" />
         </div>
         <div className="tour-card__content">
           <h3 className="tour-card__heading">{tour_name}</h3>
@@ -54,7 +55,10 @@ const TourCard = ({
             <div className="tour-card__price">
               <h5 className="tour-card__price-number">USD {price}</h5>
             </div>
-            <Button className="btn--view-details" iconUrl={chevronRightIcon}>
+            <Button
+              className=" btn btn--view-details"
+              iconUrl={chevronRightIcon}
+            >
               View details
             </Button>
           </div>

@@ -1,20 +1,23 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
 .login-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
 }
 
 .login {
   display: flex;
   flex-direction: column;
-  width: 22rem;
+  @include border-radius;
+  gap: 1.4rem;
+  width: 40rem;
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  border-radius: 0.5rem;
-  padding: 2rem 1.5rem;
+  padding: 2.4rem $space-large;
   margin-bottom: 1rem;
 
   &__title {
@@ -22,31 +25,19 @@
     margin-bottom: 1.5rem;
 
     text-align: center;
-    font-size: 1.5rem;
-    border-bottom: 5px solid #ffcf00;
+    font-size: 3.2rem;
     padding-bottom: 0.5rem;
     align-self: center;
   }
 
-  &__button {
-    margin-top: 1rem;
-    background-color: #1358db;
-    border: 1px solid #1358db;
-    color: #fff;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    font-size: inherit;
-    cursor: pointer;
-    transition: background-color 0.15s;
-
-    &:hover {
-      background-color: #003fc2;
-    }
-  }
-
   &__message {
-    border-left: 5px solid #ddd;
-    padding: 0.75rem;
+    border-left: 5px solid #f19e39;
+    padding: 0.8rem;
     margin-top: 2rem;
+    font-size: 1.2rem;
   }
+}
+
+.signup-cta {
+  font-size: 1.2rem;
 }

@@ -4,17 +4,18 @@
 .tour-intro {
   &-list {
     width: 100%;
-    margin-top: 3rem;
+    margin-top: $space-large;
     @include layout-constrain;
 
     &__heading {
       font-size: 3.2rem;
+      margin-bottom: $space-medium;
     }
   }
 
   &-wrp {
     display: flex;
-    gap: 3.2rem;
+    gap: $space-large;
   }
 
   &-icon {

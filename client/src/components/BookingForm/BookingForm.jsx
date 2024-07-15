@@ -20,6 +20,10 @@ const BookingForm = ({ tourId, available_dates }) => {
     infants,
   };
 
+  const toggleDropdown = () => {
+    setIsComponentVisible(!isComponentVisible);
+  };
+
   const handleDateSelected = (date) => {
     setSelectedDate(date);
   };
@@ -30,6 +34,7 @@ const BookingForm = ({ tourId, available_dates }) => {
     const infantPrice = 0;
     return adults * adultPrice + children * childPrice + infants * infantPrice;
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const totalPrice = calculateTotalPrice();
@@ -42,8 +47,6 @@ const BookingForm = ({ tourId, available_dates }) => {
       totalPrice,
       tourId,
     };
-
-    console.log(bookingData);
   };
 
   const totalGuests = adults + children;
@@ -61,45 +64,78 @@ const BookingForm = ({ tourId, available_dates }) => {
       <form className="booking-form" onSubmit={handleSubmit}>
         <div className="guest-section" ref={ref}>
           <h2 className="guest__heading">Guests joining</h2>
-          <div
-            className="guests"
-            onClick={() => setIsComponentVisible(!isComponentVisible)}
-          >
-            <p>
+          <div className="guests">
+            <p onClick={toggleDropdown}>
               Guests - {totalGuests} {totalGuests === 1 ? "guest" : "guests"},{" "}
               {infants} {infants === 1 ? "infant" : "infants"}
             </p>
 
             {isComponentVisible && (
               <div className="guest-details">
-                <div>
-                  <label>Adults:</label>
-                  <input
-                    type="number"
-                    value={adults}
-                    onChange={(e) => setAdults(parseInt(e.target.value) || 0)}
-                    min="1"
-                  />
+                <div className="guest-detail">
+                  <label className="guest-detail-l">Adults:</label>
+                  <div className="guest-detail-r">
+                    <button
+                      className="btn--guests-increment"
+                      type="button"
+                      onClick={() => setAdults(adults > 1 ? adults - 1 : 1)}
+                    >
+                      -
+                    </button>
+                    <span>{adults}</span>
+                    <button
+                      className="btn--guests-increment"
+                      type="button"
+                      onClick={() => setAdults(adults + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label>Children (2-14):</label>
-                  <input
-                    type="number"
-                    value={children}
-                    onChange={(e) => setChildren(parseInt(e.target.value) || 0)}
-                    min="0"
-                  />
+                <div className="guest-detail">
+                  <label className="guest-detail-l">Children (2-14):</label>
+                  <div className="guest-detail-r">
+                    <button
+                      className="btn--guests-increment"
+                      type="button"
+                      onClick={() =>
+                        setChildren(children > 0 ? children - 1 : 0)
+                      }
+                    >
+                      -
+                    </button>
+                    <span>{children}</span>
+                    <button
+                      className="btn--guests-increment"
+                      type="button"
+                      onClick={() => setChildren(children + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label>Infants:</label>
-                  <input
-                    type="number"
-                    value={infants}
-                    onChange={(e) => setInfants(parseInt(e.target.value) || 0)}
-                    min="0"
-                  />
+                <div className="guest-detail">
+                  <label className="guest-detail-l">Infants:</label>
+                  <div className="guest-detail-r">
+                    <button
+                      type="button"
+                      className="btn--guests-increment"
+                      onClick={() => setInfants(infants > 0 ? infants - 1 : 0)}
+                    >
+                      -
+                    </button>
+                    <span>{infants}</span>
+                    <button
+                      className="btn--guests-increment"
+                      type="button"
+                      onClick={() => setInfants(infants + 1)}
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
                 <button
+                  className="btn--guests-close"
                   type="button"
                   onClick={() => setIsComponentVisible(false)}
                 >
@@ -109,7 +145,7 @@ const BookingForm = ({ tourId, available_dates }) => {
             )}
           </div>
         </div>
-        <Button to="/bookings" type="submit" className="btn--book">
+        <Button to="/bookings" type="submit" className=" btn btn--book">
           Review booking
         </Button>
       </form>

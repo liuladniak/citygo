@@ -7,20 +7,18 @@ const Featured = () => {
       <div className="featured">
         <div className="featured-content">
           <div className="featured-text">
-            <h2 className="featured-title">Fusce feugiat nibh vitae</h2>
+            <h2 className="featured-title">Get in touch with us</h2>
             <p className="featured-description">
-              Mauris sit amet turpis at leo pellentesque scelerisque. Maecenas
-              felis mi, euismod ac suscipit quis, rhoncus id metus. Ut ut sem
-              non purus feugiat volutpat ut nec felis. Fusce feugiat nibh vitae
-              purus volutpat, mollis varius sapien viverra. Aenean sed mauris
-              sit amet lectus sagittis consectetur sed et magna. Etiam consequat
-              est sed accumsan mattis.
+              We are here to answer any questions you may have. Reach out to us
+              and we'll respond as soon as we can. Whether you have inquiries
+              about our services, pricing, or anything else, our team is ready
+              to assist you.
             </p>
           </div>
-          <Button className="btn--something">Something</Button>
+          <Button className="btn btn--contact" to="/">
+            Contact Us
+          </Button>
         </div>
-
-        {/* <div className="featured-img"></div> */}
       </div>
     </div>
   );

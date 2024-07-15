@@ -1,0 +1,49 @@
+.image-slider {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 40rem;
+  max-height: 67.5rem;
+  object-fit: cover;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.slider-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: darkred;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+.slider-button img {
+  width: 24px;
+  height: auto;
+}
+
+.slider-button:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}

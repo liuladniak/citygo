@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import "./Header.scss";
 import Button from "../Button/Button";
 import userAvatar from "../../assets/images/user-avatar.jpg";
 import HamburgerIcon from "../../assets/icons/burger-menu-svgrepo-com.svg";
+import logoutIcon from "../../assets/icons/logout.svg";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import AuthContext from "../../contexts/AuthContext";
+import arrowDown from "../../assets/icons/arrow-down.svg";
+import logo from "../../assets/images/logo.png";
+import logoIcon from "../../assets/images/logo-icon.png";
+
 function Header() {
   const { auth, setAuth } = useContext(AuthContext);
   const { ref, isComponentVisible, setIsComponentVisible } =
@@ -25,11 +30,32 @@ function Header() {
     closeDropdown();
   };
 
+  const checkToken = () => {
+    const token = sessionStorage.getItem("token");
+    const tokenExpiration = sessionStorage.getItem("tokenExpiration");
+
+    if (!token || new Date().getTime() > tokenExpiration) {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("tokenExpiration");
+      setAuth({ isLoggedIn: false });
+    } else {
+      setAuth({ isLoggedIn: true });
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+    const interval = setInterval(checkToken, 1000);
+
+    return () => clearInterval(interval);
+  }, [setAuth]);
+
   return (
     <header className="header">
       <Link to="/" className="logo-link">
         <div className="logo">
-          <h2>Logo</h2>
+          <img src={logoIcon} alt="logo icon" className="logo-icon" />
+          <img src={logo} alt="logo" className="logo-img" />
         </div>
       </Link>
 
@@ -51,8 +77,9 @@ function Header() {
             </Link>
           </li>
           <li className="nav__list-item">
-            <Link className="nav__item-link" to="/">
-              USD
+            <Link className="nav__item-link nav__item-link-curr" to="/">
+              <span>USD</span>
+              <img src={arrowDown} alt="icon arrow down" />
             </Link>
           </li>
           {auth.isLoggedIn ? (
@@ -60,7 +87,7 @@ function Header() {
               <div ref={ref} className="dropdown-wrapper">
                 <Button
                   onClick={toggleDropdown}
-                  className="nav__item-link btn--manage-bookings"
+                  className="btn nav__item-link btn--manage-bookings"
                 >
                   <div className="nav-hamburger">
                     <img src={HamburgerIcon} alt="Hamburger Icon" />
@@ -68,7 +95,7 @@ function Header() {
 
                   <div className="user-avatar">
                     <img src={userAvatar} alt="user avatar" />
-                    <div className="user-notification">2</div>
+                    <div className="user-notification">1</div>
                   </div>
                 </Button>
 
@@ -80,13 +107,26 @@ function Header() {
                         : "dropdown--hidden"
                     }`}
                   >
-                    <li className="dropdown-item">
+                    <li className="dropdown-item bookings-notification-wrp">
                       <Link to="/bookings" onClick={closeDropdown}>
                         Manage Bookings
                       </Link>
+                      <div className="bookings-notification"></div>
                     </li>
                     <li className="dropdown-item">
-                      <button onClick={logout}>Logout</button>
+                      <Link to="/my-profile" onClick={closeDropdown}>
+                        My profile
+                      </Link>
+                    </li>
+                    <li className="dropdown-item">
+                      <Button
+                        className="btn btn--logout"
+                        onClick={logout}
+                        iconUrl={logoutIcon}
+                        iconClassName="btn--logout-icon"
+                      >
+                        Logout
+                      </Button>
                     </li>
                   </ul>
                 )}

@@ -2,23 +2,31 @@
 @use "../../styles/partials/mixins" as *;
 
 .reservations {
-  width: 50rem;
-  height: 30rem;
+  width: 100%;
   background-color: rgba(0, 255, 255, 0.377);
   @include border-radius;
 }
 
 .dashboard {
   padding: 1rem;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  color: $main-teal;
   gap: 6rem;
   margin-top: 6rem;
+  width: 100%;
+  max-width: $max-width;
+
+  &--not-logged {
+    align-items: center;
+    margin-bottom: $space-large;
+  }
 
   &__title {
     margin: 0 0 1rem;
     padding: 0 0 0.5rem;
+    font-size: 3.2rem;
   }
 
   &__logout {
@@ -29,6 +37,39 @@
 .login-dashboard {
   display: flex;
   flex-direction: column;
-  gap: 6rem;
-  margin-top: 6rem;
+  gap: $space-large;
+  margin-top: $space-large;
+}
+.bookings {
+  &-tour-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: black;
+  }
+  &-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+  &-heading {
+    font-size: 2.4rem;
+    margin-bottom: 1.6rem;
+    color: black;
+  }
+  &-list-item {
+    display: flex;
+    gap: $space-large;
+  }
+}
+.booking-card-img {
+  width: 30rem;
+
+  @include border-radius;
+  overflow: hidden;
+}
+.booking-price,
+.booking-date,
+.booking-people {
+  font-size: 1.4rem;
+  color: black;
 }

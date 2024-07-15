@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import culinaryImg from "../../assets/images/culinarytours.webp";
 import Button from "../Button/Button";
 import sloganImg from "../../assets/icons/slogan.svg";
-import guidedImg from "../../assets/images/guided.webp";
+import guidedImg from "../../assets/images/guided.jpg";
 import experiencesImg from "../../assets/images/experiences.jpg";
 import arrowUpRightIcon from "../../assets/icons/arrow-up-right.svg";
 
@@ -16,7 +16,7 @@ const Hero = () => {
       <div className="hero-wrp">
         <div className="hero-intro">
           <div className="hero-video">
-            <VideoComponent src={videoHero} />
+            <VideoComponent src={videoHero} speed="0.8" />
           </div>
           <div className="hero-content">
             <h2 className="hero-subheading">
@@ -29,11 +29,7 @@ const Hero = () => {
                 <div className="hero-slogan-wrp">
                   <img src={sloganImg} alt="slogan" />
                 </div>
-                <Button
-                  className="btn--cta"
-                  iconUrl={arrowUpRightIcon}
-                  iconClassName="btn--icon"
-                >
+                <Button className="btn btn--cta" iconClassName="btn--icon">
                   View all tours
                 </Button>
               </div>
@@ -41,44 +37,56 @@ const Hero = () => {
           </div>
         </div>
         <div className="hero-categories">
-          <div className="hero-category">
-            <img src={guidedImg} alt="culinary tours" />
-            <div className="overlay--category"></div>
-            <Button
-              className="btn--culinary"
-              iconUrl={arrowUpRightIcon}
-              iconClassName="btn--icon"
-              to="/tours?category=Guided tour"
-            >
-              Guided tours
-            </Button>
-          </div>
-          <div className="hero-category">
-            <img src={culinaryImg} alt="culinary tours" />
-            <div className="overlay--category"></div>
+          <Link className="hero-category" to="/tours?category=Guided tour">
+            <div className="hero-category-cta">
+              <div className="hero-category-img">
+                <img src={guidedImg} alt="guided tours" />
+              </div>
+              <div className="overlay--category-guided overlay--category">
+                <Button
+                  className="btn btn--category"
+                  iconUrl={arrowUpRightIcon}
+                  iconClassName="btn--icon btn--icon-guided"
+                >
+                  Guided tours
+                </Button>
+              </div>
+            </div>
+          </Link>
+          <Link className="hero-category" to="/tours?category=Culinary tour">
+            <div className="hero-category-cta">
+              <div className="hero-category-img">
+                <img src={culinaryImg} alt="culinary tours" />
+              </div>
 
-            <Button
-              className="btn--culinary"
-              iconUrl={arrowUpRightIcon}
-              iconClassName="btn--icon"
-              to="/tours?category=Culinary tour"
-            >
-              Culinary tours
-            </Button>
-          </div>
-          <div className="hero-category">
-            <img src={experiencesImg} alt="culinary tours" />
-            <div className="overlay--category"></div>
+              <div className="overlay--category-culinary overlay--category">
+                <Button
+                  className="btn btn--category"
+                  iconUrl={arrowUpRightIcon}
+                  iconClassName="btn--icon btn--icon-culinary"
+                >
+                  Culinary visits
+                </Button>
+              </div>
+            </div>
+          </Link>
+          <Link className="hero-category" to="/tours?category=Experience">
+            <div className="hero-category-cta">
+              <div className="hero-category-img">
+                <img src={experiencesImg} alt="experiences tours" />
+              </div>
 
-            <Button
-              className="btn--culinary"
-              iconUrl={arrowUpRightIcon}
-              iconClassName="btn--icon"
-              to="/tours?category=Experience"
-            >
-              Experiences
-            </Button>
-          </div>
+              <div className="overlay--category-experiences overlay--category">
+                <Button
+                  className="btn btn--category"
+                  iconUrl={arrowUpRightIcon}
+                  iconClassName="btn--icon btn--icon-experiences"
+                >
+                  Experiences
+                </Button>
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import "./Footer.scss";
-
+import instaIcon from "../../assets/icons/instagram.svg";
+import fbIcon from "../../assets/icons/facebook.svg";
+import ytIcon from "../../assets/icons/youtube.svg";
 const Footer = () => {
   return (
     <section className="footer">
       <div className="footer-col">
-        <Link className="footer-logo-link">LOGO</Link>
+        <Link className="footer-logo-link">CityGo</Link>
         <h4 className="footer-col-title">Contact us</h4>
         <Link className="footer-col-link" to="/">
           Address: Keas 69 Str. 15234, Chalandri Istanbul, Türkiye
@@ -62,14 +64,26 @@ const Footer = () => {
             Follow us on Social Media
           </Link>
           <div className="footer-col-socials">
-            <Link className="footer-col-link" to="/">
-              Instagram
+            <Link
+              className="footer-col-link footer-col-link--social"
+              rel="noopener noreferrer"
+              to="https://www.instagram.com/"
+            >
+              <img src={instaIcon} alt="instagram icon" />
             </Link>
-            <Link className="footer-col-link" to="/">
-              Facebook
+            <Link
+              className="footer-col-link footer-col-link--social"
+              rel="noopener noreferrer"
+              to="https://www.facebook.com/"
+            >
+              <img src={fbIcon} alt="facebook icon" />
             </Link>
-            <Link className="footer-col-link" to="/">
-              Youtube
+            <Link
+              className="footer-col-link footer-col-link--social"
+              rel="noopener noreferrer"
+              to="https://www.youtube.com/"
+            >
+              <img src={ytIcon} alt="youtube icon" />
             </Link>
           </div>
         </div>

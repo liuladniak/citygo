@@ -6,7 +6,8 @@
 
 /* ************************** */
 /* MEDIA MIXINS*/
-/* ************************** */ //Tablet breakpoint from 768px to 1279px:
+/* ************************** */
+//Tablet breakpoint from 768px to 1279px:
 @mixin tablet-breakpoint {
   @media screen and (min-width: $tablet-breakpoint) {
     @content;

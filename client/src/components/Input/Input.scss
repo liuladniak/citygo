@@ -1,16 +1,21 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
 .field {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  font-family: Montserrat;
 
-    &__label {
-        margin-bottom: 0.5rem;
-    }
+  &__label {
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+  }
 
-    &__input {
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        font-size: inherit;
-    }
+  &__input {
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    @include border-radius;
+    padding: 1.6rem 2.4rem;
+    font-size: 1.4rem;
+  }
 }

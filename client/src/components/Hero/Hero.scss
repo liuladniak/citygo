@@ -6,6 +6,7 @@
   margin-top: 5.4rem;
   &-heading {
     font-size: 5.4rem;
+    font-weight: 600;
     color: $main-maroon;
   }
   &-subheading {
@@ -18,22 +19,24 @@
 
     display: flex;
     flex-direction: column;
-    gap: 3.2rem;
+    gap: $space-large;
   }
   &-intro {
     display: flex;
     justify-content: space-between;
-    gap: 3.2rem;
+    gap: $space-large;
   }
   &-video {
     overflow: hidden;
-    flex-basis: calc($max-width / 3 * 2 + 3.2rem);
+    flex-basis: calc($max-width / 3 * 2 + $space-large);
     height: 55rem;
     @include border-radius;
+    display: flex;
+    align-items: center;
 
     & video {
-      height: 100%;
-      width: 100%;
+      height: 127%;
+      width: 127%;
     }
   }
   &-content {
@@ -46,7 +49,7 @@
     background-color: $main-teal;
     height: 39rem;
     @include border-radius;
-    padding: 3.2rem;
+    padding: $space-large;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -68,7 +71,7 @@
   &-categories {
     display: flex;
     justify-content: space-between;
-    gap: 3.2rem;
+    gap: $space-large;
   }
   &-category {
     flex: 1;
@@ -78,31 +81,43 @@
     overflow: hidden;
     object-fit: cover;
     position: relative;
-
     &:hover {
       cursor: pointer;
       box-shadow: 0px 2px 10px rgb(0, 0, 0, 0.28);
       transition: all 0.3s ease;
     }
 
-    & img {
-      width: 100%;
-      height: 100%;
+    &-img {
       cursor: pointer;
+      overflow: hidden;
+      flex: 2;
+      & img {
+        filter: opacity(90%);
+      }
+    }
+
+    &-cta {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
   }
 }
 
 .overlay--category {
-  position: absolute;
-  width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 3;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0) 50%
-  );
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-guided {
+    background-color: rgba(59, 34, 108, 0.9);
+  }
+  &-culinary {
+    background-color: rgba(154, 69, 2, 0.9);
+  }
+  &-experiences {
+    background-color: rgba(162, 37, 50, 0.9);
+  }
 }

@@ -2,20 +2,20 @@
 @use "../../styles/partials/variables" as *;
 
 .featured-wrp {
-  margin-top: 3rem;
+  max-width: $max-width;
   width: 100vw;
   display: flex;
   justify-content: center;
-  background-color: rgba(211, 211, 211, 0.427);
+  margin-top: $space-large;
+  background-color: #1e556d16;
+  @include border-radius;
 }
 .featured {
   @include layout-constrain;
-  height: 20rem;
   width: 100%;
-  margin-top: 3rem;
-  padding: 3.2rem;
+  padding: $space-large;
   display: flex;
-  gap: 3.2rem;
+  gap: $space-large;
 
   &-content {
     flex: 1;
@@ -23,10 +23,11 @@
   &-title {
     font-size: 3.2rem;
   }
-  &-img {
-    flex: 1;
-    background-color: bisque;
-    height: 100%;
-    @include border-radius;
+  &-description {
+    margin: 2.4rem 0;
+  }
+  &-text {
+    width: 50%;
+    font-size: 1.4rem;
   }
 }

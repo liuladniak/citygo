@@ -5,14 +5,20 @@ import "./Subscribe.scss";
 const Subscribe = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [isValid, setIsValid] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateEmail(email)) {
-      setMessage("Thank you for subscribing!");
-      setEmail("");
-    } else {
+    if (email.trim() === "") {
+      setMessage("Email address cannot be empty.");
+      setIsValid(false);
+    } else if (!validateEmail(email)) {
       setMessage("Please enter a valid email address.");
+      setIsValid(false);
+    } else {
+      setMessage("Thank you for subscribing!");
+      setIsValid(true);
+      setEmail("");
     }
   };
 
@@ -27,19 +33,16 @@ const Subscribe = () => {
       <form onSubmit={handleSubmit} className="subscribe-form">
         <input
           className="subscribe-input"
-          type="email"
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Button type="submit" className="btn--subscribe">
+        <Button type="submit" className="btn btn--subscribe">
           Subscribe
         </Button>
       </form>
       {message && (
-        <p
-          className={validateEmail(email) ? "success-message" : "error-message"}
-        >
+        <p className={isValid ? "success-message" : "error-message"}>
           {message}
         </p>
       )}

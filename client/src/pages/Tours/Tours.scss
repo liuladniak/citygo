@@ -8,10 +8,17 @@
   &-heading {
     font-size: 5.4rem;
     color: $main-maroon;
+
+    &-wrp {
+      display: flex;
+      flex-direction: column;
+      gap: $space-medium;
+    }
   }
   &-description {
-    font-size: 1.2rem;
-    max-width: 50rem;
+    font-size: 1.4rem;
+    line-height: 1.6rem;
+    max-width: 70rem;
   }
   &-type {
     font-size: 1.2rem;
@@ -20,43 +27,138 @@
   &-wrp {
     display: flex;
     flex-direction: column;
-    margin-top: 3rem;
+    gap: 3rem;
+    margin-top: 4.5rem;
   }
   &-filter {
     flex: 1;
-    &__heading {
-      font-size: 2.4rem;
-    }
+    display: flex;
+    justify-content: space-between;
+
     &-wrp {
       display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      font-size: 1.6rem;
-      padding: 1rem;
-      background-color: #f9f9f9;
-      border-radius: 8px;
-    }
-
-    &__select {
       width: 100%;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
+      font-size: 1.6rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      @include border-radius;
+    }
+    &-l {
+      flex: 4;
+      display: flex;
+      width: 100%;
+    }
+    &-r {
+      flex: 1;
+      width: 100%;
+    }
+    &__select {
+      font-family: Montserrat;
+      border: none;
+      font-size: 1.6rem;
       color: #333;
       background-color: #fff;
       appearance: none;
-      background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'><path fill='#333' d='M5 6.5L0 1.5 1.5 0 5 3.5 8.5 0 10 1.5z'/></svg>");
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      background-size: 0.65rem auto;
+
+      &-wrp {
+        flex: 1;
+        border-right: 1px solid #ecedeb;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+    }
+
+    &__search {
+      font-weight: 400;
+      font-size: 1.6rem;
+      width: fit-content;
+
+      &-input {
+        border-radius: 3rem;
+        border: none;
+      }
+    }
+
+    &-selections {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   }
   &-list {
     flex: 3;
-
+    display: flex;
+    flex-direction: column;
+    gap: $space-large;
+  }
+  &-list__filtered,
+  &-list__remaining {
     display: flex;
     flex-wrap: wrap;
-    gap: 3.2rem;
+    gap: $space-large;
+  }
+  &-list__filtered {
+    border-bottom: 1px solid #eee;
+    padding-bottom: $space-large;
+    margin-top: $space-medium;
+
+    &-heading {
+      font-size: 1.8rem;
+      font-weight: 400;
+      padding: 1.6rem;
+    }
+  }
+}
+
+.tours-filter__search-input {
+  padding-left: 3.8rem;
+  width: 100%;
+  border: none;
+  height: 100%;
+  font-family: Montserrat;
+  font-size: 1.6rem;
+  color: black;
+  position: relative;
+  & ::placeholder {
+    color: black;
+  }
+}
+
+.search {
+  &-wrp {
+    position: relative;
+    border: none;
+  }
+
+  &-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-45%);
+  }
+}
+
+.tours-filter__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tours-filter__pill {
+  display: flex;
+  align-items: center;
+  background-color: $main-maroon;
+  color: white;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+
+  &__close {
+    margin-left: 0.5rem;
+    cursor: pointer;
   }
 }

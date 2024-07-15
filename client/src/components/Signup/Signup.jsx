@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Input from "../../components/Input/Input";
+import Button from "../Button/Button";
 
 function Signup() {
   const [error, setError] = useState(null);
@@ -12,7 +13,7 @@ function Signup() {
     event.preventDefault();
 
     try {
-      await axios.post("http://localhost:8080/auth/register", {
+      await axios.post("http://localhost:8080/auth/signup", {
         first_name: event.target.first_name.value,
         last_name: event.target.last_name.value,
         phone: event.target.phone.value,
@@ -42,12 +43,12 @@ function Signup() {
         <Input type="text" name="email" label="Email" />
         <Input type="password" name="password" label="Password" />
 
-        <button className="signup__button">Sign up</button>
+        <Button className="btn btn--signup">Sign up</Button>
 
         {success && <div className="signup__message">Signed up!</div>}
         {error && <div className="signup__message">{error}</div>}
       </form>
-      <p>
+      <p className="login-cta">
         Have an account? <Link to="/login">Log in</Link>
       </p>
     </main>

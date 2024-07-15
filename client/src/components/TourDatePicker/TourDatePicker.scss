@@ -7,7 +7,7 @@
 
   .react-datepicker {
     border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgb(221, 221, 221);
     border-radius: 12px;
     overflow: hidden;
     font-family: "Arial, sans-serif";
@@ -94,8 +94,8 @@
     top: 2.4rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 0.4rem;
-    height: 0.4rem;
+    width: 0.5rem;
+    height: 0.5rem;
 
     background-color: green;
     border-radius: 50%;
@@ -103,7 +103,6 @@
 
   .react-datepicker__day--today {
     font-weight: bold;
-    border: 1px solid rgba(170, 158, 158, 0.637);
     background-color: #fff;
     color: #333;
   }
@@ -155,4 +154,11 @@
   width: 1.6rem;
   height: 1.6rem;
   cursor: pointer;
+}
+
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__month-text--keyboard-selected,
+.react-datepicker__quarter-text--keyboard-selected,
+.react-datepicker__year-text--keyboard-selected {
+  background-color: transparent;
 }

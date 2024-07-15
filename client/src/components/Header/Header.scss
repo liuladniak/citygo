@@ -4,6 +4,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-self: center;
   @include layout-constrain;
   padding: 2.4rem 0 0;
 }
@@ -11,6 +12,7 @@
 .nav {
   display: flex;
   flex-direction: column;
+  gap: 0.8rem;
 
   &__list {
     flex: 1;
@@ -24,6 +26,10 @@
 
   &__item-link {
     font-family: "Roboto";
+    &-curr {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &-hamburger {
@@ -35,16 +41,24 @@
 }
 
 .logo {
-  & h2 {
-    font-size: 4.8rem;
+  width: 18rem;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  &-img {
+    height: 100%;
+    margin-top: 1.2rem;
+  }
+  &-icon {
+    width: 7rem;
   }
 }
 
 .user {
   &-avatar {
     border-radius: 50%;
-    width: 3.2rem;
-    height: 3.2rem;
+    width: $space-medium;
+    height: $space-medium;
     overflow: hidden;
     border: 1px solid #dddddd;
     & img {
@@ -67,20 +81,34 @@
     border-radius: 50%;
   }
 }
+.bookings-notification {
+  background-color: darkred;
+  color: white;
+  border-radius: 50%;
+  height: 0.8rem;
+  width: 0.8rem;
 
+  &-wrp {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+}
 .dropdown {
   &-wrapper {
     position: relative;
   }
 
   &-menu {
-    width: 16rem;
+    @include border-radius;
+    padding: 1.4rem 0;
+    width: 20rem;
     display: none;
     position: absolute;
-    top: 100%;
+    top: 110%;
     left: 0;
     background-color: white;
-    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
     z-index: 1000;
   }
   &--visible {
@@ -91,7 +119,11 @@
   }
 
   &-item {
-    padding: 8px 12px;
+    padding: 1.6rem 2.4rem;
     cursor: pointer;
+
+    &:hover {
+      background-color: #f7f7f7;
+    }
   }
 }

@@ -1,11 +1,35 @@
 import TourCard from "../TourCard/TourCard";
 import "./ToursIntroList.scss";
-import tours from "../../data/data.json";
 import arrowRightIcon from "../../assets/icons/chevron-right.svg";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { API_URL } from "../../utils/api";
+import axios from "axios";
 
 const ToursIntroList = () => {
-  const selectedTours = tours.slice(0, 4);
+  const [tours, setTours] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const selectedTours = tours.slice(0, 3);
+
+  useEffect(() => {
+    const getToursData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/tours`);
+        const tours = response.data;
+        setTours(tours);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("There was an error fetching the tours data!", error);
+        setIsLoading(false);
+      }
+    };
+    getToursData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="tour-intro-list">
       <h2 className="tour-intro-list__heading">View our tours</h2>
@@ -15,7 +39,7 @@ const ToursIntroList = () => {
             key={tour.id}
             id={tour.id}
             tour_name={tour.tour_name}
-            tour_thumbnail={tour.tour_thumbnail}
+            tour_thumbnail={tour.images[0]}
             highlights={tour.highlights}
             duration={tour.duration}
             price={tour.price}
