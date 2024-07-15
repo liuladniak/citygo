@@ -135,7 +135,8 @@ Optimize and debug the application.
 
 ## Nice-to-haves
 
-\_ Interactive map
+- Responsive layout
+  \_ Interactive map
 
 - Interactive date picker
 - Auth
