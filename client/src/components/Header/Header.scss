@@ -19,9 +19,9 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 2rem;
+    gap: $space-medium;
     list-style: none;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 
   &__item-link {

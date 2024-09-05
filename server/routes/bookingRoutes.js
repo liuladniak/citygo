@@ -44,4 +44,28 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  const { user_id, tour_id, number_of_people, booking_date } = req.body;
+
+  try {
+    const [id] = await knex("bookings").insert({
+      user_id,
+      tour_id,
+      number_of_people,
+      booking_date,
+    });
+
+    res.status(201).json({
+      id,
+      user_id,
+      tour_id,
+      number_of_people,
+      booking_date,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 export default router;

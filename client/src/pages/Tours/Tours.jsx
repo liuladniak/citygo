@@ -126,9 +126,9 @@ const Tours = () => {
         </div>
         <h1 className="tours-heading">Where would you like to go?</h1>
         <p className="tours-description">
-          Discover Istanbul's rich heritage, breathtaking landmarks, and hidden
-          gems with our expertly guided tours. Whether you're into history,
-          nature, or cuisine, we have a tour for you. Explore iconic sites,
+          Discover Istanbul's rich heritage, stunning landmarks, and hidden gems
+          with our expert guided tours. Whether you love history, nature, or
+          cuisine, we have the perfect tour for you. Explore iconic sites,
           vibrant neighborhoods, and unique experiences for an unforgettable
           visit. Join us for an immersive journey filled with stories, insights,
           and memorable moments.

@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
   if (!isPasswordCorrect) {
     return res.status(400).send("Invalid password");
   }
-  const expiresIn = 60;
+  const expiresIn = 35;
   const token = jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET,

@@ -202,7 +202,7 @@ const Tour = () => {
                 <Map
                   longitude={longitude}
                   latitude={latitude}
-                  popupText="Tour Location"
+                  popupText="Meeting point"
                 />
               </div>
             </div>
