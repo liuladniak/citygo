@@ -1,0 +1,13 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.main {
+  width: 100%;
+  background-color: $main-2;
+  display: flex;
+}

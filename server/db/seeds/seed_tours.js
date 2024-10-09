@@ -7,7 +7,6 @@ export async function seed(knex) {
 
   await knex("tours").insert([
     {
-      id: 1,
       tour_name: "Historical Istanbul Walking Tour",
       duration: "4 hr",
       category: "Guided tour",
@@ -29,7 +28,6 @@ export async function seed(knex) {
       latitude: 41.0082,
     },
     {
-      id: 2,
       tour_name: "Bosphorus Cruise and Spice Market Tour",
       duration: "6 hr",
       category: "Guided tour",
@@ -51,7 +49,6 @@ export async function seed(knex) {
       latitude: 41.0136,
     },
     {
-      id: 3,
       tour_name: "Istanbul Food and Culture Tour",
       category: "Culinary tour",
       duration: "5 hr",
@@ -73,7 +70,6 @@ export async function seed(knex) {
       latitude: 41.0277,
     },
     {
-      id: 4,
       tour_name: "Historical Gems of Istanbul Tour",
       duration: "4 hr",
       category: "Guided tour",
@@ -95,7 +91,6 @@ export async function seed(knex) {
       latitude: 41.0126,
     },
     {
-      id: 5,
       tour_name: "Galata Beyoglu Historical and Cultural Tour",
       duration: "4 hr",
       category: "Guided tour",
@@ -117,7 +112,6 @@ export async function seed(knex) {
       latitude: 41.0255,
     },
     {
-      id: 6,
       tour_name: "Fener-Balat Historical Walking Tour",
       duration: "4 hr",
       category: "Guided tour",
@@ -139,7 +133,6 @@ export async function seed(knex) {
       latitude: 41.0291,
     },
     {
-      id: 7,
       tour_name: "Istanbul Shopping Tour",
       duration: "6 hr",
       category: "Experience",
@@ -161,7 +154,6 @@ export async function seed(knex) {
       latitude: 41.01,
     },
     {
-      id: 8,
       tour_name: "Istanbul Art and Culture Tour",
       duration: "5 hr",
       category: "Experience",
@@ -183,7 +175,6 @@ export async function seed(knex) {
       latitude: 41.0292,
     },
     {
-      id: 9,
       tour_name: "Istanbul Photography Tour",
       duration: "4 hr",
       category: "Experience",
@@ -205,7 +196,6 @@ export async function seed(knex) {
       latitude: 41.0304,
     },
     {
-      id: 10,
       tour_name: "Golden Horn Adventure Tour",
       duration: "6 hr",
       category: "Guided tour",

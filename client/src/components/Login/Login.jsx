@@ -29,7 +29,7 @@ function Login() {
 
       setAuth({ isLoggedIn: true });
 
-      navigate("/bookings");
+      navigate("/tours");
     } catch (error) {
       setError(error.response.data);
     }

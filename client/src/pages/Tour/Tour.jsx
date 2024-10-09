@@ -67,13 +67,14 @@ const Tour = () => {
     latitude,
     images,
   } = tour;
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   const mainImage = images[0];
   const additionalImages = images.slice(1, 4);
+
+  console.log("mainImage:", mainImage);
 
   return (
     <>
@@ -208,7 +209,12 @@ const Tour = () => {
             </div>
 
             <div className="tour-summary__dates">
-              <BookingForm available_dates={available_dates} />
+              <BookingForm
+                tour_id={id}
+                available_dates={available_dates}
+                title={tour_name}
+                mainImage={mainImage}
+              />
             </div>
           </div>
         </div>

@@ -1,18 +1,24 @@
 import { Link } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import "./Header.scss";
 import Button from "../Button/Button";
 import userAvatar from "../../assets/images/user-avatar.jpg";
 import HamburgerIcon from "../../assets/icons/burger-menu-svgrepo-com.svg";
 import logoutIcon from "../../assets/icons/logout.svg";
 import useComponentVisible from "../../hooks/useComponentVisible";
-import AuthContext from "../../contexts/AuthContext";
 import arrowDown from "../../assets/icons/arrow-down.svg";
+import cartIcon from "../../assets/icons/cart.svg";
 import logo from "../../assets/images/logo.png";
 import logoIcon from "../../assets/images/logo-icon.png";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, checkToken } from "../../features/auth/authSlice";
 
 function Header() {
-  const { auth, setAuth } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.auth);
+
+  const totalBookings = useSelector((state) => state.cart.totalBookings);
+
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
@@ -24,31 +30,18 @@ function Header() {
     setIsComponentVisible(false);
   };
 
-  const logout = () => {
+  const handleLogout = () => {
     sessionStorage.removeItem("token");
-    setAuth({ isLoggedIn: false });
+    dispatch(logout());
     closeDropdown();
   };
 
-  const checkToken = () => {
-    const token = sessionStorage.getItem("token");
-    const tokenExpiration = sessionStorage.getItem("tokenExpiration");
-
-    if (!token || new Date().getTime() > tokenExpiration) {
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("tokenExpiration");
-      setAuth({ isLoggedIn: false });
-    } else {
-      setAuth({ isLoggedIn: true });
-    }
-  };
-
   useEffect(() => {
-    checkToken();
-    const interval = setInterval(checkToken, 1000);
+    dispatch(checkToken());
+    const interval = setInterval(() => dispatch(checkToken()), 1000);
 
     return () => clearInterval(interval);
-  }, [setAuth]);
+  }, [checkToken]);
 
   return (
     <header className="header">
@@ -82,7 +75,15 @@ function Header() {
               <img src={arrowDown} alt="icon arrow down" />
             </Link>
           </li>
-          {auth.isLoggedIn ? (
+          <li className="nav__list-item">
+            <Link className="nav__item-link nav__item-link--cart" to="/cart">
+              <img src={cartIcon} alt="icon shopping cart" />
+              {totalBookings > 0 && (
+                <div className="cart-notification">{totalBookings}</div>
+              )}
+            </Link>
+          </li>
+          {isLoggedIn ? (
             <li className="nav__list-item manage-bookings">
               <div ref={ref} className="dropdown-wrapper">
                 <Button
@@ -95,7 +96,6 @@ function Header() {
 
                   <div className="user-avatar">
                     <img src={userAvatar} alt="user avatar" />
-                    <div className="user-notification">1</div>
                   </div>
                 </Button>
 
@@ -107,6 +107,12 @@ function Header() {
                         : "dropdown--hidden"
                     }`}
                   >
+                    <li className="dropdown-item bookings-cart-wrp">
+                      <Link to="/cart" onClick={closeDropdown}>
+                        Cart
+                      </Link>
+                      <div className="bookings-cart"></div>
+                    </li>
                     <li className="dropdown-item bookings-notification-wrp">
                       <Link to="/bookings" onClick={closeDropdown}>
                         Manage Bookings
@@ -121,7 +127,7 @@ function Header() {
                     <li className="dropdown-item">
                       <Button
                         className="btn btn--logout"
-                        onClick={logout}
+                        onClick={handleLogout}
                         iconUrl={logoutIcon}
                         iconClassName="btn--logout-icon"
                       >

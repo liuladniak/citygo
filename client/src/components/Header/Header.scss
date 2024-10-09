@@ -30,6 +30,9 @@
       display: flex;
       align-items: center;
     }
+    &--cart {
+      position: relative;
+    }
   }
 
   &-hamburger {
@@ -61,24 +64,6 @@
     height: $space-medium;
     overflow: hidden;
     border: 1px solid #dddddd;
-    & img {
-      position: relative;
-    }
-  }
-
-  &-notification {
-    background-color: darkred;
-    border: 1px solid white;
-    color: white;
-    font-size: 1.1rem;
-    line-height: 1.6rem;
-    padding: 0 0.5rem;
-    height: 1.6rem;
-    position: absolute;
-    top: 0rem;
-    right: 0.3rem;
-    text-align: center;
-    border-radius: 50%;
   }
 }
 .bookings-notification {
@@ -106,7 +91,7 @@
     display: none;
     position: absolute;
     top: 110%;
-    left: 0;
+    left: -60%;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
     z-index: 1000;
@@ -126,4 +111,17 @@
       background-color: #f7f7f7;
     }
   }
+}
+.cart-notification {
+  background-color: darkred;
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1.6rem;
+  padding: 0 0.5rem;
+  height: 1.6rem;
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  text-align: center;
+  border-radius: 50%;
 }

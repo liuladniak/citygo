@@ -1,0 +1,19 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.cart {
+  margin-top: $space-large;
+  width: 100%;
+  max-width: $max-width;
+  display: flex;
+  flex-direction: column;
+  gap: $space-medium;
+
+  &__heading {
+    font-size: 2.8rem;
+  }
+  &__review {
+    display: flex;
+    justify-content: space-between;
+  }
+}

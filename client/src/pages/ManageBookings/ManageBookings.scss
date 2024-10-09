@@ -56,6 +56,11 @@
     margin-bottom: 1.6rem;
     color: black;
   }
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+  }
   &-list-item {
     display: flex;
     gap: $space-large;

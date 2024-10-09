@@ -1,11 +1,18 @@
+import axios from "axios";
 import { useState } from "react";
+import { API_URL } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 import "./BookingForm.scss";
 import TourDatePicker from "../TourDatePicker/TourDatePicker";
 import Button from "../Button/Button";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import calendarIcon from "../../assets/icons/calendar.svg";
 
-const BookingForm = ({ tourId, available_dates }) => {
+import { useDispatch } from "react-redux";
+import { addBooking } from "../../features/cart/cartSlice";
+import { v4 as uuidv4 } from "uuid";
+
+const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
@@ -13,40 +20,77 @@ const BookingForm = ({ tourId, available_dates }) => {
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
-
-  const formData = {
-    adults,
-    children,
-    infants,
-  };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const toggleDropdown = () => {
     setIsComponentVisible(!isComponentVisible);
   };
 
   const handleDateSelected = (date) => {
+    console.log(date);
     setSelectedDate(date);
   };
 
-  const calculateTotalPrice = () => {
+  const calculateTotalPrice = (adults, children, infants) => {
     const adultPrice = 100;
     const childPrice = 50;
     const infantPrice = 0;
     return adults * adultPrice + children * childPrice + infants * infantPrice;
   };
 
-  const handleSubmit = (event) => {
+  const formatDate = (date) => {
+    if (!date) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+  console.log(mainImage);
+  const handleAddToCart = () => {
+    const booking = {
+      id: uuidv4(),
+      tour_id: tour_id,
+      title,
+      mainImage,
+      date: formatDate(selectedDate),
+      guests: adults + children + infants,
+      price: calculateTotalPrice(adults, children, infants),
+    };
+
+    dispatch(addBooking(booking));
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const totalPrice = calculateTotalPrice();
 
     const bookingData = {
-      date: selectedDate,
-      adults,
-      children,
-      infants,
-      totalPrice,
-      tourId,
+      user_id: 2,
+      tour_id: tour_id,
+      number_of_people: adults + children + infants,
+      booking_date: formatDate(selectedDate),
     };
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/bookings`,
+
+        bookingData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Booking successfully created:", response.data);
+      handleAddToCart();
+      navigate("/cart");
+    } catch (error) {
+      console.error(
+        "Error creating booking:",
+        error.response?.data || error.message
+      );
+    }
   };
 
   const totalGuests = adults + children;
@@ -145,7 +189,7 @@ const BookingForm = ({ tourId, available_dates }) => {
             )}
           </div>
         </div>
-        <Button to="/bookings" type="submit" className=" btn btn--book">
+        <Button type="submit" className=" btn btn--book">
           Review booking
         </Button>
       </form>

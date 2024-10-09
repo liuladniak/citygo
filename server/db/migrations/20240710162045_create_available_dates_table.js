@@ -1,6 +1,6 @@
 export function up(knex) {
   return knex.schema.createTable("available_dates", function (table) {
-    table.integer("id").primary().unsigned();
+    table.increments("id").primary();
     table.integer("tour_id").unsigned().notNullable();
     table.foreign("tour_id").references("tours.id").onDelete("CASCADE");
     table.date("date").notNullable();

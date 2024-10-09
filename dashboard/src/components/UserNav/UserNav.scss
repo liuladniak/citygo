@@ -1,0 +1,28 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.user {
+  &-nav {
+    &-list {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem;
+      background-color: $main-2;
+      font-size: 1.4rem;
+    }
+
+    &-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+
+  &-img {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+  }
+}

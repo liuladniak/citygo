@@ -8,8 +8,12 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const userId = 14;
+    const userId = req.query.userId;
     console.log("Fetching bookings for user ID:", userId);
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
 
     const bookings = await knex("bookings")
       .select(

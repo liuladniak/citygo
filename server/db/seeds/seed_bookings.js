@@ -6,8 +6,7 @@ export async function seed(knex) {
   await knex("bookings").del();
   await knex("bookings").insert([
     {
-      id: 1,
-      user_id: 12,
+      user_id: 1,
       tour_id: 1,
       number_of_people: 2,
       booking_date: "2024-07-02",
@@ -15,8 +14,7 @@ export async function seed(knex) {
       updated_at: knex.fn.now(),
     },
     {
-      id: 2,
-      user_id: 14,
+      user_id: 1,
       tour_id: 1,
       number_of_people: 3,
       booking_date: "2024-07-25",

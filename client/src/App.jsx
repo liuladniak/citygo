@@ -8,6 +8,7 @@ import Tour from "./pages/Tour/Tour";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import ManageBookings from "./pages/ManageBookings/ManageBookings";
+import Cart from "./pages/Cart/Cart";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
         element: <Tour />,
       },
       { path: "/bookings", element: <ManageBookings /> },
+      { path: "/cart", element: <Cart /> },
     ],
   },
 ]);

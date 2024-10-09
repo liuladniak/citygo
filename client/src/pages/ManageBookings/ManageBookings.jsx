@@ -10,6 +10,7 @@ function ManageBookings() {
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
 
+  console.log("BOOKINGS:", bookings);
   const login = async () => {
     const token = sessionStorage.getItem("token");
 
@@ -25,7 +26,7 @@ function ManageBookings() {
       });
 
       setUser(response.data);
-      fetchBookings(token);
+      fetchBookings(response.data.id, token);
     } catch (error) {
       console.error(error);
       setFailedAuth(true);
@@ -33,15 +34,20 @@ function ManageBookings() {
     }
   };
 
-  const fetchBookings = async (token) => {
+  const fetchBookings = async (userId, token) => {
     try {
-      const response = await axios.get("http://localhost:8080/api/bookings", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+      console.log("User ID being sent:", userId);
+      const response = await axios.get(
+        `http://localhost:8080/api/bookings?userId=${userId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
       setBookings(response.data);
+      console.log("RESPONSE DATA", response.data);
     } catch (error) {
       console.error(error);
     }
@@ -104,14 +110,14 @@ function ManageBookings() {
                   </h2>
                 </div>
                 <div className="booking-price">
-                  Price for 3 people: USD {booking.tour_price * 3}
+                  Total price: USD {booking.tour_price * 3}
                 </div>
                 <div className="booking-date">
                   Tour Date:{" "}
                   {new Date(booking.booking_date).toLocaleDateString()}
                 </div>
                 <div className="booking-people">
-                  Number of People: {booking.number_of_people}
+                  Number of Guests: {booking.number_of_people}
                 </div>
               </div>
             </li>
