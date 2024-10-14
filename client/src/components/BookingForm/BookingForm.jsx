@@ -66,11 +66,11 @@ const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
 
     const bookingData = {
       user_id: 1,
-      tour_id: tour_id,
+      tour_id: Number(tour_id),
       number_of_people: adults + children + infants,
       booking_date: formatDate(selectedDate),
     };
-
+    console.log(bookingData);
     try {
       const response = await axios.post(
         `${API_URL}/api/bookings`,
@@ -84,6 +84,7 @@ const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
       );
       console.log("Booking successfully created:", response.data);
       handleAddToCart();
+      console.log(bookingData);
       navigate("/cart");
     } catch (error) {
       console.error(
