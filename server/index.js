@@ -14,9 +14,9 @@ const PORT = process.env.PORT || 3000;
 const staticFilesPath = path.resolve("public");
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 
-// app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(cors({ origin: process.env.CLIENT_URL }));
 
-const allowedOrigins = process.env.CLIENT_URLS.split(",");
+// const allowedOrigins = process.env.CLIENT_URLS.split(",");
 
 app.use(
   cors({
