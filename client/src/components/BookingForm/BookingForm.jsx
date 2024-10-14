@@ -65,7 +65,7 @@ const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
     event.preventDefault();
 
     const bookingData = {
-      user_id: 2,
+      user_id: 1,
       tour_id: tour_id,
       number_of_people: adults + children + infants,
       booking_date: formatDate(selectedDate),
