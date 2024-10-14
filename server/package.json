@@ -7,7 +7,21 @@
   "scripts": {
     "start": "nodemon index.js",
     "migrate": "knex migrate:latest",
+    "migrate:all": "knex migrate:up 20240710161921_create_users_table.js && knex migrate:up 20240714204954_create_tours_table.js && knex migrate:up 20240710162045_create_available_dates_table.js && knex migrate:up 20240710172942_create_highlights_table.js && knex migrate:up 20240710173450_create_images_table.js && knex migrate:up 20240912003451_create_bookings_table.js",
+    "migrate:users": "knex migrate:up 20240710161921_create_users_table.js",
+    "migrate:tours": "knex migrate:up 20240714204954_create_tours_table.js",
+    "migrate:available_dates": "knex migrate:up 20240710162045_create_available_dates_table.js",
+    "migrate:highlights": "knex migrate:up 20240710172942_create_highlights_table.js",
+    "migrate:images": "knex migrate:up 20240710173450_create_images_table.js",
+    "migrate:bookings": "knex migrate:up 20240912003451_create_bookings_table.js",
     "seed": "knex seed:run",
+    "seed:all": "knex seed:run --specific=seed_users.js && knex seed:run --specific=seed_tours.js && knex seed:run --specific=seed_available_dates.js && knex seed:run --specific=seed_highlights.js && knex seed:run --specific=seed_images.js && knex seed:run --specific=seed_bookings.js",
+    "seed:users": "knex seed:run --specific=seed_users.js",
+    "seed:tours": "knex seed:run --specific=seed_tours.js",
+    "seed:available_dates": "knex seed:run --specific=seed_available_dates.js",
+    "seed:highlights": "knex seed:run --specific=seed_highlights.js",
+    "seed:images": "knex seed:run --specific=seed_images.js",
+    "seed:bookings": "knex seed:run --specific=seed_bookings.js",
     "test": "jest"
   },
   "author": "Liu Ladniak",
@@ -21,6 +35,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "nodemon": "^3.1.4",
+    "pg": "^8.13.0",
     "stripe": "^16.11.0"
   }
 }

@@ -2,7 +2,8 @@ import express from "express";
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 
-const knex = initKnex(knexConfig["development"]);
+// const knex = initKnex(knexConfig["development"]);
+const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 import "dotenv/config";
 
 const router = express.Router();
