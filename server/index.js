@@ -15,27 +15,28 @@ const staticFilesPath = path.resolve("public");
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 
 // app.use(cors({ origin: process.env.CLIENT_URL }));
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  })
-);
-
-// const allowedOrigins = process.env.CLIENT_URLS.split(",");
-
 // app.use(
 //   cors({
-//     origin: function (origin, callback) {
-//       if (!origin) return callback(null, true);
-//       if (allowedOrigins.includes(origin)) {
-//         return callback(null, true);
-//       } else {
-//         return callback(new Error("Not allowed by CORS"));
-//       }
-//     },
+//     origin: process.env.CLIENT_URL,
+//     credentials: true,
 //   })
 // );
+
+const allowedOrigins = process.env.CLIENT_URLS.split(",");
+// const allowedOrigins = process.env.CLIENT_URL;
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
 
 app.use(express.json());
 app.use("/api/users", userRoutes);
