@@ -7,6 +7,16 @@
   align-self: center;
   @include layout-constrain;
   padding: 2.4rem 0 0;
+  position: relative;
+
+  &::after {
+    content: "";
+    height: 1px;
+    position: absolute;
+    width: 100%;
+    background-color: #2222221f;
+    bottom: -3rem;
+  }
 }
 
 .nav {
@@ -21,11 +31,38 @@
     align-items: center;
     gap: $space-medium;
     list-style: none;
-    font-size: 1.6rem;
-  }
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
 
+    &--menu {
+      font-size: 1.4rem;
+      gap: $space-x-small;
+      letter-spacing: normal;
+    }
+    &--categories {
+      & li {
+        background-color: $main-teal;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        color: #fff;
+        font-weight: 600;
+      }
+    }
+  }
+  &__icon {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
   &__item-link {
-    font-family: "Roboto";
+    font-family: "Montserrat";
+
+    &--phone {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      color: $main-maroon;
+      font-weight: 600;
+    }
     &-curr {
       display: flex;
       align-items: center;

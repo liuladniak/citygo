@@ -8,6 +8,7 @@ import logoutIcon from "../../assets/icons/logout.svg";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import arrowDown from "../../assets/icons/arrow-down.svg";
 import cartIcon from "../../assets/icons/cart.svg";
+import phoneIcon from "../../assets/icons/phone.svg";
 import logo from "../../assets/images/logo.png";
 import logoIcon from "../../assets/images/logo-icon.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,11 +54,15 @@ function Header() {
       </Link>
 
       <nav className="nav">
-        <ul className="nav__list">
+        <ul className="nav__list nav__list--menu">
           <li className="nav__item">
-            <Link className="nav__item-link" to="/">
-              +1 (234) 455 56-56
-            </Link>
+            <a
+              className="nav__item-link nav__item-link--phone"
+              href="tel:+12344555656"
+            >
+              <span>+1 (234) 455 56-56</span>
+              <img className="nav__icon" src={phoneIcon} alt="phone icon" />
+            </a>
           </li>
           <li className="nav__list-item">
             <Link className="nav__item-link" to="/">
@@ -149,7 +154,7 @@ function Header() {
             </li>
           )}
         </ul>
-        <ul className="nav__list">
+        <ul className="nav__list nav__list--categories">
           <li className="nav__item">
             <Link className="nav__item-link" to="/tours">
               All tours
