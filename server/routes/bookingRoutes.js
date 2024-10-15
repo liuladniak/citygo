@@ -50,14 +50,16 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { user_id, tour_id, number_of_people, booking_date } = req.body;
-  console.log("Incoming booking data:", req.body);
+
   try {
-    const [id] = await knex("bookings").insert({
-      user_id,
-      tour_id,
-      number_of_people,
-      booking_date,
-    });
+    const [id] = await knex("bookings")
+      .insert({
+        user_id,
+        tour_id,
+        number_of_people,
+        booking_date,
+      })
+      .returning("id");
 
     res.status(201).json({
       id,
