@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { API_URL } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import "./BookingForm.scss";
@@ -8,7 +8,7 @@ import Button from "../Button/Button";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import calendarIcon from "../../assets/icons/calendar.svg";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addBooking } from "../../features/cart/cartSlice";
 import { v4 as uuidv4 } from "uuid";
 
@@ -22,6 +22,7 @@ const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
   const [infants, setInfants] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const bookings = useSelector((state) => state.cart.bookings);
 
   const toggleDropdown = () => {
     setIsComponentVisible(!isComponentVisible);
@@ -57,9 +58,13 @@ const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
       guests: adults + children + infants,
       price: calculateTotalPrice(adults, children, infants),
     };
-
+    console.log("Booking before dispatch:", booking);
     dispatch(addBooking(booking));
   };
+
+  useEffect(() => {
+    console.log("Updated cart bookings:", bookings);
+  }, [bookings]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -191,7 +196,7 @@ const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
           </div>
         </div>
         <Button type="submit" className=" btn btn--book">
-          Review booking
+          Add to cart
         </Button>
       </form>
     </div>

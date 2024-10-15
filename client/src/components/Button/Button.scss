@@ -110,4 +110,11 @@
     background-color: $main-teal;
     color: #fff;
   }
+
+  &--remove-booking {
+    align-self: flex-end;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
 }

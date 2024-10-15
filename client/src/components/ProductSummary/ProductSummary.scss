@@ -1,7 +1,62 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
+.cart__heading {
+  font-size: 2.2rem;
+  margin-bottom: 3rem;
+}
+.cart__total,
+.cart__subtotal,
+.cart__fees {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+}
+
+.cart__subtotal {
+  margin-bottom: 1rem;
+}
+.cart__total {
+  margin-bottom: 3rem;
+}
+.cart__fees {
+  margin-bottom: 3rem;
+}
+.cart__total h4,
+.cart__subtotal h4,
+.cart__fees h4 {
+  font-weight: 400;
+}
+.cart__total {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
 .cart-product {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  // display: flex;
+  // flex-direction: column;
+  // gap: 2rem;
   max-width: 40rem;
+  margin-top: $space-large;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+    margin-bottom: 3rem;
+  }
+
+  &__title,
+  &__price {
+    font-size: 1.4rem;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    gap: $space-x-small;
+  }
+
+  &__total-price {
+  }
 }
