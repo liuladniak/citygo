@@ -5,18 +5,48 @@
   display: flex;
   justify-content: center;
   margin-top: 6rem;
+  width: 100%;
 
+  &__share {
+    cursor: pointer;
+    position: relative;
+    min-width: 9rem;
+    order: 1;
+
+    @include tablet {
+      order: 2;
+    }
+  }
+
+  &__save {
+    cursor: pointer;
+    order: 2;
+
+    @include tablet {
+      order: 1;
+    }
+  }
   &-wrp {
     @include layout-constrain;
   }
   &__heading {
-    font-size: 3.2rem;
+    font-size: 2.8rem;
+
+    @include tablet {
+      font-size: 3.2rem;
+    }
   }
   &__img-main {
     @include border-radius;
-    flex: 1;
+    // flex: 1;
     overflow: hidden;
     cursor: pointer;
+
+    grid-area: main-img;
+
+    @include tablet {
+      width: 100%;
+    }
 
     & img {
       height: 100%;
@@ -32,23 +62,60 @@
   }
 
   &-hero {
-    display: flex;
-    height: 40rem;
-    gap: $space-large;
+    // display: flex;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: repeat(2, 10rem) auto;
+    overflow-x: hidden;
+    grid-template-areas:
+      "main-img sec-img"
+      "main-img third-img"
+      "desc desc";
+    gap: $space-x-small;
+
+    @include tablet {
+      gap: $space-large;
+      grid-template-columns: 32fr 22fr 15fr 31fr;
+      grid-template-rows: 1fr 1fr;
+      height: 40rem;
+
+      grid-template-areas:
+        "main-img desc desc desc"
+        "main-img sec-img third-img forth-img";
+    }
 
     &__img-wrp {
-      display: flex;
-      gap: $space-large;
-      flex: 1;
+      // display: flex;
+      // gap: $space-large;
+      // flex: 1;
       margin-top: $space-large;
     }
     &__img {
       &-link {
         flex: 1;
         @include border-radius;
-        height: 20rem;
         overflow: hidden;
         cursor: pointer;
+
+        @include tablet {
+          height: 20rem;
+        }
+
+        &:nth-child(1) {
+          grid-area: sec-img;
+        }
+        &:nth-child(2) {
+          grid-area: third-img;
+        }
+        &:nth-child(3) {
+          display: none;
+
+          @include tablet {
+            display: block;
+            grid-area: forth-img;
+          }
+        }
         & img {
           width: 100%;
           height: 100%;
@@ -59,21 +126,46 @@
   &-text {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     flex: 1;
+    grid-area: desc;
+    gap: 2.4rem;
+
+    @include tablet {
+      justify-content: space-between;
+      gap: 0;
+    }
   }
 
   &-tags {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    gap: $space-small;
+    font-size: 1.6rem;
+
+    @include tablet {
+      flex-direction: row;
+      gap: 0;
+    }
 
     &--l {
       display: flex;
-      gap: $space-large;
+      flex-direction: column;
+      gap: $space-x-small;
+
+      @include tablet {
+        flex-direction: row;
+        gap: $space-large;
+      }
     }
     &--r {
       display: flex;
-      gap: $space-large;
+      gap: $space-x-small;
+      justify-content: flex-end;
+
+      @include tablet {
+        gap: $space-large;
+      }
 
       &-heading {
         font-size: 1.4rem;
@@ -95,10 +187,16 @@
     }
   }
   &-duration {
-    font-size: 1.4rem;
+    // font-size: 1.4rem;
     display: flex;
-    flex-direction: column;
+    // flex-direction: row;
+    justify-content: space-between;
     gap: 0.8rem;
+
+    @include tablet {
+      flex-direction: column;
+      justify-content: flex-start;
+    }
 
     &-price {
       display: flex;
@@ -106,7 +204,11 @@
       height: 100%;
     }
     &__title {
-      font-weight: 600;
+      font-weight: 400;
+
+      @include tablet {
+        font-weight: 600;
+      }
     }
     &-time {
       display: flex;
@@ -123,6 +225,10 @@
     display: flex;
     gap: 6rem;
     padding: $space-large 0;
+    flex-direction: column;
+    @include tablet {
+      flex-direction: row;
+    }
   }
 
   &-details {
@@ -139,6 +245,10 @@
     &-heading {
       font-size: 2.4rem;
       font-weight: 600;
+
+      @include tablet {
+        font-size: 2.4rem;
+      }
     }
 
     &-content {
@@ -213,4 +323,44 @@
     flex-direction: column;
     gap: 1rem;
   }
+}
+
+.heart-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.heart-icon {
+  width: 50px;
+  height: 50px;
+  transition: all 0.2s ease;
+}
+
+.hidden {
+  // opacity: 0;
+  display: none;
+}
+
+.visible {
+  display: block;
+  // opacity: 1;
+}
+
+.heart-container:hover .hidden {
+  opacity: 0;
+  display: none;
+}
+
+.heart-container:hover .visible {
+  opacity: 1;
+  display: block;
+}
+
+.copy-status {
+  position: absolute;
+  top: -50%;
+  right: 0;
+  color: green;
+  font-size: 14px;
 }

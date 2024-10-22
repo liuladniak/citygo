@@ -3,9 +3,13 @@
 
 .why-us {
   &-card {
-    width: calc((100% - $space-large) / 2);
+    width: 100%;
     display: flex;
     gap: 1.6rem;
+
+    @include tablet {
+      width: calc((100% - $space-large) / 2);
+    }
   }
   &-icon {
     width: 4rem;

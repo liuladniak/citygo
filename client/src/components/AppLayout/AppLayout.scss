@@ -8,3 +8,11 @@
   align-items: center;
   width: 100%;
 }
+
+.main {
+  padding: 0 2.4rem;
+
+  @include desktop-xl {
+    padding: 0;
+  }
+}

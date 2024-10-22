@@ -14,11 +14,15 @@
 }
 
 .booking-form {
-  width: 30rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: $space-large;
   align-items: center;
+
+  @include tablet {
+    width: 30rem;
+  }
 
   &__heading {
     font-size: 2.4rem;
@@ -39,14 +43,19 @@
 }
 
 .guest-section {
+  width: 100%;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @include tablet {
+    width: unset;
+  }
 }
 
 .guests {
-  width: 30rem;
+  width: 100%;
   margin-top: 0.8rem;
   border: 1px solid #ddd;
   padding: 1rem 2rem;
@@ -55,6 +64,10 @@
   font-size: 1.2rem;
   position: relative;
   transition: border-color 0.3s;
+
+  @include tablet {
+    width: 30rem;
+  }
   &:hover {
     border-color: #555;
   }

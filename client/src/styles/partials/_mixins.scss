@@ -3,16 +3,45 @@
 /* ************************** */
 /* MEDIA MIXINS*/
 /* ************************** */
-//Tablet breakpoint from 768px to 1279px:
-@mixin tablet-breakpoint {
-  @media screen and (min-width: $tablet-breakpoint) {
+
+//Mobile breakpoint at 360px:
+@mixin mobile-s {
+  @media screen and (min-width: $mobile-s) {
     @content;
   }
 }
 
-//Desktop breakpoint from 1280px onwards:
-@mixin desktop-breakpoint {
-  @media screen and (min-width: $desktop-breakpoint) {
+//Mobile breakpoint at 480px:
+@mixin mobile-m {
+  @media screen and (min-width: $mobile-m) {
+    @content;
+  }
+}
+
+//Tablet breakpoint at 768px:
+@mixin tablet {
+  @media screen and (min-width: $tablet) {
+    @content;
+  }
+}
+
+//Desktop breakpoint at 1025px :
+@mixin desktop-s {
+  @media screen and (min-width: $desktop-s) {
+    @content;
+  }
+}
+
+//Desktop breakpoint at 1281px :
+@mixin desktop {
+  @media screen and (min-width: $desktop) {
+    @content;
+  }
+}
+
+//Desktop breakpoint at 1441px :
+@mixin desktop-xl {
+  @media screen and (min-width: $desktop-xl) {
     @content;
   }
 }

@@ -4,6 +4,7 @@ import Footer from "../Footer/Footer";
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Subscribe from "../Subscribe/Subscribe";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 
 function AppLayout() {
   const location = useLocation();
@@ -15,6 +16,7 @@ function AppLayout() {
   return (
     <div className="layout">
       <Header />
+      <Breadcrumbs />
       <main className="main">
         <Outlet />
       </main>

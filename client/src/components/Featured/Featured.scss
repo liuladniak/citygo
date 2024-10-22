@@ -3,19 +3,30 @@
 
 .featured-wrp {
   max-width: $max-width;
-  width: 100vw;
+  width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: $space-large;
+  // margin-top: $space-large;
   background-color: #1e556d16;
   @include border-radius;
+  margin: $space-large $space-x-small 0;
+
+  @include tablet {
+    margin-top: $space-large;
+
+    width: 100vw;
+  }
 }
 .featured {
   @include layout-constrain;
   width: 100%;
-  padding: $space-large;
+  padding: $space-x-small;
   display: flex;
   gap: $space-large;
+
+  @include tablet {
+    padding: $space-large;
+  }
 
   &-content {
     flex: 1;
@@ -27,7 +38,11 @@
     margin: 2.4rem 0;
   }
   &-text {
-    width: 50%;
+    width: 100%;
     font-size: 1.4rem;
+
+    @include tablet {
+      width: 50%;
+    }
   }
 }

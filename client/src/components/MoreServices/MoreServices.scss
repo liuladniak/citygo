@@ -3,10 +3,16 @@
 
 .more-services {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  gap: $space-large;
+  gap: $space-x-small;
   margin-top: $space-large;
   @include layout-constrain;
+
+  @include tablet {
+    flex-direction: row;
+    gap: $space-large;
+  }
 }
 
 .transfers,
@@ -22,7 +28,15 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  padding: $space-large;
+  padding: $space-x-small;
+  gap: $space-x-small;
+  @include tablet {
+    gap: 0;
+  }
+
+  @include tablet {
+    padding: $space-large;
+  }
 }
 .transfers {
   background-image: url("../../assets/images/transfers.webp");
@@ -51,9 +65,14 @@
   &__desc {
     color: white;
     font-size: 1.4rem;
-    width: 60%;
+    width: 70%;
     flex-basis: calc(100% / 3);
-    font-weight: 600;
+    font-weight: 400;
+
+    @include tablet {
+      font-weight: 600;
+      width: 60%;
+    }
   }
 
   &__heading {
@@ -61,6 +80,11 @@
     color: white;
     z-index: 4;
     flex-basis: calc(100% / 3);
+    font-weight: 600;
+
+    @include tablet {
+      font-weight: 700;
+    }
   }
 
   &-wrp {
@@ -68,5 +92,10 @@
     flex-direction: column;
     flex: 1;
     justify-content: space-between;
+
+    gap: $space-x-small;
+    @include tablet {
+      gap: 0;
+    }
   }
 }

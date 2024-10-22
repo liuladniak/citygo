@@ -7,28 +7,48 @@ import BookingForm from "../../components/BookingForm/BookingForm";
 import Map from "../../components/Map/Map";
 import WhyUs from "../../components/WhyUs/WhyUs";
 import saveIcon from "../../assets/icons/heart.svg";
+import saveIconFilled from "../../assets/icons/heart-red-filled.svg";
 import shareIcon from "../../assets/icons/share.svg";
 import checkIcon from "../../assets/icons/check.svg";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
 import Modal from "../../components/Modal/Modal";
 import timeIcon from "../../assets/icons/icon-time.svg";
 import { formatPrice } from "../../utils/formatPrice";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 
 const Tour = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tour, setTour] = useState({});
+  const [isLiked, setIsLiked] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const { id } = useParams();
+  const { slug } = useParams();
+
+  const handleShareClick = async () => {
+    const shareUrl = `${window.location.origin}/tours/${slug}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopyStatus("Link copied!");
+      setTimeout(() => setCopyStatus(""), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+
+  const handleClick = () => {
+    setIsLiked((prev) => !prev);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
+  console.log(`${API_URL}/api/tours/${slug}`);
   useEffect(() => {
     const getOneTour = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/tours/${id}`);
+        const response = await axios.get(`${API_URL}/api/tours/${slug}`);
+        console.log(response.data, "response data:");
         setTour(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -37,7 +57,7 @@ const Tour = () => {
       }
     };
     getOneTour();
-  }, [id]);
+  }, [slug]);
 
   const openModal = (index) => {
     setSelectedImageIndex(index);
@@ -48,7 +68,12 @@ const Tour = () => {
     setModalOpen(false);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const {
+    id,
     tour_name,
     duration,
     price,
@@ -67,10 +92,8 @@ const Tour = () => {
     latitude,
     images,
   } = tour;
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
+  console.log(tour, "tour || images:", tour.images);
   const mainImage = images[0];
   const additionalImages = images.slice(1, 4);
 
@@ -89,55 +112,80 @@ const Tour = () => {
               />
             </div>
 
-            <div className="tour-content">
-              <div className="tour-text">
-                <h1 className="tour__heading">{tour_name}</h1>
-                <div className="tour-tags">
-                  <div className="tour-tags--l">
-                    <div className="tour-duration">
-                      <h4 className="tour-duration__title">Duration</h4>
-                      <div className="tour-duration-time">
-                        <img src={timeIcon} alt="icon clock" />
-                        <p className="tour-duration__hour">{duration}</p>
-                      </div>
-                    </div>
-                    <div className="tour-duration">
-                      <h4>Price</h4>
-                      <div className="tour-duration-price">
-                        <p>USD {formatPrice(price)}</p>
-                      </div>
-                    </div>
-                    <div className="tour-duration">
-                      <h4>Activity Level</h4>
-                      <div className="tour-duration-price">
-                        <p>{activity_level}</p>
-                      </div>
+            {/* <div className="tour-content"> */}
+
+            <div className="tour-text">
+              <h1 className="tour__heading">{tour_name}</h1>
+              <div className="tour-tags">
+                <div className="tour-tags--l">
+                  <div className="tour-duration">
+                    <h4 className="tour-duration__title">Duration</h4>
+                    <div className="tour-duration-time">
+                      <img src={timeIcon} alt="icon clock" />
+                      <p className="tour-duration__hour">{duration}</p>
                     </div>
                   </div>
-                  <div className="tour-tags--r">
-                    <div className="tour-tags-wrp">
-                      <img src={saveIcon} alt="heart icon" />
-                      <h5 className="tour-tags--r-heading">Save to wishlist</h5>
+                  <div className="tour-duration">
+                    <h4 className="tour-duration__title">Price</h4>
+                    <div className="tour-duration-price">
+                      <p>USD {formatPrice(price)}</p>
                     </div>
-                    <div className="tour-tags-wrp">
-                      <img src={shareIcon} alt="share icon" />
-                      <h5 className="tour-tags--r-heading">Share</h5>
+                  </div>
+                  <div className="tour-duration">
+                    <h4 className="tour-duration__title">Activity Level</h4>
+                    <div className="tour-duration-price">
+                      <p>{activity_level}</p>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="tour-hero__img-wrp">
-                {additionalImages.map((image, index) => (
-                  <div className="tour-hero__img-link" key={index}>
-                    <img
-                      src={`${API_URL}/${image}`}
-                      alt={`tour image ${index}`}
-                      onClick={() => openModal(index + 1)}
-                    />
+                <div className="tour-tags--r">
+                  <div
+                    className="tour-tags-wrp tour__save"
+                    onClick={handleClick}
+                  >
+                    <div className="heart-container">
+                      <img
+                        src={saveIcon}
+                        alt="heart outline icon"
+                        className={`heart-icon ${isLiked ? "hidden" : ""}`}
+                      />
+                      <img
+                        src={saveIconFilled}
+                        alt="Liked"
+                        className={`heart-icon ${
+                          isLiked ? "visible" : "hidden"
+                        }`}
+                      />
+                    </div>
+                    <h5 className="tour-tags--r-heading">
+                      {" "}
+                      {isLiked ? "Saved to wishlist" : "Save to wishlist"}
+                    </h5>
                   </div>
-                ))}
+                  <div
+                    className="tour-tags-wrp tour__share"
+                    onClick={handleShareClick}
+                  >
+                    <img src={shareIcon} alt="share icon" />
+                    <h5 className="tour-tags--r-heading">Share</h5>
+                    {copyStatus && <p className="copy-status">{copyStatus}</p>}
+                  </div>
+                </div>
               </div>
             </div>
+            {/* <div className="tour-hero__img-wrp"> */}
+
+            {additionalImages.map((image, index) => (
+              <div className="tour-hero__img-link" key={index}>
+                <img
+                  src={`${API_URL}/${image}`}
+                  alt={`tour image ${index}`}
+                  onClick={() => openModal(index + 1)}
+                />
+              </div>
+            ))}
+            {/* </div> */}
+            {/* </div> */}
           </div>
 
           <Modal isOpen={modalOpen} onClose={closeModal}>

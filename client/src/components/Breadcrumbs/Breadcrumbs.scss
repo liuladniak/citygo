@@ -1,0 +1,26 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+.breadcrumb-nav {
+  width: 100%;
+  max-width: $max-width;
+  padding: 2rem 2rem 0;
+}
+.breadcrumb {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .breadcrumb-item {
+    display: inline;
+    font-size: 1.4rem;
+    font-weight: 600;
+
+    & a {
+      text-decoration: underline;
+    }
+    &:not(:last-child)::after {
+      content: " > ";
+      margin: 0 5px;
+    }
+  }
+}

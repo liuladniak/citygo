@@ -5,18 +5,28 @@
   @include layout-constrain;
   @include border-radius;
   width: 100%;
-  margin-top: 4rem;
+  margin: 4rem 1.6rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: $space-large;
-  padding: 6rem;
+  padding: $space-x-small;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+
+  @include tablet {
+    padding: 6rem;
+  }
 
   &-form {
     display: flex;
-    gap: $space-large;
+    flex-direction: column;
+    gap: $space-x-small;
+
+    @include tablet {
+      flex-direction: row;
+      gap: $space-large;
+    }
   }
 
   &-heading {

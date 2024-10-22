@@ -5,7 +5,7 @@ import fbIcon from "../../assets/icons/facebook.svg";
 import ytIcon from "../../assets/icons/youtube.svg";
 const Footer = () => {
   return (
-    <section className="footer">
+    <footer className="footer">
       <div className="footer-col">
         <Link className="footer-logo-link">CityGo</Link>
         <h4 className="footer-col-title">Contact us</h4>
@@ -88,7 +88,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 };
 

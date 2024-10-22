@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./Header.scss";
 import Button from "../Button/Button";
 import userAvatar from "../../assets/images/user-avatar.jpg";
@@ -18,8 +18,13 @@ import { logout, checkToken } from "../../features/auth/authSlice";
 function Header() {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
+  const [isOpen, setIsOpen] = useState(false);
 
   const totalBookings = useSelector((state) => state.cart.totalBookings);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
@@ -54,7 +59,16 @@ function Header() {
         </div>
       </Link>
 
-      <nav className="nav">
+      <button
+        className={`burger-menu ${isOpen ? "open" : ""}`}
+        onClick={toggleMenu}
+      >
+        <span className="burger-bar"></span>
+        <span className="burger-bar"></span>
+        <span className="burger-bar"></span>
+      </button>
+
+      <nav className={`nav ${isOpen ? "nav--open" : "nav--closing"}`}>
         <ul className="nav__list nav__list--menu">
           <li className="nav__item">
             <a

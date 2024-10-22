@@ -4,6 +4,8 @@ import Button from "../Button/Button";
 import timeIcon from "../../assets/icons/time-icon-red.png";
 import chevronRightIcon from "../../assets/icons/chevron-right.svg";
 import { API_URL } from "../../utils/api";
+import { generateSlug } from "../../utils/generateSlug";
+
 const TourCard = ({
   id,
   tour_name,
@@ -28,7 +30,8 @@ const TourCard = ({
     }
   };
   return (
-    <Link className="tour-card" to={`/tours/${id}`}>
+    // <Link className="tour-card" to={`/tours/${id}`}>
+    <Link className="tour-card" to={`/tours/${generateSlug(tour_name)}`}>
       <div>
         <div className="tour-card__img-wrp">
           <img src={`${API_URL}/${tour_thumbnail}`} alt="tour image" />

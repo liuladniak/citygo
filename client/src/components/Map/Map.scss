@@ -3,12 +3,16 @@
 
 .map {
   margin-top: $space-large;
-  height: 44rem;
+  height: 26rem;
   width: 100%;
   @include border-radius;
   @include layout-constrain;
   overflow: hidden;
   transition: height 0.3s ease;
+
+  @include tablet {
+    height: 44rem;
+  }
 
   &-tour {
     height: 30rem;

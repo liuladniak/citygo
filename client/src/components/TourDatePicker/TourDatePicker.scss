@@ -12,7 +12,11 @@
     overflow: hidden;
     font-family: "Arial, sans-serif";
     font-size: 1.2rem;
-    padding: 2.4rem;
+    padding: 0;
+
+    @include tablet {
+      padding: 2.4rem;
+    }
 
     &__navigation {
       top: 3.8rem;

@@ -15,14 +15,22 @@
 
   &-wrp {
     display: flex;
+    flex-direction: column;
     gap: $space-large;
+
+    @include tablet {
+      flex-direction: row;
+    }
   }
 
   &-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 35rem;
+    display: none;
+    @include tablet {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 35rem;
+    }
 
     & img {
       width: 4rem;

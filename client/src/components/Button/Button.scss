@@ -23,7 +23,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
     gap: 0.5rem;
 
-    @include tablet-breakpoint {
+    @include tablet {
       flex-shrink: 0;
       padding: 0 1rem;
     }
@@ -37,8 +37,12 @@
     background-color: transparent;
     color: white;
     z-index: 9;
-    font-size: 3.2rem;
-    letter-spacing: 1px;
+    font-size: 2.2rem;
+
+    @include tablet {
+      font-size: 3.2rem;
+      letter-spacing: 1px;
+    }
   }
   &--login,
   &--signup {
@@ -64,7 +68,7 @@
     right: -1rem;
   }
   &--cta {
-    @include tablet-breakpoint {
+    @include tablet {
       min-width: 15.5rem;
       max-width: 23rem;
       flex-shrink: 0;
