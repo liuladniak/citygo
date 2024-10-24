@@ -2,9 +2,11 @@ import "./ManageBookings.scss";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Button from "../../components/Button/Button";
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 
 function ManageBookings() {
+  const API_URL = import.meta.env.VITE_API_KEY;
+
   const [failedAuth, setFailedAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);

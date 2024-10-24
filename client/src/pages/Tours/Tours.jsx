@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 import { useLocation } from "react-router-dom";
 import TourCard from "../../components/TourCard/TourCard";
 import "./Tours.scss";
@@ -13,6 +13,8 @@ const useQuery = () => {
 };
 
 const Tours = () => {
+  const API_URL = import.meta.env.VITE_API_KEY;
+
   const [tours, setTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const query = useQuery();

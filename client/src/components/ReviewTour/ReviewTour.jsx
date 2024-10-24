@@ -1,6 +1,6 @@
 import "./ReviewTour.scss";
 import { useState } from "react";
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 import iconEdit from "../../assets/icons/edit.svg";
 import { useDispatch } from "react-redux";
 // import { RootState } from "../store";
@@ -8,6 +8,8 @@ import { removeBooking } from "../../features/cart/cartSlice";
 import EditBookingModal from "../EditBookingModal/EditBookingModal";
 
 const ReviewTour = ({ bookings }) => {
+  const API_URL = import.meta.env.VITE_API_KEY;
+
   const dispatch = useDispatch();
   const [editingBooking, setEditingBooking] = useState(null);
 

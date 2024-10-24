@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import "./BookingForm.scss";
 import TourDatePicker from "../TourDatePicker/TourDatePicker";
@@ -13,6 +13,8 @@ import { addBooking } from "../../features/cart/cartSlice";
 import { v4 as uuidv4 } from "uuid";
 
 const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
+  const API_URL = import.meta.env.VITE_API_KEY;
+
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
