@@ -16,8 +16,8 @@ const CountdownLoader = () => {
   return (
     <div style={styles.container}>
       <div style={styles.loader}>
-        <p>Connecting to server...</p>
-        <p style={styles.text}>{seconds} seconds remaining</p>
+        <p>Connecting to server</p>
+        <p style={styles.text}>{seconds}s...</p>
       </div>
     </div>
   );
