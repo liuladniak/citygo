@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "NODE_ENV=production node server.js",
+    "dev": "NODE_ENV=development nodemon server.js",
     "migrate": "knex migrate:latest",
     "migrate:all": "knex migrate:up 20240710161921_create_users_table.js && knex migrate:up 20240714204954_create_tours_table.js && knex migrate:up 20240710162045_create_available_dates_table.js && knex migrate:up 20240710172942_create_highlights_table.js && knex migrate:up 20240710173450_create_images_table.js && knex migrate:up 20240912003451_create_bookings_table.js",
     "migrate:users": "knex migrate:up 20240710161921_create_users_table.js",
@@ -32,8 +33,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
+    "morgan": "^1.10.0",
     "nodemon": "^3.1.4",
     "pg": "^8.13.0",
     "stripe": "^16.11.0"

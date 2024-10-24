@@ -1,6 +1,7 @@
 export default [
   {
     tour_name: "Historical Istanbul Walking Tour",
+    slug: "historical-istanbul-walking-tour",
     duration: "4 hr",
     category: "Guided tour",
     landmarks: "Center",
@@ -22,6 +23,7 @@ export default [
   },
   {
     tour_name: "Bosphorus Cruise and Spice Market Tour",
+    slug: "bosphorus-cruise-and-spice-market-tour",
     duration: "6 hr",
     category: "Guided tour",
     landmarks: "Center",
@@ -43,6 +45,7 @@ export default [
   },
   {
     tour_name: "Istanbul Food and Culture Tour",
+    slug: "istanbul-food-and-culture-tour",
     category: "Culinary tour",
     duration: "5 hr",
     landmarks: "Neighborhood",
@@ -64,6 +67,7 @@ export default [
   },
   {
     tour_name: "Historical Gems of Istanbul Tour",
+    slug: "historical-gems-of-istanbul-tour",
     duration: "4 hr",
     category: "Guided tour",
     landmarks: "Center",
@@ -85,6 +89,7 @@ export default [
   },
   {
     tour_name: "Galata Beyoglu Historical and Cultural Tour",
+    slug: "galata-beyoglu-historical-and-cultural-tour",
     duration: "4 hr",
     category: "Guided tour",
     landmarks: "Center",
@@ -106,6 +111,7 @@ export default [
   },
   {
     tour_name: "Fener-Balat Historical Walking Tour",
+    slug: "fener-balat-historical-walking-tour",
     duration: "4 hr",
     category: "Guided tour",
     landmarks: "Neighborhood",
@@ -127,6 +133,7 @@ export default [
   },
   {
     tour_name: "Istanbul Shopping Tour",
+    slug: "istanbul-shopping-tour",
     duration: "6 hr",
     category: "Experience",
     landmarks: "Center",
@@ -148,6 +155,7 @@ export default [
   },
   {
     tour_name: "Istanbul Art and Culture Tour",
+    slug: "istanbul-art-and-culture-tour",
     duration: "5 hr",
     category: "Experience",
     landmarks: "Center",
@@ -169,6 +177,7 @@ export default [
   },
   {
     tour_name: "Istanbul Photography Tour",
+    slug: "istanbul-photography-tour",
     duration: "4 hr",
     category: "Experience",
     landmarks: "Neighborhood",
@@ -190,6 +199,7 @@ export default [
   },
   {
     tour_name: "Golden Horn Adventure Tour",
+    slug: "golden-horn-adventure-tour",
     duration: "6 hr",
     category: "Guided tour",
     landmarks: "Neighborhood",

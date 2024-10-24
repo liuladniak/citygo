@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import authRoutes from "./routes/auth.js";
@@ -9,7 +11,7 @@ import bookingRoutes from "./routes/bookingRoutes.js";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 const staticFilesPath = path.resolve("public");
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
@@ -37,6 +39,19 @@ app.use(
     },
   })
 );
+
+if (process.env.NODE_ENV === "production") {
+  app.use(helmet());
+  console.log("Helmet security enabled in production");
+}
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+  console.log("Morgan logging in dev mode");
+} else {
+  app.use(morgan("combined"));
+  console.log("Morgan logging in combined mode (production)");
+}
 
 app.use(express.json());
 app.use("/api/users", userRoutes);

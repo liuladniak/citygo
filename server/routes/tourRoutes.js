@@ -58,15 +58,16 @@ const getAllTours = async (req, res) => {
   }
 };
 
-const getTourById = async (req, res) => {
+const getTourBySlug = async (req, res) => {
+  // const slug = req.query.slug;
+  const { slug } = req.params;
+  console.log("Fetching tour with slug:", slug);
   try {
-    const { id } = req.params;
-
-    const tour = await knex("tours").where({ id }).first();
+    const tour = await knex("tours").where({ slug }).first();
     if (!tour) {
       return res.status(404).json({ message: "Tour not found" });
     }
-
+    const { id } = tour;
     const images = await knex("images")
       .where({ tour_id: id })
       .orderBy("id")
@@ -93,6 +94,6 @@ const getTourById = async (req, res) => {
 };
 
 router.get("/", getAllTours);
-router.get("/:id", getTourById);
+router.get("/:slug", getTourBySlug);
 
 export default router;
