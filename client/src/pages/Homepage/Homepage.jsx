@@ -6,6 +6,7 @@ import Featured from "../../components/Featured/Featured";
 import ToursIntroList from "../../components/ToursIntroList/ToursIntroList";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
 
 // import { API_URL } from "../../utils/api";
 
@@ -29,7 +30,8 @@ const Homepage = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    // return <div>Loading...</div>;
+    return <CountdownLoader />;
   }
 
   return (
