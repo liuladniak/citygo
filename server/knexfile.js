@@ -2,7 +2,6 @@ import "dotenv/config";
 
 export default {
   development: {
-    // client: "mysql2",
     client: "pg",
     connection: {
       host: process.env.DB_HOST,
