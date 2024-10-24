@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Tour.scss";
@@ -17,7 +17,7 @@ import { formatPrice } from "../../utils/formatPrice";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 
 const Tour = () => {
-  // const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_KEY;
 
   const [isLoading, setIsLoading] = useState(true);
   const [tour, setTour] = useState({});

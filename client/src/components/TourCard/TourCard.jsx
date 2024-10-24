@@ -3,7 +3,7 @@ import "./TourCard.scss";
 import Button from "../Button/Button";
 import timeIcon from "../../assets/icons/time-icon-red.png";
 import chevronRightIcon from "../../assets/icons/chevron-right.svg";
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 import { generateSlug } from "../../utils/generateSlug";
 
 const TourCard = ({
@@ -15,7 +15,7 @@ const TourCard = ({
   price,
   category,
 }) => {
-  // const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_KEY;
   const highlightsList = highlights.join(", ");
 
   const getCategoryClass = (category) => {

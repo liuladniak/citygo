@@ -3,11 +3,11 @@ import "./ToursIntroList.scss";
 import arrowRightIcon from "../../assets/icons/chevron-right.svg";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 import axios from "axios";
 
 const ToursIntroList = () => {
-  // const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_KEY;
 
   const [tours, setTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

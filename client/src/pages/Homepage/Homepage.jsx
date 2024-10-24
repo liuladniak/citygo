@@ -7,10 +7,10 @@ import ToursIntroList from "../../components/ToursIntroList/ToursIntroList";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { API_URL } from "../../utils/api";
+// import { API_URL } from "../../utils/api";
 
 const Homepage = () => {
-  // const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_KEY;
   const [tours, setTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
