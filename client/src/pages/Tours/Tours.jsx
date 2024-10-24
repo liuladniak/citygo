@@ -7,6 +7,7 @@ import "./Tours.scss";
 import CustomSelect from "../../components/CustomSelect/CustomSelect";
 import searchIcon from "../../assets/icons/search.svg";
 import Button from "../../components/Button/Button";
+import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -116,7 +117,8 @@ const Tours = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    // return <div>Loading...</div>;
+    return <CountdownLoader />;
   }
 
   return (

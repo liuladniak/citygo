@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import { API_URL } from "../../utils/api";
 import axios from "axios";
+import CountdownLoader from "../CountdownLoader/CountdownLoader";
 
 const ToursIntroList = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
@@ -29,7 +30,8 @@ const ToursIntroList = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    // return <div>Loading...</div>;
+    return <CountdownLoader />;
   }
 
   return (

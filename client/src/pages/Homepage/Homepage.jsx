@@ -30,8 +30,8 @@ const Homepage = () => {
   }, []);
 
   if (isLoading) {
-    // return <div>Loading...</div>;
-    return <CountdownLoader />;
+    return <div>Loading...</div>;
+    // return <CountdownLoader />;
   }
 
   return (

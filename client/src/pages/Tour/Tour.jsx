@@ -15,6 +15,7 @@ import Modal from "../../components/Modal/Modal";
 import timeIcon from "../../assets/icons/icon-time.svg";
 import { formatPrice } from "../../utils/formatPrice";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
+import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
 
 const Tour = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
@@ -71,7 +72,8 @@ const Tour = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    // return <div>Loading...</div>;
+    return <CountdownLoader />;
   }
 
   const {
