@@ -12,7 +12,9 @@ import arrowUpRightIcon from "../../assets/icons/arrow-up-right.svg";
 const Hero = () => {
   return (
     <section className="hero">
-      <h1 className="hero-heading">Guided tours: Discover Majestic İstanbul</h1>
+      <h1 className="hero-heading">
+        Hey!Guided tours: Discover Majestic İstanbul
+      </h1>
       <div className="hero-wrp">
         <div className="hero-intro">
           <div className="hero-video">
