@@ -21,7 +21,7 @@ function ManageBookings() {
     }
 
     try {
-      const response = await axios.get("http://localhost:8080/auth/profile", {
+      const response = await axios.get(`${API_URL}/auth/profile`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -40,7 +40,7 @@ function ManageBookings() {
     try {
       console.log("User ID being sent:", userId);
       const response = await axios.get(
-        `http://localhost:8080/api/bookings?userId=${userId}`,
+        `${API_URL}/api/bookings?userId=${userId}`,
         {
           headers: {
             Authorization: "Bearer " + token,

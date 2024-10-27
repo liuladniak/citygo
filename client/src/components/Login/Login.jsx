@@ -10,12 +10,13 @@ function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
+  const API_URL = import.meta.env.VITE_API_KEY;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         email: event.target.email.value,
         password: event.target.password.value,
       });

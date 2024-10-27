@@ -6,6 +6,8 @@ import Input from "../../components/Input/Input";
 import Button from "../Button/Button";
 
 function Signup() {
+  const API_URL = import.meta.env.VITE_API_KEY;
+
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
@@ -13,7 +15,7 @@ function Signup() {
     event.preventDefault();
 
     try {
-      await axios.post("http://localhost:8080/auth/signup", {
+      await axios.post(`${API_URL}/auth/signup`, {
         first_name: event.target.first_name.value,
         last_name: event.target.last_name.value,
         phone: event.target.phone.value,
