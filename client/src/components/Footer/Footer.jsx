@@ -3,6 +3,7 @@ import "./Footer.scss";
 import instaIcon from "../../assets/icons/instagram.svg";
 import fbIcon from "../../assets/icons/facebook.svg";
 import ytIcon from "../../assets/icons/youtube.svg";
+
 const Footer = () => {
   return (
     <footer className="footer">
