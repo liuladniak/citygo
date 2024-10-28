@@ -1,7 +1,12 @@
+import Header from "../../components/Header/Header";
 import "./Team.scss";
 
 const Team = () => {
-  return <div>Team</div>;
+  return (
+    <section className="team">
+      <Header pageTitle="Team" />
+    </section>
+  );
 };
 
 export default Team;

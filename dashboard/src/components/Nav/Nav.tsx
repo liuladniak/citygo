@@ -11,11 +11,11 @@ import reportsIcon from "../../assets/icons/report.svg";
 import guestsIcon from "../../assets/icons/person_search.svg";
 import settingsIcon from "../../assets/icons/settings.svg";
 
-import "./Sidebar.scss";
+import "./Nav.scss";
 
-const Sidebar = () => {
+const Nav = () => {
   return (
-    <aside className="sidebar">
+    <aside className="main-nav">
       <div className="logo">CityGo</div>
       <nav className="nav">
         <ul className="nav-list">
@@ -103,4 +103,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default Nav;

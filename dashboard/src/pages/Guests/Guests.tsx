@@ -1,7 +1,12 @@
+import Header from "../../components/Header/Header";
 import "./Guests.scss";
 
 const Guests = () => {
-  return <div>Guests</div>;
+  return (
+    <section className="guests">
+      <Header pageTitle="Guests" />
+    </section>
+  );
 };
 
 export default Guests;

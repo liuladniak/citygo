@@ -1,13 +1,14 @@
 @use "../../styles/partials/mixins" as *;
 @use "../../styles/partials/variables" as *;
 
-.sidebar {
-  padding: 3rem;
+.main-nav {
+  padding: 1.6rem 3rem;
   width: 22rem;
+  border-right: 1px solid #eee;
 }
 
 .logo {
-  font-size: 3rem;
+  font-size: 2.6rem;
   padding-bottom: 2rem;
   font-weight: 700;
 }

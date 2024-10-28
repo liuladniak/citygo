@@ -1,7 +1,12 @@
+import Header from "../../components/Header/Header";
 import "./Reports.scss";
 
 const Reports = () => {
-  return <div>Reports</div>;
+  return (
+    <section className="reports">
+      <Header pageTitle="Reports" />
+    </section>
+  );
 };
 
 export default Reports;

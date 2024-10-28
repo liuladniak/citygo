@@ -1,8 +1,7 @@
-import UserNav from "../../components/UserNav/UserNav";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { API_URL } from "../../utils/api";
 import "./Dashboard.scss";
+import Header from "../../components/Header/Header";
 
 interface Booking {
   tour_id: string;
@@ -10,6 +9,8 @@ interface Booking {
 }
 
 const Dashboard = () => {
+  const API_URL = import.meta.env.VITE_API_KEY;
+
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,13 +36,11 @@ const Dashboard = () => {
 
   return (
     <section className="dashboard">
-      <header className="header">
-        <h1 className="heading">Dashboard</h1>
-        <UserNav />
-      </header>
-
+      <Header pageTitle="Dashboard" />
       <div className="cards">
-        <div className="card">Todays schedule</div>
+        <div className="card">
+          <h2>Todays schedule</h2>
+        </div>
         <div className="card">
           <h2>Today bookings</h2>
 

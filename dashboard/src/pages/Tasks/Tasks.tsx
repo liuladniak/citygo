@@ -1,7 +1,12 @@
+import Header from "../../components/Header/Header";
 import "./Tasks.scss";
 
 const Tasks = () => {
-  return <div>Tasks</div>;
+  return (
+    <section className="tasks">
+      <Header pageTitle="Tasks" />
+    </section>
+  );
 };
 
 export default Tasks;

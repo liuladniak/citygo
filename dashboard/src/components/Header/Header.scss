@@ -1,6 +1,19 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+
+  &__heading {
+    font-size: 1.8rem;
+    font-weight: 500;
+    padding: 0 3rem;
+  }
+}
+
 .user {
   &-nav {
     &-list {
@@ -9,7 +22,6 @@
       align-items: center;
       gap: 2rem;
       padding: 2rem;
-      background-color: $main-2;
       font-size: 1.4rem;
     }
 

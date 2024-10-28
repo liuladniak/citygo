@@ -1,7 +1,12 @@
+import Header from "../../components/Header/Header";
 import "./Tours.scss";
 
 const Tours = () => {
-  return <div>Tours</div>;
+  return (
+    <section className="tours">
+      <Header pageTitle="Tours" />
+    </section>
+  );
 };
 
 export default Tours;

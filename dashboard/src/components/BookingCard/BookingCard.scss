@@ -1,0 +1,11 @@
+.booking {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  border: 1px solid #eee;
+  border-radius: 1rem;
+  padding: 0.8rem 1.6rem;
+  & span {
+    display: block;
+  }
+}

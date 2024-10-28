@@ -1,41 +1,47 @@
-import { useEffect, useState } from "react";
 import "./Bookings.scss";
-import axios from "axios";
-import { API_URL } from "../../utils/api";
-
-interface Booking {
-  tour_name: string;
-}
+// import { useEffect, useState } from "react";
+// import axios from "axios";
+import Header from "../../components/Header/Header";
+import BookingsList from "../../components/BookingsList/BookingsList";
+// interface Booking {
+//   tour_name: string;
+// }
 
 const Bookings = () => {
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const API_URL = import.meta.env.VITE_API_KEY;
 
-  useEffect(() => {
-    const getBookingsData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/tours`);
-        const bookings = response.data;
-        setBookings(bookings);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("There was an error fetching the tours data!");
-        setIsLoading(false);
-      }
-    };
-    getBookingsData();
-  }, []);
+  // const [bookings, setBookings] = useState<Booking[]>([]);
+  // const [isLoading, setIsLoading] = useState(true);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // useEffect(() => {
+  //   const getBookingsData = async () => {
+  //     try {
+  //       const response = await axios.get(`${API_URL}/tours`);
+  //       const bookings = response.data;
+  //       setBookings(bookings);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.error("There was an error fetching the tours data!");
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   getBookingsData();
+  // }, []);
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
-    <div>
-      {bookings.map((booking, i) => (
+    <section className="bookings">
+      <Header pageTitle="Bookings" />
+
+      <BookingsList />
+
+      {/* {bookings.map((booking, i) => (
         <p key={i}>{booking.tour_name}</p>
-      ))}
-    </div>
+      ))} */}
+    </section>
   );
 };
 
