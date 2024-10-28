@@ -13,7 +13,7 @@ const Hero = () => {
   return (
     <section className="hero">
       <h1 className="hero-heading">
-        Hey! 🐈Guided tours: Discover Majestic İstanbul
+        Hey! 🐈 Guided tours: Discover Majestic İstanbul
       </h1>
       <div className="hero-wrp">
         <div className="hero-intro">
@@ -31,9 +31,11 @@ const Hero = () => {
                 <div className="hero-slogan-wrp">
                   <img src={sloganImg} alt="slogan" />
                 </div>
-                <Button className="btn btn--cta" iconClassName="btn--icon">
-                  View all tours
-                </Button>
+                <Button
+                  className="btn btn--cta"
+                  iconClassName="btn--icon"
+                  text="View all tours"
+                />
               </div>
             </Link>
           </div>
@@ -49,9 +51,8 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-guided"
-                >
-                  Guided tours
-                </Button>
+                  text="Guided tours"
+                />
               </div>
             </div>
           </Link>
@@ -66,9 +67,8 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-culinary"
-                >
-                  Culinary visits
-                </Button>
+                  text="Culinary visits"
+                />
               </div>
             </div>
           </Link>
@@ -83,9 +83,8 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-experiences"
-                >
-                  Experiences
-                </Button>
+                  text="Experiences"
+                />
               </div>
             </div>
           </Link>

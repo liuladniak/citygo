@@ -19,8 +19,8 @@ function AppLayout() {
       <Breadcrumbs />
       <main className="main">
         <Outlet />
+        <Subscribe />
       </main>
-      <Subscribe />
       <Footer />
     </div>
   );

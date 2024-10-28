@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
 
-// import { API_URL } from "../../utils/api";
-
 const Homepage = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
   const [tours, setTours] = useState([]);
@@ -30,8 +28,7 @@ const Homepage = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
-    // return <CountdownLoader />;
+    return <CountdownLoader />;
   }
 
   return (

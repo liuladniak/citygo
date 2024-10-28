@@ -17,6 +17,24 @@
   width: fit-content;
   font-weight: 600;
 
+  &__icon--subscribe {
+    width: 4.2rem;
+    height: 4.2rem;
+    transform: rotate(-30deg) translate(10%, -5%);
+    display: inline;
+    @include tablet {
+      display: none;
+    }
+  }
+
+  &__text--subscribe {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
   &--manage-bookings {
     background-color: white;
     border: 1px solid #dddddd;
@@ -81,11 +99,26 @@
     }
   }
 
-  &--subscribe,
   &--contact {
     background-color: white;
     border: 1px solid #dddddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  }
+
+  &--subscribe {
+    background-color: white;
+    border: 1px solid #dddddd;
+    font-size: 1.6rem;
+    border-radius: 50%;
+    padding: 0.8rem;
+    width: 6rem;
+    height: 6rem;
+
+    @include tablet {
+      width: fit-content;
+      padding: 0 3.2rem;
+      @include border-radius;
+    }
   }
 
   &--book {

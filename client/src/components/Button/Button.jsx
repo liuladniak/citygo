@@ -2,19 +2,27 @@ import { Link } from "react-router-dom";
 import "./Button.scss";
 
 function Button({
+  text,
   children,
   iconUrl,
   to,
-  className = "",
   onClick,
+  className = "",
+  textClassName = "",
   iconClassName = "",
 }) {
   const content = (
     <>
-      <>{children}</>
-      {iconUrl && (
-        <img className={`${iconClassName}`} src={iconUrl} alt="Button icon" />
-      )}
+      <span className={`btn__text ${textClassName}`}>{text}</span>
+      <span>
+        {iconUrl && (
+          <img
+            className={`btn__icon ${iconClassName}`}
+            src={iconUrl}
+            alt="Button icon"
+          />
+        )}
+      </span>
     </>
   );
   return to ? (

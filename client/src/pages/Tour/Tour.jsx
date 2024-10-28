@@ -1,5 +1,4 @@
 import axios from "axios";
-// import { API_URL } from "../../utils/api";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Tour.scss";
@@ -72,7 +71,6 @@ const Tour = () => {
   };
 
   if (isLoading) {
-    // return <div>Loading...</div>;
     return <CountdownLoader />;
   }
 
@@ -100,7 +98,6 @@ const Tour = () => {
   console.log(tour, "tour || images:", tour.images);
   const mainImage = images[0];
   const additionalImages = images.slice(1, 4);
-
   console.log("mainImage:", mainImage);
 
   return (
@@ -115,8 +112,6 @@ const Tour = () => {
                 onClick={() => openModal(0)}
               />
             </div>
-
-            {/* <div className="tour-content"> */}
 
             <div className="tour-text">
               <h1 className="tour__heading">{tour_name}</h1>
@@ -177,7 +172,6 @@ const Tour = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="tour-hero__img-wrp"> */}
 
             {additionalImages.map((image, index) => (
               <div className="tour-hero__img-link" key={index}>
@@ -188,8 +182,6 @@ const Tour = () => {
                 />
               </div>
             ))}
-            {/* </div> */}
-            {/* </div> */}
           </div>
 
           <Modal isOpen={modalOpen} onClose={closeModal}>

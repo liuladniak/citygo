@@ -11,9 +11,11 @@ const MoreServices = () => {
             Private & Legal Airport Transportation Service in Istanbul. Safe and
             Economic Transport.
           </p>
-          <Button className="btn btn--cta" iconClassName="btn--icon">
-            See all Car Services
-          </Button>
+          <Button
+            className="btn btn--cta"
+            iconClassName="btn--icon"
+            text="See all Car Services"
+          />
         </div>
         <div className="overlay--more"></div>
       </div>
@@ -25,9 +27,11 @@ const MoreServices = () => {
             itineraries, personalized experiences, and dedicated guides.
           </p>
 
-          <Button className="btn btn--cta" iconClassName="btn--icon">
-            View how it works
-          </Button>
+          <Button
+            className="btn btn--cta"
+            iconClassName="btn--icon"
+            text="View how it works"
+          />
         </div>
         <div className="overlay--more"></div>
       </div>

@@ -1,6 +1,5 @@
 import "./ReviewTour.scss";
 import { useState } from "react";
-// import { API_URL } from "../../utils/api";
 import iconEdit from "../../assets/icons/edit.svg";
 import { useDispatch } from "react-redux";
 // import { RootState } from "../store";

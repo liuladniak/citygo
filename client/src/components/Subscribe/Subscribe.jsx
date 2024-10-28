@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "../Button/Button";
 import "./Subscribe.scss";
+import sendIcon from "../../assets/icons/send.svg";
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
@@ -33,13 +34,18 @@ const Subscribe = () => {
       <form onSubmit={handleSubmit} className="subscribe-form">
         <input
           className="subscribe-input"
-          placeholder="Enter your email"
+          placeholder="Enter your email..."
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Button type="submit" className="btn btn--subscribe">
-          Subscribe
-        </Button>
+        <Button
+          type="submit"
+          className="btn btn--subscribe"
+          iconUrl={sendIcon}
+          text="Subscribe"
+          textClassName="btn__text--subscribe"
+          iconClassName="btn__icon--subscribe"
+        />
       </form>
       {message && (
         <p className={isValid ? "success-message" : "error-message"}>

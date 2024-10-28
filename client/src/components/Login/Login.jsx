@@ -41,9 +41,6 @@ function Login() {
       <form className="login" onSubmit={handleSubmit}>
         <h1 className="login__title">Log in</h1>
 
-        {/* <Input type="text" name="email" label="Email" />
-        <Input type="password" name="password" label="Password" /> */}
-
         <Input
           type="text"
           name="email"

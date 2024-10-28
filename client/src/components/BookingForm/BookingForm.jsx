@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { API_URL } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import "./BookingForm.scss";
 import TourDatePicker from "../TourDatePicker/TourDatePicker";

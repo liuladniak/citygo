@@ -4,8 +4,8 @@
 .subscribe {
   @include layout-constrain;
   @include border-radius;
-  width: 100%;
-  margin: 4rem 1.6rem 0;
+
+  margin: 4rem 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,16 +16,27 @@
 
   @include tablet {
     padding: 6rem;
+    margin: 4rem 1.6rem 0;
   }
 
   &-form {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    gap: $space-x-small;
+    justify-content: space-between;
+    @include border-radius;
+    border: 1px solid #ddd;
+    overflow: hidden;
+    padding: 0.8rem;
+    margin: 0 $space-medium;
+    background-color: $main-maroon;
 
     @include tablet {
-      flex-direction: row;
       gap: $space-large;
+      width: 80%;
+    }
+
+    @include desktop {
+      width: 50%;
     }
   }
 
@@ -34,10 +45,20 @@
   }
 
   &-input {
-    @include border-radius;
-    border: 1px solid #ddd;
-    padding: 0 $space-large;
+    background-color: transparent;
+    width: 100%;
+    outline: transparent;
+    border: none;
+    padding: 0 $space-x-small;
     font-family: Montserrat;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    &::placeholder {
+      color: $main-white;
+    }
+    @include tablet {
+      padding: 0 $space-large;
+    }
   }
 }
 

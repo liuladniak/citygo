@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./Breadcrumbs.scss";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../../utils/api";
 
 const breadcrumbNames = {
   tours: "All Tours",
@@ -15,6 +14,8 @@ const getBreadcrumbName = (value, tourName) => {
 };
 
 const Breadcrumbs = () => {
+  const API_URL = import.meta.env.VITE_API_KEY;
+
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   const [tourName, setTourName] = useState("");

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { API_URL } from "../../utils/api";
 import { useLocation } from "react-router-dom";
 import TourCard from "../../components/TourCard/TourCard";
 import "./Tours.scss";
@@ -117,7 +116,6 @@ const Tours = () => {
   };
 
   if (isLoading) {
-    // return <div>Loading...</div>;
     return <CountdownLoader />;
   }
 

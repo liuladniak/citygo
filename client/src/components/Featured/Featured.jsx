@@ -15,9 +15,7 @@ const Featured = () => {
               to assist you.
             </p>
           </div>
-          <Button className="btn btn--contact" to="/">
-            Contact Us
-          </Button>
+          <Button className="btn btn--contact" to="/" text="Contact Us" />
         </div>
       </div>
     </div>

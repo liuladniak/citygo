@@ -38,7 +38,6 @@
   }
   &__img-main {
     @include border-radius;
-    // flex: 1;
     overflow: hidden;
     cursor: pointer;
 
@@ -62,8 +61,6 @@
   }
 
   &-hero {
-    // display: flex;
-
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: repeat(2, 10rem) auto;
@@ -86,9 +83,6 @@
     }
 
     &__img-wrp {
-      // display: flex;
-      // gap: $space-large;
-      // flex: 1;
       margin-top: $space-large;
     }
     &__img {
@@ -187,9 +181,7 @@
     }
   }
   &-duration {
-    // font-size: 1.4rem;
     display: flex;
-    // flex-direction: row;
     justify-content: space-between;
     gap: 0.8rem;
 
@@ -338,13 +330,11 @@
 }
 
 .hidden {
-  // opacity: 0;
   display: none;
 }
 
 .visible {
   display: block;
-  // opacity: 1;
 }
 
 .heart-container:hover .hidden {

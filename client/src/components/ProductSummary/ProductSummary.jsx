@@ -1,7 +1,6 @@
 import Button from "../Button/Button";
 import "./ProductSummary.scss";
 import { formatCurrency } from "../../utils/formatCurrency";
-// import { API_URL } from "../../utils/api";
 
 const ProductSummary = ({ bookings, makePayment }) => {
   if (!bookings || bookings.length === 0) {

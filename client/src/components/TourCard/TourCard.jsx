@@ -3,7 +3,6 @@ import "./TourCard.scss";
 import Button from "../Button/Button";
 import timeIcon from "../../assets/icons/time-icon-red.png";
 import chevronRightIcon from "../../assets/icons/chevron-right.svg";
-// import { API_URL } from "../../utils/api";
 import { generateSlug } from "../../utils/generateSlug";
 
 const TourCard = ({
@@ -31,7 +30,6 @@ const TourCard = ({
     }
   };
   return (
-    // <Link className="tour-card" to={`/tours/${id}`}>
     <Link className="tour-card" to={`/tours/${generateSlug(tour_name)}`}>
       <div>
         <div className="tour-card__img-wrp">
@@ -62,9 +60,8 @@ const TourCard = ({
             <Button
               className=" btn btn--view-details"
               iconUrl={chevronRightIcon}
-            >
-              View details
-            </Button>
+              text="View details"
+            />
           </div>
         </div>
       </div>
