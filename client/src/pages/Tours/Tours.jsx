@@ -14,7 +14,7 @@ const useQuery = () => {
 
 const Tours = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
-
+  console.log(API_URL, "API URL");
   const [tours, setTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const query = useQuery();
