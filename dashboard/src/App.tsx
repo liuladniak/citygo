@@ -13,6 +13,7 @@ import Tasks from "./pages/Tasks/Tasks";
 import Team from "./pages/Team/Team";
 import Tours from "./pages/Tours/Tours";
 import Guests from "./pages/Guests/Guests";
+import TourDetails from "./pages/TourDetails/TourDetails";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/tours",
         element: <Tours />,
+      },
+      {
+        path: "/tours/:slug",
+        element: <TourDetails />,
       },
     ],
   },

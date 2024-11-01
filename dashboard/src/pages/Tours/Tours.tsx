@@ -1,10 +1,12 @@
 import Header from "../../components/Header/Header";
 import "./Tours.scss";
+import ToursList from "../../components/ToursList/ToursList.jsx";
 
 const Tours = () => {
   return (
     <section className="tours">
       <Header pageTitle="Tours" />
+      <ToursList />
     </section>
   );
 };
