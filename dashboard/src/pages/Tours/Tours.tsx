@@ -1,4 +1,4 @@
-import Header from "../../components/Header/Header";
+import Header from "../../components/Header/Header.js";
 import "./Tours.scss";
 import ToursList from "../../components/ToursList/ToursList.jsx";
 
