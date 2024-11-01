@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "./ToursList.scss";
 import TourListCard from "../TourListCard/TourListCard";
-import CountdownLoader from "../../../../client/src/components/CountdownLoader/CountdownLoader";
+import CountdownLoader from "../CountdownLoader/CountdownLoader";
 
 const ToursList = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
