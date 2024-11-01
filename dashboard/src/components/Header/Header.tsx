@@ -4,7 +4,7 @@ import moreIcon from "../../assets/icons/more_vert.svg";
 import notifIcon from "../../assets/icons/notifications.svg";
 import userAvatar from "../../assets/images/user-avatar.jpg";
 
-const Header = ({ pageTitle }) => {
+const Header: React.FC<{ pageTitle: string }> = ({ pageTitle }) => {
   return (
     <header className="header">
       <h1 className="header__heading">{pageTitle}</h1>
