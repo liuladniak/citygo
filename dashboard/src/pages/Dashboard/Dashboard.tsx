@@ -47,7 +47,7 @@ const Dashboard = () => {
           <ul className="bookings-list">
             {bookings.map((booking, i) => (
               <li className="bookings-list__item" key={i}>
-                {/* {booking} */} asd
+                {booking.tour_name} asd
               </li>
             ))}
           </ul>
