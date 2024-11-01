@@ -6,13 +6,17 @@ import { useEffect, useState } from "react";
 const TourDetails = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
   const { slug } = useParams();
-  const [tour, setTour] = useState({});
+
+  interface Tour {
+    tour_name: string;
+  }
+  const [tour, setTour] = useState<Tour | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getOneTour = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/tours/${slug}`);
+        const response = await axios.get<Tour>(`${API_URL}/api/tours/${slug}`);
         console.log(response.data, "response data:");
         setTour(response.data);
         setIsLoading(false);
@@ -33,7 +37,7 @@ const TourDetails = () => {
         <div>go back</div>
         <div>
           <h3>Tour</h3>
-          <div>{tour.tour_name}</div>
+          <div>{tour?.tour_name}</div>
         </div>
       </div>
       gallery
