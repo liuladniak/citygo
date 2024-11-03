@@ -73,7 +73,7 @@
 
     @include tablet {
       gap: $space-large;
-      grid-template-columns: 32fr 22fr 15fr 31fr;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
       grid-template-rows: 1fr 1fr;
       height: 40rem;
 

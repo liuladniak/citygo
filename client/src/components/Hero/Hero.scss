@@ -11,7 +11,7 @@
 
   &-heading {
     font-size: 3rem;
-    line-height: 3.6rem;
+    line-height: 1.4;
     font-weight: 700;
     color: $main-maroon;
     text-align: left;
@@ -19,12 +19,12 @@
     @include mobile-s {
       text-align: center;
       font-size: 3.6rem;
-      line-height: 3.8rem;
     }
 
     @include tablet {
       text-align: left;
       font-weight: 600;
+      line-height: 1.2;
     }
     @include desktop {
       font-size: 5.4rem;
@@ -79,6 +79,11 @@
     & video {
       height: 127%;
       width: 127%;
+      transform: scale(1.25);
+
+      @include tablet {
+        transform: scale(1);
+      }
     }
   }
   &-content {

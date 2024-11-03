@@ -30,6 +30,7 @@ const Tours = () => {
       try {
         const response = await axios.get(`${API_URL}/api/tours`);
         const tours = response.data;
+        console.log(tours);
         setTours(tours);
         setIsLoading(false);
       } catch (error) {
