@@ -1,6 +1,6 @@
 # CityGo Travel Booking App
 
-The CityGo app tackles common challenges travelers encounter in city tour planning. It simplifies the booking process, secures user management, and streamlines navigation to make travel planning both efficient and enjoyable.
+  The app addresses the common challenges travelers encounter when planning city tours, such as cumbersome booking processes and unclear navigation. By providing a streamlined user experience, the app ensures secure user management and simplifies the booking journey. With CityGo, travelers can easily discover and book their ideal city tours, making their travel planning efficient and enjoyable.
 
 ---
 
