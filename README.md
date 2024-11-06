@@ -20,10 +20,9 @@
 
 ## 🎥 Demo
 
-Check out the live demo and visit the GitHub repository for collaboration or to share feedback:
+Check out the live demo, while it's still work in progress, feel free to share your feedback or suggestions:
 
-- [**Live Demo**](https://citygo.liuladniak.io/)
-- [**GitHub Repository**](https://github.com/liuladniak/citygo)
+- [**Live Demo - CityGo app**](https://citygo.liuladniak.io/)
 
 ---
 
