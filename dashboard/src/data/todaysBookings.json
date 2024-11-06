@@ -1,0 +1,102 @@
+[
+  {
+    "bookingId": 1,
+    "user": {
+      "userId": 101,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "phone": "+1234567890"
+    },
+    "tour": {
+      "tourId": 201,
+      "title": "City Highlights Tour",
+      "date": "2024-11-05",
+      "time": "09:00",
+      "pricePerPerson": 50.0
+    },
+    "numberOfPeople": 2,
+    "totalPrice": 100.0,
+    "bookingDate": "2024-11-05T08:30:00Z",
+    "status": "Requires Action"
+  },
+  {
+    "bookingId": 2,
+    "user": {
+      "userId": 102,
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "phone": "+0987654321"
+    },
+    "tour": {
+      "tourId": 202,
+      "title": "Adventure Hiking",
+      "date": "2024-11-05",
+      "time": "10:30",
+      "pricePerPerson": 75.0
+    },
+    "numberOfPeople": 3,
+    "totalPrice": 225.0,
+    "bookingDate": "2024-11-05T09:15:00Z",
+    "status": "Confirmed"
+  },
+  {
+    "bookingId": 3,
+    "user": {
+      "userId": 103,
+      "name": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "phone": "+1122334455"
+    },
+    "tour": {
+      "tourId": 203,
+      "title": "Cultural Experience",
+      "date": "2024-11-05",
+      "time": "11:00",
+      "pricePerPerson": 40.0
+    },
+    "numberOfPeople": 1,
+    "totalPrice": 40.0,
+    "bookingDate": "2024-11-05T10:00:00Z",
+    "status": "In Progress"
+  },
+  {
+    "bookingId": 4,
+    "user": {
+      "userId": 104,
+      "name": "Bob Brown",
+      "email": "bob.brown@example.com",
+      "phone": "+2233445566"
+    },
+    "tour": {
+      "tourId": 204,
+      "title": "Historical Sites Tour",
+      "date": "2024-11-05",
+      "time": "13:30",
+      "pricePerPerson": 60.0
+    },
+    "numberOfPeople": 4,
+    "totalPrice": 240.0,
+    "bookingDate": "2024-11-05T11:30:00Z",
+    "status": "Completed"
+  },
+  {
+    "bookingId": 5,
+    "user": {
+      "userId": 105,
+      "name": "Charlie White",
+      "email": "charlie.white@example.com",
+      "phone": "+3344556677"
+    },
+    "tour": {
+      "tourId": 205,
+      "title": "Nature Walk",
+      "date": "2024-11-05",
+      "time": "15:00",
+      "pricePerPerson": 30.0
+    },
+    "numberOfPeople": 2,
+    "totalPrice": 60.0,
+    "bookingDate": "2024-11-05T12:45:00Z",
+    "status": "Requires Action"
+  }
+]

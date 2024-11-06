@@ -1,3 +1,4 @@
+import BookingSummaryChart from "../../components/BookingSummaryChart/BookingSummaryChart";
 import Header from "../../components/Header/Header";
 import "./Analytics.scss";
 
@@ -7,7 +8,9 @@ const Analytics = () => {
       <Header pageTitle="Analytics" />
 
       <div className="cards">
-        <div className="card">Todays bookings</div>
+        <div className="card">
+          <BookingSummaryChart />
+        </div>
         <div className="card">Todays bookings</div>
       </div>
     </section>

@@ -1,0 +1,42 @@
+.team-members {
+  border: 1px solid #ccc;
+  border-radius: 2rem;
+  padding: 1.6rem;
+  width: 40rem;
+  margin-left: 1.6rem;
+}
+
+.team-member {
+  &__heading {
+    font-size: 1.6rem;
+    margin-bottom: 2.4rem;
+  }
+
+  &__list {
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+  &__item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__avatar {
+    overflow: hidden;
+    width: 3rem !important;
+    height: 3rem !important;
+    border-radius: 50%;
+    flex: unset !important;
+    margin-right: 1.6rem;
+    & img {
+    }
+  }
+
+  &__detail {
+    flex: 1;
+  }
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "year": 2021,
+    "tourA": 500,
+    "tourB": 450,
+    "tourC": 300,
+    "tourD": 250,
+    "tourE": 400,
+    "tourF": 350,
+    "tourG": 600,
+    "tourH": 550,
+    "tourI": 470,
+    "tourJ": 480
+  },
+  {
+    "year": 2022,
+    "tourA": 550,
+    "tourB": 470,
+    "tourC": 320,
+    "tourD": 280,
+    "tourE": 420,
+    "tourF": 370,
+    "tourG": 630,
+    "tourH": 580,
+    "tourI": 490,
+    "tourJ": 510
+  },
+  {
+    "year": 2023,
+    "tourA": 600,
+    "tourB": 500,
+    "tourC": 350,
+    "tourD": 300,
+    "tourE": 450,
+    "tourF": 390,
+    "tourG": 660,
+    "tourH": 610,
+    "tourI": 510,
+    "tourJ": 540
+  },
+  {
+    "year": 2024,
+    "tourA": 650,
+    "tourB": 530,
+    "tourC": 380,
+    "tourD": 320,
+    "tourE": 480,
+    "tourF": 410,
+    "tourG": 700,
+    "tourH": 640,
+    "tourI": 530,
+    "tourJ": 560
+  }
+]

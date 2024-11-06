@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "role": "Manager",
+    "avatar": "user-avatar.jpg",
+    "status": "",
+    "currentActivity": "Coordinating team assignments",
+    "contact": {
+      "email": "alice.johnson@example.com",
+      "phone": "+123456789"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Laura Kim",
+    "role": "Manager",
+    "avatar": "user-avatar.jpg",
+    "status": "",
+    "currentActivity": "Reviewing guest feedback",
+    "contact": {
+      "email": "laura.kim@example.com",
+      "phone": "+123456783"
+    }
+  },
+  {
+    "id": 2,
+    "name": "David Thompson",
+    "role": "Tour Guide",
+    "avatar": "user-avatar.jpg",
+    "status": "On Tour",
+    "currentActivity": "Guiding 'City History Walk' tour",
+    "tourInfo": {
+      "tourId": 101,
+      "tourName": "City History Walk",
+      "startTime": "10:00 AM",
+      "endTime": "12:00 PM"
+    },
+    "contact": {
+      "email": "david.thompson@example.com",
+      "phone": "+123456780"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Sam Lee",
+    "role": "Tour Guide",
+    "avatar": "user-avatar.jpg",
+    "status": "Preparing for Next Tour",
+    "currentActivity": "Setting up for 'Food Tasting Tour'",
+    "tourInfo": {
+      "tourId": 102,
+      "tourName": "Food Tasting Tour",
+      "startTime": "1:00 PM",
+      "endTime": "3:00 PM"
+    },
+    "contact": {
+      "email": "sam.lee@example.com",
+      "phone": "+123456782"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Eva Martinez",
+    "role": "Driver",
+    "avatar": "user-avatar.jpg",
+    "status": "Available",
+    "currentActivity": "Awaiting tour pickup",
+    "contact": {
+      "email": "eva.martinez@example.com",
+      "phone": "+123456781"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Mark Nguyen",
+    "role": "Driver",
+    "avatar": "user-avatar.jpg",
+    "status": "On Tour",
+    "currentActivity": "Transporting guests for 'Nature Trail Hike'",
+    "tourInfo": {
+      "tourId": 103,
+      "tourName": "Nature Trail Hike",
+      "startTime": "9:30 AM",
+      "endTime": "12:30 PM"
+    },
+    "contact": {
+      "email": "mark.nguyen@example.com",
+      "phone": "+123456784"
+    }
+  }
+]

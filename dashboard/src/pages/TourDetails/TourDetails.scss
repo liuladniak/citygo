@@ -1,0 +1,72 @@
+.tour {
+  padding: 2.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  &__header {
+    display: flex;
+    gap: 1.6rem;
+    align-items: center;
+  }
+
+  &__heading {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+
+  &__images {
+    display: flex;
+    gap: 0.8rem;
+  }
+
+  &__image {
+    height: 10rem;
+    width: 15rem;
+    border-radius: 1.6rem;
+    overflow: hidden;
+
+    &--add {
+      border: 1px dashed black;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+
+      & span:first-child {
+        font-size: 2.4rem;
+      }
+    }
+  }
+
+  &-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    &__heading {
+      font-size: 1.6rem;
+      font-weight: 500;
+    }
+    &__prices {
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+
+    &__price,
+    &__duration,
+    &__activity {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+  }
+}
+
+.icon--arrowBack {
+  width: 2rem;
+  height: 2rem;
+}
