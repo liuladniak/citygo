@@ -4,7 +4,7 @@ The CityGo app tackles common challenges travelers encounter in city tour planni
 
 ---
 
-## 🚀 Features Implemented
+## Features Implemented
 
 - **User Authentication**: Secure user access with JWT-based authentication using Node.js and Express.
 - **Shopping Cart Management**: Easily review and manage selected tours with Redux for efficient state management.
