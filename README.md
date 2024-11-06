@@ -39,6 +39,6 @@ Check out the live demo, while it's still work in progress, feel free to share y
 
 ## 📈 Next Steps
 
-The focus is on continuously improving the CityGo app’s user experience by adding more features that make booking smoother and more valuable. Feedback is highly appreciated to help enhance this feature-rich travel planning app.
+The focus is on continuously improving the CityGo app’s user experience by adding more features that make booking smoother and more valuable. Feedback is highly appreciated to help enhance this feature-rich travel booking app.
 
 --- 
