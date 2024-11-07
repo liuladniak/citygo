@@ -92,39 +92,45 @@ function ManageBookings() {
       <h1 className="dashboard__title">
         Welcome back, {user.first_name} {user.last_name}
       </h1>
-      <div>
-        <h2 className="bookings-heading">My Bookings:</h2>
-        <ul className="bookings-list">
-          {bookings.map((booking) => (
-            <li className="bookings-list-item" key={booking.id}>
-              <div className="booking-card-img">
-                <img
-                  src={`${API_URL}/${booking.tour_images[0]}`}
-                  alt="tour thumbnail"
-                />
-              </div>
 
-              <div className="bookings-details">
-                <div>
-                  <h2 className="bookings-tour-title">
-                    Tour: {booking.tour_title}
-                  </h2>
+      {bookings.length > 0 ? (
+        <div>
+          <h2 className="bookings-heading">My Bookings:</h2>
+
+          <ul className="bookings-list">
+            {bookings.map((booking) => (
+              <li className="bookings-list-item" key={booking.id}>
+                <div className="booking-card-img">
+                  <img
+                    src={`${API_URL}/${booking.tour_images[0]}`}
+                    alt="tour thumbnail"
+                  />
                 </div>
-                <div className="booking-price">
-                  Total price: USD {booking.tour_price * 3}
+
+                <div className="bookings-details">
+                  <div>
+                    <h2 className="bookings-tour-title">
+                      Tour: {booking.tour_title}
+                    </h2>
+                  </div>
+                  <div className="booking-price">
+                    Total price: USD {booking.tour_price * 3}
+                  </div>
+                  <div className="booking-date">
+                    Tour Date:{" "}
+                    {new Date(booking.booking_date).toLocaleDateString()}
+                  </div>
+                  <div className="booking-people">
+                    Number of Guests: {booking.number_of_people}
+                  </div>
                 </div>
-                <div className="booking-date">
-                  Tour Date:{" "}
-                  {new Date(booking.booking_date).toLocaleDateString()}
-                </div>
-                <div className="booking-people">
-                  Number of Guests: {booking.number_of_people}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p className="booking-message">No bookings yet</p>
+      )}
     </main>
   );
 }
