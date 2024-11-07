@@ -45,7 +45,7 @@ function Signup() {
         <Input type="text" name="email" label="Email" />
         <Input type="password" name="password" label="Password" />
 
-        <Button className="btn btn--signup">Sign up</Button>
+        <Button className="btn btn--signup" text="Sign up" />
 
         {success && <div className="signup__message">Signed up!</div>}
         {error && <div className="signup__message">{error}</div>}

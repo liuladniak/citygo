@@ -55,7 +55,7 @@ function Login() {
           defaultValue="1234"
         />
 
-        <Button className="btn btn--login">Log in</Button>
+        <Button className="btn btn--login" text="Log in" />
 
         {error && <div className="login__message">{error}</div>}
       </form>

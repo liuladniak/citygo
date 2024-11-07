@@ -272,11 +272,20 @@
   }
 
   &-item {
-    padding: 1.6rem 2.4rem;
+    // padding: 1.6rem 2.4rem;
     cursor: pointer;
 
     &:hover {
       background-color: #f7f7f7;
+    }
+
+    & a {
+      display: block;
+      padding: 1.6rem 2.4rem;
+    }
+
+    & .btn--logout {
+      padding: 1.6rem 2.4rem;
     }
   }
 }

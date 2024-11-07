@@ -9,7 +9,6 @@ import useComponentVisible from "../../hooks/useComponentVisible";
 import arrowDown from "../../assets/icons/arrow-down.svg";
 import cartIcon from "../../assets/icons/cart.svg";
 import phoneIcon from "../../assets/icons/phone.svg";
-// import logo from "../../assets/images/logo.png";
 import logo from "../../assets/logos/logo.png";
 import logoIcon from "../../assets/images/logo-icon.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -150,9 +149,8 @@ function Header() {
                         onClick={handleLogout}
                         iconUrl={logoutIcon}
                         iconClassName="btn--logout-icon"
-                      >
-                        Logout
-                      </Button>
+                        text="Logout"
+                      />
                     </li>
                   </ul>
                 )}
