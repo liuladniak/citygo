@@ -42,7 +42,7 @@ Check out the live demo, while it's still work in progress, feel free to share y
 The focus is on continuously improving the CityGo app’s user experience by adding more features that make booking smoother and more valuable. Feedback is highly appreciated to help enhance this feature-rich travel booking app.
 
 --- 
-## 💼 Dashboard (Admin Panel)
+## 💼 Dashboard / Admin Panel
 
 The **CityGo Dashboard** is an admin panel for managing the backend of the CityGo Travel Booking app. This dashboard allows administrators to perform key tasks such as managing tours, assigning tasks, viewing bookings, and analyzing booking activity. It features secure login for admin users, role-based access controls, and an easy-to-navigate interface built with React and Redux for efficient state management.
 
