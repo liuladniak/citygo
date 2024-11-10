@@ -1,3 +1,5 @@
+@use "../../styles/partials/variables" as *;
+
 .tour {
   padding: 2.4rem;
   display: flex;
@@ -27,7 +29,7 @@
     overflow: hidden;
 
     &--add {
-      border: 1px dashed black;
+      border: 1px dashed $main-1;
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
@@ -52,16 +54,20 @@
     }
     &__prices {
       display: flex;
-      flex-direction: column;
       gap: 1.6rem;
     }
 
     &__price,
     &__duration,
-    &__activity {
+    &__activity,
+    &__category,
+    &__landmark,
+    &__highlights,
+    &__overview {
       display: flex;
       flex-direction: column;
       gap: 0.8rem;
+      width: 100%;
     }
   }
 }
@@ -69,4 +75,31 @@
 .icon--arrowBack {
   width: 2rem;
   height: 2rem;
+}
+
+.highlights__list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.highlight-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.highlight-item input {
+  flex-grow: 1;
+}
+
+button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.select-inputs {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
 }

@@ -42,7 +42,7 @@ const TodaysBookingList = () => {
   return (
     <div>
       <h2 className="t-bookings__heading">All Today's Bookings</h2>
-      <input placeholder="Search" />
+      {/* <input placeholder="Search" /> */}
       <ul className="t-bookings__list">
         <li className="t-bookings__item t-bookings__item--title">
           <span className="t-bookings__item-content">Tour name</span>
