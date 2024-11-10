@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Alice Johnson",
     "role": "Manager",
-    "avatar": "user-avatar.jpg",
+    "avatar": "8.jpg",
     "status": "",
     "currentActivity": "Coordinating team assignments",
     "contact": {
@@ -12,10 +12,10 @@
     }
   },
   {
-    "id": 5,
+    "id": 2,
     "name": "Laura Kim",
     "role": "Manager",
-    "avatar": "user-avatar.jpg",
+    "avatar": "65.jpg",
     "status": "",
     "currentActivity": "Reviewing guest feedback",
     "contact": {
@@ -24,10 +24,10 @@
     }
   },
   {
-    "id": 2,
+    "id": 3,
     "name": "David Thompson",
     "role": "Tour Guide",
-    "avatar": "user-avatar.jpg",
+    "avatar": "47.jpg",
     "status": "On Tour",
     "currentActivity": "Guiding 'City History Walk' tour",
     "tourInfo": {
@@ -44,8 +44,8 @@
   {
     "id": 4,
     "name": "Sam Lee",
-    "role": "Tour Guide",
-    "avatar": "user-avatar.jpg",
+    "role": "Driver",
+    "avatar": "71.jpg",
     "status": "Preparing for Next Tour",
     "currentActivity": "Setting up for 'Food Tasting Tour'",
     "tourInfo": {
@@ -60,10 +60,10 @@
     }
   },
   {
-    "id": 3,
+    "id": 5,
     "name": "Eva Martinez",
-    "role": "Driver",
-    "avatar": "user-avatar.jpg",
+    "role": "Tour Guide",
+    "avatar": "76.jpg",
     "status": "Available",
     "currentActivity": "Awaiting tour pickup",
     "contact": {
@@ -75,7 +75,7 @@
     "id": 6,
     "name": "Mark Nguyen",
     "role": "Driver",
-    "avatar": "user-avatar.jpg",
+    "avatar": "20.jpg",
     "status": "On Tour",
     "currentActivity": "Transporting guests for 'Nature Trail Hike'",
     "tourInfo": {

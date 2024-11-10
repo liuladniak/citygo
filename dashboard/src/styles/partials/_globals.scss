@@ -39,8 +39,14 @@ html {
 }
 
 body {
+  color: $main-1;
   font-family: "MonaSans";
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.label {
+  font-size: 1.35rem;
+  font-weight: 600;
 }

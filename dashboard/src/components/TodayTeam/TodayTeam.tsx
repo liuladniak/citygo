@@ -3,11 +3,16 @@ import todayTeamData from "../../data/todayTeamData.json";
 
 const API_URL = "http://localhost:5173";
 const TodayTeam = () => {
+  const sortedTeamMembers = todayTeamData?.sort((a, b) => {
+    const roleOrder = ["Manager", "Tour Guide", "Driver"];
+    return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);
+  });
+
   return (
     <div className="team-members">
       <h3 className="team-member__heading">Available Team</h3>
       <ul className="team-member__list">
-        {todayTeamData?.map((teamMember, index) => {
+        {sortedTeamMembers?.map((teamMember, index) => {
           console.log(`${API_URL}/assets/images/${teamMember.avatar}`);
 
           return (
