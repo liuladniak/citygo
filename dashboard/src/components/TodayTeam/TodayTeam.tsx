@@ -1,8 +1,8 @@
 import "./TodayTeam.scss";
 import todayTeamData from "../../data/todayTeamData.json";
 
-const API_URL = "http://localhost:5173";
 const TodayTeam = () => {
+  const API_URL = import.meta.env.VITE_API_KEY;
   const sortedTeamMembers = todayTeamData?.sort((a, b) => {
     const roleOrder = ["Manager", "Tour Guide", "Driver"];
     return roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role);

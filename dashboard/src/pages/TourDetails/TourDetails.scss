@@ -77,12 +77,16 @@
   height: 2rem;
 }
 
-.highlights__list {
+.highlights__list,
+.essentials__list,
+.includes__list {
   list-style-type: none;
   padding: 0;
 }
 
-.highlight-item {
+.highlight-item,
+.essentials-item,
+.includes-item {
   display: flex;
   gap: 10px;
   align-items: center;
