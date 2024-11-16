@@ -1,5 +1,5 @@
 import Header from "../../components/Header/Header";
-import "./Invoices.scss";
+import "./Invoices.css";
 
 const Invoices = () => {
   return (

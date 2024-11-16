@@ -26,7 +26,7 @@
 //   return <div>Loading...</div>;
 // }
 
-import "./Dashboard.scss";
+import "./Dashboard.css";
 import Header from "../../components/Header/Header";
 import RevenueAreaChart from "../../components/RevenueAreaChart/RevenueAreaChart";
 import TodaysBookingList from "../../components/TodaysBookingList/TodaysBookingList";

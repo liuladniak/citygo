@@ -1,5 +1,5 @@
 import Header from "../../components/Header/Header";
-import "./Guests.scss";
+import "./Guests.css";
 
 const Guests = () => {
   return (

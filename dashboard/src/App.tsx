@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import "./App.scss";
-import "./styles/partials/_globals.scss";
+import "./App.css";
+import "../src/styles/fonts.css";
 import AppLayout from "./components/AppLayout/AppLayout";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Analytics from "./pages/Analytics/Analytics";
@@ -65,6 +65,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/tours/:slug",
+        element: <TourDetails />,
+      },
+
+      {
+        path: "/tours/:slug/edit",
         element: <TourDetails />,
       },
     ],

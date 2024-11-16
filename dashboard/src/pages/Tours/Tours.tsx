@@ -1,5 +1,5 @@
 import Header from "../../components/Header/Header.js";
-import "./Tours.scss";
+import "./Tours.css";
 import ToursList from "../../components/ToursList/ToursList.jsx";
 
 const Tours = () => {

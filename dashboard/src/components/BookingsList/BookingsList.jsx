@@ -1,5 +1,5 @@
 import BookingCard from "../BookingCard/BookingCard";
-import "./BookingsList.scss";
+import "./BookingsList.css";
 
 const bookings = [
   {

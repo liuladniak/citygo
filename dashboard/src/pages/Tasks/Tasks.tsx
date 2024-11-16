@@ -1,5 +1,5 @@
 import Header from "../../components/Header/Header";
-import "./Tasks.scss";
+import "./Tasks.css";
 
 const Tasks = () => {
   return (

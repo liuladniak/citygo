@@ -1,4 +1,4 @@
-import "./TodaysBookingList.scss";
+import "./TodaysBookingList.css";
 import bookingsData from "../../data/todaysBookings.json";
 import { Link } from "react-router-dom";
 
