@@ -1,5 +1,4 @@
-/* BackButton.scss */
-.back-button {
+/* .back-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -7,13 +6,13 @@
   display: flex;
   align-items: center;
   color: inherit;
+} */
 
-  &:hover {
-    opacity: 0.8;
-  }
+/* .back-button:hover {
+  opacity: 0.8;
+} */
 
-  svg {
-    width: 2rem;
-    height: 2rem;
-  }
+.back-button svg {
+  width: 2rem;
+  height: 2rem;
 }

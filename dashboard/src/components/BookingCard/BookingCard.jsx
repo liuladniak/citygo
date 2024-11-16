@@ -1,4 +1,4 @@
-import "./BookingCard.scss";
+import "./BookingCard.css";
 
 const BookingCard = ({ booking }) => {
   return (

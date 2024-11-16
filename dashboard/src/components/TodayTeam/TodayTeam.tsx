@@ -1,4 +1,4 @@
-import "./TodayTeam.scss";
+import "./TodayTeam.css";
 import todayTeamData from "../../data/todayTeamData.json";
 
 const TodayTeam = () => {

@@ -1,5 +1,5 @@
 import Header from "../../components/Header/Header";
-import "./Schedule.scss";
+import "./Schedule.css";
 
 const Schedule = () => {
   return (

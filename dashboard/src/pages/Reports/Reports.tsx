@@ -1,5 +1,5 @@
 import Header from "../../components/Header/Header";
-import "./Reports.scss";
+import "./Reports.css";
 
 const Reports = () => {
   return (

@@ -1,6 +1,6 @@
 import BookingSummaryChart from "../../components/BookingSummaryChart/BookingSummaryChart";
 import Header from "../../components/Header/Header";
-import "./Analytics.scss";
+import "./Analytics.css";
 
 const Analytics = () => {
   return (

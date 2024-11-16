@@ -1,5 +1,4 @@
 import axios from "axios";
-import "./TourDetails.scss";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import arrowBack from "../../assets/icons/arrowBack.svg";
@@ -37,7 +36,7 @@ const TourDetails = () => {
 
   type FormDataType = {
     images: string[];
-    tourName: string;
+    tour_name: string;
     price: string;
     adultPrice: string;
     childPrice: string;
@@ -62,7 +61,7 @@ const TourDetails = () => {
 
   const [formData, setFormData] = useState<FormDataType>({
     images: [],
-    tourName: "",
+    tour_name: "",
     price: "",
     adultPrice: "",
     childPrice: "",
@@ -179,43 +178,51 @@ const TourDetails = () => {
   }
 
   return (
-    <section className="tour">
+    <section className="flex flex-col gap-6 p-6 ">
       <form onSubmit={handleSubmit}>
-        <div className="tour__header">
-          <Link to="/tours" className="icon--arrowBack">
-            <img src={arrowBack} alt="arrow back icon" />
+        <div className="flex gap-4 items-center">
+          <Link to="/tours" className="h-5 w-5">
+            <img
+              className="h-full w-full object-cover"
+              src={arrowBack}
+              alt="arrow back icon"
+            />
           </Link>
 
           <Input
-            className="input__tour-name"
+            className="text-base
+            "
             type="text"
             placeholder="Tour Name"
-            value={formData.tourName}
+            value={formData.tour_name}
             onChange={handleInputChange}
           />
-          <Button className="">Save</Button>
+          <Button>Save</Button>
         </div>
 
-        <div className="tour__images">
+        <div className="flex gap-2 mt-6">
           {formData.images.map((image, index) => (
-            <div key={index} className="tour__image">
+            <div key={index} className="h-24 w-36 rounded-2xl overflow-hidden">
               <img
+                className="h-full"
                 src={`${API_URL}/${image}`}
-                alt={`Image of ${formData.tourName} ${index + 1}`}
+                alt={`Image of ${formData.tour_name} ${index + 1}`}
               />
             </div>
           ))}
-          <div className="tour__image tour__image--add">
-            <span>+</span>
+          <div className="h-24 w-36 rounded-2xl overflow-hidden border border-dashed border-customBlue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
+            <span className="text-2xl">+</span>
             <span>Add Image</span>
           </div>
         </div>
 
-        <div className="tour-details">
-          <h2 className="tour-details__heading">Tour Details</h2>
-          <div className="tour-details__prices">
-            <div className="tour-details__price">
-              <label className="label">Tour price for an adult</label>
+        <div className="flex flex-col gap-4 mt-6">
+          <h2 className="text-base font-medium">Tour Details</h2>
+          <div className="flex gap-4">
+            <div className="flex flex-col gap-2 w-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                Tour price for an adult
+              </label>
               <Input
                 type="number"
                 placeholder="$"
@@ -224,8 +231,10 @@ const TourDetails = () => {
               />
             </div>
 
-            <div className="tour-details__price">
-              <label className="label">Tour price for a child</label>
+            <div className="flex flex-col gap-2 w-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                Tour price for a child
+              </label>
               <Input
                 type="number"
                 placeholder="$"
@@ -233,8 +242,10 @@ const TourDetails = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="tour-details__duration">
-              <label className="label">Tour Duration</label>
+            <div className="flex flex-col gap-2 w-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                Tour Duration
+              </label>
               <Input
                 type="text"
                 placeholder="hr"
@@ -243,9 +254,12 @@ const TourDetails = () => {
               />
             </div>
           </div>
-          <div className="select-inputs">
-            <div className="tour-details__activity">
-              <label className="label" htmlFor="activity">
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col gap-2 w-full">
+              <label
+                className="block text-sm/6 font-medium text-gray-900"
+                htmlFor="activity"
+              >
                 Activity level
               </label>
 
@@ -256,8 +270,11 @@ const TourDetails = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="tour-details__category">
-              <label className="label" htmlFor="category">
+            <div className="flex flex-col gap-2 w-full">
+              <label
+                className="block text-sm/6 font-medium text-gray-900"
+                htmlFor="category"
+              >
                 Tour Category
               </label>
               <SelectInput
@@ -267,8 +284,11 @@ const TourDetails = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="tour-details__landmark">
-              <label className="label" htmlFor="activity">
+            <div className="flex flex-col gap-2 w-full">
+              <label
+                className="block text-sm/6 font-medium text-gray-900"
+                htmlFor="activity"
+              >
                 Landmark
               </label>
 
@@ -280,18 +300,23 @@ const TourDetails = () => {
               />
             </div>
           </div>
-          <div>
-            <label>Tour Overiew Title</label>
+          <div className="flex flex-col gap-2 w-full">
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Tour Overiew Title
+            </label>
             <Input
-              className="input__tour-name"
+              className=""
               type="text"
               placeholder="Overview Title..."
               value={formData.overview_title}
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__overview">
-            <label className="label" htmlFor="overview">
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              className="block text-sm/6 font-medium text-gray-900"
+              htmlFor="overview"
+            >
               Tour Overview
             </label>
             <TextArea
@@ -300,13 +325,16 @@ const TourDetails = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__highlights">
-            <label className="label">Highlights</label>
+          <div className="flex flex-col gap-2 w-full">
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Highlights
+            </label>
 
-            <ul className="highlights__list">
+            <ul className="list-none p-0">
               {formData.highlights.map((item, index) => (
-                <li key={index} className="highlight-item">
+                <li key={index} className="flex gap-2.5 items-center mb-2.5">
                   <Input
+                    className="grow"
                     placeholder=""
                     type="text"
                     value={item}
@@ -326,8 +354,10 @@ const TourDetails = () => {
               Add Highlight
             </Button>
           </div>
-          <div className="tour-details__essentials">
-            <label className="label">Essentials</label>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Essentials
+            </label>
 
             <Input
               type="text"
@@ -336,11 +366,13 @@ const TourDetails = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__includes">
-            <label className="label">Includes</label>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Includes
+            </label>
 
             <Input
-              className="input__includes"
+              className=""
               type="text"
               placeholder="Includes..."
               value={formData.includes}
@@ -348,8 +380,11 @@ const TourDetails = () => {
             />
           </div>
 
-          <div className="tour-details__landmark">
-            <label className="label" htmlFor="activity">
+          <div>
+            <label
+              className="block text-sm/6 font-medium text-gray-900"
+              htmlFor="activity"
+            >
               Accessibility
             </label>
 
@@ -361,8 +396,10 @@ const TourDetails = () => {
             />
           </div>
 
-          <div className="tour-details__max-group">
-            <label className="label">Maximum Group size</label>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Maximum Group size
+            </label>
             <Input
               type="number"
               placeholder="Max group size..."
@@ -370,8 +407,10 @@ const TourDetails = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__min-group">
-            <label className="label">Minimum Group size</label>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Minimum Group size
+            </label>
             <Input
               type="number"
               placeholder="Minimum group size..."
@@ -379,8 +418,10 @@ const TourDetails = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__add-costs">
-            <label className="label">Additional costs</label>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Additional costs
+            </label>
             <Input
               type="text"
               placeholder="Additional costs..."
@@ -388,8 +429,10 @@ const TourDetails = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__start-time">
-            <label className="label">Start time</label>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Start time
+            </label>
             <Input
               type="time"
               placeholder="Start time..."
@@ -397,8 +440,10 @@ const TourDetails = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__end-time">
-            <label className="label">End time</label>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              End time
+            </label>
             <Input
               type="time"
               placeholder="End time..."
@@ -406,9 +451,11 @@ const TourDetails = () => {
               onChange={handleInputChange}
             />
           </div>
-          <div className="tour-details__meeting-point">
+          <div>
             <h4>Meeting point</h4>
-            <label className="label">Latitude</label>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Latitude
+            </label>
             <Input
               type="number"
               step="any"
@@ -416,7 +463,9 @@ const TourDetails = () => {
               value={formData.latitude}
               onChange={handleInputChange}
             />
-            <label className="label">Longitude</label>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Longitude
+            </label>
             <Input
               type="number"
               step="any"

@@ -1,4 +1,4 @@
-import "./Header.scss";
+import "./Header.css";
 import { Link } from "react-router-dom";
 import moreIcon from "../../assets/icons/more_vert.svg";
 import notifIcon from "../../assets/icons/notifications.svg";

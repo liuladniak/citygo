@@ -1,5 +1,5 @@
 import Header from "../../components/Header/Header";
-import "./Settings.scss";
+import "./Settings.css";
 
 const Settings = () => {
   return (

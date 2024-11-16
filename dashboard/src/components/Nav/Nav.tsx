@@ -11,7 +11,7 @@ import reportsIcon from "../../assets/icons/report.svg";
 import guestsIcon from "../../assets/icons/person_search.svg";
 import settingsIcon from "../../assets/icons/settings.svg";
 
-import "./Nav.scss";
+import "./Nav.css";
 
 const Nav = () => {
   return (

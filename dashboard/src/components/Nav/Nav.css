@@ -1,0 +1,30 @@
+.main-nav {
+  padding: 1.6rem;
+  width: 17rem;
+  border-right: 1px solid #eee;
+}
+
+.logo {
+  font-size: 2rem;
+  padding-bottom: 2rem;
+  font-weight: 700;
+}
+
+.nav {
+  font-size: 1rem;
+}
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  font-size: 1rem;
+}
+.nav-link {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.nav-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+}

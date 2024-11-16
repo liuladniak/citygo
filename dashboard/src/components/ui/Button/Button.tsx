@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./Button.scss";
+// import "./Button.css";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -21,7 +21,10 @@ const Button: React.FC<ButtonProps> = ({
   iconClassName = "",
 }) => {
   return to ? (
-    <Link to={to} className={`btn ${className}`}>
+    <Link
+      to={to}
+      className={`rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${className}`}
+    >
       <span className={`btn__text ${textClassName}`}>{children}</span>
       {iconUrl && (
         <img
@@ -32,7 +35,10 @@ const Button: React.FC<ButtonProps> = ({
       )}
     </Link>
   ) : (
-    <button className={`btn ${className}`} onClick={onClick}>
+    <button
+      className={`rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${className}`}
+      onClick={onClick}
+    >
       <span className={`btn__text ${textClassName}`}>{children}</span>
       {iconUrl && (
         <img

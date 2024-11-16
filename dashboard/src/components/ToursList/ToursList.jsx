@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import "./ToursList.scss";
+import "./ToursList.css";
 import TourListCard from "../TourListCard/TourListCard";
 import CountdownLoader from "../CountdownLoader/CountdownLoader";
 
@@ -36,6 +36,7 @@ const ToursList = () => {
           console.log(tour, "TOURs");
           return (
             <TourListCard
+              tour_image={tour.images[0]}
               key={tour.id}
               slug={tour.slug}
               tour_name={tour.tour_name}

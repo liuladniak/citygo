@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./GoBackButton.scss";
+import "./GoBackButton.css";
 import arrowBackIcon from "../../../assets/icons/arrowBack.svg";
 
 const BackButton = () => {
@@ -10,7 +10,11 @@ const BackButton = () => {
   };
 
   return (
-    <button className="back-button" onClick={handleGoBack} aria-label="Go back">
+    <button
+      className="back-button bg-transparent border-none cursor-pointer p-0 flex items-center text-inherit hover:opacity-80"
+      onClick={handleGoBack}
+      aria-label="Go back"
+    >
       <img src={arrowBackIcon} alt="Back" />
     </button>
   );
