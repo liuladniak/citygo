@@ -12,7 +12,7 @@ import {
 
 const RevenueAreaChart = () => {
   const tooltipFormatter = (
-    value: string,
+    value: string | number,
     name: string,
     props: TooltipProps<number | string, string>
   ) => {

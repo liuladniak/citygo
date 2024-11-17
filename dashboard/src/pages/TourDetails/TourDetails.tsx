@@ -161,7 +161,7 @@ const TourDetails = () => {
     if (Array.isArray(formData[field])) {
       setFormData((prevData) => ({
         ...prevData,
-        [field]: [...prevData[field], ""],
+        [field]: [...(prevData[field] as string[]), ""],
       }));
     }
   };
