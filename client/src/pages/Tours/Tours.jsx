@@ -31,7 +31,8 @@ const Tours = () => {
         const response = await axios.get(`${API_URL}/api/tours`);
         const tours = response.data;
         console.log(tours);
-        setTours(tours);
+        const sortedTours = tours.sort((a, b) => a.id - b.id);
+        setTours(sortedTours);
         setIsLoading(false);
       } catch (error) {
         console.error("There was an error fetching the tours data!", error);
