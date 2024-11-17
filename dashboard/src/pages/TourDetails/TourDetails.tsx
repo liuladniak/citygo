@@ -34,7 +34,6 @@ const optionsAccessibility = [
 
 const TourDetails = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
-  // const API_URL = "http://localhost:3000";
   const { slug } = useParams();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,8 +47,8 @@ const TourDetails = () => {
     overview_title: string;
     overview: string;
     landmarks: string;
-    groups: number;
-    minimum_of_attendees: number;
+    groups: string;
+    minimum_of_attendees: string;
     additional_costs: string;
     start_time: string;
     end_time: string;
@@ -73,8 +72,8 @@ const TourDetails = () => {
     overview_title: "",
     overview: "",
     landmarks: "",
-    groups: 0,
-    minimum_of_attendees: 0,
+    groups: "",
+    minimum_of_attendees: "",
     additional_costs: "",
     start_time: "",
     end_time: "",
@@ -115,17 +114,13 @@ const TourDetails = () => {
     >
   ) => {
     const { name, value } = e.target;
-    const updatedValue =
-      name === "price" ||
-      name === "groups" ||
-      name === "minimum_of_attendees" ||
-      name === "latitude" ||
-      name === "longitude"
+    const parsedValue =
+      name === "price" || name === "groups" || name === "minimum_of_attendees"
         ? parseFloat(value) || 0
         : value;
     setFormData((prevData) => ({
       ...prevData,
-      [name as K]: updatedValue,
+      [name as K]: parsedValue,
     }));
   };
 
@@ -251,7 +246,7 @@ const TourDetails = () => {
                 name="price"
                 type="number"
                 placeholder="$"
-                value={formData.price}
+                value={formData.price.toString()}
                 onChange={handleInputChange}
               />
             </div>
@@ -443,7 +438,7 @@ const TourDetails = () => {
               <Input
                 name="groups"
                 className="max_group"
-                type="number"
+                type="text"
                 placeholder="Max group size..."
                 value={formData.groups}
                 onChange={handleInputChange}
@@ -455,7 +450,7 @@ const TourDetails = () => {
               </label>
               <Input
                 name="minimum_of_attendees"
-                type="number"
+                type="text"
                 placeholder="Minimum group size..."
                 value={formData.minimum_of_attendees}
                 onChange={handleInputChange}
@@ -502,7 +497,7 @@ const TourDetails = () => {
                   type="number"
                   step="any"
                   placeholder="Enter Latitude..."
-                  value={formData.latitude}
+                  value={formData.latitude.toString()}
                   onChange={handleInputChange}
                 />
               </div>
@@ -515,7 +510,7 @@ const TourDetails = () => {
                   type="number"
                   step="any"
                   placeholder="Enter Longitude..."
-                  value={formData.longitude}
+                  value={formData.longitude.toString()}
                   onChange={handleInputChange}
                 />
               </div>
