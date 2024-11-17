@@ -115,9 +115,17 @@ const TourDetails = () => {
     >
   ) => {
     const { name, value } = e.target;
+    const updatedValue =
+      name === "price" ||
+      name === "groups" ||
+      name === "minimum_of_attendees" ||
+      name === "latitude" ||
+      name === "longitude"
+        ? parseFloat(value) || 0
+        : value;
     setFormData((prevData) => ({
       ...prevData,
-      [name as K]: value,
+      [name as K]: updatedValue,
     }));
   };
 
@@ -248,7 +256,7 @@ const TourDetails = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-2 w-full">
+            {/* <div className="flex flex-col gap-2 w-full">
               <label className="block text-sm/6 font-medium text-gray-900">
                 Tour price for a child
               </label>
@@ -259,7 +267,7 @@ const TourDetails = () => {
                 value={formData.childPrice}
                 onChange={handleInputChange}
               />
-            </div>
+            </div> */}
             <div className="flex flex-col gap-2 w-full">
               <label className="block text-sm/6 font-medium text-gray-900">
                 Tour Duration
