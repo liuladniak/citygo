@@ -33,8 +33,8 @@ const optionsAccessibility = [
 ];
 
 const TourDetails = () => {
-  // const API_URL = import.meta.env.VITE_API_KEY;
-  const API_URL = "http://localhost:3000";
+  const API_URL = import.meta.env.VITE_API_KEY;
+  // const API_URL = "http://localhost:3000";
   const { slug } = useParams();
   const [isLoading, setIsLoading] = useState(true);
 
