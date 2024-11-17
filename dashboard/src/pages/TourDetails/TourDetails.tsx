@@ -6,13 +6,16 @@ import Input from "../../components/ui/Input/Input";
 import SelectInput from "../../components/ui/SelectInput/SelectInput";
 import Button from "../../components/ui/Button/Button";
 import TextArea from "../../components/ui/TextArea/TextArea";
+import DeleteIcon from "../../components/ui/SVGIcons/DeleteIcon";
+import AddIcon from "../../components/ui/SVGIcons/AddIcon";
+import CheckboxList from "../../components/ui/CheckboxList/CheckboxList";
 
 const optionsActivity = ["Easy", "Medium", "Hard"];
 const optionsCategory = ["Guided tour", "Culinary tour", "Experience"];
 const optionsLandmark = ["Center", "Neighborhood"];
 const optionsAccessibility = [
   "Fully Wheelchair Accessible",
-  "Partially Wheelchair Accessible",
+  "Partially accessible",
   "Not Wheelchair Accessible",
   "Audio Guide Available",
   "Sign Language Interpretation Available",
@@ -30,59 +33,60 @@ const optionsAccessibility = [
 ];
 
 const TourDetails = () => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  // const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = "http://localhost:3000";
   const { slug } = useParams();
   const [isLoading, setIsLoading] = useState(true);
 
   type FormDataType = {
     images: string[];
     tour_name: string;
-    price: string;
-    adultPrice: string;
-    childPrice: string;
+    price: number;
     duration: string;
     activity_level: string;
     category: string;
     overview_title: string;
     overview: string;
     landmarks: string;
-    groups: string;
-    minimum_of_attendees: string;
+    groups: number;
+    minimum_of_attendees: number;
     additional_costs: string;
     start_time: string;
     end_time: string;
-    latitude: string;
-    longitude: string;
-    accessibility: string;
+    latitude: number;
+    longitude: number;
+    accessibility: string[];
     highlights: string[];
     essentials: string;
     includes: string;
+    available_dates: string[];
   };
 
   const [formData, setFormData] = useState<FormDataType>({
     images: [],
+    available_dates: [],
     tour_name: "",
-    price: "",
-    adultPrice: "",
-    childPrice: "",
+    price: 0,
     duration: "",
     activity_level: "",
     category: "",
     overview_title: "",
     overview: "",
     landmarks: "",
-    groups: "",
-    minimum_of_attendees: "",
+    groups: 0,
+    minimum_of_attendees: 0,
     additional_costs: "",
     start_time: "",
     end_time: "",
-    latitude: "",
-    longitude: "",
-    accessibility: "",
+    latitude: 0,
+    longitude: 0,
+    accessibility: [],
     highlights: [],
     essentials: "",
     includes: "",
   });
+
+  console.log("formData:", formData);
 
   useEffect(() => {
     const getOneTourData = async () => {
@@ -93,12 +97,8 @@ const TourDetails = () => {
           ...prevData,
           ...response.data,
           highlights: response.data.highlights || [],
-          essentials: response.data.essentials || [],
-          includes: response.data.includes || [],
-          meetingPoint: response.data.meetingPoint || {
-            latitude: "",
-            longitude: "",
-          },
+          images: response.data.images || [],
+          available_dates: response.data.available_dates || [],
         }));
         setIsLoading(false);
       } catch (error) {
@@ -134,6 +134,20 @@ const TourDetails = () => {
         ),
       }));
     }
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const option = e.target.value;
+    setFormData((prevData) => {
+      const updatedAccessibility = e.target.checked
+        ? [...prevData.accessibility, option]
+        : prevData.accessibility.filter((item) => item !== option);
+
+      return {
+        ...prevData,
+        accessibility: updatedAccessibility,
+      };
+    });
   };
 
   const handleAddItem = <K extends keyof FormDataType>(
@@ -190,19 +204,21 @@ const TourDetails = () => {
           </Link>
 
           <Input
-            className="text-base
-            "
+            name="tour_name"
+            className="text-base"
             type="text"
             placeholder="Tour Name"
             value={formData.tour_name}
             onChange={handleInputChange}
           />
-          <Button>Save</Button>
+          <Button className="w-fit min-w-36 bg-slate-800 text-white">
+            Save
+          </Button>
         </div>
 
         <div className="flex gap-2 mt-6">
           {formData.images.map((image, index) => (
-            <div key={index} className="h-24 w-36 rounded-2xl overflow-hidden">
+            <div key={index} className="h-24 w-36 rounded-md overflow-hidden">
               <img
                 className="h-full"
                 src={`${API_URL}/${image}`}
@@ -210,7 +226,7 @@ const TourDetails = () => {
               />
             </div>
           ))}
-          <div className="h-24 w-36 rounded-2xl overflow-hidden border border-dashed border-customBlue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
+          <div className="h-24 w-36 rounded-md overflow-hidden border border-dashed border-customBlue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
             <span className="text-2xl">+</span>
             <span>Add Image</span>
           </div>
@@ -224,6 +240,7 @@ const TourDetails = () => {
                 Tour price for an adult
               </label>
               <Input
+                name="price"
                 type="number"
                 placeholder="$"
                 value={formData.price}
@@ -236,6 +253,7 @@ const TourDetails = () => {
                 Tour price for a child
               </label>
               <Input
+                name="price_child"
                 type="number"
                 placeholder="$"
                 value={formData.childPrice}
@@ -247,6 +265,7 @@ const TourDetails = () => {
                 Tour Duration
               </label>
               <Input
+                name="duration"
                 type="text"
                 placeholder="hr"
                 value={formData.duration}
@@ -264,6 +283,7 @@ const TourDetails = () => {
               </label>
 
               <SelectInput
+                name="activity_level"
                 options={optionsActivity}
                 placeholder="Activity level..."
                 value={formData.activity_level}
@@ -278,6 +298,7 @@ const TourDetails = () => {
                 Tour Category
               </label>
               <SelectInput
+                name="category"
                 options={optionsCategory}
                 placeholder="Category..."
                 value={formData.category}
@@ -293,6 +314,7 @@ const TourDetails = () => {
               </label>
 
               <SelectInput
+                name="landmarks"
                 options={optionsLandmark}
                 placeholder="Select landmark..."
                 value={formData.landmarks}
@@ -300,11 +322,12 @@ const TourDetails = () => {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full ">
             <label className="block text-sm/6 font-medium text-gray-900">
               Tour Overiew Title
             </label>
             <Input
+              name="overview_title"
               className=""
               type="text"
               placeholder="Overview Title..."
@@ -320,6 +343,7 @@ const TourDetails = () => {
               Tour Overview
             </label>
             <TextArea
+              name="overview"
               placeholder="Tour Overview..."
               value={formData.overview}
               onChange={handleInputChange}
@@ -334,6 +358,7 @@ const TourDetails = () => {
               {formData.highlights.map((item, index) => (
                 <li key={index} className="flex gap-2.5 items-center mb-2.5">
                   <Input
+                    name="highlights"
                     className="grow"
                     placeholder=""
                     type="text"
@@ -343,14 +368,20 @@ const TourDetails = () => {
                     }
                   />
                   <Button
+                    className="text-slate-600 w-fit min-w-36"
                     onClick={(e) => handleRemoveItem("highlights", index, e)}
+                    IconComponent={DeleteIcon}
                   >
-                    Remove
+                    Delete
                   </Button>
                 </li>
               ))}
             </ul>
-            <Button onClick={(e) => handleAddItem("highlights", e)}>
+            <Button
+              IconComponent={AddIcon}
+              className="text-slate-600 w-fit min-w-36"
+              onClick={(e) => handleAddItem("highlights", e)}
+            >
               Add Highlight
             </Button>
           </div>
@@ -360,6 +391,7 @@ const TourDetails = () => {
             </label>
 
             <Input
+              name="essentials"
               type="text"
               placeholder="Essentials..."
               value={formData.essentials}
@@ -372,6 +404,7 @@ const TourDetails = () => {
             </label>
 
             <Input
+              name="includes"
               className=""
               type="text"
               placeholder="Includes..."
@@ -387,95 +420,115 @@ const TourDetails = () => {
             >
               Accessibility
             </label>
-
-            <SelectInput
+            <CheckboxList
               options={optionsAccessibility}
-              placeholder="Select accessibility..."
-              value={formData.accessibility}
-              onChange={handleInputChange}
+              selectedOptions={formData.accessibility}
+              onChange={handleCheckboxChange}
             />
           </div>
 
-          <div>
-            <label className="block text-sm/6 font-medium text-gray-900">
-              Maximum Group size
-            </label>
-            <Input
-              type="number"
-              placeholder="Max group size..."
-              value={formData.groups}
-              onChange={handleInputChange}
-            />
+          <div className="flex gap-4 mt-6">
+            <div className="w-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                Maximum Group size
+              </label>
+              <Input
+                name="groups"
+                className="max_group"
+                type="number"
+                placeholder="Max group size..."
+                value={formData.groups}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="w-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                Minimum Group size
+              </label>
+              <Input
+                name="minimum_of_attendees"
+                type="number"
+                placeholder="Minimum group size..."
+                value={formData.minimum_of_attendees}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm/6 font-medium text-gray-900">
-              Minimum Group size
-            </label>
-            <Input
-              type="number"
-              placeholder="Minimum group size..."
-              value={formData.minimum_of_attendees}
-              onChange={handleInputChange}
-            />
+
+          <div className="flex gap-4 mt-6">
+            <div className="w-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                Start time
+              </label>
+              <Input
+                name="start_time"
+                type="time"
+                placeholder="Start time..."
+                value={formData.start_time}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="w-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                End time
+              </label>
+              <Input
+                name="end_time"
+                type="time"
+                placeholder="End time..."
+                value={formData.end_time}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-          <div>
+
+          <div className="mt-6">
+            <h4>Meeting point</h4>
+            <div className="flex gap-4">
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  Latitude
+                </label>
+                <Input
+                  name="latitude"
+                  type="number"
+                  step="any"
+                  placeholder="Enter Latitude..."
+                  value={formData.latitude}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  Longitude
+                </label>
+                <Input
+                  name="longitude"
+                  type="number"
+                  step="any"
+                  placeholder="Enter Longitude..."
+                  value={formData.longitude}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="">
             <label className="block text-sm/6 font-medium text-gray-900">
               Additional costs
             </label>
             <Input
+              name="additional_costs"
               type="text"
               placeholder="Additional costs..."
               value={formData.additional_costs}
               onChange={handleInputChange}
             />
           </div>
-          <div>
-            <label className="block text-sm/6 font-medium text-gray-900">
-              Start time
-            </label>
-            <Input
-              type="time"
-              placeholder="Start time..."
-              value={formData.start_time}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <label className="block text-sm/6 font-medium text-gray-900">
-              End time
-            </label>
-            <Input
-              type="time"
-              placeholder="End time..."
-              value={formData.end_time}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div>
-            <h4>Meeting point</h4>
-            <label className="block text-sm/6 font-medium text-gray-900">
-              Latitude
-            </label>
-            <Input
-              type="number"
-              step="any"
-              placeholder="Enter Latitude..."
-              value={formData.latitude}
-              onChange={handleInputChange}
-            />
-            <label className="block text-sm/6 font-medium text-gray-900">
-              Longitude
-            </label>
-            <Input
-              type="number"
-              step="any"
-              placeholder="Enter Longitude..."
-              value={formData.longitude}
-              onChange={handleInputChange}
-            />
-          </div>
 
-          <Button className="">Save</Button>
+          <Button className="w-fit min-w-36 bg-slate-800 text-white">
+            Save
+          </Button>
         </div>
       </form>
     </section>

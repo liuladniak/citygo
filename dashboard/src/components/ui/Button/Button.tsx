@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 interface ButtonProps {
   children: React.ReactNode;
-  iconUrl?: string;
+  IconComponent?: React.FC<React.SVGProps<SVGSVGElement>>;
   to?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
@@ -13,7 +13,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  iconUrl,
+  IconComponent,
   to,
   onClick,
   className = "",
@@ -23,30 +23,22 @@ const Button: React.FC<ButtonProps> = ({
   return to ? (
     <Link
       to={to}
-      className={`rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${className}`}
+      className={`rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg  hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${className}`}
     >
       <span className={`btn__text ${textClassName}`}>{children}</span>
-      {iconUrl && (
-        <img
-          className={`btn__icon ${iconClassName}`}
-          src={iconUrl}
-          alt="Button icon"
-        />
+      {IconComponent && (
+        <IconComponent className={`btn__icon ${iconClassName}`} />
       )}
     </Link>
   ) : (
     <button
-      className={`rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${className}`}
+      className={`flex items-center justify-center gap-2 rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg  hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${className}`}
       onClick={onClick}
     >
-      <span className={`btn__text ${textClassName}`}>{children}</span>
-      {iconUrl && (
-        <img
-          className={`btn__icon ${iconClassName}`}
-          src={iconUrl}
-          alt="Button icon"
-        />
+      {IconComponent && (
+        <IconComponent className={`w-6 h-6 ${iconClassName}`} />
       )}
+      <span className={`btn__text ${textClassName}`}>{children}</span>
     </button>
   );
 };
