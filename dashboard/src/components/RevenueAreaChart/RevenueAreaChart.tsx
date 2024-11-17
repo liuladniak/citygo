@@ -7,10 +7,15 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  TooltipProps,
 } from "recharts";
 
 const RevenueAreaChart = () => {
-  const tooltipFormatter = (value, name, props) => {
+  const tooltipFormatter = (
+    value: string,
+    name: string,
+    props: TooltipProps<number | string, string>
+  ) => {
     if (props && props.active && props.payload && props.payload.length > 0) {
       const monthData = props.payload[0].payload;
       if (monthData && typeof monthData === "object") {

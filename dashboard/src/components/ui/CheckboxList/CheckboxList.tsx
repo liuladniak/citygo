@@ -5,7 +5,6 @@ type CheckboxListProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 const CheckboxList: React.FC<CheckboxListProps> = ({
-  label,
   options,
   selectedOptions,
   onChange,
