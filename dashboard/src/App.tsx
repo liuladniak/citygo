@@ -14,6 +14,7 @@ import Team from "./pages/Team/Team";
 import Tours from "./pages/Tours/Tours";
 import Guests from "./pages/Guests/Guests";
 import TourDetails from "./pages/TourDetails/TourDetails";
+import AddTour from "./pages/AddTour/AddTour";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/tours/:slug/edit",
         element: <TourDetails />,
+      },
+      {
+        path: "/tours/add",
+        element: <AddTour />,
       },
     ],
   },

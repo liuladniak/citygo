@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import arrowBack from "../../assets/icons/arrowBack.svg";
 import Input from "../../components/ui/Input/Input";
@@ -33,16 +33,73 @@ const optionsAccessibility = [
   "Pet-Friendly",
 ];
 
-const TourDetails = () => {
+const AddTour = () => {
+  type PreviewImage = {
+    file: File;
+    previewUrl: string;
+  };
   const API_URL = import.meta.env.VITE_API_KEY;
-  const { slug } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
+  const [images, setImages] = useState<PreviewImage[]>([]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const selectedFiles = Array.from(e.target.files);
+    console.log("Selected files:", selectedFiles);
+    const newImages = selectedFiles.map((file) => ({
+      file,
+      previewUrl: URL.createObjectURL(file),
+    }));
+
+    setImages((prevImages) => [...prevImages, ...newImages]);
+  };
+
+  const handleImageRemove = (index: number) => {
+    setImages((prevImages) => {
+      const updatedImages = prevImages.filter((_, i) => i !== index);
+      if (prevImages[index]) {
+        URL.revokeObjectURL(prevImages[index].previewUrl);
+      }
+      return updatedImages;
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      images.forEach((image) => URL.revokeObjectURL(image.previewUrl));
+    };
+  }, [images]);
+
+  // const createFormData = (
+  //   data: FormDataType,
+  //   images: { file: File }[]
+  // ): FormData => {
+  //   const formData = new FormData();
+
+  //   Object.keys(data).forEach((key) => {
+  //     const value = data[key as keyof FormDataType];
+  //     if (Array.isArray(value)) {
+  //       value.forEach((item) => formData.append(key, item));
+  //     } else {
+  //       formData.append(
+  //         key,
+  //         typeof value === "number" ? value.toString() : value
+  //       );
+  //     }
+  //   });
+
+  //   if (images.length > 0) {
+  //     images.forEach(({ file }) => formData.append("images", file));
+  //   }
+
+  //   return formData;
+  // };
 
   type FormDataType = {
-    images: string[];
+    images: File[];
     tour_name: string;
     price: number;
     duration: string;
+    slug: string;
     activity_level: string;
     category: string;
     overview_title: string;
@@ -64,10 +121,11 @@ const TourDetails = () => {
 
   const [formData, setFormData] = useState<FormDataType>({
     images: [],
-    available_dates: [],
+    available_dates: ["2024-11-21", "2024-11-23", "2024-11-24"],
     tour_name: "",
     price: 0,
     duration: "",
+    slug: "islands",
     activity_level: "",
     category: "",
     overview_title: "",
@@ -78,36 +136,13 @@ const TourDetails = () => {
     additional_costs: "",
     start_time: "",
     end_time: "",
-    latitude: 0,
-    longitude: 0,
+    latitude: 41.015137,
+    longitude: 28.97953,
     accessibility: [],
     highlights: [],
     essentials: "",
     includes: "",
   });
-
-  console.log("formData:", formData);
-
-  useEffect(() => {
-    const getOneTourData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/tours/${slug}`);
-        console.log(response.data, "response data:");
-        setFormData((prevData) => ({
-          ...prevData,
-          ...response.data,
-          highlights: response.data.highlights || [],
-          images: response.data.images || [],
-          available_dates: response.data.available_dates || [],
-        }));
-        setIsLoading(false);
-      } catch (error) {
-        console.error("There was an error fetching the tour data", error);
-        setIsLoading(false);
-      }
-    };
-    getOneTourData();
-  }, [slug]);
 
   const handleInputChange = <K extends keyof FormDataType>(
     e: React.ChangeEvent<
@@ -180,26 +215,60 @@ const TourDetails = () => {
       }));
     }
   };
-
+  console.log(formData);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("tour_name", formData.tour_name);
+    formDataToSend.append("price", formData.price.toString());
+    formDataToSend.append("duration", formData.duration);
+    formDataToSend.append("slug", formData.slug);
+    formDataToSend.append("activity_level", formData.activity_level);
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("overview_title", formData.overview_title);
+    formDataToSend.append("overview", formData.overview);
+    formDataToSend.append("landmarks", formData.landmarks);
+    formDataToSend.append("groups", formData.groups);
+    formDataToSend.append(
+      "minimum_of_attendees",
+      formData.minimum_of_attendees
+    );
+    formDataToSend.append("additional_costs", formData.additional_costs);
+    formDataToSend.append("essentials", formData.essentials);
+    formDataToSend.append("includes", formData.includes);
+    formDataToSend.append("start_time", formData.start_time);
+    formDataToSend.append("end_time", formData.end_time);
+    formDataToSend.append("latitude", formData.latitude.toString());
+    formDataToSend.append("longitude", formData.longitude.toString());
+    const accessibilityString = formData.accessibility.join(", ");
+    formDataToSend.append("accessibility", accessibilityString);
+    formData.highlights.forEach((highlight) => {
+      formDataToSend.append("highlights[]", highlight);
+    });
+    console.log("*****IMGES:", images);
+    images.forEach(({ file }) => {
+      formDataToSend.append("images", file);
+    });
     try {
-      await axios.put(`${API_URL}/api/tours/${slug}`, formData);
-      alert("Tour details updated successfully!");
+      console.log("FORM DATA:", formDataToSend, formData);
+      await axios.post(`${API_URL}/api/tours`, formDataToSend);
+      alert("Tour added successfully!");
     } catch (error) {
-      console.error("Error updating tour details:", error);
+      console.error("Error adding tour ", error);
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="">
-      <Header pageTitle="Edit Tour" />
+    <div>
+      <Header pageTitle="Add New Tour" />
       <section className="flex flex-col gap-6 p-6 ">
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          action="post"
+        >
           <div className="flex justify-between items-center">
             <div className="flex justify-between items-center">
               <Link to="/tours" className="h-5 w-5 grow-0">
@@ -209,22 +278,24 @@ const TourDetails = () => {
                   alt="arrow back icon"
                 />
               </Link>
-              <h1 className="m-4 text-xl font-medium">Edit Tour</h1>
+              <h1 className="m-4 text-xl font-semibold text-darkGray">
+                Add New Tour
+              </h1>
             </div>
             <Button className="w-fit min-w-36 bg-slate-800 text-white grow-0">
               Save
             </Button>
           </div>
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 ">
             <label
               htmlFor="tour_name"
-              className="block text-sm/6 font-semibold text-darkGray "
+              className="block text-sm/6 font-bold text-gray-900 "
             >
               Tour Name
             </label>
             <Input
               name="tour_name"
-              className="text-base grow max-w-full"
+              className="text-base"
               type="text"
               placeholder="Tour Name"
               value={formData.tour_name}
@@ -233,26 +304,52 @@ const TourDetails = () => {
           </div>
 
           <div className="flex gap-2 mt-6">
-            {formData.images.map((image, index) => (
-              <div key={index} className="h-24 w-36 rounded-md overflow-hidden">
-                <img
-                  className="h-full"
-                  src={`${API_URL}/${image}`}
-                  alt={`Image of ${formData.tour_name} ${index + 1}`}
-                />
-              </div>
-            ))}
+            <div className="flex gap-4 mt-4 flex-wrap">
+              {images &&
+                images.map((image, index) => {
+                  console.log("Index: " + index);
+                  return (
+                    <div
+                      key={image.previewUrl}
+                      className="h-24 w-36 rounded-md border"
+                    >
+                      <img
+                        src={image.previewUrl}
+                        alt="Tour image"
+                        className="h-full w-full object-cover"
+                      />
+                      <button
+                        className="text-black bg-red-500"
+                        onClick={() => handleImageRemove(index)}
+                      >
+                        Delete image
+                      </button>
+                    </div>
+                  );
+                })}
+            </div>
             <div className="h-24 w-36 rounded-md overflow-hidden border border-dashed border-customBlue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
-              <span className="text-2xl">+</span>
-              <span>Add Image</span>
+              <label className="cursor-pointer flex flex-col">
+                <span className="text-2xl">+</span>
+                Add Image
+                <span>up to 10 images</span>
+                <input
+                  className="hidden"
+                  name="images"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileChange}
+                />
+              </label>
             </div>
           </div>
 
           <div className="flex flex-col gap-4 mt-6">
-            <h2 className="text-base font-medium ">Tour Details</h2>
+            <h2 className="text-base font-medium">Tour Details</h2>
             <div className="flex gap-4">
               <div className="flex flex-col gap-2 w-full">
-                <label className="block text-sm/6 font-semibold text-darkGray">
+                <label className="block text-sm/6 font-semibold text-darkGray ">
                   Tour price for an adult
                 </label>
                 <Input
@@ -277,7 +374,7 @@ const TourDetails = () => {
               />
             </div> */}
               <div className="flex flex-col gap-2 w-full">
-                <label className="block text-sm/6 font-semibold text-darkGray">
+                <label className="block text-sm/6 font-medium text-gray-900">
                   Tour Duration
                 </label>
                 <Input
@@ -292,7 +389,7 @@ const TourDetails = () => {
             <div className="flex items-center gap-4">
               <div className="flex flex-col gap-2 w-full">
                 <label
-                  className="block text-sm/6 font-semibold text-darkGray"
+                  className="block text-sm/6 font-medium text-gray-900"
                   htmlFor="activity"
                 >
                   Activity level
@@ -308,7 +405,7 @@ const TourDetails = () => {
               </div>
               <div className="flex flex-col gap-2 w-full">
                 <label
-                  className="block text-sm/6 font-semibold text-darkGray"
+                  className="block text-sm/6 font-medium text-gray-900"
                   htmlFor="category"
                 >
                   Tour Category
@@ -323,7 +420,7 @@ const TourDetails = () => {
               </div>
               <div className="flex flex-col gap-2 w-full">
                 <label
-                  className="block text-sm/6 font-semibold text-darkGray"
+                  className="block text-sm/6 font-medium text-gray-900"
                   htmlFor="activity"
                 >
                   Landmark
@@ -339,7 +436,7 @@ const TourDetails = () => {
               </div>
             </div>
             <div className="flex flex-col gap-2 w-full ">
-              <label className="block text-sm/6 font-semibold text-darkGray">
+              <label className="block text-sm/6 font-medium text-gray-900">
                 Tour Overiew Title
               </label>
               <Input
@@ -353,7 +450,7 @@ const TourDetails = () => {
             </div>
             <div className="flex flex-col gap-2 w-full">
               <label
-                className="block text-sm/6 font-semibold text-darkGray"
+                className="block text-sm/6 font-medium text-gray-900"
                 htmlFor="overview"
               >
                 Tour Overview
@@ -366,7 +463,7 @@ const TourDetails = () => {
               />
             </div>
             <div className="flex flex-col gap-2 w-full">
-              <label className="block text-sm/6 font-semibold text-darkGray">
+              <label className="block text-sm/6 font-medium text-gray-900">
                 Highlights
               </label>
 
@@ -552,4 +649,4 @@ const TourDetails = () => {
   );
 };
 
-export default TourDetails;
+export default AddTour;

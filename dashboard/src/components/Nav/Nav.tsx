@@ -1,102 +1,78 @@
-import { Link } from "react-router-dom";
-import homeIcon from "../../assets/icons/home.svg";
-import scheduleIcon from "../../assets/icons/schedule.svg";
-import bookingsIcon from "../../assets/icons/booking.svg";
-import teamIcon from "../../assets/icons/team.svg";
-import toursIcon from "../../assets/icons/tour.svg";
-import analyticsIcon from "../../assets/icons/analytics.svg";
-import invoicesIcon from "../../assets/icons/receipt_long.svg";
-import tasksIcon from "../../assets/icons/task.svg";
-import reportsIcon from "../../assets/icons/report.svg";
-import guestsIcon from "../../assets/icons/person_search.svg";
-import settingsIcon from "../../assets/icons/settings.svg";
+import { Link, NavLink } from "react-router-dom";
+
+import {
+  homeIconPath,
+  scheduleIconPath,
+  bookingsIconPath,
+  teamIconPath,
+  toursIconPath,
+  analyticsIconPath,
+  invoicesIconPath,
+  tasksIconPath,
+  reportsIconPath,
+  guestsIconPath,
+  settingsIconPath,
+} from "../ui/SVGIcons/iconPaths";
 
 import "./Nav.css";
+import Icon from "../ui/SVGIcons/Icon";
+
+const navItems = [
+  { path: "/", label: "Dashboard", iconPath: homeIconPath },
+  { path: "/schedule", label: "Schedule", iconPath: scheduleIconPath },
+  { path: "/bookings", label: "Bookings", iconPath: bookingsIconPath },
+  { path: "/team", label: "Team", iconPath: teamIconPath },
+  { path: "/tours", label: "Tours", iconPath: toursIconPath },
+  { path: "/analytics", label: "Analytics", iconPath: analyticsIconPath },
+  { path: "/invoices", label: "Invoices", iconPath: invoicesIconPath },
+  { path: "/tasks", label: "Tasks", iconPath: tasksIconPath },
+  { path: "/reports", label: "Reports", iconPath: reportsIconPath },
+  { path: "/guests", label: "Guests lookup", iconPath: guestsIconPath },
+  { path: "/settings", label: "Settings", iconPath: settingsIconPath },
+];
 
 const Nav = () => {
   return (
-    <aside className="main-nav">
-      <div className="logo">CityGo</div>
-      <nav className="nav">
+    <aside className="w-56 bg-gray4 p-4 main-nav text-mediumGray ">
+      <Link
+        to="/"
+        className="logo text-darkGray mb-4  text-xl pb-5 block font-medium"
+      >
+        CityGo
+      </Link>
+      <nav className="nav ">
         <ul className="nav-list">
-          <li className="nav-item">
-            <Link className="nav-link" to="/">
-              <img className="nav-icon" src={homeIcon} alt="home icon" />
-              <span>Dashboard</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/schedule">
-              <img className="nav-icon" src={scheduleIcon} alt="clock icon" />
-              <span>Schedule</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/bookings">
-              <img className="nav-icon" src={bookingsIcon} alt="ticket icon" />
-              <span>Bookings</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/team">
-              <img className="nav-icon" src={teamIcon} alt="group icon" />
-              <span>Team</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/tours">
-              <img className="nav-icon" src={toursIcon} alt="flag icon" />
-              <span>Tours</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/analytics">
-              <img
-                className="nav-icon"
-                src={analyticsIcon}
-                alt="diagram icon"
-              />
-              <span>Analytics</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/invoices">
-              <img className="nav-icon" src={invoicesIcon} alt="invoice icon" />
-              <span>Invoices</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/tasks">
-              <img className="nav-icon" src={tasksIcon} alt="task icon" />
-              <span>Tasks</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/reports">
-              <img className="nav-icon" src={reportsIcon} alt="report icon" />
-              <span>Reports</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/guests">
-              <img
-                className="nav-icon"
-                src={guestsIcon}
-                alt="person with a magnifying glass icon"
-              />
-              <span>Guests lookup</span>
-            </Link>
-          </li>
-          <li>
-            <Link className="nav-link" to="/settings">
-              <img
-                className="nav-icon"
-                src={settingsIcon}
-                alt="settings icon"
-              />
-              <span>Settings</span>
-            </Link>
-          </li>
+          {navItems.map(({ path, label, iconPath }) => (
+            <li key={path}>
+              <NavLink
+                to={path}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 rounded-md w-full
+                  ${
+                    isActive
+                      ? "hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
+                      : "hover:bg-gray-200 text-gray-600"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <div
+                    className={`w-full flex gap-2 rounded-md py-1 px-2 ${
+                      isActive ? "bg-gray-200 text-gray-600" : ""
+                    }`}
+                  >
+                    <Icon
+                      iconPath={iconPath}
+                      fill="light-gray-600"
+                      size={20}
+                      className="transition-colors duration-200"
+                    />
+                    <span>{label}</span>
+                  </div>
+                )}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </nav>
     </aside>
