@@ -14,7 +14,7 @@ function AppLayout() {
   return (
     <div className="layout">
       <Nav />
-      <main className="main">
+      <main className="main bg-white mt-2 rounded-md">
         <Outlet />
       </main>
     </div>

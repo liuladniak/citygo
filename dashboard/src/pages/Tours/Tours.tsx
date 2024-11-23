@@ -4,8 +4,8 @@ import ToursList from "../../components/ToursList/ToursList.jsx";
 
 const Tours = () => {
   return (
-    <section className="tours">
-      <Header pageTitle="Tours" />
+    <section className="tours ">
+      <Header pageTitle="" />
       <ToursList />
     </section>
   );

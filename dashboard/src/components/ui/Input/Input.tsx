@@ -5,6 +5,8 @@ interface InputProps {
   className?: string;
   step?: string;
   value: string;
+  accept?: string;
+
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -18,8 +20,9 @@ const Input: React.FC<InputProps> = ({
   className = "",
 }) => {
   return (
-    <div className="grow w-full max-w-sm min-w-[200px]">
+    <div className="grow w-full  min-w-[200px]">
       <input
+        multiple
         name={name}
         type={type}
         placeholder={placeholder}
