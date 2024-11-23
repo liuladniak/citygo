@@ -8,6 +8,8 @@ import userRoutes from "./routes/userRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import authRoutes from "./routes/auth.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,9 @@ const PORT = process.env.PORT || 8080;
 
 const staticFilesPath = path.resolve("public");
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const allowedOrigins = process.env.CLIENT_URLS.split(",");
 
@@ -45,8 +50,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/users", userRoutes);
-app.use("/api/tours", tourRoutes);
+app.use("/api/tours", tourRoutes(__dirname));
 app.use("/api/bookings", bookingRoutes);
 app.use("/auth", authRoutes);
 
