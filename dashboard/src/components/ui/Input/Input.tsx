@@ -6,7 +6,6 @@ interface InputProps {
   step?: string;
   value: string;
   accept?: string;
-
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

@@ -1,4 +1,3 @@
-import "./TodayTeam.css";
 import todayTeamData from "../../data/todayTeamData.json";
 
 const TodayTeam = () => {
@@ -9,25 +8,21 @@ const TodayTeam = () => {
   });
 
   return (
-    <div className="team-members">
-      <h3 className="team-member__heading">Available Team</h3>
-      <ul className="team-member__list">
+    <div className="border border-lightGray p-4 ml-4 w-full h-full">
+      <h3 className="text-base mb-6">Available Team</h3>
+      <ul className="text-xs flex flex-col gap-4">
         {sortedTeamMembers?.map((teamMember, index) => {
-          console.log(`${API_URL}/assets/images/${teamMember.avatar}`);
-
           return (
-            <li className="team-member__item" key={index}>
-              <div className="team-member__detail team-member__avatar">
-                <img
-                  src={`${API_URL}/src/assets/images/${teamMember.avatar}`}
-                  alt="team member avatar"
-                />
+            <li
+              className="w-full flex justify-between items-center"
+              key={index}
+            >
+              <div className="overflow-hidden w-8 h-8 block rounded-full mr-4">
+                <img src={teamMember.avatar} alt="w-full h-full object-cover" />
               </div>
-              <span className="team-member__detail">{teamMember.name}</span>
-              <span className="team-member__detail">{teamMember.role}</span>
-              <span className="team-member__detail team-member__detail--status">
-                {teamMember.status}
-              </span>
+              <span className="flex-1">{teamMember.name}</span>
+              <span className="flex-1">{teamMember.role}</span>
+              <span className="flex-1">{teamMember.status}</span>
             </li>
           );
         })}

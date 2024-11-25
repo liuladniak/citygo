@@ -33,7 +33,7 @@ const ToursList = () => {
     <section className="max-w-70  w-full flex flex-col  mx-4 border-t  border-borderGray">
       <div className="flex justify-between items-center">
         <h1 className="m-4 text-xl font-medium">Tours</h1>
-        <Button to="/tours/add" className="">
+        <Button to="/tours/add" className="bg-brandTeal text-white">
           + Add new tour
         </Button>
       </div>
@@ -49,6 +49,7 @@ const ToursList = () => {
                 tour_name={tour.tour_name}
                 duration={tour.duration}
                 price={tour.price}
+                category={tour.category}
               />
             );
           })}
