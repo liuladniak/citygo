@@ -8,7 +8,7 @@ const TodayTeam = () => {
   });
 
   return (
-    <div className="border border-lightGray p-4 ml-4 w-full h-full">
+    <div className="border border-lightGray w-full h-full">
       <h3 className="text-base mb-6">Available Team</h3>
       <ul className="text-xs flex flex-col gap-4">
         {sortedTeamMembers?.map((teamMember, index) => {

@@ -32,13 +32,13 @@ import Header from "../../components/Header/Header";
 import TodaysBookingList from "../../components/TodaysBookingList/TodaysBookingList";
 import TodayTeam from "../../components/TodayTeam/TodayTeam";
 import arrowIcon from "../../assets/icons/arrow-up-right.svg";
-
+import weatherWidget from "../../assets/images/Screenshot 2024-11-24 at 11.08.03 PM.png";
 const Dashboard = () => {
   return (
     <section className="w-full h-full">
       <Header pageTitle="Dashboard" />
       <div className="flex justify-between">
-        <div className="flex flex-col gap-10 mt-8 flex-2">
+        <div className="flex flex-col gap-10 mt-8 flex-3 p-4">
           <div className="flex gap-10">
             <div className="flex gap-10">
               <div className="dashboard__stat flex items-end border border-blue-200  p-4 w-48 h-28 rounded-2xl">
@@ -65,7 +65,15 @@ const Dashboard = () => {
 
           <TodaysBookingList />
         </div>
-        <div className="flex flex-col gap-6 flex-1">
+        <div className="flex flex-col gap-6 flex-1 p-4">
+          <div className="h-40">
+            <h3>Weather</h3>
+            <img
+              src={weatherWidget}
+              alt="weather"
+              className="w-full h-full object-cover"
+            />
+          </div>
           <div className="w-full h-80 bg-blue-200 rounded-md p-4">
             <h3 className="text-xl text-center">Calender</h3>
           </div>

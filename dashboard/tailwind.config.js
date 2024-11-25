@@ -24,12 +24,16 @@ export default {
         brandDarkOrange: "#8b3f18",
         brandRed: "#fc3a4f52",
         brandDarkRed: "#941a26",
+        muted: "#A3A3C2",
       },
       maxWidth: {
         70: "70rem",
       },
       flex: {
         2: "2 2 0%",
+        3: "3 3 0%",
+        4: "4 4 0%",
+        5: "5 5 0%",
       },
     },
     plugins: [],
