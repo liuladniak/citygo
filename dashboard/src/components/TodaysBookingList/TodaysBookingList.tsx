@@ -40,35 +40,32 @@ const TodaysBookingList = () => {
   });
 
   return (
-    <div>
-      <h2 className="t-bookings__heading">All Today's Bookings</h2>
+    <div className="">
+      <h2 className="t-bookings__heading text-base mx-4 mt-4 mb-6">
+        All Today's Bookings
+      </h2>
       {/* <input placeholder="Search" /> */}
-      <ul className="t-bookings__list">
-        <li className="t-bookings__item t-bookings__item--title">
-          <span className="t-bookings__item-content">Tour name</span>
-          <span className="t-bookings__item-content">Customer name</span>
-          <span className="t-bookings__item-content">Tour time</span>
-          <span className="t-bookings__item-content">Number of people</span>
-          <span className="t-bookings__item-content">Status</span>
+      <ul className="flex flex-col gap-4 text-xs m-4 ">
+        <li className="font-semibold cursor-pointer flex justify-between w-full border border-lightGray rounded-md py-2 px-4 items-center">
+          <span className="flex-1">Tour name</span>
+          <span className="flex-1">Customer name</span>
+          <span className="flex-1">Tour time</span>
+          <span className="flex-1">Number of people</span>
+          <span className="flex-1">Status</span>
         </li>
         {sortedBookings.map((booking) => (
           <li key={booking.bookingId}>
-            <Link className="t-bookings__item" to="/">
-              <span className="t-bookings__item-content">
-                {booking.tour.title}
-              </span>
-              <span className="t-bookings__item-content">
-                {booking.user.name}
-              </span>
-              <span className="t-bookings__item-content">
-                {booking.tour.time}
-              </span>
-              <span className="t-bookings__item-content">
-                {booking.numberOfPeople}
-              </span>
-              <div className="t-bookings__item-content t-bookings__status-wrp">
+            <Link
+              className="cursor-pointer flex justify-between w-full border border-lightGray rounded-md py-2 px-4 items-center"
+              to="/"
+            >
+              <span className="flex-1">{booking.tour.title}</span>
+              <span className="flex-1">{booking.user.name}</span>
+              <span className="flex-1">{booking.tour.time}</span>
+              <span className="flex-1">{booking.numberOfPeople}</span>
+              <div className="flex-1 flex justify-start">
                 <span
-                  className={`t-bookings__status t-bookings__status--${booking.status
+                  className={`py-2 px-4 w-fit rounded-md t-bookings__status t-bookings__status--${booking.status
                     .toLowerCase()
                     .replace(" ", "-")}`}
                 >

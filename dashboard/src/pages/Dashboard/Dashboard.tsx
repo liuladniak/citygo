@@ -28,38 +28,35 @@
 
 import "./Dashboard.css";
 import Header from "../../components/Header/Header";
-import RevenueAreaChart from "../../components/RevenueAreaChart/RevenueAreaChart";
+
 import TodaysBookingList from "../../components/TodaysBookingList/TodaysBookingList";
 import TodayTeam from "../../components/TodayTeam/TodayTeam";
 import arrowIcon from "../../assets/icons/arrow-up-right.svg";
 
 const Dashboard = () => {
   return (
-    <section className="dashboard">
+    <section className="w-full h-full">
       <Header pageTitle="Dashboard" />
-      <div className="dashboard__layout-split">
-        <div className="cards">
-          <div className="dashboard__charts">
-            <div className="dashboard__chart">
-              <RevenueAreaChart />
-            </div>
-            <div className="dashboard__stats">
-              <div className="dashboard__stat">
-                <div className=" dashboard__stat--rev">
-                  <h3 className="dashboard__stat-name">Total revenue today</h3>
-                  <span className="dashboard__stat-value">8,500</span>
+      <div className="flex justify-between">
+        <div className="flex flex-col gap-10 mt-8 flex-2">
+          <div className="flex gap-10">
+            <div className="flex gap-10">
+              <div className="dashboard__stat flex items-end border border-blue-200  p-4 w-48 h-28 rounded-2xl">
+                <div className="dashboard__stat--rev flex flex-col justify-between gap-5 w-full h-full">
+                  <h3 className="text-sm">Total revenue today</h3>
+                  <span className="text-2xl">8,500</span>
                 </div>
-                <div className="dashboard__stat-link">
+                <div className="w-8 h-8">
                   <img src={arrowIcon} alt="arrow up right icon" />
                 </div>
               </div>
 
-              <div className="dashboard__stat dashboard__stat--tours">
-                <div className=" dashboard__stat--rev ">
-                  <h3 className="dashboard__stat-name">Tours booked today</h3>
-                  <span className="dashboard__stat-value">5</span>
+              <div className="bg-gradient-to-b from-violet-200 to-transparent flex items-end border border-blue-200  p-4 w-48 h-28 rounded-2xl">
+                <div className="flex flex-col justify-between gap-5 w-full h-full">
+                  <h3 className="text-sm">Tours booked today</h3>
+                  <span className="text-2xl">5</span>
                 </div>
-                <div className="dashboard__stat-link">
+                <div className="w-8 h-8">
                   <img src={arrowIcon} alt="arrow up right icon" />
                 </div>
               </div>
@@ -68,8 +65,12 @@ const Dashboard = () => {
 
           <TodaysBookingList />
         </div>
-
-        <TodayTeam />
+        <div className="flex flex-col gap-6 flex-1">
+          <div className="w-full h-80 bg-blue-200 rounded-md p-4">
+            <h3 className="text-xl text-center">Calender</h3>
+          </div>
+          <TodayTeam />
+        </div>
       </div>
     </section>
   );
