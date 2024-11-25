@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 
 import {
+  lockIconPath,
   homeIconPath,
   scheduleIconPath,
   bookingsIconPath,
@@ -19,16 +20,61 @@ import Icon from "../ui/SVGIcons/Icon";
 
 const navItems = [
   { path: "/", label: "Dashboard", iconPath: homeIconPath },
-  { path: "/schedule", label: "Schedule", iconPath: scheduleIconPath },
-  { path: "/bookings", label: "Bookings", iconPath: bookingsIconPath },
-  { path: "/team", label: "Team", iconPath: teamIconPath },
+  {
+    path: "/schedule",
+    label: "Schedule",
+    iconPath: scheduleIconPath,
+    lockIcon: lockIconPath,
+  },
+  {
+    path: "/bookings",
+    label: "Bookings",
+    iconPath: bookingsIconPath,
+    lockIcon: lockIconPath,
+  },
+  {
+    path: "/team",
+    label: "Team",
+    iconPath: teamIconPath,
+    lockIcon: lockIconPath,
+  },
   { path: "/tours", label: "Tours", iconPath: toursIconPath },
-  { path: "/analytics", label: "Analytics", iconPath: analyticsIconPath },
-  { path: "/invoices", label: "Invoices", iconPath: invoicesIconPath },
-  { path: "/tasks", label: "Tasks", iconPath: tasksIconPath },
-  { path: "/reports", label: "Reports", iconPath: reportsIconPath },
-  { path: "/guests", label: "Guests lookup", iconPath: guestsIconPath },
-  { path: "/settings", label: "Settings", iconPath: settingsIconPath },
+  {
+    path: "/analytics",
+    label: "Analytics",
+    iconPath: analyticsIconPath,
+    lockIcon: lockIconPath,
+  },
+  {
+    path: "/invoices",
+    label: "Invoices",
+    iconPath: invoicesIconPath,
+    lockIcon: lockIconPath,
+  },
+  {
+    path: "/tasks",
+    label: "Tasks",
+    iconPath: tasksIconPath,
+    lockIcon: lockIconPath,
+  },
+  {
+    path: "/reports",
+    label: "Reports",
+    iconPath: reportsIconPath,
+    lockIcon: lockIconPath,
+  },
+  {
+    path: "/guests",
+    label: "Guests lookup",
+    iconPath: guestsIconPath,
+    lockIcon: lockIconPath,
+  },
+  {
+    path: "/settings",
+    label: "Settings",
+    iconPath: settingsIconPath,
+    lockIcon: lockIconPath,
+  },
 ];
 
 const Nav = () => {
@@ -42,7 +88,7 @@ const Nav = () => {
       </Link>
       <nav className="nav ">
         <ul className="nav-list">
-          {navItems.map(({ path, label, iconPath }) => (
+          {navItems.map(({ lockIcon, path, label, iconPath }) => (
             <li key={path}>
               <NavLink
                 to={path}
@@ -57,17 +103,25 @@ const Nav = () => {
               >
                 {({ isActive }) => (
                   <div
-                    className={`w-full flex gap-2 rounded-md py-1 px-2 ${
-                      isActive ? "bg-gray-200 text-gray-600" : ""
-                    }`}
+                    className={`w-full flex gap-2 rounded-md py-1 px-2 items-center ${
+                      lockIcon ? "text-muted" : "text-light-gray-600"
+                    }  ${isActive ? "bg-gray-200 text-gray-600" : ""}`}
                   >
                     <Icon
                       iconPath={iconPath}
-                      fill="light-gray-600"
                       size={20}
-                      className="transition-colors duration-200"
+                      className={`transition-colors duration-200 ${
+                        lockIcon ? "fill-muted" : "fill-light-gray-600"
+                      }`}
                     />
                     <span>{label}</span>
+                    {lockIcon && (
+                      <Icon
+                        iconPath={lockIconPath}
+                        size={15}
+                        className="transition-colors duration-200 fill-muted"
+                      />
+                    )}
                   </div>
                 )}
               </NavLink>
