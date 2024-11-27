@@ -234,12 +234,20 @@ const TourDetails = () => {
 
           <div className="flex gap-2 mt-6">
             {formData.images.map((image, index) => (
-              <div key={index} className="h-24 w-36 rounded-md overflow-hidden">
+              <div
+                key={index}
+                className="h-24 w-36 rounded-md overflow-hidden relative"
+              >
                 <img
                   className="h-full"
                   src={`${API_URL}/${image}`}
                   alt={`Image of ${formData.tour_name} ${index + 1}`}
                 />
+                {index === 0 && (
+                  <div className="absolute bottom-0 right-0 py-1 px-2 bg-lightGray text-darkGray rounded-3xl m-1 text-xs">
+                    Main image
+                  </div>
+                )}
               </div>
             ))}
             <div className="h-24 w-36 rounded-md overflow-hidden border border-dashed border-customBlue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">

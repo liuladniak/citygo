@@ -15,6 +15,7 @@ import Tours from "./pages/Tours/Tours";
 import Guests from "./pages/Guests/Guests";
 import TourDetails from "./pages/TourDetails/TourDetails";
 import AddTour from "./pages/AddTour/AddTour";
+import UnderConstruction from "./pages/UnderConstruction/UnderConstruction";
 
 const router = createBrowserRouter([
   {
@@ -26,39 +27,39 @@ const router = createBrowserRouter([
       },
       {
         path: "/analytics",
-        element: <Analytics />,
+        element: <UnderConstruction />,
       },
       {
         path: "/bookings",
-        element: <Bookings />,
+        element: <UnderConstruction />,
       },
       {
         path: "/invoices",
-        element: <Invoices />,
+        element: <UnderConstruction />,
       },
       {
         path: "/reports",
-        element: <Reports />,
+        element: <UnderConstruction />,
       },
       {
         path: "/schedule",
-        element: <Schedule />,
+        element: <UnderConstruction />,
       },
       {
         path: "/settings",
-        element: <Settings />,
+        element: <UnderConstruction />,
       },
       {
         path: "/tasks",
-        element: <Tasks />,
+        element: <UnderConstruction />,
       },
       {
         path: "/team",
-        element: <Team />,
+        element: <UnderConstruction />,
       },
       {
         path: "/guests",
-        element: <Guests />,
+        element: <UnderConstruction />,
       },
       {
         path: "/tours",
