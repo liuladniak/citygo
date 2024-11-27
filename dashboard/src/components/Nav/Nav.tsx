@@ -20,6 +20,7 @@ import Icon from "../ui/SVGIcons/Icon";
 
 const navItems = [
   { path: "/", label: "Dashboard", iconPath: homeIconPath },
+  { path: "/tours", label: "Tours", iconPath: toursIconPath },
   {
     path: "/schedule",
     label: "Schedule",
@@ -38,7 +39,6 @@ const navItems = [
     iconPath: teamIconPath,
     lockIcon: lockIconPath,
   },
-  { path: "/tours", label: "Tours", iconPath: toursIconPath },
   {
     path: "/analytics",
     label: "Analytics",
@@ -93,7 +93,7 @@ const Nav = () => {
               <NavLink
                 to={path}
                 className={({ isActive }) =>
-                  `flex items-center gap-4 rounded-md w-full
+                  `flex items-center gap-4 rounded-md w-full  
                   ${
                     isActive
                       ? "hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900"
