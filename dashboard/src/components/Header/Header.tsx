@@ -13,7 +13,7 @@ const Header: React.FC<{ pageTitle: string }> = ({ pageTitle }) => {
 
   return (
     <header className="header">
-      {/* <h1 className="header__heading">{pageTitle}</h1> */}
+      <h1 className="header__heading">{pageTitle}</h1>
       <div className="w-full flex-1">
         <Input
           name="search"
