@@ -69,31 +69,6 @@ const AddTour = () => {
     };
   }, [images]);
 
-  // const createFormData = (
-  //   data: FormDataType,
-  //   images: { file: File }[]
-  // ): FormData => {
-  //   const formData = new FormData();
-
-  //   Object.keys(data).forEach((key) => {
-  //     const value = data[key as keyof FormDataType];
-  //     if (Array.isArray(value)) {
-  //       value.forEach((item) => formData.append(key, item));
-  //     } else {
-  //       formData.append(
-  //         key,
-  //         typeof value === "number" ? value.toString() : value
-  //       );
-  //     }
-  //   });
-
-  //   if (images.length > 0) {
-  //     images.forEach(({ file }) => formData.append("images", file));
-  //   }
-
-  //   return formData;
-  // };
-
   type FormDataType = {
     images: File[];
     tour_name: string;
