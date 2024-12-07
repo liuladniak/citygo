@@ -13,8 +13,7 @@ const Hero = () => {
   return (
     <section className="hero">
       <h1 className="hero-heading">
-        {/* Hey! 🐈 Guided tours: Discover Majestic İstanbul */}
-        Hey! 🐈 Discover Majestic İstanbul with Guided tours
+        Discover Majestic İstanbul with Guided tours
       </h1>
       <div className="hero-wrp">
         <div className="hero-intro">

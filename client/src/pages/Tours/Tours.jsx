@@ -246,7 +246,7 @@ const Tours = () => {
             <Button
               onClick={handleResetFilters}
               className="btn btn--reset-filter"
-              text="View All Tours"
+              text="Remove all filters"
             />
           )}
         </div>

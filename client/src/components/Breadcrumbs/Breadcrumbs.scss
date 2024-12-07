@@ -4,6 +4,10 @@
   width: 100%;
   max-width: $max-width;
   padding: 2rem 2rem 0;
+
+  @include desktop {
+    padding: 2rem 0 0;
+  }
 }
 .breadcrumb {
   list-style: none;

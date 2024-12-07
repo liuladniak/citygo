@@ -28,7 +28,9 @@
     overflow: hidden;
     padding: 0.8rem;
     margin: 0 $space-medium;
-    background-color: $main-maroon;
+    // background-color: $main-maroon;
+    background-color: transparent;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
     @include tablet {
       gap: $space-large;
@@ -53,9 +55,10 @@
     font-family: Montserrat;
     font-size: 1.6rem;
     letter-spacing: 1px;
-    color: $main-white;
+    // color: $main-white;
+
     &::placeholder {
-      color: $main-white;
+      // color: $main-white;
     }
     @include tablet {
       padding: 0 $space-large;
@@ -63,12 +66,15 @@
   }
 }
 
+.message {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
 .success-message {
   color: green;
-  font-size: 1rem;
 }
 
 .error-message {
   color: red;
-  font-size: 1rem;
 }
