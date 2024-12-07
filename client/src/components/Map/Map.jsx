@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./Map.scss";
 import { orangeIcon, purpleIcon, redIcon } from "../../utils/customMarkers";
+import { useEffect, useState } from "react";
 
 const Map = ({
   className,
@@ -11,6 +12,15 @@ const Map = ({
   category,
   tours = [],
 }) => {
+  useEffect(() => {
+    return () => {
+      const mapContainer = document.getElementById("map");
+      if (mapContainer && mapContainer._leaflet_id) {
+        mapContainer._leaflet_id = null; // Reset the container
+      }
+    };
+  }, []);
+
   const getMarkerIcon = (category) => {
     switch (category) {
       case "Culinary tour":
@@ -27,6 +37,7 @@ const Map = ({
   return (
     <div className={`map ${className}`}>
       <MapContainer
+        id="map"
         center={[latitude, longitude]}
         zoom={13}
         style={{ height: "100%" }}

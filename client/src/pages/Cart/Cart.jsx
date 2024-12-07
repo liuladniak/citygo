@@ -20,7 +20,7 @@ const Cart = () => {
     <div className="cart">
       <div>
         {bookings.length === 0 ? (
-          <p>Your cart is empty.</p>
+          <p className="cart__heading">Your cart is empty.</p>
         ) : (
           <div className="cart__review">
             <ReviewTour bookings={bookings} />
