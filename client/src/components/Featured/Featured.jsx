@@ -1,6 +1,6 @@
 import Button from "../Button/Button";
 import "./Featured.scss";
-
+import contactImg from "../../assets/images/contactImg.png";
 const Featured = () => {
   return (
     <div className="featured-wrp">
@@ -16,6 +16,9 @@ const Featured = () => {
             </p>
           </div>
           <Button className="btn btn--contact" to="/" text="Contact Us" />
+        </div>
+        <div className="featured-img-wrp">
+          <img src={contactImg} alt="" className="featured-img" />
         </div>
       </div>
     </div>

@@ -11,7 +11,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { addBooking } from "../../features/cart/cartSlice";
 import { v4 as uuidv4 } from "uuid";
 
-const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
+const BookingForm = ({
+  tour_id,
+  availableStartDate,
+  availableEndDate,
+  title,
+  mainImage,
+  unavailableRecurringDays,
+  unavailableDates,
+}) => {
   const API_URL = import.meta.env.VITE_API_KEY;
 
   const { ref, isComponentVisible, setIsComponentVisible } =
@@ -109,8 +117,12 @@ const BookingForm = ({ tour_id, available_dates, title, mainImage }) => {
         <img src={calendarIcon} alt="calendar icon" />
       </div>
       <TourDatePicker
-        availableDates={available_dates}
+        availableStartDate={availableStartDate}
+        availableEndDate={availableEndDate}
+        // availableDates={available_dates}
         onDateSelected={handleDateSelected}
+        unavailableDates={unavailableDates}
+        unavailableRecurringDays={unavailableRecurringDays}
       />
       <form className="booking-form" onSubmit={handleSubmit}>
         <div className="guest-section" ref={ref}>

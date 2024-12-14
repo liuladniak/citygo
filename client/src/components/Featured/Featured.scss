@@ -25,11 +25,15 @@
   gap: $space-large;
 
   @include tablet {
-    padding: $space-large;
+    // padding: $space-large;
+    padding: 4rem;
   }
 
   &-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-large;
   }
   &-title {
     font-size: 3.2rem;
@@ -42,7 +46,17 @@
     font-size: 1.4rem;
 
     @include tablet {
-      width: 50%;
+      // width: 50%;
+    }
+  }
+
+  &-img {
+    // object-position: top center;
+    object-fit: contain;
+    height: 100%;
+    &-wrp {
+      flex: 1;
+      height: 32rem;
     }
   }
 }

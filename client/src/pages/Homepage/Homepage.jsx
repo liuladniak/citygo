@@ -7,6 +7,7 @@ import ToursIntroList from "../../components/ToursIntroList/ToursIntroList";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
+// import Loader from "../../components/UI/Loader";
 
 const Homepage = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
@@ -27,9 +28,9 @@ const Homepage = () => {
     fetchTours();
   }, []);
 
-  if (isLoading) {
-    return <CountdownLoader />;
-  }
+  // if (isLoading) {
+  //   return <CountdownLoader />;
+  // }
 
   return (
     <>
