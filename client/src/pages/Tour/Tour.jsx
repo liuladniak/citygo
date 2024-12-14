@@ -13,8 +13,8 @@ import ImageSlider from "../../components/ImageSlider/ImageSlider";
 import Modal from "../../components/Modal/Modal";
 import timeIcon from "../../assets/icons/icon-time.svg";
 import { formatPrice } from "../../utils/formatPrice";
-import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
-import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
+// import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
+import Loader from "../../components/UI/Loader";
 
 const Tour = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
@@ -71,7 +71,7 @@ const Tour = () => {
   };
 
   if (isLoading) {
-    return <CountdownLoader />;
+    return <Loader />;
   }
 
   const {
@@ -89,10 +89,14 @@ const Tour = () => {
     groups,
     minimum_of_attendees,
     additional_costs,
-    available_dates,
+    // available_dates,
     longitude,
     latitude,
     images,
+    available_end_date,
+    unavailable_recurring_day_of_week,
+    unavailable_dates,
+    available_start_date,
   } = tour;
 
   console.log(tour, "tour || images:", tour.images);
@@ -255,9 +259,12 @@ const Tour = () => {
             <div className="tour-summary__dates">
               <BookingForm
                 tour_id={id}
-                available_dates={available_dates}
+                availableEndDate={available_end_date}
+                availableStartDate={available_start_date}
                 title={tour_name}
                 mainImage={mainImage}
+                unavailableRecurringDays={unavailable_recurring_day_of_week}
+                unavailableDates={unavailable_dates}
               />
             </div>
           </div>

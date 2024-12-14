@@ -10,8 +10,8 @@ const Subscribe = () => {
 
   const [isValid, setIsValid] = useState(true);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // e.preventDefault();
     if (email.trim() === "") {
       setMessage("Email address cannot be empty.");
       setIsValid(false);
@@ -39,7 +39,11 @@ const Subscribe = () => {
           className="subscribe-input"
           placeholder="Enter your email..."
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setMessage("");
+            setIsValid(true);
+          }}
         />
         <Button
           type="submit"

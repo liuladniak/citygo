@@ -61,7 +61,10 @@ function Login() {
       </form>
 
       <p className="signup-cta">
-        Don't have an account? <Link to="/signup">Sign up</Link>
+        Don't have an account?{" "}
+        <Link className="signup-link" to="/signup">
+          Sign up
+        </Link>
       </p>
     </main>
   );

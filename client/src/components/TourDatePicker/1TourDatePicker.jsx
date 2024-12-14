@@ -1,50 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./TourDatePicker.scss";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import closeIcon from "../../assets/icons/close.svg";
 
-const TourDatePicker = ({
-  availableStartDate,
-  availableEndDate,
-  onDateSelected,
-  unavailableRecurringDays,
-  unavailableDates,
-}) => {
+const TourDatePicker = ({ availableDates, onDateSelected }) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const [parsedDates, setParsedDates] = useState([]);
 
-  const startDate = new Date(availableStartDate);
-  const endDate = new Date(availableEndDate);
-  console.log(availableStartDate, availableEndDate, startDate, endDate);
-  // const isDateAvailable = (date) => {
-  //   return date >= startDate && date <= endDate;
-  // };
-
-  const isDateAvailable = (date) => {
-    const dayOfWeek = date.getDay();
-    const formattedDate = date.toISOString().split("T")[0]; // Format date as YYYY-MM-DD
-
-    const isUnavailableRecurringDay =
-      unavailableRecurringDays.includes(dayOfWeek);
-    const isUnavailableDate = unavailableDates.includes(formattedDate);
-
-    return (
-      date >= startDate &&
-      date <= endDate &&
-      !isUnavailableRecurringDay &&
-      !isUnavailableDate
-    );
-  };
-
-  const isPastDate = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-  };
+  useEffect(() => {
+    const dates = availableDates.map((date) => date.split("T")[0]);
+    setParsedDates(dates);
+  }, [availableDates]);
 
   const handleDateClick = (event) => {
     const dayElement = event.target.closest(".react-datepicker__day");
@@ -59,6 +30,11 @@ const TourDatePicker = ({
     }
   };
 
+  const isDateAvailable = (date) => {
+    const formattedDate = date.toISOString().split("T")[0];
+    return parsedDates.includes(formattedDate);
+  };
+
   const handleDateChange = (date) => {
     if (isDateAvailable(date)) {
       setSelectedDate(date);
@@ -69,14 +45,20 @@ const TourDatePicker = ({
       setIsComponentVisible(true);
     }
   };
-  console.log(selectedDate, "selectedDate");
+
+  const isPastDate = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
   return (
     <div className="tour-date-picker">
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}
         onClick={handleDateClick}
-        filterDate={(date) => isDateAvailable(date) && !isPastDate(date)}
+        filterDate={(date) => !isPastDate(date)}
         dayClassName={(date) =>
           isPastDate(date)
             ? "react-datepicker__day--past"

@@ -9,6 +9,7 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import ManageBookings from "./pages/ManageBookings/ManageBookings";
 import Cart from "./pages/Cart/Cart";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
       },
       { path: "/bookings", element: <ManageBookings /> },
       { path: "/cart", element: <Cart /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ]);
