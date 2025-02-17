@@ -9,7 +9,6 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const userId = req.query.userId;
-    console.log("Fetching bookings for user ID:", userId);
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
@@ -39,8 +38,6 @@ router.get("/", async (req, res) => {
       tour_images: imagesByTourId[booking.tour_id] || [],
     }));
 
-    console.log("Bookings fetched:", result);
-
     res.json(result);
   } catch (error) {
     console.error("Error fetching bookings:", error);
@@ -49,15 +46,30 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { user_id, tour_id, number_of_people, booking_date } = req.body;
+  const {
+    user_id,
+    tour_id,
+    booking_date,
+    time_slot_id,
+    adults,
+    children,
+    infants,
+  } = req.body;
+
+  if (!user_id || !tour_id || !booking_date || !time_slot_id) {
+    return res.status(400).json({ message: "Required fields are missing" });
+  }
 
   try {
     const [id] = await knex("bookings")
       .insert({
         user_id,
         tour_id,
-        number_of_people,
         booking_date,
+        time_slot_id,
+        adults,
+        children,
+        infants,
       })
       .returning("id");
 
@@ -65,11 +77,30 @@ router.post("/", async (req, res) => {
       id,
       user_id,
       tour_id,
-      number_of_people,
       booking_date,
+      time_slot_id,
+      adults,
+      children,
+      infants,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error creating booking:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/bulk", async (req, res) => {
+  const bookings = req.body;
+
+  if (!Array.isArray(bookings) || bookings.length === 0) {
+    return res.status(400).json({ message: "No bookings provided" });
+  }
+
+  try {
+    const insertedIds = await knex("bookings").insert(bookings).returning("id");
+    res.status(201).json({ message: "Bookings created", ids: insertedIds });
+  } catch (error) {
+    console.error("Error creating bookings:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });

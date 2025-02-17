@@ -6,17 +6,19 @@ import helmet from "helmet";
 import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
+import articleRoutes from "./routes/articleRoutes.js";
 import authRoutes from "./routes/auth.js";
+import webhook from "./routes/webhook.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import paymentRoutes from "./routes/payment.js";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 const staticFilesPath = path.resolve("public");
-app.use("/", express.static(path.join(staticFilesPath, "tours")));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -48,14 +50,24 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("combined"));
   console.log("Morgan logging in combined mode (production)");
 }
+app.use(
+  "/api/payment/webhook",
+  express.raw({ type: "application/json" }),
+  webhook
+);
 
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/api/users", userRoutes);
+app.use("/api/users/", userRoutes);
+
 app.use("/api/tours", tourRoutes(__dirname));
 app.use("/api/bookings", bookingRoutes);
 app.use("/auth", authRoutes);
+app.use("/api/articles", articleRoutes(__dirname));
+app.use("/", express.static(path.join(staticFilesPath, "tours")));
+app.use("/articles", express.static(path.join(staticFilesPath, "articles")));
+app.use("/api/payment", paymentRoutes);
 
 app.use((req, res) => {
   res.status(404).send("Route not found");
