@@ -1,0 +1,12 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.banner {
+  background-color: $accent-4;
+  color: $main-teal;
+  font-size: 1.6rem;
+  width: 100%;
+  text-align: center;
+  padding: 1.2rem;
+  font-weight: bold;
+}

@@ -20,13 +20,10 @@ const TourDatePicker = ({
   const startDate = new Date(availableStartDate);
   const endDate = new Date(availableEndDate);
   console.log(availableStartDate, availableEndDate, startDate, endDate);
-  // const isDateAvailable = (date) => {
-  //   return date >= startDate && date <= endDate;
-  // };
 
   const isDateAvailable = (date) => {
     const dayOfWeek = date.getDay();
-    const formattedDate = date.toISOString().split("T")[0]; // Format date as YYYY-MM-DD
+    const formattedDate = date.toISOString().split("T")[0];
 
     const isUnavailableRecurringDay =
       unavailableRecurringDays.includes(dayOfWeek);

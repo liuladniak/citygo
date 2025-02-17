@@ -1,0 +1,148 @@
+{
+  "tours_itinerary": [
+    {
+      "name": "Bosphorus Cruise and Spice Market Tour",
+      "itinerary": [
+        { "name": "Spice Market", "coordinates": [41.0164, 28.9662] },
+        { "name": "Rustem Pasha Mosque", "coordinates": [41.0186, 28.9643] },
+        {
+          "name": "Bosphorus Pier (Boat Boarding)",
+          "coordinates": [41.0256, 28.973]
+        },
+        { "name": "Bosphorus Viewpoint 1", "coordinates": [41.0345, 29.0047] },
+        {
+          "name": "Intermediate Scenic Point",
+          "coordinates": [41.0381, 29.0113]
+        },
+        { "name": "Bosphorus Viewpoint 2", "coordinates": [41.0412, 29.0151] },
+        { "name": "Intermediate Boat Stop", "coordinates": [41.043, 29.012] },
+        { "name": "Bosphorus Viewpoint 3", "coordinates": [41.0478, 29.0203] },
+        { "name": "Final Docking Point", "coordinates": [41.0503, 29.0135] },
+        {
+          "name": "Walking Return to Spice Market",
+          "coordinates": [41.0164, 28.9662]
+        }
+      ]
+    },
+    {
+      "name": "Istanbul Food and Culture Tour",
+      "itinerary": [
+        { "name": "Turkish Delight Shop", "coordinates": [41.0115, 28.9711] },
+        {
+          "name": "Intermediate Snack Stop",
+          "coordinates": [41.0123, 28.9725]
+        },
+        { "name": "Kebap Restaurant", "coordinates": [41.0086, 28.9761] },
+        { "name": "Street Food Spot", "coordinates": [41.0102, 28.978] },
+        { "name": "Fish Market", "coordinates": [41.0221, 28.9833] },
+        { "name": "Intermediate Tea Stop", "coordinates": [41.0204, 28.9802] },
+        { "name": "Traditional Tea House", "coordinates": [41.0193, 28.9765] },
+        { "name": "Baklava Shop", "coordinates": [41.0138, 28.9751] },
+        { "name": "Local Spice Store", "coordinates": [41.0175, 28.9689] },
+        { "name": "Back to Starting Point", "coordinates": [41.0115, 28.9711] }
+      ]
+    },
+    {
+      "name": "Historical Gems of Istanbul Tour",
+      "itinerary": [
+        { "name": "Basilica Cistern", "coordinates": [41.0085, 28.9784] },
+        { "name": "Intermediate Walk Stop", "coordinates": [41.0095, 28.981] },
+        { "name": "Gülhane Park Entrance", "coordinates": [41.0118, 28.979] },
+        { "name": "Gülhane Park Fountain", "coordinates": [41.013, 28.9783] },
+        { "name": "Museum Pathway", "coordinates": [41.0123, 28.9805] },
+        {
+          "name": "Istanbul Archaeological Museums",
+          "coordinates": [41.0116, 28.9811]
+        },
+        {
+          "name": "Intermediate Bench Stop",
+          "coordinates": [41.0112, 28.9797]
+        },
+        { "name": "Historical Alley", "coordinates": [41.0107, 28.9773] },
+        { "name": "Nearby Tea House", "coordinates": [41.0096, 28.9754] },
+        {
+          "name": "Back to Basilica Cistern",
+          "coordinates": [41.0085, 28.9784]
+        }
+      ]
+    },
+    {
+      "name": "Galata Beyoglu Historical and Cultural Tour",
+      "itinerary": [
+        { "name": "Galata Tower", "coordinates": [41.0257, 28.9744] },
+        { "name": "Historic Streets 1", "coordinates": [41.0271, 28.9747] },
+        { "name": "Historic Streets 2", "coordinates": [41.0281, 28.9733] },
+        { "name": "Intermediate Stop 1", "coordinates": [41.0291, 28.9729] },
+        { "name": "Pera Museum", "coordinates": [41.0312, 28.9739] },
+        { "name": "Local Cafes 1", "coordinates": [41.0315, 28.975] },
+        { "name": "Local Cafes 2", "coordinates": [41.0325, 28.9756] },
+        { "name": "Cihangir Starting Point", "coordinates": [41.0295, 28.981] },
+        {
+          "name": "Cihangir Intermediate Stop",
+          "coordinates": [41.0298, 28.9824]
+        },
+        { "name": "Cihangir End Point", "coordinates": [41.0295, 28.9837] }
+      ]
+    },
+    {
+      "name": "Fener-Balat Historical Walking Tour",
+      "itinerary": [
+        {
+          "name": "Fener Greek Orthodox Patriarchate",
+          "coordinates": [41.0291, 28.9483]
+        },
+        { "name": "Colorful Streets 1", "coordinates": [41.0311, 28.949] },
+        { "name": "Intermediate Stop 1", "coordinates": [41.0325, 28.9501] },
+        {
+          "name": "Bulgarian St. Stephen Church",
+          "coordinates": [41.0354, 28.9506]
+        },
+        { "name": "Colorful Streets 2", "coordinates": [41.0335, 28.9518] },
+        { "name": "Intermediate Stop 2", "coordinates": [41.0315, 28.9527] },
+        { "name": "Local Cafe Experience", "coordinates": [41.0371, 28.9537] },
+        { "name": "Intermediate Alley", "coordinates": [41.0339, 28.9545] },
+        { "name": "Street Art Spot", "coordinates": [41.0315, 28.9532] },
+        { "name": "Return to Patriarchate", "coordinates": [41.0291, 28.9483] }
+      ]
+    },
+    {
+      "name": "Istanbul Shopping Tour",
+      "itinerary": [
+        { "name": "Grand Bazaar", "coordinates": [41.0106, 28.9685] },
+        {
+          "name": "Intermediate Market Stop",
+          "coordinates": [41.0121, 28.9667]
+        },
+        { "name": "Spice Market", "coordinates": [41.0164, 28.9662] },
+        {
+          "name": "Intermediate Boutique Stop",
+          "coordinates": [41.0433, 29.0034]
+        },
+        { "name": "Istinye Park", "coordinates": [41.1081, 29.0231] },
+        { "name": "Intermediate Mall Stop", "coordinates": [41.0502, 29.0092] },
+        { "name": "Nişantaşı", "coordinates": [41.0438, 28.9887] },
+        { "name": "Luxury Street", "coordinates": [41.0461, 28.9854] },
+        { "name": "High-End Cafe", "coordinates": [41.0421, 28.9876] },
+        { "name": "Return to Bazaar", "coordinates": [41.0106, 28.9685] }
+      ]
+    },
+    {
+      "name": "Golden Horn Adventure Tour",
+      "itinerary": [
+        { "name": "Pierre Loti Hill", "coordinates": [41.0535, 28.9383] },
+        { "name": "Intermediate Hill Stop", "coordinates": [41.0513, 28.941] },
+        { "name": "Eyup Sultan Mosque", "coordinates": [41.0489, 28.9338] },
+        {
+          "name": "Intermediate River View",
+          "coordinates": [41.0445, 28.9367]
+        },
+        { "name": "Feshane", "coordinates": [41.0427, 28.9314] },
+        { "name": "Rahmi M. Koç Museum", "coordinates": [41.0439, 28.9425] },
+        { "name": "Miniatürk Entrance", "coordinates": [41.0551, 28.9482] },
+        { "name": "Miniatürk Scenic Stop", "coordinates": [41.0571, 28.9471] },
+        { "name": "Golden Horn Walkway", "coordinates": [41.0512, 28.9395] },
+        { "name": "Return to Pierre Loti", "coordinates": [41.0535, 28.9383] }
+      ]
+    }
+  ]
+}

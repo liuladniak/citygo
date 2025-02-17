@@ -8,18 +8,23 @@ function CustomSelect({
   value,
   onChange,
   placeholder = "Please select",
+  hidePlaceholder = false,
+  className = "",
+  optionsClassName = "",
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(value || placeholder);
+  const [selectedValue, setSelectedValue] = useState(
+    value || (hidePlaceholder ? options[0] : placeholder)
+  );
   const dropdownRef = useRef(null);
 
   useEffect(() => {
     if (options.includes(value)) {
       setSelectedValue(value);
     } else {
-      setSelectedValue(placeholder);
+      setSelectedValue(hidePlaceholder ? options[0] : placeholder);
     }
-  }, [value, options, placeholder]);
+  }, [value, options, placeholder, hidePlaceholder]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -40,15 +45,15 @@ function CustomSelect({
   };
 
   const handleReset = () => {
-    setSelectedValue(placeholder);
-    onChange("");
+    setSelectedValue(hidePlaceholder ? options[0] : placeholder);
+    onChange(null);
     setIsOpen(false);
   };
 
   return (
     <div className="select" ref={dropdownRef}>
       <div
-        className={`form-input select--selected ${
+        className={`form-input select--selected ${className} ${
           isOpen ? "input-active" : ""
         }`}
         onClick={() => setIsOpen(!isOpen)}
@@ -62,10 +67,16 @@ function CustomSelect({
           alt="select icon"
         />
       </div>
-      <ul className={`select__options ${isOpen ? "open" : ""}`}>
-        <li className="select__option" onClick={handleReset}>
-          {placeholder}
-        </li>
+      <ul
+        className={`select__options ${optionsClassName} ${
+          isOpen ? "open" : ""
+        }`}
+      >
+        {!hidePlaceholder && (
+          <li className="select__option" onClick={handleReset}>
+            {placeholder}
+          </li>
+        )}
         {options.map((option, index) => (
           <li
             key={index}

@@ -1,0 +1,136 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.stats-container {
+  display: flex;
+
+  margin: $space-medium 0 $space-large;
+  gap: $space-small;
+
+  .stat-wrapper {
+    flex: 1 1 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: $space-small;
+
+    @media (max-width: 800px) {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+.stat {
+  &__number {
+    font-weight: 700;
+    font-size: 3.2rem;
+    padding: $space-x-small;
+  }
+
+  &__heading {
+    font-size: 2rem;
+    font-weight: 700;
+    padding: 0 $space-x-small;
+  }
+
+  &__img {
+    position: absolute;
+    z-index: -1;
+    border-radius: $border-radius;
+  }
+
+  &-card {
+    flex: 1;
+    display: grid;
+    grid-template-rows: 7rem 7rem 1rem 7rem;
+    grid-template-columns: 1fr 1rem 1fr 1fr;
+    border-radius: 16px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: -2;
+    }
+
+    &__img {
+      grid-column: 1/5;
+      grid-row: 1/5;
+      z-index: -3;
+    }
+
+    &__content {
+      display: flex;
+      grid-column: 3/5;
+      grid-row: 4/5;
+      background-color: white;
+      position: relative;
+      z-index: 1;
+      justify-content: center;
+      align-items: center;
+
+      &::after {
+        border-radius: $border-radius;
+        border: 2px solid #5161406d;
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: $supportive-3;
+        bottom: 0;
+        left: 0;
+        z-index: -2;
+      }
+    }
+
+    &--4 {
+      grid-column: 4/5;
+      grid-row: 2/3;
+      position: relative;
+
+      &::after {
+        width: 2rem;
+        height: 2rem;
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-radius: 100%;
+        box-shadow: 0.8rem 0.8rem #f9f9f9;
+      }
+    }
+
+    &--5 {
+      grid-column: 1/2;
+      grid-row: 4/5;
+      position: relative;
+
+      &::before {
+        width: 2rem;
+        height: 2rem;
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-radius: 100%;
+        box-shadow: 0.8rem 0.8rem #f9f9f9;
+      }
+    }
+
+    &--6 {
+      grid-column: 2/5;
+      grid-row: 3/4;
+      background-color: #f9f9f9;
+      border-radius: 5rem 0 0 0;
+    }
+
+    &--7 {
+      grid-column: 2/3;
+      grid-row: 4/5;
+      background-color: #f9f9f9;
+    }
+  }
+}

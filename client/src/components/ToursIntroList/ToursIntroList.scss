@@ -2,6 +2,13 @@
 @use "../../styles/partials/mixins" as *;
 
 .tour-intro {
+  &-card {
+    flex: 1;
+  }
+
+  &-img {
+  }
+
   &-list {
     width: 100%;
     margin-top: $space-large;
@@ -9,15 +16,25 @@
 
     &__heading {
       font-size: 3.2rem;
+      margin-bottom: $space-x-small;
+    }
+    &__subheading {
+      font-size: 1.6rem;
+      width: 60%;
+      color: $charcoal;
       margin-bottom: $space-medium;
     }
+  }
+
+  &__link-title {
+    font-size: 2.2rem;
   }
 
   &-wrp {
     display: flex;
     flex-direction: column;
     gap: $space-large;
-
+    height: 42rem;
     @include tablet {
       flex-direction: row;
     }
@@ -27,9 +44,18 @@
     display: none;
     @include tablet {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 35rem;
+      flex: 1;
+      gap: 2.4rem;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      border-radius: 50%;
+      transform: translate(50%, -50%);
+      background-color: $main-teal;
+      padding: 0.8rem;
     }
 
     & img {
@@ -38,4 +64,99 @@
       cursor: pointer;
     }
   }
+}
+
+.tour-info {
+  &-card {
+    @include border-radius;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: flex-start;
+    flex: 1;
+    background-color: darkolivegreen;
+    background-color: $accent-4;
+    color: $charcoal;
+    font-size: 1.4rem;
+    flex: 1;
+
+    &--skeleton {
+      flex: 1;
+    }
+  }
+  &-title {
+    font-size: 2.4rem;
+  }
+  &-tag {
+    display: block;
+    width: 100%;
+    text-transform: uppercase;
+  }
+}
+
+.tour-intro-wrp {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+
+  .tour-slider {
+    display: flex;
+    gap: 1rem;
+    overflow: hidden;
+    padding: 1rem;
+    height: 100%;
+    &__wrp {
+      position: relative;
+      flex: 3;
+    }
+  }
+
+  .tour-intro-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 2px 10px rgb(0, 0, 0, 0.1);
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: white;
+
+    &:hover {
+      box-shadow: 0px 2px 10px rgb(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    &--prev {
+      left: -4rem;
+    }
+
+    &--next {
+      right: -4rem;
+    }
+
+    img {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}
+
+.tour-chevron {
+  width: 4.6rem;
+  height: 4.6rem;
+}
+
+.tour-cards--skeleton {
+  flex: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-x-small;
+  justify-content: center;
+  flex-wrap: nowrap;
 }

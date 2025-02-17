@@ -1,0 +1,18 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.license {
+  display: flex;
+  gap: $space-large;
+  justify-content: center;
+  align-items: center;
+  &-card {
+    width: 10rem;
+    height: 10rem;
+  }
+  &-img {
+    object-fit: contain;
+    width: 100%;
+  }
+  margin-bottom: $space-large;
+}

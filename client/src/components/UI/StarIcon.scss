@@ -1,0 +1,9 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.star-icon {
+  fill: $accent-2;
+}
+.stars {
+  display: flex;
+}

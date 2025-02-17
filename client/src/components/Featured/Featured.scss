@@ -2,12 +2,10 @@
 @use "../../styles/partials/variables" as *;
 
 .featured-wrp {
-  max-width: $max-width;
   width: 100%;
   display: flex;
   justify-content: center;
-  // margin-top: $space-large;
-  background-color: #1e556d16;
+  background-color: $supportive-2;
   @include border-radius;
   margin: $space-large $space-x-small 0;
 
@@ -25,10 +23,13 @@
   gap: $space-large;
 
   @include tablet {
-    // padding: $space-large;
     padding: 4rem;
   }
-
+  &-btns {
+    display: flex;
+    align-items: center;
+    gap: 2.4rem;
+  }
   &-content {
     flex: 1;
     display: flex;
@@ -46,12 +47,10 @@
     font-size: 1.4rem;
 
     @include tablet {
-      // width: 50%;
     }
   }
 
   &-img {
-    // object-position: top center;
     object-fit: contain;
     height: 100%;
     &-wrp {

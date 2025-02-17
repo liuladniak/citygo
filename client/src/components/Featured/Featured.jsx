@@ -15,7 +15,18 @@ const Featured = () => {
               to assist you.
             </p>
           </div>
-          <Button className="btn btn--contact" to="/" text="Contact Us" />
+          <div className="featured-btns">
+            <Button
+              className="btn btn--contact"
+              to="/contact"
+              text="Contact Us"
+            />
+            <Button
+              className="btn btn--contact"
+              to="/about"
+              text="Get to know us"
+            />
+          </div>
         </div>
         <div className="featured-img-wrp">
           <img src={contactImg} alt="" className="featured-img" />

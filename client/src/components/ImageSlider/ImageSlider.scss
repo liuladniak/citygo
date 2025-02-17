@@ -5,6 +5,7 @@
   min-height: 40rem;
   max-height: 67.5rem;
   object-fit: cover;
+  height: 100%;
   margin: 0 auto;
   overflow: hidden;
   border-radius: 8px;
@@ -22,7 +23,6 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: darkred;
   color: white;
   border: none;
   cursor: pointer;
@@ -33,11 +33,9 @@
 
 .slider-button img {
   width: 24px;
-  height: auto;
 }
 
 .slider-button:hover {
-  background: rgba(0, 0, 0, 0.7);
 }
 
 .prev {
@@ -46,4 +44,12 @@
 
 .next {
   right: 10px;
+}
+
+.images-count {
+  font-size: 1.4rem;
+  color: white;
+  min-width: 3rem;
+  display: block;
+  text-align: center;
 }

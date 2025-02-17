@@ -5,10 +5,10 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  margin: $space-large 0;
+  margin: $space-large 0 0;
   padding: $space-x-small;
   font-size: 1.4rem;
-  background-color: $main-teal;
+  gap: $space-medium;
   width: 100%;
   @include layout-constrain;
   @include border-radius;
@@ -18,9 +18,20 @@
     flex-direction: row;
     padding: $space-large;
   }
-
+  &-wrp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: $main-teal;
+  }
   &-logo-link {
     font-size: 3.2rem;
+  }
+
+  &-ist-logo {
+    width: 12rem;
+    object-fit: cover;
   }
 
   &-col {
@@ -59,4 +70,38 @@
       }
     }
   }
+
+  &-socials {
+    fill: white;
+    width: 100%;
+    height: 100%;
+    padding: 0.6rem;
+  }
+}
+
+.wrp {
+  background-color: $main-teal;
+  width: 100%;
+}
+.credit {
+  color: white;
+  font-weight: 600;
+  font-size: 1.6rem;
+  text-align: center;
+}
+.disclaimer {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  margin: $space-medium;
+  background-color: orange;
+  padding: 1.8rem;
+  border-radius: $border-radius;
+}
+.copy {
+  color: white;
+  font-weight: 600;
+  font-size: 1.6rem;
+  text-align: center;
+  margin: $space-large;
 }

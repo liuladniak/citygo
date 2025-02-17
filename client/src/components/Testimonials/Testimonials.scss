@@ -1,0 +1,19 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.testimonials {
+  &-item {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+  }
+  &-title {
+    font-weight: 600;
+  }
+  &-name {
+    font-weight: 600;
+  }
+  &-highlighted {
+    font-weight: 600;
+  }
+}

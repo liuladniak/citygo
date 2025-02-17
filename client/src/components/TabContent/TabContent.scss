@@ -1,0 +1,38 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.account-menu__item {
+  cursor: pointer;
+}
+
+.account {
+  &-header {
+    margin-bottom: $space-medium;
+  }
+  &-details {
+    display: flex;
+    flex-direction: column;
+    gap: $space-medium;
+  }
+  &-detail {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: flex-start;
+    padding-bottom: $space-medium;
+    border-bottom: 1px solid #eee;
+
+    &__col {
+      display: flex;
+      flex-direction: column;
+      gap: $space-x-small;
+    }
+  }
+  &-btn--cancel {
+    align-self: flex-end;
+  }
+
+  &-actions {
+    margin-top: $space-medium;
+  }
+}

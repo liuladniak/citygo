@@ -4,7 +4,7 @@ import Button from "../../components/Button/Button";
 import iconError from "../../assets/images/SVG/3.svg";
 const NotFoundPage = () => {
   return (
-    <div className="wrp">
+    <div className="">
       <div className="iconError-wrp">
         <img src={iconError} />
       </div>

@@ -4,10 +4,10 @@
 .cart {
   margin-top: $space-large;
   width: 100%;
-  max-width: $max-width;
   display: flex;
   flex-direction: column;
   gap: $space-medium;
+  max-width: $max-width;
 
   &__heading {
     font-size: 2.8rem;
@@ -16,5 +16,13 @@
     display: flex;
     justify-content: space-between;
     gap: 9rem;
+  }
+
+  &-heading {
+    font-size: 3.2rem;
+    z-index: 5;
+  }
+
+  &-list {
   }
 }

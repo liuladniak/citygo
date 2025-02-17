@@ -1,0 +1,185 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.destinations {
+  margin-top: 6rem;
+  @include layout-constrain;
+  &-testimonials {
+    background-color: $supportive-2;
+    margin-top: $space-large;
+    padding: $space-medium;
+
+    .testimonials-list {
+      display: flex;
+      gap: $space-large;
+      margin-top: $space-medium;
+    }
+    .testimonials-item {
+      border-radius: $border-radius;
+      padding: $space-x-small;
+      background-color: #fff;
+      font-size: 1.4rem;
+      flex: 1;
+    }
+  }
+  &-glimpse {
+    margin-top: $space-large;
+    .glimpse-el {
+      flex: 1;
+
+      &--2 {
+        flex: 1.8;
+      }
+    }
+  }
+  &-list {
+    margin-top: $space-medium;
+  }
+  &-categories {
+    display: flex;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+  }
+  &-img {
+    height: 30rem;
+    border-radius: $border-radius;
+    display: flex;
+  }
+
+  &-stories__cols {
+    display: flex;
+    gap: $space-medium;
+  }
+  &-stories {
+    margin-top: $space-large;
+  }
+  &-stories__col--1,
+  &-stories__col--2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  &-heading {
+    font-size: 2.4rem;
+    font-weight: 500;
+    margin-bottom: $space-medium;
+
+    @include tablet {
+      font-size: 3.2rem;
+    }
+
+    @include desktop-s {
+      font-size: 3.6rem;
+    }
+  }
+  &-desc {
+    font-size: 1.6rem;
+    margin-bottom: $space-medium;
+
+    @include desktop-s {
+      width: 70%;
+    }
+  }
+  &-own {
+    background-color: $supportive-1;
+    height: 40rem;
+    display: flex;
+    gap: $space-large;
+    padding: $space-large;
+    margin-top: $space-large;
+
+    &__col {
+      flex: 1;
+      overflow: hidden;
+      border-radius: $border-radius;
+      &--1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+    }
+  }
+  &-contact {
+    display: none;
+    background-color: $supportive-1;
+    margin-top: $space-large;
+    height: 40rem;
+
+    &__desc {
+      font-size: 1.6rem;
+    }
+    &__options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $space-small;
+    }
+
+    &__option {
+      display: flex;
+      gap: $space-small;
+      align-items: center;
+      width: 48%;
+    }
+    &__icon {
+      width: 6rem;
+      height: 6rem;
+      background-color: $supportive-3;
+      border-radius: $border-radius;
+    }
+  }
+  &-faq {
+    margin-top: $space-large;
+  }
+}
+
+.destination {
+  &-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-large;
+    justify-content: center;
+    margin-top: $space-medium;
+  }
+  &-card {
+    background-color: $supportive-2;
+    border-radius: $border-radius;
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+    color: #fff;
+
+    &__img {
+      height: 40rem;
+      object-fit: cover;
+
+      & img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__title {
+      font-size: 1.8rem;
+      line-height: 2.4rem;
+      text-align: center;
+      margin-bottom: $space-small;
+
+      @include tablet {
+        font-size: 2rem;
+      }
+    }
+    &__desc {
+      font-size: 1.4rem;
+    }
+    &__text {
+      width: 100%;
+      font-size: 1.4rem;
+      margin-top: 1.6rem;
+    }
+  }
+}
+
+.romantic {
+  display: none;
+}

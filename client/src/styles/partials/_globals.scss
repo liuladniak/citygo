@@ -41,7 +41,62 @@ html {
 body {
   font-family: "Montserrat", sans-serif;
   overflow-x: hidden;
+  background-color: $off-white;
+  color: $charcoal;
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.tours {
+  &-heading {
+    font-size: 3rem;
+    line-height: 3.6rem;
+    color: $main-maroon;
+
+    @include tablet {
+      font-size: 5.4rem;
+    }
+
+    &-wrp {
+      display: flex;
+      flex-direction: column;
+      gap: $space-medium;
+    }
+  }
+  &-description {
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+    max-width: 80rem;
+  }
+  &-type {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+}
+
+.container-centered {
+  @include layout-constrain;
+  margin: 0 auto;
+}
+
+.overlay--category {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: $space-small;
+  align-items: flex-end;
+  padding-bottom: 3rem;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
 }

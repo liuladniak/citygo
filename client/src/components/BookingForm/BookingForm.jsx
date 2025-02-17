@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BookingForm.scss";
@@ -10,8 +9,10 @@ import calendarIcon from "../../assets/icons/calendar.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { addBooking } from "../../features/cart/cartSlice";
 import { v4 as uuidv4 } from "uuid";
+import CustomSelect from "../CustomSelect/CustomSelect";
 
 const BookingForm = ({
+  slug,
   tour_id,
   availableStartDate,
   availableEndDate,
@@ -19,13 +20,15 @@ const BookingForm = ({
   mainImage,
   unavailableRecurringDays,
   unavailableDates,
+  tour_time_slots = [],
 }) => {
-  const API_URL = import.meta.env.VITE_API_KEY;
-
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(
+    tour_time_slots.length > 0 ? tour_time_slots[0] : null
+  );
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
@@ -42,6 +45,14 @@ const BookingForm = ({
     setSelectedDate(date);
   };
 
+  const handleTimeSlotChange = (selectedId) => {
+    const selectedSlot = tour_time_slots.find((slot) => slot.id === selectedId);
+    if (selectedSlot) {
+      setSelectedTimeSlot(selectedSlot);
+    }
+  };
+
+  console.log("Selected Slot", selectedTimeSlot);
   const calculateTotalPrice = (adults, children, infants) => {
     const adultPrice = 100;
     const childPrice = 50;
@@ -64,52 +75,38 @@ const BookingForm = ({
       title,
       mainImage,
       date: formatDate(selectedDate),
-      guests: adults + children + infants,
+      timeSlot: selectedTimeSlot,
+      tour_time_slots,
+      slug,
+      availableStartDate,
+      availableEndDate,
+      unavailableRecurringDays,
+      unavailableDates,
+      guests: {
+        adults,
+        children,
+        infants,
+      },
       price: calculateTotalPrice(adults, children, infants),
     };
     console.log("Booking before dispatch:", booking);
     dispatch(addBooking(booking));
+
+    navigate("/cart");
   };
 
   useEffect(() => {
     console.log("Updated cart bookings:", bookings);
   }, [bookings]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const bookingData = {
-      user_id: 1,
-      tour_id: Number(tour_id),
-      number_of_people: adults + children + infants,
-      booking_date: formatDate(selectedDate),
-    };
-    console.log(bookingData);
-    try {
-      const response = await axios.post(
-        `${API_URL}/api/bookings`,
-
-        bookingData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Booking successfully created:", response.data);
-      handleAddToCart();
-      console.log(bookingData);
-      navigate("/cart");
-    } catch (error) {
-      console.error(
-        "Error creating booking:",
-        error.response?.data || error.message
-      );
-    }
-  };
-
   const totalGuests = adults + children;
 
+  const timeSlotOptions = tour_time_slots.map(
+    (slot) => `${slot.start_time} - ${slot.end_time}`
+  );
+  console.log(timeSlotOptions);
+
+  console.log("TIME slot options", timeSlotOptions);
   return (
     <div className="booking-form-wrp">
       <div className="booking-form__heading-wrp">
@@ -119,12 +116,11 @@ const BookingForm = ({
       <TourDatePicker
         availableStartDate={availableStartDate}
         availableEndDate={availableEndDate}
-        // availableDates={available_dates}
         onDateSelected={handleDateSelected}
         unavailableDates={unavailableDates}
         unavailableRecurringDays={unavailableRecurringDays}
       />
-      <form className="booking-form" onSubmit={handleSubmit}>
+      <form className="booking-form">
         <div className="guest-section" ref={ref}>
           <h2 className="guest__heading">Guests joining</h2>
           <div className="guests">
@@ -208,7 +204,18 @@ const BookingForm = ({
             )}
           </div>
         </div>
-        <Button type="submit" className=" btn btn--book">
+        <CustomSelect
+          value={selectedTimeSlot?.id}
+          placeholder="Select Time Slot"
+          hidePlaceholder={true}
+          options={timeSlotOptions}
+          onChange={handleTimeSlotChange}
+        />
+        <Button
+          type="button"
+          onClick={handleAddToCart}
+          className=" btn btn--book"
+        >
           Add to cart
         </Button>
       </form>

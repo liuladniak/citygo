@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./Tour.scss";
 import BookingForm from "../../components/BookingForm/BookingForm";
 import Map from "../../components/Map/Map";
@@ -9,23 +10,41 @@ import saveIcon from "../../assets/icons/heart.svg";
 import saveIconFilled from "../../assets/icons/heart-red-filled.svg";
 import shareIcon from "../../assets/icons/share.svg";
 import checkIcon from "../../assets/icons/check.svg";
-import ImageSlider from "../../components/ImageSlider/ImageSlider";
 import Modal from "../../components/Modal/Modal";
 import timeIcon from "../../assets/icons/icon-time.svg";
-import { formatPrice } from "../../utils/formatPrice";
-// import CountdownLoader from "../../components/CountdownLoader/CountdownLoader";
-import Loader from "../../components/UI/Loader";
+import {
+  addFavorite,
+  removeFavorite,
+} from "../../features/wishlist/wishlistSlice";
+import ImageGallery from "../../components/ImageGallery/ImageGallery";
+import SkeletonTour from "../../components/LoadingSceleton/SkeletonTour";
+
+const DISCOUNTED_TOUR_IDS = [1, 2, 4];
 
 const Tour = () => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const dispatch = useDispatch();
 
+  const API_URL = import.meta.env.VITE_API_KEY;
+  const selectedCurrency = useSelector(
+    (state) => state.currency.selectedCurrency
+  );
+  const exchangeRates = useSelector((state) => state.currency.exchangeRates);
   const [isLoading, setIsLoading] = useState(true);
   const [tour, setTour] = useState({});
-  const [isLiked, setIsLiked] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { slug } = useParams();
+
+  const convertPrice = (price) => {
+    if (selectedCurrency === "USD") return price;
+    const rate = exchangeRates[selectedCurrency.toLowerCase()];
+    if (!rate) {
+      console.error(`No exchange rate found for ${selectedCurrency}`);
+      return price;
+    }
+    return Math.round(price * rate);
+  };
 
   const handleShareClick = async () => {
     const shareUrl = `${window.location.origin}/tours/${slug}`;
@@ -38,19 +57,28 @@ const Tour = () => {
     }
   };
 
-  const handleClick = () => {
-    setIsLiked((prev) => !prev);
+  const favorites = useSelector((state) => state.wishlist.favorites);
+
+  const isLiked = favorites.some((favorite) => favorite.id === tour.id);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isLiked) {
+      dispatch(removeFavorite(tour.id));
+    } else {
+      dispatch(addFavorite(tour));
+    }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  console.log(`${API_URL}/api/tours/${slug}`);
+
   useEffect(() => {
     const getOneTour = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/tours/${slug}`);
-        console.log(response.data, "response data:");
         setTour(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -70,8 +98,41 @@ const Tour = () => {
     setModalOpen(false);
   };
 
+  const navRef = useRef(null);
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!navRef.current) return;
+      const navTop = navRef.current.offsetTop;
+      const scrollY = window.scrollY;
+
+      if (scrollY >= navTop) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleNavClick = (e, targetId) => {
+    e.preventDefault();
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      window.scrollTo({
+        top:
+          targetElement.offsetTop -
+          (isSticky ? navRef.current.offsetHeight : 0),
+        behavior: "smooth",
+      });
+    }
+  };
+
   if (isLoading) {
-    return <Loader />;
+    return <SkeletonTour />;
   }
 
   const {
@@ -89,9 +150,9 @@ const Tour = () => {
     groups,
     minimum_of_attendees,
     additional_costs,
-    // available_dates,
-    longitude,
-    latitude,
+
+    tour_itinerary_coordinates,
+    tour_time_slots,
     images,
     available_end_date,
     unavailable_recurring_day_of_week,
@@ -99,10 +160,13 @@ const Tour = () => {
     available_start_date,
   } = tour;
 
-  console.log(tour, "tour || images:", tour.images);
+  const isDiscounted = DISCOUNTED_TOUR_IDS.includes(id);
+  const discountedPrice = isDiscounted
+    ? Math.round(convertPrice(price) * 0.9)
+    : null;
+
   const mainImage = images[0];
   const additionalImages = images.slice(1, 4);
-  console.log("mainImage:", mainImage);
 
   return (
     <>
@@ -131,7 +195,26 @@ const Tour = () => {
                   <div className="tour-duration">
                     <h4 className="tour-duration__title">Price</h4>
                     <div className="tour-duration-price">
-                      <p>USD {formatPrice(price)}</p>
+                      <div className="tour-card__price">
+                        {isDiscounted ? (
+                          <div className="tour-card__price-discount">
+                            {" "}
+                            <span className="tour-card__price-number">
+                              From
+                            </span>
+                            <span className="tour-card__price-old">
+                              {convertPrice(price)} {selectedCurrency}
+                            </span>{" "}
+                            <span className="tour-card__price-new">
+                              {discountedPrice} {selectedCurrency} 🔥
+                            </span>
+                          </div>
+                        ) : (
+                          <h5 className="tour-card__price-number">
+                            From {convertPrice(price)} {selectedCurrency}
+                          </h5>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="tour-duration">
@@ -188,20 +271,52 @@ const Tour = () => {
             ))}
           </div>
 
-          <Modal isOpen={modalOpen} onClose={closeModal}>
-            <ImageSlider
-              images={images.map((image) => `${API_URL}/${image}`)}
-              startIndex={selectedImageIndex}
-            />
+          <div ref={navRef} className={`tour-nav ${isSticky ? "sticky" : ""}`}>
+            <ul className="tour-nav__list">
+              <li className="tour-nav__item">
+                <a
+                  href="#overview"
+                  onClick={(e) => handleNavClick(e, "overview")}
+                >
+                  Overview
+                </a>
+              </li>
+              <li className="tour-nav__item">
+                <a
+                  href="#highlights"
+                  onClick={(e) => handleNavClick(e, "highlights")}
+                >
+                  Highlights
+                </a>
+              </li>
+              <li className="tour-nav__item">
+                <a
+                  href="#details"
+                  onClick={(e) => handleNavClick(e, "details")}
+                >
+                  Details
+                </a>
+              </li>
+              <li className="tour-nav__item">
+                <a href="#map" onClick={(e) => handleNavClick(e, "map")}>
+                  Map
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <Modal isOpen={modalOpen} onClose={closeModal} className="tour-modal">
+            <ImageGallery images={images} startIndex={selectedImageIndex} />
           </Modal>
+
           <div className="tour-details-wrp">
-            <div className="tour-details">
+            <div className="tour-details " id="overview">
               <div className="tour-overview">
                 <h4 className="tour-overview-heading">{overview_title}</h4>
                 <p className="tour-overview-content">{overview}</p>
               </div>
 
-              <div className="tour-highlights">
+              <div className="tour-highlights" id="highlights">
                 <h4 className="tour-details__heading">Highlights</h4>
                 <ul className="tour-highlights__list">
                   {highlights.map((item, i) => {
@@ -215,7 +330,7 @@ const Tour = () => {
                 </ul>
               </div>
 
-              <div className="tour-summary">
+              <div className="tour-summary" id="details">
                 <h3 className="tour-details__heading">What should you know?</h3>
                 <div className="tour-el">
                   <h4 className="tour-el__title">Includes</h4>
@@ -248,16 +363,13 @@ const Tour = () => {
                   <p className="tour-el__content">{additional_costs}</p>
                 </div>
 
-                <Map
-                  longitude={longitude}
-                  latitude={latitude}
-                  popupText="Meeting point"
-                />
+                <Map id="map" itinerary={tour_itinerary_coordinates} />
               </div>
             </div>
 
             <div className="tour-summary__dates">
               <BookingForm
+                slug={slug}
                 tour_id={id}
                 availableEndDate={available_end_date}
                 availableStartDate={available_start_date}
@@ -265,6 +377,7 @@ const Tour = () => {
                 mainImage={mainImage}
                 unavailableRecurringDays={unavailable_recurring_day_of_week}
                 unavailableDates={unavailable_dates}
+                tour_time_slots={tour_time_slots}
               />
             </div>
           </div>

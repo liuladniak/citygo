@@ -1,0 +1,36 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+.modal {
+  &-content {
+    background-color: white;
+    padding: $space-small;
+    border-radius: $border-radius;
+    font-size: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: $space-medium;
+    max-width: 45rem;
+    width: 100%;
+    align-items: center;
+
+    justify-content: center;
+  }
+
+  &-actions {
+    width: 100%;
+    display: flex;
+    gap: $space-medium;
+    justify-content: space-between;
+  }
+
+  &-select {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: $border-radius;
+  }
+
+  &-select-time-slot {
+    padding-left: $space-small;
+    padding-right: $space-small;
+  }
+}

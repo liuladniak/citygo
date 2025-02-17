@@ -1,0 +1,35 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.story-sm {
+  &-card {
+    display: flex;
+    gap: $space-x-small;
+  }
+  &-img {
+    width: 13rem;
+    height: 13rem;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: $border-radius;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+
+  &-tag {
+    font-size: 1.2rem;
+    color: $main-teal;
+  }
+
+  &-heading {
+    font-size: 1.6rem;
+  }
+
+  &-timestamp {
+    font-size: 1.1rem;
+  }
+}

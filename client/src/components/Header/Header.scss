@@ -6,7 +6,6 @@
   justify-content: space-between;
   align-self: center;
   padding: 1.6rem;
-  background-color: white;
   @include layout-constrain;
   position: relative;
   align-items: center;
@@ -17,14 +16,22 @@
   @include desktop {
     padding: 1.6rem 0;
   }
+}
+.burger-wrp {
+  display: flex;
+  align-items: center;
+  gap: $space-x-small;
 
-  &::after {
-    content: "";
-    height: 1px;
-    position: absolute;
-    width: 100%;
-    background-color: #2222221f;
-    bottom: 0rem;
+  &:hover {
+    color: $main-teal;
+  }
+}
+.burger-title {
+  font-size: 1.8rem;
+  transition: 0.2s ease-out;
+
+  @include desktop-s {
+    display: none;
   }
 }
 .burger-menu {
@@ -66,10 +73,6 @@
   border-radius: 10px;
   transform-origin: 1px center;
   transition: all 0.3s linear;
-
-  // @include desktop-s {
-  //   display: none;
-  // }
 }
 .nav {
   position: absolute;
@@ -81,13 +84,23 @@
   flex-direction: column;
   align-items: center;
   z-index: 1;
-  // height: 0;
-  // opacity: 0;
+
+  &-phone--mobile {
+    display: none;
+
+    &::marker {
+      content: none;
+      display: none;
+    }
+
+    @include desktop-s {
+      display: block;
+    }
+  }
 
   &--open {
     opacity: 1;
-    padding: 3rem;
-    height: 100vh;
+    padding: 3rem 0;
     transition: all 0.3s ease;
   }
 
@@ -98,7 +111,7 @@
     transition: none;
     pointer-events: none;
 
-    @include tablet {
+    @include desktop-s {
       pointer-events: all;
     }
   }
@@ -111,52 +124,99 @@
     display: flex;
     flex-direction: column;
     align-items: unset;
-    gap: 0.8rem;
+    gap: 1.6rem;
     width: fit-content;
   }
 
+  &__item {
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    padding: 1.6rem 2.4rem;
+
+    @include desktop-s {
+      padding: 0;
+      width: unset;
+      border: none;
+    }
+  }
+
+  &__item--mobile {
+    border-bottom: 1px solid #ccc;
+
+    @include desktop-s {
+      border-bottom: none;
+    }
+  }
+
+  &__item--phone-mobile {
+    list-style: none;
+
+    @include desktop-s {
+      display: none;
+    }
+  }
+
   &__list {
-    // flex: 1;
+    font-weight: 600;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: $space-medium;
     list-style: none;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     letter-spacing: 0.5px;
 
+    width: 100%;
     @include desktop-s {
+      font-weight: 400;
+      gap: $space-medium;
       flex-direction: row;
       justify-content: flex-end;
     }
 
+    &-item {
+      padding: 1.6rem 2.4rem;
+      width: 100%;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+
+      @include desktop-s {
+        padding: 0;
+        width: unset;
+        border: none;
+      }
+    }
+
     &--menu {
-      font-size: 1.4rem;
-      gap: $space-x-small;
+      font-size: 1.6rem;
       letter-spacing: normal;
 
       order: 2;
 
       @include desktop-s {
+        gap: $space-x-small;
+
         order: 1;
       }
     }
     &--categories {
       order: 1;
-      gap: $space-x-small;
 
       @include desktop-s {
+        gap: $space-x-small;
+
         order: 2;
       }
       & li {
-        border-radius: 1rem;
+        border-radius: 0;
 
         @include desktop-s {
           background-color: $main-teal;
-          color: #fff;
+          color: $supportive-1;
           font-weight: 600;
           padding: 0.5rem 1rem;
+          border-radius: 1rem;
         }
       }
     }
@@ -167,6 +227,13 @@
   }
   &__item-link {
     font-family: "Montserrat";
+    width: 100%;
+    display: inline-block;
+    @include desktop-s {
+      width: unset;
+    }
+    &--profile {
+    }
 
     &--phone {
       display: flex;
@@ -188,7 +255,39 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    width: 1.6rem;
+    width: 100%;
+
+    @include desktop-s {
+      width: 1.6rem;
+
+      display: none;
+    }
+
+    &__icon {
+      display: none;
+      @include desktop-s {
+        display: block;
+      }
+    }
+
+    &__text {
+      font-size: 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      @include desktop-s {
+        display: none;
+        display: block;
+      }
+    }
+  }
+}
+
+.phone-text {
+  display: none;
+
+  @include tablet {
+    display: flex;
+    font-size: 1.6rem;
   }
 }
 
@@ -230,11 +329,22 @@
 
 .user {
   &-avatar {
-    border-radius: 50%;
-    width: $space-medium;
-    height: $space-medium;
     overflow: hidden;
-    border: 1px solid #dddddd;
+    display: none;
+
+    @include desktop-s {
+      display: block;
+    }
+
+    &__menu {
+      display: none;
+      @include desktop-s {
+        font-size: 1.6rem;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 }
 .bookings-notification {
@@ -250,33 +360,68 @@
     align-items: flex-start;
   }
 }
+
+.dropdown-item.bookings-cart-wrp {
+  display: none;
+
+  @include desktop-s {
+    display: block;
+  }
+}
 .dropdown {
   &-wrapper {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include desktop-s {
+      flex-direction: row;
+    }
   }
 
   &-menu {
     @include border-radius;
-    padding: 1.4rem 0;
-    width: 20rem;
-    display: none;
-    position: absolute;
+    padding: 1.6rem 2.4rem;
+
     top: 110%;
-    left: -60%;
     background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
     z-index: 1000;
+
+    width: 100%;
+
+    overflow: hidden;
+    transform: scaleY(0);
+    opacity: 0;
+    max-height: 0;
+
+    @include desktop-s {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+      left: -60%;
+      position: absolute;
+      width: 20rem;
+    }
   }
   &--visible {
-    display: block;
+    max-height: 50rem;
+    transform: scale(1);
+    opacity: 1;
+    transform-origin: top;
+    transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
   }
   &--hidden {
-    display: none;
   }
 
   &-item {
-    // padding: 1.6rem 2.4rem;
     cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+
+    @include desktop-s {
+      display: block;
+      border: none;
+    }
 
     &:hover {
       background-color: #f7f7f7;
@@ -302,6 +447,78 @@
   position: absolute;
   top: -1rem;
   right: -1rem;
-  text-align: center;
+  text-align: left;
   border-radius: 50%;
+}
+
+.wishlist-text,
+.cart-text {
+  @include desktop-s {
+    display: none;
+  }
+}
+.wishlist-icon,
+.cart-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+  display: inline-block;
+
+  @include desktop-s {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.form-input.select--selected.select-currency {
+  padding: 0;
+  justify-content: space-between;
+}
+
+.manage-bookings {
+  padding: 1.6rem 0;
+  border-bottom: none;
+
+  @include desktop-s {
+    padding: 0;
+  }
+}
+
+.user-avatar.btn--manage-bookings {
+  border-radius: 100%;
+  padding: 0;
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  aspect-ratio: 1/1;
+  display: none;
+
+  height: 4rem;
+
+  @include desktop-s {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.select__options.options-currency {
+  position: unset;
+  box-shadow: none;
+  width: 100%;
+
+  @include desktop-s {
+    position: absolute;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.btn.nav__item-link {
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0 2.4rem;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+  @include desktop-s {
+    border-bottom: none;
+    padding: 0;
+  }
 }

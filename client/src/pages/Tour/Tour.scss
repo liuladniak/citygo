@@ -7,6 +7,10 @@
   margin-top: 6rem;
   width: 100%;
 
+  & .modal-content.tour-modal {
+    max-width: 60vw;
+  }
+
   &__share {
     cursor: pointer;
     position: relative;
@@ -294,6 +298,21 @@
     flex-direction: column;
     gap: 0.8rem;
   }
+
+  &-nav {
+    width: 100%;
+    font-size: 1.4rem;
+    padding: $space-x-small;
+    margin: $space-small auto;
+    box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.2);
+    &__list {
+      display: flex;
+      gap: $space-large;
+    }
+    &__item {
+      font-weight: 600;
+    }
+  }
 }
 
 .calender {
@@ -353,4 +372,25 @@
   right: 0;
   color: green;
   font-size: 14px;
+}
+
+.comments {
+  height: 50rem;
+  background-color: lightcoral;
+  width: 100%;
+  @include layout-constrain;
+  margin: $space-large;
+}
+
+.tour-nav {
+  background: white;
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.tour-nav.sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }

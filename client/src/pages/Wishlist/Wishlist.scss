@@ -1,0 +1,40 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.wishlist {
+  width: 100%;
+  &-banner {
+    background-image: url("../../assets/images/aboutBanner-3.jpg");
+    background-position: center center;
+    background-size: cover;
+    width: 100%;
+    height: 30rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: $space-large;
+  }
+  &-heading {
+    font-size: 3.2rem;
+    z-index: 5;
+    color: #ffff;
+  }
+  &__grid {
+    @include layout-constrain;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  &__empty {
+    @include layout-constrain;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 2rem;
+  }
+}

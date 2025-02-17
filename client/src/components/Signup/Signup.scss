@@ -5,7 +5,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
   align-items: center;
   margin-top: 3.2rem;
 }
@@ -38,6 +37,13 @@
   }
 }
 
-.login-cta {
-  font-size: 1.2rem;
+.login {
+  &-cta {
+    margin: $space-medium 0;
+    font-size: 1.6rem;
+  }
+  &-link {
+    text-decoration: underline;
+    font-size: 1.8rem;
+  }
 }

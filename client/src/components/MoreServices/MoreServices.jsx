@@ -1,21 +1,23 @@
-import Button from "../Button/Button";
+import { Link } from "react-router-dom";
 import "./MoreServices.scss";
 
 const MoreServices = () => {
   return (
     <section className="more-services">
       <div className="transfers service">
-        <h2 className="service__heading">Transfers</h2>
+        <h2 className="service__heading">Get inspired</h2>
         <div className="service-wrp">
           <p className="service__desc">
-            Private & Legal Airport Transportation Service in Istanbul. Safe and
-            Economic Transport.
+            Get inspired with our top tours, the latest articles, and plenty of
+            ideas to help you plan your next adventure.
           </p>
-          <Button
+          <Link
+            to="/destinations"
             className="btn btn--cta"
             iconClassName="btn--icon"
-            text="See all Car Services"
-          />
+          >
+            Start Exploring
+          </Link>
         </div>
         <div className="overlay--more"></div>
       </div>
@@ -27,11 +29,13 @@ const MoreServices = () => {
             itineraries, personalized experiences, and dedicated guides.
           </p>
 
-          <Button
+          <Link
+            to="/destinations"
             className="btn btn--cta"
             iconClassName="btn--icon"
-            text="View how it works"
-          />
+          >
+            View how it works
+          </Link>
         </div>
         <div className="overlay--more"></div>
       </div>

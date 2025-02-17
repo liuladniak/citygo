@@ -21,14 +21,12 @@
   &__item {
     display: flex;
     flex-direction: column;
-    // max-width: 40rem;
   }
 }
 
 .review-details {
   font-size: 1.4rem;
   display: flex;
-  // flex-direction: column;
   gap: $space-small;
   border-bottom: 1px solid #2222221b;
   padding-bottom: $space-small;
@@ -68,5 +66,11 @@
   &__edit {
     display: flex;
     gap: 0.8rem;
+    cursor: pointer;
+  }
+
+  &__time,
+  &__guests {
+    display: flex;
   }
 }

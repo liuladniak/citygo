@@ -1,0 +1,67 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-img-main {
+  width: 100%;
+  height: 300px;
+  grid-area: main-img;
+}
+
+.skeleton-heading {
+  width: 60%;
+  height: 24px;
+  margin: 16px 0;
+}
+
+.skeleton-tag {
+  width: 120px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+.skeleton-btn {
+  width: 100px;
+  height: 30px;
+}
+
+.skeleton-img-secondary {
+  width: 30%;
+  height: 20rem;
+  margin-top: 10px;
+
+  &:nth-child(1) {
+    grid-area: sec-img;
+  }
+  &:nth-child(2) {
+    grid-area: third-img;
+  }
+  &:nth-child(3) {
+    grid-area: forth-img;
+  }
+}
+
+.skeleton-text {
+  grid-area: desc;
+}
+
+.skeleton-tags {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

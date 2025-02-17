@@ -1,19 +1,31 @@
-import { useRef, useEffect } from "react";
-
-const VideoComponent = ({ src, speed = 1.0 }) => {
+import { useRef, useEffect, useState } from "react";
+import "./VideoComponent.scss";
+const VideoComponent = ({ className, src, speed = 1.0 }) => {
   const videoRef = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
+  const handleLoadedData = () => {
+    setIsLoaded(true);
     if (videoRef.current) {
       videoRef.current.playbackRate = speed;
     }
-  }, [speed]);
+  };
 
   return (
-    <video ref={videoRef} autoPlay loop muted className="video">
-      <source src={src} />
-      Your browser does not support the video tag.
-    </video>
+    <div className={`video-container ${className}`}>
+      {!isLoaded && <div className="video-skeleton"></div>}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        className={`video ${isLoaded ? "visible" : "hidden"} `}
+        onLoadedData={handleLoadedData}
+      >
+        <source src={src} />
+        Your browser does not support the video tag.
+      </video>
+    </div>
   );
 };
 

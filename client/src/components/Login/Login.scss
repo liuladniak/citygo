@@ -5,7 +5,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
   margin-top: 3.2rem;
   align-items: center;
 }
@@ -13,13 +12,32 @@
 .login {
   display: flex;
   flex-direction: column;
-  @include border-radius;
   gap: 1.4rem;
   width: 40rem;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  padding: 2.4rem $space-large;
   margin-bottom: 1rem;
+
+  &-wrp {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: $border-radius;
+    padding: 2.4rem $space-large;
+  }
+
+  &-or {
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: $space-x-small;
+    margin: $space-small 0;
+    &::before,
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 100%;
+      height: 1px;
+      background-color: #ccc;
+    }
+  }
 
   &__title {
     margin-top: 0;
@@ -41,11 +59,11 @@
 
 .signup {
   &-cta {
-    margin-top: 1.2rem;
-
-    font-size: 1.4rem;
+    margin: $space-medium 0;
+    font-size: 1.6rem;
   }
   &-link {
     text-decoration: underline;
+    font-size: 1.8rem;
   }
 }

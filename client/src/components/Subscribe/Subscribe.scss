@@ -17,6 +17,7 @@
   @include tablet {
     padding: 6rem;
     margin: 4rem 1.6rem 0;
+    margin-bottom: $space-large;
   }
 
   &-form {
@@ -28,7 +29,6 @@
     overflow: hidden;
     padding: 0.8rem;
     margin: 0 $space-medium;
-    // background-color: $main-maroon;
     background-color: transparent;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
@@ -55,10 +55,8 @@
     font-family: Montserrat;
     font-size: 1.6rem;
     letter-spacing: 1px;
-    // color: $main-white;
 
     &::placeholder {
-      // color: $main-white;
     }
     @include tablet {
       padding: 0 $space-large;

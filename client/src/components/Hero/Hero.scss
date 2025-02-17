@@ -4,9 +4,10 @@
 .hero {
   @include layout-constrain;
   margin-top: 2.4rem;
+  margin-bottom: $space-large;
 
   @include tablet {
-    margin-top: 5.4rem;
+    margin-top: 5rem;
   }
 
   &-heading {
@@ -35,11 +36,14 @@
     padding: 0;
     font-weight: 600;
     text-align: center;
+    color: $charcoal;
 
     @include tablet {
       font-size: 2rem;
       padding: 2rem 2rem 0 0;
-      text-align: end;
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 1.5;
     }
   }
   &-wrp {
@@ -65,7 +69,6 @@
   }
   &-video {
     overflow: hidden;
-    // flex-basis: calc(100% / 3 * 2 + $space-x-small);
     flex: 1;
     height: 55rem;
     @include border-radius;
@@ -122,7 +125,6 @@
     }
 
     &-wrp {
-      // width: 70%;
       height: 70%;
     }
     & img {
@@ -179,16 +181,27 @@
   height: 100%;
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-bottom: 3rem;
 
-  &-guided {
-    background-color: rgba(59, 34, 108, 0.9);
-  }
-  &-culinary {
-    background-color: rgba(154, 69, 2, 0.9);
-  }
-  &-experiences {
-    background-color: rgba(162, 37, 50, 0.9);
-  }
+  // &-guided {
+  //   background-color: rgba(59, 34, 108, 0.9);
+  // }
+  // &-culinary {
+  //   background-color: rgba(154, 69, 2, 0.9);
+  // }
+  // &-experiences {
+  //   background-color: rgba(162, 37, 50, 0.9);
+  // }
+
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0) 70%
+  );
 }

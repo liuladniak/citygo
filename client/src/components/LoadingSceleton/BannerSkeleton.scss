@@ -1,0 +1,77 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.banner-skeleton {
+  position: relative;
+  width: 100%;
+  height: 30rem;
+  overflow: hidden;
+  margin: $space-large auto;
+
+  .skeleton-slider-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 100%;
+  }
+
+  .skeleton-slider-track {
+    display: flex;
+    width: 100%;
+  }
+
+  .skeleton-slider-card {
+    min-width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    background: rgba(200, 200, 200, 0.3);
+  }
+
+  .skeleton-slider-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .skeleton-text-overlay {
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    width: 80%;
+  }
+
+  .skeleton-title {
+    width: 60%;
+    height: 1.5rem;
+    background: rgba(255, 255, 255, 0.6);
+    margin: 0 auto;
+    border-radius: 4px;
+  }
+
+  .skeleton-slider-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+
+  .skeleton-dot {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &.active {
+      background: #fff;
+    }
+  }
+}

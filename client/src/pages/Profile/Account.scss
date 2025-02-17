@@ -1,0 +1,21 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.account {
+  width: 100%;
+  @include layout-constrain;
+  &-heading {
+    font-size: 2.4rem;
+    font-weight: 500;
+    margin-bottom: $space-medium;
+    width: 100%;
+
+    @include tablet {
+      font-size: 3.2rem;
+    }
+
+    @include desktop-s {
+      font-size: 3.6rem;
+    }
+  }
+}

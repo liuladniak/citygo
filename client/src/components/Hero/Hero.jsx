@@ -13,7 +13,8 @@ const Hero = () => {
   return (
     <section className="hero">
       <h1 className="hero-heading">
-        Discover Majestic İstanbul with Guided tours
+        Hey! 🐈 Discover Majestic İstanbul <br />{" "}
+        <span className="highlighted"> with Guided tours</span>
       </h1>
       <div className="hero-wrp">
         <div className="hero-intro">
@@ -22,8 +23,7 @@ const Hero = () => {
           </div>
           <div className="hero-content">
             <h2 className="hero-subheading">
-              Meet İstanbul, where the past meets the present amidst historic
-              landmarks, vibrant markets, and the enchanting Bosphorus—a
+              Where history, vibrant markets, and the Bosphorus 🌊 create a
               traveler's dream.
             </h2>
             <Link to="/tours">

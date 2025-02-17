@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import Button from "../Button/Button";
 import "./Subscribe.scss";
 import sendIcon from "../../assets/icons/send.svg";
@@ -33,6 +32,7 @@ const Subscribe = () => {
   return (
     <section className="subscribe">
       <h2 className="subscribe-heading">Subscribe to our newsletter</h2>
+
       <form action={handleSubmit} className="subscribe-form">
         <input
           name="email"

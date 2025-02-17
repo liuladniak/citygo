@@ -2,42 +2,19 @@ import "./ManageBookings.scss";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Button from "../../components/Button/Button";
+import { useDispatch, useSelector } from "react-redux";
 
 function ManageBookings() {
   const API_URL = import.meta.env.VITE_API_KEY;
-
+  const dispatch = useDispatch();
   const [failedAuth, setFailedAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
-
-  console.log("BOOKINGS:", bookings);
-  const login = async () => {
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      return setFailedAuth(true);
-    }
-
-    try {
-      const response = await axios.get(`${API_URL}/auth/profile`, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-
-      setUser(response.data);
-      fetchBookings(response.data.id, token);
-    } catch (error) {
-      console.error(error);
-      setFailedAuth(true);
-      setIsLoading(false);
-    }
-  };
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
 
   const fetchBookings = async (userId, token) => {
     try {
-      console.log("User ID being sent:", userId);
       const response = await axios.get(
         `${API_URL}/api/bookings?userId=${userId}`,
         {
@@ -48,7 +25,6 @@ function ManageBookings() {
       );
 
       setBookings(response.data);
-      console.log("RESPONSE DATA", response.data);
     } catch (error) {
       console.error(error);
     }
@@ -56,15 +32,15 @@ function ManageBookings() {
     setIsLoading(false);
   };
 
-  const logout = () => {
-    sessionStorage.removeItem("token");
-    setUser(null);
-    setFailedAuth(true);
-  };
-
   useEffect(() => {
-    login();
-  }, []);
+    if (!user || !token) {
+      return setFailedAuth(true);
+    }
+
+    if (user.id && token) {
+      fetchBookings(user.id, token);
+    }
+  }, [user, token]);
 
   if (failedAuth) {
     return (
@@ -121,9 +97,18 @@ function ManageBookings() {
                     {new Date(booking.booking_date).toLocaleDateString()}
                   </div>
                   <div className="booking-people">
-                    Number of Guests: {booking.number_of_people}
+                    Number of Guests:
+                    <span> Adults: {booking.adults}</span>
+                    {booking.children > 0 && (
+                      <span>Children: {booking.children}</span>
+                    )}
+                    {booking.infants > 0 && (
+                      <span>Infants: {booking.infants}</span>
+                    )}
                   </div>
                 </div>
+
+                <Button>Get prepared</Button>
               </li>
             ))}
           </ul>

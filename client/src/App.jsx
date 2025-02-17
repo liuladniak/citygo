@@ -10,6 +10,15 @@ import Signup from "./components/Signup/Signup";
 import ManageBookings from "./pages/ManageBookings/ManageBookings";
 import Cart from "./pages/Cart/Cart";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import Destinations from "./pages/Destinations/Destinations";
+import TravelGuide from "./pages/TravelGuide/TravelGuide";
+import Account from "./pages/Profile/Account";
+import HelpContact from "./pages/HelpContact/HelpContact";
+import About from "./pages/About/About";
+import Wishlist from "./pages/Wishlist/Wishlist";
+
+import Success from "./pages/Success/Success";
+import Article from "./pages/Article/Article";
 
 const router = createBrowserRouter([
   {
@@ -32,12 +41,36 @@ const router = createBrowserRouter([
         element: <Tours />,
       },
       {
+        path: "/account",
+        element: <Account />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/wishlist",
+        element: <Wishlist />,
+      },
+      {
+        path: "/contact",
+        element: <HelpContact />,
+      },
+      {
+        path: "/travel-guide",
+        element: <TravelGuide />,
+      },
+      { path: "/article/:slug", element: <Article /> },
+      {
         path: "/tours/:slug",
         element: <Tour />,
       },
       { path: "/bookings", element: <ManageBookings /> },
       { path: "/cart", element: <Cart /> },
+      { path: "/destinations", element: <Destinations /> },
       { path: "*", element: <NotFoundPage /> },
+
+      { path: "/success", element: <Success /> },
     ],
   },
 ]);
