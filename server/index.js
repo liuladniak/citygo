@@ -39,7 +39,7 @@ app.use(
 );
 
 if (process.env.NODE_ENV === "production") {
-  app.use(helmet());
+  // app.use(helmet());
   console.log("Helmet security enabled in production");
 }
 
