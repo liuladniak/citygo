@@ -10,7 +10,11 @@
   }
 
   &-stats {
-    z-index: -10;
+    font-size: 3.2rem;
+    width: 100%;
+    max-width: $max-width;
+    margin: 1.6rem auto;
+    font-weight: 600;
   }
 
   &-banner {
@@ -81,9 +85,8 @@
 
   &-section__heading {
     font-size: 3.2rem;
-    margin-top: $space-large;
     z-index: 3;
-
+    text-align: center;
     width: 100%;
     max-width: $max-width;
     margin: 1.6rem auto;

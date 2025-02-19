@@ -57,9 +57,7 @@ const About = () => {
         </div>
       </div>
       <div className="about-stats container-centered">
-        <h3 className="about-section__heading about-stats">
-          GityGo in numbers
-        </h3>
+        <h3 className=" about-stats">GityGo in numbers</h3>
         <p className="about-section__subheading">
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque totam
           nam dicta illum ipsa accusantium tempora dolor vero, maxime impedit
