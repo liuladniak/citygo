@@ -37,11 +37,21 @@ const Map = ({
   itinerary = [],
   landmarks = [],
 }) => {
+  // useEffect(() => {
+  //   return () => {
+  //     const mapContainer = document.getElementById("map");
+  //     if (mapContainer && mapContainer._leaflet_id) {
+  //       mapContainer._leaflet_id = null;
+  //     }
+  //   };
+  // }, []);
+
   useEffect(() => {
     return () => {
       const mapContainer = document.getElementById("map");
-      if (mapContainer && mapContainer._leaflet_id) {
-        mapContainer._leaflet_id = null;
+      if (mapContainer) {
+        mapContainer._leaflet_id = null; // This might not always be enough
+        mapContainer.innerHTML = ""; // Clear any Leaflet content
       }
     };
   }, []);
@@ -67,11 +77,12 @@ const Map = ({
         return redIcon;
     }
   };
-
+  const mapKey = `${latitude}-${longitude}-${itinerary.length}`;
   return (
     <div className="map-wrp">
       <div className={`map ${className}`}>
         <MapContainer
+          key={mapKey}
           id="map"
           center={[latitude || 41.0082, longitude || 28.9784]}
           zoom={13}

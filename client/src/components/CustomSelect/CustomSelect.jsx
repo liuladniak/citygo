@@ -59,7 +59,10 @@ function CustomSelect({
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className={selectedValue === placeholder ? "placeholder" : ""}>
-          {selectedValue}
+          {/* {selectedValue} */}
+          {typeof selectedValue === "object" && selectedValue !== null
+            ? selectedValue.label
+            : selectedValue}
         </span>
         <img
           className="select__icon"
@@ -77,15 +80,21 @@ function CustomSelect({
             {placeholder}
           </li>
         )}
-        {options.map((option, index) => (
-          <li
-            key={index}
-            className="select__option"
-            onClick={() => handleSelect(option)}
-          >
-            {option}
-          </li>
-        ))}
+        {options.map((option, index) => {
+          console.log("option for time slot", option.label);
+          return (
+            <li
+              key={index}
+              className="select__option"
+              onClick={() => handleSelect(option)}
+            >
+              {/* {option} */}
+              {typeof option === "object" && option !== null
+                ? option.label
+                : option}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

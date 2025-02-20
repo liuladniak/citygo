@@ -5,7 +5,7 @@ import Button from "../Button/Button";
 const EditTimeSlotModal = ({ booking, onUpdate, onClose }) => {
   const timeSlots = booking?.tour_time_slots || [];
   const [newTimeSlot, setNewTimeSlot] = useState(booking?.timeSlot || null);
-
+  console.log("BOOKING IN EDIT TIME SLOTS", booking);
   console.log("Time Slots: ", timeSlots);
   console.log("Current Time Slot: ", newTimeSlot);
 
@@ -42,7 +42,10 @@ const EditTimeSlotModal = ({ booking, onUpdate, onClose }) => {
         <div className="modal-select">
           <CustomSelect
             options={timeSlotOptions}
-            value={newTimeSlot?.id || ""}
+            // value={newTimeSlot?.id || ""}
+            value={timeSlotOptions.find(
+              (option) => option.value === newTimeSlot?.id
+            )}
             onChange={handleTimeSlotChange}
             placeholder="Select Time Slot"
             hidePlaceholder={true}
