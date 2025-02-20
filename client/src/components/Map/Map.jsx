@@ -37,24 +37,26 @@ const Map = ({
   itinerary = [],
   landmarks = [],
 }) => {
-  // useEffect(() => {
-  //   return () => {
-  //     const mapContainer = document.getElementById("map");
-  //     if (mapContainer && mapContainer._leaflet_id) {
-  //       mapContainer._leaflet_id = null;
-  //     }
-  //   };
-  // }, []);
-
   useEffect(() => {
     return () => {
       const mapContainer = document.getElementById("map");
-      if (mapContainer) {
-        mapContainer._leaflet_id = null; // This might not always be enough
-        mapContainer.innerHTML = ""; // Clear any Leaflet content
+      if (mapContainer && mapContainer._leaflet_id) {
+        mapContainer._leaflet_id = null;
       }
     };
   }, []);
+
+  // useEffect(() => {
+  //   return () => {
+  //     const mapElement = document.getElementById("map");
+  //     if (mapElement && mapElement._leaflet_id) {
+  //       const mapInstance = mapElement._leaflet_id;
+  //       if (mapInstance && mapInstance.remove) {
+  //         mapInstance.remove(); // Properly destroy the Leaflet map
+  //       }
+  //     }
+  //   };
+  // }, []);
 
   const getMarkerIcon = (category) => {
     switch (category) {
