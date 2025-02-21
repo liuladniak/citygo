@@ -1,9 +1,9 @@
 import "./Login.scss";
 import Input from "../../components/Input/Input";
 import axios from "axios";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import AuthContext from "../../contexts/AuthContext";
+// import AuthContext from "../../contexts/AuthContext";
 import Button from "../Button/Button";
 import { useDispatch } from "react-redux";
 import { login } from "../../features/auth/authSlice";
@@ -12,7 +12,7 @@ function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { setAuth } = useContext(AuthContext);
+  // const { setAuth } = useContext(AuthContext);
   const API_URL = import.meta.env.VITE_API_KEY;
 
   const handleSubmit = async (event) => {
@@ -42,14 +42,14 @@ function Login() {
         })
       );
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("tokenExpiration", expirationTime);
+      // localStorage.setItem("token", token);
+      // localStorage.setItem("tokenExpiration", expirationTime);
 
-      setAuth({ isLoggedIn: true });
+      // setAuth({ isLoggedIn: true });
 
       navigate("/tours");
     } catch (error) {
-      setError(error.response.data);
+      setError(error.response?.data || "Signin failed");
     }
   };
 
@@ -73,10 +73,10 @@ function Login() {
         })
       );
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("tokenExpiration", expirationTime);
-
-      setAuth({ isLoggedIn: true });
+      // localStorage.setItem("token", token);
+      // localStorage.setItem("tokenExpiration", expirationTime);
+      //
+      // setAuth({ isLoggedIn: true });
 
       navigate("/tours");
     } catch (error) {

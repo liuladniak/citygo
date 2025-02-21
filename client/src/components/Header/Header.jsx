@@ -54,7 +54,7 @@ function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    // localStorage.removeItem("token");
     dispatch(logout());
     closeDropdown();
     navigate("/");

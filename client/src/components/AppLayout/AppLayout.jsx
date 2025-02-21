@@ -6,6 +6,8 @@ import { Outlet, useLocation } from "react-router-dom";
 import Subscribe from "../Subscribe/Subscribe";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Banner from "../Banner/Banner";
+import { useDispatch } from "react-redux";
+import { checkToken } from "../../features/auth/authSlice";
 
 function AppLayout() {
   const location = useLocation();
@@ -14,6 +16,13 @@ function AppLayout() {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, [location]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkToken());
+  }, [dispatch]);
+
   return (
     <div className="layout">
       <Banner />
