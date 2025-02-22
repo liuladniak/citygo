@@ -204,7 +204,11 @@ const Destinations = () => {
           {immersive.map((destination) => (
             <div key={destination.id} className="destination-card">
               <div className="destination-card__img">
-                <img src={destination.img} alt={destination.title} />
+                <img
+                  src={destination.img}
+                  alt={destination.title}
+                  loading="lazy"
+                />
               </div>
               <div className="overlay--category">
                 <h3 className="destination-card__title">{destination.title}</h3>
@@ -304,7 +308,7 @@ const Destinations = () => {
           <Button className="btn--cta">Learn More</Button>
         </div>
         <div className="destinations-own__col">
-          <img src={chooseImg} alt="" />
+          <img src={chooseImg} alt="" loading="lazy" />
         </div>
       </div>
 

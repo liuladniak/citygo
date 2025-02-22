@@ -1,8 +1,8 @@
 import "./Stats.scss";
 
-import statImg5 from "../../assets/images/stat-5.jpg";
-import statImg2 from "../../assets/images/stat-11.jpg";
-import statImg9 from "../../assets/images/stat-14.jpg";
+import statImg5 from "../../assets/images/stat-5.webp";
+import statImg2 from "../../assets/images/stat-11.webp";
+import statImg9 from "../../assets/images/stat-14.webp";
 import { Fragment } from "react";
 
 const stats = [
@@ -30,7 +30,12 @@ const Stat = ({ stat, index }) => {
     <div className={`stat-card stat-card--${index}`}>
       <div className="stat-card__img">
         {stat.img && (
-          <img src={stat.img} alt={stat.title} className="stat__img" />
+          <img
+            src={stat.img}
+            alt={stat.title}
+            className="stat__img"
+            loading="lazy"
+          />
         )}
       </div>
       <div className="stat-card__content">

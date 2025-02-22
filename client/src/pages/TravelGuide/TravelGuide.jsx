@@ -76,9 +76,9 @@ const TravelGuide = () => {
         <div className="article-cards">
           {cardArticles.map((article, i) => {
             return (
-              <Link
-                to={`/article/${article.slug}`}
-                // to="/"
+              <div
+                // <Link
+                // to={`/article/${article.slug}`}
                 key={i}
                 className="article-card"
               >
@@ -92,7 +92,8 @@ const TravelGuide = () => {
                   <span>{article.category}</span>
                   <h3>{article.title}</h3>
                 </div>
-              </Link>
+                {/* </Link> */}
+              </div>
             );
           })}
         </div>

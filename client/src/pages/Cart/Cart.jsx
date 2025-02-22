@@ -2,7 +2,7 @@ import "./Cart.scss";
 import ProductSummary from "../../components/ProductSummary/ProductSummary";
 import ReviewTour from "../../components/ReviewTour/ReviewTour";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+// import axios from "axios";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../../components/CheckoutForm/CheckoutForm";

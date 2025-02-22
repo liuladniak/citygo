@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import culinaryImg from "../../assets/images/culinarytours.webp";
 import Button from "../Button/Button";
 import sloganImg from "../../assets/icons/slogan.svg";
-import guidedImg from "../../assets/images/guided.jpg";
-import experiencesImg from "../../assets/images/experiences.jpg";
+import guidedImg from "../../assets/images/guided.webp";
+import experiencesImg from "../../assets/images/experiences.webp";
 import arrowUpRightIcon from "../../assets/icons/arrow-up-right.svg";
 
 const Hero = () => {
@@ -44,7 +44,7 @@ const Hero = () => {
           <Link className="hero-category" to="/tours?category=Guided tour">
             <div className="hero-category-cta">
               <div className="hero-category-img">
-                <img src={guidedImg} alt="guided tours" />
+                <img src={guidedImg} alt="guided tours" loading="lazy" />
               </div>
               <div className="overlay--category-guided overlay--category">
                 <Button
@@ -59,7 +59,7 @@ const Hero = () => {
           <Link className="hero-category" to="/tours?category=Culinary tour">
             <div className="hero-category-cta">
               <div className="hero-category-img">
-                <img src={culinaryImg} alt="culinary tours" />
+                <img src={culinaryImg} alt="culinary tours" loading="lazy" />
               </div>
 
               <div className="overlay--category-culinary overlay--category">
@@ -75,7 +75,11 @@ const Hero = () => {
           <Link className="hero-category" to="/tours?category=Experience">
             <div className="hero-category-cta">
               <div className="hero-category-img">
-                <img src={experiencesImg} alt="experiences tours" />
+                <img
+                  src={experiencesImg}
+                  alt="experiences tours"
+                  loading="lazy"
+                />
               </div>
 
               <div className="overlay--category-experiences overlay--category">

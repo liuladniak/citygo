@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./ImageGallery.scss";
 import iconLeft from "../../assets/icons/chevron-left-white.svg";
 import iconRight from "../../assets/icons/chevron-right-white.svg";
@@ -6,15 +6,31 @@ import iconRight from "../../assets/icons/chevron-right-white.svg";
 const ImageGallery = ({ images, startIndex }) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const API_URL = import.meta.env.VITE_API_KEY;
+
   const nextSlide = () => {
-    const newIndex = (currentIndex + 1) % images.length;
-    setCurrentIndex(newIndex);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
   const prevSlide = () => {
-    const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowRight") {
+        nextSlide();
+      } else if (event.key === "ArrowLeft") {
+        prevSlide();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [images.length]);
 
   return (
     <div className="image-slider">

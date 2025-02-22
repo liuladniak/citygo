@@ -139,7 +139,7 @@ const HelpContact = () => {
           <div>We've sent a confirmation message to your email address</div>
         </form>
         <div className="contact-img">
-          <img src={contactImg} alt="" />
+          <img src={contactImg} alt="" loading="lazy" />
         </div>
       </div>
 

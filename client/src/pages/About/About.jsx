@@ -1,5 +1,5 @@
 import "./About.scss";
-import teamImg from "../../assets/images/team.jpg";
+import teamImg from "../../assets/images/team.webp";
 import WhyUs from "../../components/WhyUs/WhyUs";
 import ToursIntroList from "../../components/ToursIntroList/ToursIntroList";
 import Button from "../../components/Button/Button";
@@ -33,7 +33,7 @@ const About = () => {
 
       <div className="about-team">
         <div className="about-team__img">
-          <img src={teamImg} alt="Founders image" />
+          <img src={teamImg} alt="Founders image" loading="lazy" />
         </div>
         <div className="about-team__story">
           <h2 className="about-team__heading">Where it all began</h2>

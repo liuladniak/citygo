@@ -41,7 +41,8 @@ html {
 body {
   font-family: "Montserrat", sans-serif;
   overflow-x: hidden;
-  background-color: $off-white;
+  // background-color: $off-white;
+  background-color: #fff;
   color: $charcoal;
   &::-webkit-scrollbar {
     display: none;
