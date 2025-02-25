@@ -369,6 +369,7 @@ const Tour = () => {
 
             <div className="tour-summary__dates">
               <BookingForm
+                price={price}
                 slug={slug}
                 tour_id={id}
                 availableEndDate={available_end_date}

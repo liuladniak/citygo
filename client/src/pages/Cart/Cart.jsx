@@ -1,36 +1,45 @@
 import "./Cart.scss";
-import ProductSummary from "../../components/ProductSummary/ProductSummary";
 import ReviewTour from "../../components/ReviewTour/ReviewTour";
-import { useDispatch, useSelector } from "react-redux";
-// import axios from "axios";
+import { useSelector } from "react-redux";
+
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import CheckoutForm from "../../components/CheckoutForm/CheckoutForm";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 import { clearCart } from "../../features/cart/cartSlice";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import BookingSummary from "../../components/BookingSummary/BookingSummary";
+import CheckoutForm from "./CheckoutForm";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
   const [user, setUser] = useState(null);
+  const [clientSecret, setClientSecret] = useState(null);
   const bookings = useSelector((state) => state.cart.bookings);
-  const dispatch = useDispatch();
-
+  const selectedCurrency = useSelector(
+    (state) => state.currency.selectedCurrency
+  );
+  console.log("Bookings in cart from the redux state", bookings);
   const decodeJWT = (token) => {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = JSON.parse(atob(base64));
 
-    return JSON.parse(jsonPayload);
+      const isExpired = jsonPayload.exp * 1000 < Date.now();
+      if (isExpired) {
+        localStorage.removeItem("token");
+        return null;
+      }
+
+      return jsonPayload;
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return null;
+    }
   };
 
   useEffect(() => {
@@ -62,58 +71,28 @@ const Cart = () => {
     }, 0);
   };
 
+  useEffect(() => {
+    if (bookings.length > 0 && user && !clientSecret) {
+      console.log("Booking Payload:", bookings);
+      axios
+        .post(`${API_URL}/api/payment/create-payment-intent`, {
+          selectedCurrency: selectedCurrency,
+          bookings: bookings.map((booking) => ({
+            user_id: user.id,
+            tour_id: booking.tour_id,
+            time_slot_id: booking.timeSlot.id,
+            booking_date: booking.date,
+            adults: booking.guests.adults,
+            children: booking.guests.children,
+            infants: booking.guests.infants,
+          })),
+        })
+        .then((res) => setClientSecret(res.data.clientSecret))
+        .catch((err) => console.error("Error fetching payment intent:", err));
+    }
+  }, [bookings, clientSecret, user, selectedCurrency]);
+
   console.log("Bookings %%%:", bookings, "user%", user);
-
-  // const handleCheckout = async () => {
-  //   if (!bookings || bookings.length === 0) {
-  //     alert("Your cart is empty!");
-  //     return;
-  //   }
-  //   if (!user) {
-  //     alert("You need to be logged in to proceed with the booking!");
-  //     return;
-  //   }
-
-  //   try {
-  //     const bookingRequests = bookings.map((booking) => ({
-  //       user_id: user.id,
-  //       tour_id: booking.tour_id,
-  //       time_slot_id: booking.timeSlot.id,
-  //       booking_date: booking.date,
-  //       adults: booking.guests.adults,
-  //       children: booking.guests.children,
-  //       infants: booking.guests.infants,
-  //       mainImage: booking.mainImage,
-  //       price: booking.price,
-  //       title: booking.title,
-  //     }));
-
-  //     console.log("Booking requests:", bookingRequests);
-
-  //     const stripe = await stripePromise;
-  //     const totalAmount = calculateTotal();
-
-  //     const response = await axios.post(
-  //       `${API_URL}/api/payment/create-checkout-session`,
-  //       { bookings: bookingRequests, totalAmount }
-  //     );
-
-  //     const { id } = response.data;
-  //     const result = await stripe.redirectToCheckout({ sessionId: id });
-
-  //     if (result.error) {
-  //       console.error(result.error);
-  //       alert("Payment failed. Please try again.");
-  //       return;
-  //     }
-
-  //     dispatch(clearCart());
-  //     alert("Your booking has been confirmed!");
-  //   } catch (error) {
-  //     console.error("Error during checkout process:", error);
-  //     alert("Failed to process booking. Please try again.");
-  //   }
-  // };
 
   return (
     <div className="cart">
@@ -124,19 +103,34 @@ const Cart = () => {
         ) : (
           <div className="cart__review">
             <ReviewTour bookings={bookings} />
-            <ProductSummary
-              bookings={bookings}
-              // handleCheckout={handleCheckout}
-              totalPrice={calculateTotal()}
-            />
-            <Elements stripe={stripePromise}>
-              <CheckoutForm
+            <div>
+              <BookingSummary
                 bookings={bookings}
-                user={user}
-                apiUrl={API_URL}
-                clearCart={clearCart}
+                totalPrice={calculateTotal()}
               />
-            </Elements>
+              {user ? (
+                clientSecret ? (
+                  <Elements stripe={stripePromise} options={{ clientSecret }}>
+                    <CheckoutForm
+                      bookings={bookings}
+                      user={user}
+                      clearCart={clearCart}
+                      totalPrice={calculateTotal()}
+                      clientSecret={clientSecret}
+                    />
+                  </Elements>
+                ) : (
+                  <p>Loading payment options...</p>
+                )
+              ) : (
+                <div className="sign-in-prompt">
+                  <p>You need to sign in to proceed with booking.</p>
+                  <Link to="/login" className="sign-in-btn">
+                    Sign In
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

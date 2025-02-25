@@ -19,6 +19,7 @@ import Wishlist from "./pages/Wishlist/Wishlist";
 
 import Success from "./pages/Success/Success";
 import Article from "./pages/Article/Article";
+import CheckoutForm from "./pages/Cart/CheckoutForm";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
       { path: "*", element: <NotFoundPage /> },
 
       { path: "/success", element: <Success /> },
+      { path: "/checkout", element: <CheckoutForm /> },
     ],
   },
 ]);

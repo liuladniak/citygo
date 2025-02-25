@@ -1,15 +1,9 @@
-import Button from "../Button/Button";
-import "./ProductSummary.scss";
+import "./ BookingSummary.scss";
 import { formatCurrency } from "../../utils/formatCurrency";
 
-const ProductSummary = ({ bookings, handleCheckout, totalPrice }) => {
-  if (!bookings || bookings.length === 0) {
-    return <p>Your cart is empty.</p>;
-  }
+const BookingSummary = ({ bookings, totalPrice }) => {
+  console.log("Bookings summary component bookings", bookings);
 
-
-
-  
   return (
     <div className="cart-product">
       <h2 className="cart__heading">Total items</h2>
@@ -35,12 +29,8 @@ const ProductSummary = ({ bookings, handleCheckout, totalPrice }) => {
         <h4>Total</h4>
         <span>{formatCurrency(totalPrice)}</span>
       </div>
-
-      <Button className="btn btn--book" onClick={handleCheckout}>
-        Proceed to Checkout
-      </Button>
     </div>
   );
 };
 
-export default ProductSummary;
+export default BookingSummary;

@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import CustomSelect from "../CustomSelect/CustomSelect";
 
 const BookingForm = ({
+  price,
   slug,
   tour_id,
   availableStartDate,
@@ -52,14 +53,6 @@ const BookingForm = ({
     }
   };
 
-  console.log("Selected Slot", selectedTimeSlot);
-  const calculateTotalPrice = (adults, children, infants) => {
-    const adultPrice = 100;
-    const childPrice = 50;
-    const infantPrice = 0;
-    return adults * adultPrice + children * childPrice + infants * infantPrice;
-  };
-
   const formatDate = (date) => {
     if (!date) return "";
     const year = date.getFullYear();
@@ -67,7 +60,6 @@ const BookingForm = ({
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-  console.log(mainImage);
   const handleAddToCart = () => {
     const booking = {
       id: uuidv4(),
@@ -87,9 +79,9 @@ const BookingForm = ({
         children,
         infants,
       },
-      price: calculateTotalPrice(adults, children, infants),
+      price,
     };
-    console.log("Booking before dispatch:", booking);
+    console.log("Booking before dispatch in Booking form:", booking);
     dispatch(addBooking(booking));
 
     navigate("/cart");

@@ -37,24 +37,6 @@ const Map = ({
   itinerary = [],
   landmarks = [],
 }) => {
-  useEffect(() => {
-    return () => {
-      const mapContainer = document.getElementById("map");
-      if (mapContainer && mapContainer._leaflet_id) {
-        mapContainer._leaflet_id = null;
-      }
-    };
-  }, []);
-
-  // useEffect(() => {
-  //   return () => {
-  //     const mapContainer = document.getElementById("map");
-  //     if (mapContainer && mapContainer._leaflet_id) {
-  //       delete mapContainer._leaflet_id; // Ensures no reused ID issues
-  //     }
-  //   };
-  // }, []);
-
   const getMarkerIcon = (category) => {
     switch (category) {
       case "Culinary tour":
@@ -80,7 +62,7 @@ const Map = ({
     <div className="map-wrp">
       <div className={`map ${className}`}>
         <MapContainer
-          id="map"
+          key={`${latitude || 41.0082}-${longitude || 28.9784}`}
           center={[latitude || 41.0082, longitude || 28.9784]}
           zoom={13}
           style={{ height: "100%" }}
