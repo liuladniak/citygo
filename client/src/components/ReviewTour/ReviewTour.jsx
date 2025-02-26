@@ -8,6 +8,9 @@ import EditDateModal from "../EditDateModal/EditDateModal";
 import EditTimeSlotModal from "../EditTimeSlotModal/EditTimeSlotModal";
 import EditGuestsModal from "../EditGuestsModal/EditGuestsModal";
 import { Link } from "react-router-dom";
+import Button from "../Button/Button";
+import { iconDelete } from "../UI/iconsPaths";
+import Icon from "../UI/Icon";
 
 const ReviewTour = ({ bookings }) => {
   const dispatch = useDispatch();
@@ -105,6 +108,7 @@ const ReviewTour = ({ bookings }) => {
               className="btn btn--remove-booking"
               onClick={() => handleRemoveBooking(booking.id)}
             >
+              <Icon iconPath={iconDelete} />
               Remove from cart
             </button>
           </li>

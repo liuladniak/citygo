@@ -290,6 +290,7 @@ const Tours = () => {
                     price={tour.price}
                     category={tour.category}
                     images={tour.images}
+                    featured={tour.featured}
                   />
                 ))
               ) : (
@@ -316,6 +317,7 @@ const Tours = () => {
                   price={tour.price}
                   category={tour.category}
                   images={tour.images}
+                  featured={tour.featured}
                 />
               ))}
             </div>

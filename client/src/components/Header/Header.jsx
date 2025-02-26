@@ -54,18 +54,17 @@ function Header() {
   };
 
   const handleLogout = () => {
-    // localStorage.removeItem("token");
     dispatch(logout());
     closeDropdown();
     navigate("/");
   };
 
-  useEffect(() => {
-    dispatch(checkToken());
-    const interval = setInterval(() => dispatch(checkToken()), 1000);
+  // useEffect(() => {
+  //   dispatch(checkToken());
+  //   const interval = setInterval(() => dispatch(checkToken()), 10000);
 
-    return () => clearInterval(interval);
-  }, [checkToken]);
+  //   return () => clearInterval(interval);
+  // }, [checkToken]);
 
   useEffect(() => {
     dispatch(fetchExchangeRates());

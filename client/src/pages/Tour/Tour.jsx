@@ -19,7 +19,7 @@ import {
 import ImageGallery from "../../components/ImageGallery/ImageGallery";
 import SkeletonTour from "../../components/LoadingSceleton/SkeletonTour";
 
-const DISCOUNTED_TOUR_IDS = [1, 2, 4];
+// const DISCOUNTED_TOUR_IDS = [1, 2, 4];
 
 const Tour = () => {
   const dispatch = useDispatch();
@@ -150,7 +150,7 @@ const Tour = () => {
     groups,
     minimum_of_attendees,
     additional_costs,
-
+    featured,
     tour_itinerary_coordinates,
     tour_time_slots,
     images,
@@ -160,8 +160,9 @@ const Tour = () => {
     available_start_date,
   } = tour;
 
-  const isDiscounted = DISCOUNTED_TOUR_IDS.includes(id);
-  const discountedPrice = isDiscounted
+  console.log("Tour", tour);
+
+  const discountedPrice = featured
     ? Math.round(convertPrice(price) * 0.9)
     : null;
 
@@ -196,7 +197,7 @@ const Tour = () => {
                     <h4 className="tour-duration__title">Price</h4>
                     <div className="tour-duration-price">
                       <div className="tour-card__price">
-                        {isDiscounted ? (
+                        {featured ? (
                           <div className="tour-card__price-discount">
                             {" "}
                             <span className="tour-card__price-number">
@@ -379,6 +380,7 @@ const Tour = () => {
                 unavailableRecurringDays={unavailable_recurring_day_of_week}
                 unavailableDates={unavailable_dates}
                 tour_time_slots={tour_time_slots}
+                featured={featured}
               />
             </div>
           </div>

@@ -81,14 +81,13 @@ function CustomSelect({
           </li>
         )}
         {options.map((option, index) => {
-          console.log("option for time slot", option.label);
+          console.log("option for time slot", option.label, options);
           return (
             <li
               key={index}
               className="select__option"
               onClick={() => handleSelect(option)}
             >
-              {/* {option} */}
               {typeof option === "object" && option !== null
                 ? option.label
                 : option}

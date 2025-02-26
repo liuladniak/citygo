@@ -14,6 +14,7 @@ import CustomSelect from "../CustomSelect/CustomSelect";
 const BookingForm = ({
   price,
   slug,
+  featured,
   tour_id,
   availableStartDate,
   availableEndDate,
@@ -46,12 +47,31 @@ const BookingForm = ({
     setSelectedDate(date);
   };
 
-  const handleTimeSlotChange = (selectedId) => {
-    const selectedSlot = tour_time_slots.find((slot) => slot.id === selectedId);
+  const timeSlotOptions = tour_time_slots.map((slot) => ({
+    id: slot.id,
+    label: `${slot.start_time} - ${slot.end_time}`,
+  }));
+
+  const handleTimeSlotChange = (selectedLabel) => {
+    const selectedSlot = tour_time_slots.find(
+      (slot) => `${slot.start_time} - ${slot.end_time}` === selectedLabel
+    );
     if (selectedSlot) {
       setSelectedTimeSlot(selectedSlot);
     }
   };
+
+  // const timeSlotOptions = tour_time_slots.map(
+  //   (slot) => `${slot.start_time} - ${slot.end_time}`
+  // );
+  // console.log(timeSlotOptions);
+
+  // const handleTimeSlotChange = (selectedId) => {
+  //   const selectedSlot = tour_time_slots.find((slot) => slot.id === selectedId);
+  //   if (selectedSlot) {
+  //     setSelectedTimeSlot(selectedSlot);
+  //   }
+  // };
 
   const formatDate = (date) => {
     if (!date) return "";
@@ -80,6 +100,7 @@ const BookingForm = ({
         infants,
       },
       price,
+      featured,
     };
     console.log("Booking before dispatch in Booking form:", booking);
     dispatch(addBooking(booking));
@@ -93,12 +114,12 @@ const BookingForm = ({
 
   const totalGuests = adults + children;
 
-  const timeSlotOptions = tour_time_slots.map(
-    (slot) => `${slot.start_time} - ${slot.end_time}`
+  console.log(
+    "TIME slot options",
+    timeSlotOptions,
+    "Selected time slot",
+    selectedTimeSlot
   );
-  console.log(timeSlotOptions);
-
-  console.log("TIME slot options", timeSlotOptions);
   return (
     <div className="booking-form-wrp">
       <div className="booking-form__heading-wrp">
@@ -197,11 +218,17 @@ const BookingForm = ({
           </div>
         </div>
         <CustomSelect
-          value={selectedTimeSlot?.id}
+          // value={selectedTimeSlot?.id}
           placeholder="Select Time Slot"
           hidePlaceholder={true}
-          options={timeSlotOptions}
+          // options={timeSlotOptions}
           onChange={handleTimeSlotChange}
+          value={
+            selectedTimeSlot
+              ? `${selectedTimeSlot.start_time} - ${selectedTimeSlot.end_time}`
+              : ""
+          }
+          options={timeSlotOptions.map((opt) => opt.label)}
         />
         <Button
           type="button"

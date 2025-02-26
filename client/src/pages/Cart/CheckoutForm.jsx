@@ -67,7 +67,7 @@ const CheckoutForm = ({ bookings, user, clientSecret }) => {
         </p>
       )}
 
-      <form onSubmit={handlePayment}>
+      <form className="checkout-form" onSubmit={handlePayment}>
         <PaymentElement />
         {error && <p className="error">{error}</p>}
         <Button

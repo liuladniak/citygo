@@ -106,6 +106,7 @@ const ToursIntroList = () => {
                   className="tour-intro-card"
                   images={tour.images}
                   tourCardImg="tour-intro-img"
+                  featured={tour.featured}
                   cardWrp="tour-intro-container"
                 />
               ))}

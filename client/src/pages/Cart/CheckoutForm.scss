@@ -1,5 +1,13 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
 .success-message {
   color: green;
   font-weight: bold;
   margin-top: 1rem;
+}
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-medium;
 }

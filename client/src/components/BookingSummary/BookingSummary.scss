@@ -1,0 +1,53 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.booking-section {
+  padding: 20px;
+  text-align: center;
+}
+
+.sign-in-prompt {
+  background: #ffefef;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.sign-in-btn {
+  background: #ff5a5f;
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.cart-product {
+  display: flex;
+  flex-direction: column;
+  gap: $space-x-small;
+  margin-bottom: $space-large;
+}
+.cart-product {
+  font-size: 1.4rem;
+  text-align: right;
+
+  &__item {
+    display: flex;
+    gap: $space-large;
+    justify-content: flex-end;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+  }
+}
+
+.cart__fees,
+.cart__total {
+  display: flex;
+  justify-content: space-between;
+}

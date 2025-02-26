@@ -5,7 +5,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useState } from "react";
 
-const CheckoutForm = ({ bookings, user, apiUrl, clearCart }) => {
+const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -43,6 +43,7 @@ const CheckoutForm = ({ bookings, user, apiUrl, clearCart }) => {
     <form onSubmit={handleSubmit}>
       <PaymentElement />
       {error && <p className="error">{error}</p>}
+      {success && <p className="success">Success! Payment completed</p>}
       <button type="submit" disabled={!stripe || loading}>
         {loading ? "Processing..." : "Pay Now"}
       </button>

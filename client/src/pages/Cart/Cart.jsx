@@ -56,14 +56,14 @@ const Cart = () => {
 
   const calculateTotal = () => {
     return bookings.reduce((total, booking) => {
-      const { price, guests, isFeatured } = booking;
+      const { price, guests, featured } = booking;
       let totalPrice = 0;
 
       totalPrice += guests.adults * price;
       totalPrice += guests.children * (price * 0.5);
       totalPrice += guests.infants * 0;
 
-      if (isFeatured) {
+      if (featured) {
         totalPrice *= 0.9;
       }
 
@@ -115,7 +115,6 @@ const Cart = () => {
                       bookings={bookings}
                       user={user}
                       clearCart={clearCart}
-                      totalPrice={calculateTotal()}
                       clientSecret={clientSecret}
                     />
                   </Elements>

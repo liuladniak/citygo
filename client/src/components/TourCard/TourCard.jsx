@@ -8,11 +8,12 @@ import { generateSlug } from "../../utils/generateSlug";
 import AddToFavorites from "../AddToFavorites/AddToFavorites";
 import ImageSlider from "../ImageSlider/ImageSlider";
 
-const DISCOUNTED_TOUR_IDS = [1, 2, 4];
+// const DISCOUNTED_TOUR_IDS = [1, 2, 4];
 const BEST_SELLERS = [2, 5, 9];
 
 const TourCard = ({
   id,
+  featured,
   className,
   tour_name,
   tour_thumbnail,
@@ -56,8 +57,8 @@ const TourCard = ({
     }
   };
 
-  const isDiscounted = DISCOUNTED_TOUR_IDS.includes(id);
-  const discountedPrice = isDiscounted
+  // const isDiscounted = DISCOUNTED_TOUR_IDS.includes(id);
+  const discountedPrice = featured
     ? Math.round(convertPrice(price) * 0.9)
     : null;
   const isBestSeller = BEST_SELLERS.includes(id);
@@ -99,7 +100,7 @@ const TourCard = ({
             <p className="tour-card__highlights-list">{highlightsList}</p>
           </div>
           <div className="tour-card__price">
-            {isDiscounted ? (
+            {featured ? (
               <div className="tour-card__price-discount">
                 {" "}
                 <span className="tour-card__price-number">From</span>
