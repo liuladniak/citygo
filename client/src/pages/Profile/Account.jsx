@@ -20,6 +20,7 @@ const Account = () => {
   const [failedAuth, setFailedAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [bookings, setBookings] = useState([]);
   const API_URL = import.meta.env.VITE_API_KEY;
 
   const login = async () => {
@@ -37,6 +38,7 @@ const Account = () => {
       });
 
       setUser(response.data);
+      await fetchBookings(response.data.id, token);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -45,15 +47,27 @@ const Account = () => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    setFailedAuth(true);
-  };
-
   useEffect(() => {
     login();
   }, []);
+
+  const fetchBookings = async (userId, token) => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/api/bookings?userId=${userId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setBookings(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsLoading(false);
+  };
 
   if (failedAuth) {
     return (
@@ -84,7 +98,7 @@ const Account = () => {
     },
     {
       label: "My bookings",
-      content: <Tab2Content user={user} />,
+      content: <Tab2Content user={user} bookings={bookings} />,
       icon: () => <Icon iconPath={iconTicket} />,
     },
     {
