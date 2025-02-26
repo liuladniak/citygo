@@ -19,8 +19,6 @@ import {
 import ImageGallery from "../../components/ImageGallery/ImageGallery";
 import SkeletonTour from "../../components/LoadingSceleton/SkeletonTour";
 
-// const DISCOUNTED_TOUR_IDS = [1, 2, 4];
-
 const Tour = () => {
   const dispatch = useDispatch();
 

@@ -99,7 +99,7 @@ const BookingForm = ({
         children,
         infants,
       },
-      price,
+      price: slece,
       featured,
     };
     console.log("Booking before dispatch in Booking form:", booking);

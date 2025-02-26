@@ -44,6 +44,10 @@
     flex-direction: column;
     gap: $space-x-small;
   }
+
+  &__title {
+    text-align: left;
+  }
 }
 
 .cart__fees,

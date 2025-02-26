@@ -22,6 +22,8 @@ const Cart = () => {
   const selectedCurrency = useSelector(
     (state) => state.currency.selectedCurrency
   );
+  const exchangeRates = useSelector((state) => state.currency.exchangeRates);
+
   console.log("Bookings in cart from the redux state", bookings);
   const decodeJWT = (token) => {
     try {
@@ -55,12 +57,17 @@ const Cart = () => {
   }, []);
 
   const calculateTotal = () => {
+    const exchangeRate =
+      selectedCurrency === "USD"
+        ? 1
+        : exchangeRates[selectedCurrency.toLowerCase()] || 1;
+
     return bookings.reduce((total, booking) => {
       const { price, guests, featured } = booking;
       let totalPrice = 0;
 
-      totalPrice += guests.adults * price;
-      totalPrice += guests.children * (price * 0.5);
+      totalPrice += guests.adults * price * exchangeRate;
+      totalPrice += guests.children * (price * 0.5 * exchangeRate);
       totalPrice += guests.infants * 0;
 
       if (featured) {
