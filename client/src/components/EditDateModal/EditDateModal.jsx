@@ -30,8 +30,8 @@ const EditDateModal = ({ booking, onUpdate, onClose }) => {
         unavailableRecurringDays={booking.unavailableRecurringDays}
       />{" "}
       <div className="modal-actions">
-        <Button onClick={handleSubmit}>Save</Button>
         <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleSubmit}>Save</Button>
       </div>
     </div>
   );

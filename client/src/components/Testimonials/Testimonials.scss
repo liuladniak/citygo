@@ -16,4 +16,8 @@
   &-highlighted {
     font-weight: 600;
   }
+  &-name,
+  &-desc {
+    font-style: italic;
+  }
 }

@@ -1,6 +1,7 @@
 import "./Testimonials.scss";
 
 import StarIcon from "../UI/StarIcon";
+import { NavLink } from "react-router-dom";
 
 const Testimonials = () => {
   return (
@@ -13,37 +14,47 @@ const Testimonials = () => {
           <h4 className="testimonials-title">
             Great tour, fun and knowledgeable guide!
           </h4>
-          <span className="testimonials-name">Leona</span>
+          <span className="testimonials-name">Leona, France</span>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat
-            modi odio aliquid, unde omnis minima saepe, nemo molestias vero
-            numquam nihil dolorem, qui quasi temporibus totam corporis!
-            Architecto, ratione tempore. Lorem ipsum dolor sit, amet consectetur
-            adipisicing elit. Vitae veritatis deleniti temporibus minus
-            aspernatur. Vitae, at placeat.
+            Our guide, Emre, was fantastic! He shared so many hidden details
+            about the Hagia Sophia that I would have never noticed on my own.
+            Walking through the Grand Bazaar was such a unique experience - I
+            even got to try some freshly made Turkish delight at a tiny shop
+            tucked away in one of the quieter corners. Definitely an
+            unforgettable experience.
           </p>
-          <p>
+          <p className="testimonials-desc">
             Visited{" "}
-            <span className="testimonials-highlighted">
-              Historical Gems of Istanbul Tour
-            </span>{" "}
+            <NavLink
+              to="/tours/historical-istanbul-walking-tour"
+              className="testimonials-highlighted"
+            >
+              Historical Istanbul Walking Tour
+            </NavLink>{" "}
             on <span className="testimonials-highlighted">18 March 2024</span>
           </p>
         </div>
         <div className="testimonials-item">
           <StarIcon />
           <h4 className="testimonials-title">Loved the vibe</h4>
-          <span className="testimonials-name">Chirs</span>
+          <span className="testimonials-name">Chirs, USA</span>
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat
-            modi odio aliquid, unde omnis minima saepe, nemo molestias vero
-            numquam nihil dolorem, qui quasi temporibus totam corporis!
+            This tour had such a great energy! The boat ride on the Bosphorus at
+            sunset was stunning, and the way the city lights reflected on the
+            water was unreal. At the Spice Market, I found a tiny shop selling
+            saffron and the freshest pistachios I’ve ever had. I also met Jake
+            from Australia during the tour, and we ended up exploring more of
+            Istanbul together the next day - still friends to this day! A truly
+            special experience.
           </p>
-          <p>
+          <p className="testimonials-desc">
             Visited{" "}
-            <span className="testimonials-highlighted">
-              Historical Gems of Istanbul Tour
-            </span>{" "}
+            <NavLink
+              to="/tours/bosphorus-cruise-and-spice-market-tour"
+              className="testimonials-highlighted"
+            >
+              Bosphorus Cruise and Spice Market Tour
+            </NavLink>{" "}
             on <span className="testimonials-highlighted">18 March 2024</span>
           </p>
         </div>

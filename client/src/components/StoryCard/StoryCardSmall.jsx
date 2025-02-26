@@ -1,3 +1,4 @@
+import { formatDateTime } from "../../utils/formatDateTime";
 import "./StoryCardSmall.scss";
 const StoryCardSmall = ({ articles, articleIndex }) => {
   if (!articles.length) {
@@ -16,7 +17,7 @@ const StoryCardSmall = ({ articles, articleIndex }) => {
         <span className="story-sm-tag">{category}</span>
         <h4 className="story-sm-heading">{title}</h4>
         <span className="story-sm-timestamp">
-          {date_posted} - {read_time} min read
+          {formatDateTime(date_posted)} - {read_time} min read
         </span>
       </div>
     </div>

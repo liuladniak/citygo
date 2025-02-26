@@ -1,3 +1,4 @@
+import { formatDateTime } from "../../utils/formatDateTime";
 import "./StoryCard.scss";
 const StoryCard = ({ article }) => {
   console.log("Story card article:", article);
@@ -17,7 +18,7 @@ const StoryCard = ({ article }) => {
         <span className="story-tag">{category}</span>
         <h4 className="story-heading">{title}</h4>
         <span className="story-timestamp">
-          {date_posted} - {read_time} min read
+          {formatDateTime(date_posted)} - {read_time} min read
         </span>
         <p className="story-desc">{description}</p>
       </div>

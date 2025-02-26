@@ -220,6 +220,7 @@ const Destinations = () => {
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn__icon--explore"
                   className="btn--destination-card"
+                  disabled={true}
                 >
                   Explore
                 </Button>

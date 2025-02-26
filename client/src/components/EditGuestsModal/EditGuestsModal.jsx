@@ -83,8 +83,8 @@ const EditGuestsModal = ({ booking, onUpdate, onClose }) => {
       </div>
 
       <div className="modal-actions">
-        <Button onClick={handleSubmit}>Save</Button>
         <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleSubmit}>Save</Button>
       </div>
     </div>
   );

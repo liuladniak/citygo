@@ -11,6 +11,7 @@ function Button({
   textClassName = "",
   iconClassName = "",
   type = "",
+  disabled,
 }) {
   const textContent = children || (
     <span className={`btn__text ${textClassName}`}>{text}</span>
@@ -28,7 +29,12 @@ function Button({
       )}
     </Link>
   ) : (
-    <button className={`btn ${className}`} onClick={onClick} type={type}>
+    <button
+      className={`btn ${className}`}
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+    >
       <span>{textContent}</span>
       {iconUrl && (
         <img

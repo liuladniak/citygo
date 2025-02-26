@@ -56,8 +56,8 @@ const EditTimeSlotModal = ({ booking, onUpdate, onClose }) => {
         <p>No time slots available for this tour.</p>
       )}
       <div className="modal-actions">
-        <Button onClick={handleSubmit}>Save</Button>
         <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleSubmit}>Save</Button>
       </div>
     </div>
   );
