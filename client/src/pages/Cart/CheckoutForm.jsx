@@ -68,6 +68,24 @@ const CheckoutForm = ({ bookings, user, clientSecret }) => {
       )}
 
       <form className="checkout-form" onSubmit={handlePayment}>
+        <div className="disclaimer-alert">
+          <h5 className="disclaimer-alert__heading">Disclaimer:</h5>
+          <p className="disclaimer-alert__desc">
+            This application is for demonstration purposes only and does not
+            provide any actual services or products. Please utilize only the
+            test data provided below. This app is designed solely as a learning
+            tool. Do not enter any real card information, as it will result in a
+            charge.
+          </p>
+        </div>
+        <p className="test-card-note">
+          <span>For testing, use:</span>
+          <span>
+            Card number: <strong>4242 4242 4242 4242</strong>
+          </span>
+          <span>Expiration date: Any future date</span>
+          <span>CVC Security code : Any 3 digit number</span>
+        </p>
         <PaymentElement />
         {error && <p className="error">{error}</p>}
         <Button

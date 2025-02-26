@@ -22,6 +22,7 @@ import Accordion from "../../components/Accordion/Accordion";
 import arrowUpRightIcon from "../../assets/icons/arrow-up-right.svg";
 import Testimonials from "../../components/Testimonials/Testimonials";
 import ToursSkeletonCard from "../../components/LoadingSceleton/ToursSkeletonCard";
+import { Link } from "react-router-dom";
 const faqs = [
   {
     id: 1,
@@ -170,7 +171,7 @@ const Destinations = () => {
             ))}
           </div>
         )}
-        <div className="destinations-stories">
+        <Link to="/travel-guide" className="destinations-stories">
           <h3 className="destinations-heading">
             Get ideas from latest articles
           </h3>
@@ -188,7 +189,7 @@ const Destinations = () => {
               ))}
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       <div className="destinations-list">

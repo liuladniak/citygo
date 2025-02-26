@@ -11,3 +11,25 @@
   flex-direction: column;
   gap: $space-medium;
 }
+
+.test-card-note {
+  font-size: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: $space-x-small;
+}
+
+.disclaimer-alert {
+  font-size: 1.6rem;
+  background: #ff5a5f;
+  // color: white;
+  border-radius: $border-radius;
+  padding: $space-x-small;
+
+  &__heading {
+    font-size: 2rem;
+  }
+
+  &_desc {
+  }
+}

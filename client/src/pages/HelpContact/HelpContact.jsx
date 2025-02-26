@@ -5,15 +5,17 @@ import Button from "../../components/Button/Button";
 import Icon from "../../components/UI/Icon";
 import {
   iconCall,
+  iconCheck,
   iconLocation,
   iconMail,
   iconPhone,
   iconSchedule,
 } from "../../components/UI/iconsPaths";
-import IconInstagram from "../../components/UI/IconInstagram";
-import IconTikTok from "../../components/UI/IconTikTok";
-import IconYoutube from "../../components/UI/IconYouTube";
+// import IconInstagram from "../../components/UI/IconInstagram";
+// import IconTikTok from "../../components/UI/IconTikTok";
+// import IconYoutube from "../../components/UI/IconYouTube";
 import contactImg from "../../assets/images/office.jpg";
+import { useState } from "react";
 const faqs = [
   {
     id: 1,
@@ -31,20 +33,72 @@ const faqs = [
     answer: "Yes, we offer discounts for groups of 10 or more.",
   },
 ];
+
 const HelpContact = () => {
+  const [success, setSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const validateForm = (data) => {
+    const errors = {};
+    if (!data.first_name.trim()) {
+      errors.first_name = "First name is required";
+    }
+    if (!data.last_name.trim()) {
+      errors.last_name = "Last name is required";
+    }
+    if (!data.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(data.email)) {
+      errors.email = "Invalid email format";
+    }
+    if (!data.message.trim()) {
+      errors.message = "Message cannot be empty";
+    }
+    return errors;
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+  const sendMessage = (e) => {
+    e.preventDefault();
+    const validationErrors = validateForm(formData);
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
+    console.log("Form submitted successfully:", formData);
+    setSuccess(true);
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+  };
   return (
     <div className="contact">
       <div className="contact-banner">
-        <h1 className="contact-heading">Get in Touch with CityGo</h1>
+        <h1 className="contact-heading--main">Get in Touch with CityGo</h1>
       </div>
-
+      <h2 className="contact__heading">We’d love to hear from you!</h2>
       <div className="contact-main">
         <div className="contact-main__col contact-main__content">
           <p>
-            We’d love to hear from you! Whether you have a question, need
-            assistance with your booking, or just want to say hello, our team is
-            here to help. Reach out to us through any of the contact details
-            below, and we’ll get back to you as soon as possible.
+            Whether you have a question, need assistance with your booking, or
+            just want to say hello, our team is here to help. Reach out to us
+            through any of the contact details below, and we’ll get back to you
+            as soon as possible.
           </p>
           <div className="contact-main__el">
             <Icon iconPath={iconMail} />
@@ -78,7 +132,7 @@ const HelpContact = () => {
               Monday–Sunday: 9:00 AM – 6:00 PM (GMT+3)
             </span>
           </div>
-          <div>
+          {/* <div>
             {" "}
             <h3 className="contact-main__title">Follow Us On Social Media</h3>
             <div className="contact-main__el contact-main__el--socials">
@@ -95,7 +149,7 @@ const HelpContact = () => {
                 <span className="contact-main__desc">YouTube</span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="contact-main__col contact-main__map">
           <Map
@@ -103,40 +157,85 @@ const HelpContact = () => {
             longitude={28.974155}
             popupText="Our Office Location"
             category="Office"
+            className="map-office"
           />
         </div>
       </div>
       <h2 className="form-heading">Contact form</h2>
       <div className="form-section">
-        <form className="contact-form">
-          <h2>Any Questions? </h2>
+        <form className="contact-form" onSubmit={sendMessage}>
+          <h2>Got Questions? </h2>
           <div className="contact-form__name">
             <div className="contact-form__el">
               <label className="contact-form__label">First Name</label>
-              <input className="contact-form__input" placeholder="First Name" />
+              <input
+                className="contact-form__input"
+                placeholder="Enter your first name.."
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
+              />
+              {errors.first_name && (
+                <span className="error">{errors.first_name}</span>
+              )}
             </div>
             <div className="contact-form__el">
               <label className="contact-form__label">Last Name</label>
-              <input className="contact-form__input" placeholder="Last Name" />
+              <input
+                className="contact-form__input"
+                placeholder="Enter your last name.."
+                name="last_name"
+                onChange={handleChange}
+                value={formData.last_name}
+              />
+              {errors.last_name && (
+                <span className="error">{errors.last_name}</span>
+              )}
             </div>
           </div>
           <div className="contact-form__el">
             <label className="contact-form__label">Your Email</label>
-            <input className="contact-form__input" placeholder="Your Email" />
+            <input
+              className="contact-form__input"
+              placeholder="Enter your email.."
+              name="email"
+              type="email"
+              onChange={handleChange}
+              value={formData.email}
+            />
+            {errors.email && <span className="error">{errors.email}</span>}
           </div>
           <div className="contact-form__el">
-            <label className="contact-form__label">Phone Number</label>
-            <input className="contact-form__input" placeholder="Phone Number" />
+            <label className="contact-form__label">
+              Phone Number (optional)
+            </label>
+            <input
+              className="contact-form__input"
+              placeholder="Enter your phone number.."
+              name="phone"
+              type="phone"
+              onChange={handleChange}
+              value={formData.phone}
+            />
           </div>
           <div className="contact-form__el">
             <label className="contact-form__label">Message</label>
             <textarea
               className="contact-form__input"
-              placeholder="Message"
+              placeholder="Write your message.."
+              name="message"
+              onChange={handleChange}
+              value={formData.message}
             ></textarea>
+            {errors.message && <span className="error">{errors.message}</span>}
           </div>
           <Button>Send a Message</Button>
-          <div>We've sent a confirmation message to your email address</div>
+          {success && (
+            <div className="contact-success">
+              <Icon iconPath={iconCheck} />
+              We've sent a confirmation message to your email address
+            </div>
+          )}
         </form>
         <div className="contact-img">
           <img src={contactImg} alt="" loading="lazy" />

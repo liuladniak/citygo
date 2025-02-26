@@ -17,12 +17,24 @@
     position: relative;
     margin-bottom: $space-large;
   }
-  &-heading {
+  &-heading--main {
     font-size: 3.2rem;
     z-index: 0;
     color: #fff;
   }
-
+  &__heading {
+    font-size: 2.4rem;
+    z-index: 0;
+    margin: $space-medium auto;
+    @include layout-constrain;
+  }
+  &-success {
+    color: $success;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    fill: $success;
+  }
   &__social {
     display: flex;
     gap: $space-small;
@@ -90,6 +102,8 @@
       border-radius: 0.8rem;
       border: 1px solid gray;
       padding: 0.8rem 1.6rem;
+      font-family: "Montserrat", sans-serif;
+      letter-spacing: 1.1;
     }
 
     &__name {
@@ -123,4 +137,12 @@
   flex: 1;
   border-radius: $border-radius;
   overflow: hidden;
+}
+
+.map-office {
+  height: 30rem;
+}
+
+.error {
+  color: #ff5a5f;
 }

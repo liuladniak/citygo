@@ -103,7 +103,7 @@ const Cart = () => {
         ) : (
           <div className="cart__review">
             <ReviewTour bookings={bookings} />
-            <div>
+            <div className="booking-summary">
               <BookingSummary
                 bookings={bookings}
                 totalPrice={calculateTotal()}

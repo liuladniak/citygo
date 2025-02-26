@@ -9,15 +9,6 @@ const BookingSummary = ({ totalPrice, bookings }) => {
     <div className="cart-product">
       <h2 className="cart__heading">Total</h2>
       <ul className="cart-product__list">
-        {/* {bookings.map((booking, i) => (
-          <li key={i} className="cart-product__item">
-            <div className="cart-product__title">{booking.title}</div>
-            <div className="cart-product__price">
-              $ {booking.featured ? booking.price * 0.9 : booking.price}
-            </div>
-          </li>
-        ))} */}
-
         {bookings.map((booking, i) => {
           const { title, price, guests, featured } = booking;
 

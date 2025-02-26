@@ -22,7 +22,7 @@ const TravelGuide = () => {
       try {
         console.log("Fetching articles");
         const response = await axios.get(
-          `${API_URL}/api/articles?limit=9&page=1`
+          `${API_URL}/api/articles?limit=8&page=1`
         );
         setArticles(response.data.data);
         setBannerArticles(response.data.data.slice(0, 3));
@@ -100,7 +100,9 @@ const TravelGuide = () => {
       )}
 
       <div className="guide-pagination">
-        <Button>More</Button>
+        <button className="btn btn--disabled" disabled>
+          More
+        </button>
       </div>
     </div>
   );

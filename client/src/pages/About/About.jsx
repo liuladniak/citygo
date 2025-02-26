@@ -17,7 +17,7 @@ const About = () => {
         </h2>
         <p className="about-hero__desc">
           Since 2012, CityGo has been making travel unforgettable by connecting
-          over 55000 explorers with local guides in Istanbul and its surrounding
+          over 85000 explorers with local guides in Istanbul and its surrounding
           areas. Our mission is to offer tours that go beyond the usual tourist
           spots. Whether it's tasting authentic street food in Istanbul's
           vibrant markets, exploring hidden alleyways in the Old City, or
@@ -39,29 +39,31 @@ const About = () => {
           <h2 className="about-team__heading">Where it all began</h2>
           <p className="about-team__desc">
             CityGo began with a desire to offer travelers more than just
-            sightseeing—it’s about connecting with the soul of Istanbul. Founded
-            by a team of local explorers, we set out to share the city’s
+            sightseeing - it’s about connecting with the soul of Istanbul.
+            Founded by a team of local explorers, we set out to share the city’s
             stories, culture, and spirit with those who seek a deeper journey,
             beyond the usual tourist paths. We craft experiences that celebrate
-            Istanbul in all its dimensions—from the majestic landmarks to the
+            Istanbul in all its dimensions - from the majestic landmarks to the
             quiet corners where history whispers. Our tours are for those who
             want to immerse themselves in the real Istanbul, whether it's
             navigating the bustling streets, savoring authentic flavors, or
             discovering hidden gems along the Bosphorus. Quality and
-            authenticity drive us. Our passionate guides are more than
-            experts—they’re locals with stories, eager to share their love for
-            the city. Every tour with CityGo is a step closer to understanding
-            Istanbul through the eyes of those who call it home. At CityGo, we
-            believe travel should be personal, meaningful, and unforgettable.
+            authenticity drive us. Our passionate guides are more than experts -
+            they’re locals with stories, eager to share their love for the city.
+            Every tour with CityGo is a step closer to understanding Istanbul
+            through the eyes of those who call it home. At CityGo, we believe
+            travel should be personal, meaningful, and unforgettable.
           </p>
         </div>
       </div>
       <div className="about-stats container-centered">
         <h3 className=" about-stats">GityGo in numbers</h3>
         <p className="about-section__subheading">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque totam
-          nam dicta illum ipsa accusantium tempora dolor vero, maxime impedit
-          ipsam nesciunt libero iste veniam excepturi, fuga quos facilis facere?
+          With over 50 unique tours, 10,000 satisfied customers annually, and
+          partnerships with more than 50 local guides, CityGo is at the
+          forefront of immersive travel experiences. Our tours cover everything
+          from historical landmarks to culinary delights, ensuring that every
+          traveler finds something to cherish.
         </p>
 
         <Stats />
@@ -72,9 +74,10 @@ const About = () => {
           Your Trusted Partner in Exploring the city
         </h2>
         <p className="about-section__subheading">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque totam
-          nam dicta illum ipsa accusantium tempora dolor vero, maxime impedit
-          ipsam nesciunt libero iste veniam excepturi, fuga quos facilis facere?
+          At CityGo, we’re more than a travel company; we’re a passionate team
+          dedicated to creating unforgettable experiences. If you love travel
+          and want to make a difference, join us in showcasing the beauty of
+          Istanbul and inspiring travelers together!
         </p>
       </div>
       <div className="container-centered about-careers">
