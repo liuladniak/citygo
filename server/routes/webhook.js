@@ -48,17 +48,27 @@ async function addBookingsToDatabase(metadata) {
     for (let key of Object.keys(metadata)) {
       if (key.startsWith("booking_")) {
         const index = key.split("_")[1];
+
+        const rawBookingDate = metadata[`booking_${index}_booking_date`];
+        const sanitizedBookingDate = new Date(rawBookingDate);
+
+        if (isNaN(sanitizedBookingDate.getTime())) {
+          console.error("Invalid booking date:", rawBookingDate);
+          continue;
+        }
+
         const bookingEntry = {
           user_id: metadata[`booking_${index}_user_id`],
           tour_id: metadata[`booking_${index}_tour_id`],
           time_slot_id: metadata[`booking_${index}_time_slot_id`],
-          booking_date: metadata[`booking_${index}_booking_date`],
+          booking_date: sanitizedBookingDate.toISOString().split("T")[0],
           adults: Number(metadata[`booking_${index}_adults`]),
           children: Number(metadata[`booking_${index}_children`]),
           infants: Number(metadata[`booking_${index}_infants`]),
           created_at: new Date(),
           updated_at: new Date(),
         };
+
         bookings.add(JSON.stringify(bookingEntry));
       }
     }

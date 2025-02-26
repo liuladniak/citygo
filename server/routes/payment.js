@@ -83,7 +83,15 @@ router.post("/create-payment-intent", async (req, res) => {
       metadata[`booking_${index + 1}_user_id`] = user_id;
       metadata[`booking_${index + 1}_tour_id`] = tour_id;
       metadata[`booking_${index + 1}_time_slot_id`] = time_slot_id;
-      metadata[`booking_${index + 1}_booking_date`] = booking_date;
+      // metadata[`booking_${index + 1}_booking_date`] = booking_date;
+      const sanitizedBookingDate = new Date(booking_date);
+      if (isNaN(sanitizedBookingDate.getTime())) {
+        return res.status(400).json({ error: "Invalid booking date format." });
+      }
+      metadata[`booking_${index + 1}_booking_date`] = sanitizedBookingDate
+        .toISOString()
+        .split("T")[0];
+
       metadata[`booking_${index + 1}_adults`] = adults;
       metadata[`booking_${index + 1}_children`] = children;
       metadata[`booking_${index + 1}_infants`] = infants;
