@@ -19,7 +19,7 @@ import {
 import { logout, checkToken } from "../../features/auth/authSlice";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Icon from "../UI/Icon";
-import { iconArrowDown, iconArrowUp } from "../UI/iconsPaths";
+import { iconArrowDown, iconArrowUp, iconSignout } from "../UI/iconsPaths";
 
 function Header() {
   const navigate = useNavigate();
@@ -215,20 +215,15 @@ function Header() {
                     className="dropdown-item bookings-notification-wrp"
                     onClick={closeDropdown}
                   >
-                    <Link to="/bookings">Manage Bookings</Link>
-                    <div className="bookings-notification"></div>
+                    <Link to="/bookings">My Bookings</Link>
                   </li>
                   <li className="dropdown-item" onClick={closeDropdown}>
                     <Link to="/account">Account</Link>
                   </li>
                   <li className="dropdown-item" onClick={closeDropdown}>
-                    <Button
-                      className="btn btn--logout"
-                      onClick={handleLogout}
-                      iconUrl={logoutIcon}
-                      iconClassName="btn--logout-icon"
-                      text="Sign out"
-                    />
+                    <Button className="btn btn--logout" onClick={handleLogout}>
+                      Sign out <Icon iconPath={iconSignout} />
+                    </Button>
                   </li>
                 </ul>
               </div>
