@@ -8,11 +8,15 @@ const ToursList = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
   const [tours, setTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const getAllTours = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/tours`);
-      setTours(response.data);
+      const response = await axios.get(
+        `${API_URL}/api/tours?page=${currentPage}&limit=${itemsPerPage}`
+      );
+      setTours(response.data.data);
       console.log(response.data, "response");
       setIsLoading(false);
     } catch (error) {
