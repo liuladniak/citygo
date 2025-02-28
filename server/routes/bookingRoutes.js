@@ -6,6 +6,48 @@ import "dotenv/config";
 const knex = initKnex(knexConfig["development"]);
 const router = express.Router();
 
+router.get("/all", async (req, res) => {
+  try {
+    const filter = req.query.filter;
+
+    let query = knex("bookings")
+      .select(
+        "bookings.*",
+        "tours.tour_name as tour_title",
+        "tours.price as tour_price",
+        "users.first_name as user_first_name",
+        "users.last_name as user_last_name",
+        "tour_time_slots.start_time as tour_start_time",
+        "tour_time_slots.end_time as tour_end_time"
+      )
+      .leftJoin("tours", "bookings.tour_id", "tours.id")
+      .leftJoin("users", "bookings.user_id", "users.id")
+      .leftJoin(
+        "tour_time_slots",
+        "bookings.time_slot_id",
+        "tour_time_slots.id"
+      );
+
+    if (filter === "today") {
+      query = query.where("booking_date", knex.raw("CURRENT_DATE"));
+    } else if (filter === "tomorrow") {
+      query = query.where(
+        "booking_date",
+        knex.raw("CURRENT_DATE + INTERVAL '1 day'")
+      );
+    } else if (filter === "upcoming") {
+      query = query.where("booking_date", ">", knex.raw("CURRENT_DATE"));
+    }
+
+    const bookings = await query;
+
+    res.json({ data: bookings });
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     const userId = req.query.userId;
