@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Button from "../../components/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
+import BookingStatus from "../../components/BookingStatus/BookingStatus";
 
 function ManageBookings() {
   const API_URL = import.meta.env.VITE_API_KEY;
@@ -108,11 +109,7 @@ function ManageBookings() {
                   </div>
                 </div>
                 <div className="booking-actions">
-                  <div className="booking-status">
-                    <div className="booking-status__dot"></div>
-                    {booking.status}
-                  </div>
-
+                  <BookingStatus status={booking.status} />
                   <Button className="btn--get-prepared">Get prepared</Button>
                 </div>
               </li>

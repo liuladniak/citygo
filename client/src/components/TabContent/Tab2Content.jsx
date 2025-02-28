@@ -1,3 +1,4 @@
+import BookingStatus from "../BookingStatus/BookingStatus";
 import Button from "../Button/Button";
 import "./Tab2Content.scss";
 import "./TabContent.scss";
@@ -46,11 +47,7 @@ const Tab2Content = ({ bookings }) => {
                   </div>
                 </div>
                 <div className="booking-actions">
-                  <div className="booking-status">
-                    <div className="booking-status__dot"></div>
-                    {booking.status}
-                  </div>
-
+                  <BookingStatus status={booking.status} />
                   <Button className="btn--get-prepared">Get prepared</Button>
                 </div>
               </li>
