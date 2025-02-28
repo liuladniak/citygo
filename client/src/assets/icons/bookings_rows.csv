@@ -1,0 +1,2 @@
+id,user_id,tour_id,booking_date,created_at,updated_at,adults,children,infants,time_slot_id,status
+73,11,3,2025-02-28,2025-02-26 02:41:33.565,2025-02-26 02:41:33.565,2,0,0,6,pending
