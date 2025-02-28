@@ -5,7 +5,6 @@ import { useState } from "react";
 import Button from "../ui/Button/Button";
 interface Booking {
   bookingId: number;
-  // user: User;
   user_first_name: string;
   user_last_name: string;
   tour_title: string;

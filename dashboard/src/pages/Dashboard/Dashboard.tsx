@@ -1,52 +1,15 @@
-// import axios from "axios";
-// import { useState, useEffect } from "react";
-
-// const API_URL = import.meta.env.VITE_API_KEY;
-
-// const [bookings, setBookings] = useState<Booking[]>([]);
-// const [isLoading, setIsLoading] = useState(true);
-
-// useEffect(() => {
-//   const getBookingsData = async () => {
-//     try {
-//       console.log();
-//       const response = await axios.get(`${API_URL}/api/bookings`);
-//       const bookings = response.data;
-//       setBookings(bookings);
-//       setIsLoading(false);
-//     } catch (error) {
-//       console.error("There was an error fetching the tours data!");
-//       setIsLoading(false);
-//     }
-//   };
-//   getBookingsData();
-// }, []);
-
-// if (isLoading) {
-//   return <div>Loading...</div>;
-// }
-
 import "./Dashboard.css";
 import Header from "../../components/Header/Header";
 
 import TodaysBookingList from "../../components/TodaysBookingList/TodaysBookingList";
 import TodayTeam from "../../components/TodayTeam/TodayTeam";
 import arrowIcon from "../../assets/icons/arrow-up-right.svg";
-import weatherWidget from "../../assets/images/Screenshot 2024-11-24 at 11.08.03 PM.png";
 import Weather from "../../components/Weather/Weather";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// interface User {
-//   userId: number;
-
-//   email: string;
-//   phone: string;
-// }
-
 interface Booking {
   bookingId: number;
-  // user: User;
   user_first_name: string;
   user_last_name: string;
   tour_title: string;
@@ -137,18 +100,9 @@ const Dashboard = () => {
         </div>
         <div className="flex flex-col gap-6 flex-1 p-4">
           <div className="">
-            {/* <h3>Weather</h3>
-            <img
-              src={weatherWidget}
-              alt="weather"
-              className="w-full h-full object-cover"
-            /> */}
-
             <Weather lat="51.5074" lon="-0.1278" />
           </div>
-          {/* <div className="w-full h-80 bg-blue-200 rounded-md p-4">
-            <h3 className="text-xl text-center">Calender</h3>
-          </div> */}
+
           <TodayTeam />
         </div>
       </div>
