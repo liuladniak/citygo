@@ -1,49 +1,54 @@
 import "./TodaysBookingList.css";
-import bookingsData from "../../data/todaysBookings.json";
 import { Link } from "react-router-dom";
 import Input from "../ui/Input/Input";
 import { useState } from "react";
 import Button from "../ui/Button/Button";
-
-interface User {
-  userId: number;
-  name: string;
-  email: string;
-  phone: string;
-}
-
-interface Tour {
-  tourId: number;
-  title: string;
-  date: string;
-  time: string;
-  pricePerPerson: number;
-}
-
 interface Booking {
   bookingId: number;
-  user: User;
-  tour: Tour;
-  numberOfPeople: number;
+  // user: User;
+  user_first_name: string;
+  user_last_name: string;
+  tour_title: string;
+  adults: number;
+  children: number;
   totalPrice: number;
   bookingDate: string;
+  tour_start_time: string;
+  tour_end_time: string;
   status: "Requires Action" | "Confirmed" | "In Progress" | "Completed";
 }
-const bookings: Booking[] = bookingsData as Booking[];
-const TodaysBookingList = () => {
-  const sortedBookings = [...bookings].sort((a, b) => {
-    const statusOrder: { [key: string]: number } = {
-      "Requires Action": 1,
-      Confirmed: 2,
-      "In Progress": 3,
-      Completed: 4,
-    };
-
-    return (statusOrder[a.status] || 0) - (statusOrder[b.status] || 0);
-  });
-
+interface TodaysBookingListProps {
+  bookings: Booking[];
+  fetchBookings: (filter: "today" | "tomorrow" | "upcoming" | "all") => void;
+}
+const TodaysBookingList: React.FC<TodaysBookingListProps> = ({
+  bookings,
+  fetchBookings,
+}) => {
   const [todayBookingSearch, setTodayBookingSearch] = useState("");
 
+  // const sortedBookings = [...bookings].sort((a, b) => {
+  //   const statusOrder: { [key: string]: number } = {
+  //     "Requires Action": 1,
+  //     Confirmed: 2,
+  //     "In Progress": 3,
+  //     Completed: 4,
+  //   };
+
+  //   return (statusOrder[a.status] || 0) - (statusOrder[b.status] || 0);
+  // });
+
+  const statusOrder: { [key in Booking["status"]]: number } = {
+    "Requires Action": 1,
+    Confirmed: 2,
+    "In Progress": 3,
+    Completed: 4,
+  };
+
+  const sortedBookings = [...bookings].sort(
+    (a, b) => statusOrder[a.status] - statusOrder[b.status]
+  );
+  console.log("Sorted Bookings", sortedBookings);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodayBookingSearch(e.target.value);
   };
@@ -52,10 +57,11 @@ const TodaysBookingList = () => {
     const searchTerm = todayBookingSearch.toLowerCase();
 
     return (
-      booking.tour.title.toLowerCase().includes(searchTerm) ||
-      booking.user.name.toLowerCase().includes(searchTerm) ||
-      booking.numberOfPeople.toString().includes(searchTerm) ||
-      booking.tour.time.includes(searchTerm)
+      booking.tour_title.toLowerCase().includes(searchTerm) ||
+      booking.user_first_name.toLowerCase().includes(searchTerm) ||
+      booking.adults.toString().includes(searchTerm) ||
+      booking.children.toString().includes(searchTerm) ||
+      booking.tour_start_time.includes(searchTerm)
     );
   });
 
@@ -63,7 +69,7 @@ const TodaysBookingList = () => {
     <div className="">
       <div className="flex items-center justify-between ">
         <h2 className="t-bookings__heading text-base  mt-4 mb-6 font-semibold">
-          All Today's Bookings
+          All Upcoming Bookings
         </h2>
         <Button className="py-2 px-4 m-w grow-0 whitespace-nowrap bg-brandTeal text-white">
           + Add New Booking
@@ -80,9 +86,10 @@ const TodaysBookingList = () => {
           />
         </div>
         <div className="flex gap-4 flex-1">
-          <span>Filter1</span>
-          <span>Filter2</span>
-          <span>Filter3</span>
+          <Button onClick={() => fetchBookings("today")}>Today</Button>
+          <Button onClick={() => fetchBookings("tomorrow")}>Tomorrow</Button>
+          <Button onClick={() => fetchBookings("upcoming")}>Upcoming</Button>
+          <Button onClick={() => fetchBookings("all")}>All</Button>
         </div>
       </div>
 
@@ -91,7 +98,7 @@ const TodaysBookingList = () => {
           <span className="flex-1">Tour name</span>
           <span className="flex-1">Customer name</span>
           <span className="flex-1">Tour time</span>
-          <span className="flex-1">Number of people</span>
+          <span className="flex-1">Number of guests</span>
           <span className="flex-1">Status</span>
         </li>
         {filteredBookings.map((booking) => (
@@ -100,10 +107,16 @@ const TodaysBookingList = () => {
               className="cursor-pointer flex justify-between w-full border border-lightGray rounded-md py-2 items-center"
               to="/"
             >
-              <span className="flex-1">{booking.tour.title}</span>
-              <span className="flex-1">{booking.user.name}</span>
-              <span className="flex-1">{booking.tour.time}</span>
-              <span className="flex-1">{booking.numberOfPeople}</span>
+              <span className="flex-1">{booking.tour_title}</span>
+              <span className="flex-1">
+                {booking.user_first_name} {booking.user_last_name}
+              </span>
+              <span className="flex-1">
+                {booking.tour_start_time} - {booking.tour_end_time}
+              </span>
+              <span className="flex-1">
+                {booking.adults + booking.children}
+              </span>
               <div className="flex-1 flex justify-start">
                 <span
                   className={`py-2 px-4 w-fit rounded-md t-bookings__status t-bookings__status--${booking.status

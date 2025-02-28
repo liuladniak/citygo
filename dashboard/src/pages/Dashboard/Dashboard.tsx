@@ -33,7 +33,74 @@ import TodaysBookingList from "../../components/TodaysBookingList/TodaysBookingL
 import TodayTeam from "../../components/TodayTeam/TodayTeam";
 import arrowIcon from "../../assets/icons/arrow-up-right.svg";
 import weatherWidget from "../../assets/images/Screenshot 2024-11-24 at 11.08.03 PM.png";
+import Weather from "../../components/Weather/Weather";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+// interface User {
+//   userId: number;
+
+//   email: string;
+//   phone: string;
+// }
+
+interface Booking {
+  bookingId: number;
+  // user: User;
+  user_first_name: string;
+  user_last_name: string;
+  tour_title: string;
+  adults: number;
+  children: number;
+  totalPrice: number;
+  bookingDate: string;
+  tour_start_time: string;
+  tour_end_time: string;
+  status: "Requires Action" | "Confirmed" | "In Progress" | "Completed";
+}
+
 const Dashboard = () => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookingsToday, setBookingsToday] = useState<Booking[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [itemsPerPage] = useState(10);
+  const [todayBookingSearch, setTodayBookingSearch] = useState("");
+  const API_URL = import.meta.env.VITE_API_KEY;
+
+  const fetchBookings = async (filter = "all") => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get<{ data: Booking[] }>(
+        `${API_URL}/api/bookings/all?filter=${filter}`
+      );
+      setBookings(response.data.data);
+      console.log("Bookings", response.data.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("There was an error fetching the tours data!", error);
+      setIsLoading(false);
+    }
+  };
+  const fetchBookingsToday = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get<{ data: Booking[] }>(
+        `${API_URL}/api/bookings/all?filter=today`
+      );
+      setBookingsToday(response.data.data);
+      console.log("Bookings", response.data.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("There was an error fetching the tours data!", error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings();
+    fetchBookingsToday();
+  }, []);
+
   return (
     <section className="w-full h-full">
       <Header pageTitle="Dashboard" />
@@ -54,7 +121,7 @@ const Dashboard = () => {
               <div className="bg-gradient-to-b from-violet-200 to-transparent flex items-end border border-blue-200  p-4 w-48 h-28 rounded-2xl">
                 <div className="flex flex-col justify-between gap-5 w-full h-full">
                   <h3 className="text-sm">Tours booked today</h3>
-                  <span className="text-2xl">5</span>
+                  <span className="text-2xl">{bookingsToday.length}</span>
                 </div>
                 <div className="w-8 h-8">
                   <img src={arrowIcon} alt="arrow up right icon" />
@@ -63,20 +130,25 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <TodaysBookingList />
+          <TodaysBookingList
+            bookings={bookings}
+            fetchBookings={fetchBookings}
+          />
         </div>
         <div className="flex flex-col gap-6 flex-1 p-4">
-          <div className="h-40">
-            <h3>Weather</h3>
+          <div className="">
+            {/* <h3>Weather</h3>
             <img
               src={weatherWidget}
               alt="weather"
               className="w-full h-full object-cover"
-            />
+            /> */}
+
+            <Weather lat="51.5074" lon="-0.1278" />
           </div>
-          <div className="w-full h-80 bg-blue-200 rounded-md p-4">
+          {/* <div className="w-full h-80 bg-blue-200 rounded-md p-4">
             <h3 className="text-xl text-center">Calender</h3>
-          </div>
+          </div> */}
           <TodayTeam />
         </div>
       </div>
