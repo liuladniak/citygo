@@ -50,6 +50,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
+    flex: 4;
   }
   &-heading {
     font-size: 2.4rem;
@@ -68,6 +69,8 @@
 }
 .booking-card-img {
   width: 30rem;
+  height: 17rem;
+  flex: 3;
 
   @include border-radius;
   overflow: hidden;
@@ -81,4 +84,42 @@
 .booking-message {
   font-size: 1.6rem;
   color: black;
+}
+
+.btn--get-prepared {
+  width: 100%;
+  background-color: $supportive-3;
+}
+
+.booking-actions {
+  flex: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $space-large;
+}
+
+.booking-status {
+  width: fit-content;
+  border: 1px solid #faca15;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.4rem;
+  color: #92400e;
+  background-color: #fffbeb;
+  border-radius: $border-radius;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0px 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
+}
+
+.booking-status__dot {
+  display: block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0.8rem;
+  background-color: #92400e;
+  border-radius: 50%;
 }

@@ -107,8 +107,14 @@ function ManageBookings() {
                     )}
                   </div>
                 </div>
+                <div className="booking-actions">
+                  <div className="booking-status">
+                    <div className="booking-status__dot"></div>
+                    {booking.status}
+                  </div>
 
-                <Button>Get prepared</Button>
+                  <Button className="btn--get-prepared">Get prepared</Button>
+                </div>
               </li>
             ))}
           </ul>
