@@ -1,3 +1,4 @@
+import Button from "../Button/Button";
 import "./Tab2Content.scss";
 import "./TabContent.scss";
 
@@ -43,6 +44,14 @@ const Tab2Content = ({ bookings }) => {
                       <span>Infants: {booking.infants}</span>
                     )}
                   </div>
+                </div>
+                <div className="booking-actions">
+                  <div className="booking-status">
+                    <div className="booking-status__dot"></div>
+                    {booking.status}
+                  </div>
+
+                  <Button className="btn--get-prepared">Get prepared</Button>
                 </div>
               </li>
             ))}
