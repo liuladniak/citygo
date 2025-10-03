@@ -8,6 +8,7 @@ import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Banner from "../Banner/Banner";
 import { useDispatch } from "react-redux";
 import { checkToken } from "../../features/auth/authSlice";
+import ChatbotWidget from "../Chatbot/Chatbot";
 
 function AppLayout() {
   const location = useLocation();
@@ -24,7 +25,7 @@ function AppLayout() {
   }, [dispatch]);
 
   return (
-    <div className="layout">
+    <div className="layout relative">
       <Banner />
       <Header />
       <Breadcrumbs />
@@ -33,6 +34,7 @@ function AppLayout() {
         <Subscribe />
       </main>
       <Footer />
+      <ChatbotWidget />
     </div>
   );
 }

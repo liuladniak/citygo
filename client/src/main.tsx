@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
 import App from "./App.jsx";
-// import { AuthProvider } from "./contexts/AuthContext.jsx";
+import "./styles/main.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

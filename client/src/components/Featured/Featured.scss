@@ -20,9 +20,11 @@
   width: 100%;
   padding: $space-x-small;
   display: flex;
+  flex-direction: column;
   gap: $space-large;
 
   @include tablet {
+    flex-direction: row;
     padding: 4rem;
   }
   &-btns {

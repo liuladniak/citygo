@@ -10,7 +10,7 @@ const Tab2Content = ({ bookings }) => {
     <div>
       {bookings.length > 0 ? (
         <div>
-          <h2 className="bookings-heading">My Bookings:</h2>
+          <h2 className="account-heading">My Bookings:</h2>
 
           <ul className="bookings-list">
             {bookings.map((booking) => (

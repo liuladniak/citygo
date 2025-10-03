@@ -15,11 +15,12 @@ const Tab3Content = () => {
       <div className="account-details">
         <div className="account-detail">
           <h3 className="account-detail__title">Gift credit</h3>
+          <span className="account-subheading">No gift credit available</span>
           <Button>Add gift certificate</Button>
         </div>
         <div className="account-detail">
           <h3 className="account-detail__title">Coupons</h3>
-          <span className="account-subheading">Your coupons</span>
+          <span className="account-subheading">No coupons available</span>
           <Button>Add coupons</Button>
         </div>
         <div className="account-detail">

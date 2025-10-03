@@ -6,7 +6,7 @@ import statImg9 from "../../assets/images/stat-14.webp";
 import { Fragment } from "react";
 
 const stats = [
-  { title: "Happy Travelers", value: "85+", img: statImg9 },
+  { title: "Happy Travelers", value: "85K+", img: statImg9 },
   { title: "Tour Guides", value: "45+", img: statImg2 },
   { title: "Total Tours", value: "50+", img: statImg5 },
 ];

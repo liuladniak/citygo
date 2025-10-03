@@ -225,4 +225,11 @@
     height: fit-content;
     padding: 0;
   }
+
+  &--tours-filters {
+    margin-bottom: 1.6rem;
+    @include tablet {
+      display: none;
+    }
+  }
 }

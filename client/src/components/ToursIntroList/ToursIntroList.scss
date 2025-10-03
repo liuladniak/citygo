@@ -32,11 +32,16 @@
 
   &-wrp {
     display: flex;
-    flex-direction: column;
-    gap: $space-large;
-    height: 42rem;
+    // flex-direction: column;
+    // height: 42rem;
+    position: relative;
+    gap: $space-x-small;
+    // display: flex;
+    align-items: stretch;
+    overflow: scroll;
     @include tablet {
       flex-direction: row;
+      gap: $space-large;
     }
   }
 
@@ -74,12 +79,12 @@
     flex-direction: column;
     gap: 3rem;
     align-items: flex-start;
-    flex: 1;
     background-color: darkolivegreen;
     background-color: $accent-4;
     color: $charcoal;
     font-size: 1.4rem;
     flex: 1;
+    min-width: 25rem;
 
     &--skeleton {
       flex: 1;
@@ -96,9 +101,9 @@
 }
 
 .tour-intro-wrp {
-  position: relative;
-  display: flex;
-  align-items: stretch;
+  // position: relative;
+  // display: flex;
+  // align-items: stretch;
 
   .tour-slider {
     display: flex;
@@ -106,6 +111,7 @@
     overflow: hidden;
     padding: 1rem;
     height: 100%;
+
     &__wrp {
       position: relative;
       flex: 3;

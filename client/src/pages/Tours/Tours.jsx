@@ -12,6 +12,8 @@ import {
   iconChevronLeft,
   iconChevronRight,
 } from "../../components/UI/iconsPaths";
+// import useComponentVisible from "../../hooks/useComponentVisible";
+import FiltersComponent from "../../components/FiltersComponent/FiltersComponent";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -62,6 +64,13 @@ const Tours = () => {
   const handleFilterChange = (setter) => (option) => {
     setter(option);
   };
+
+  // const { ref, isComponentVisible, setIsComponentVisible } =
+  //   useComponentVisible(false);
+
+  // const handleFiltersVisible = () => {
+  //   setIsComponentVisible(!isComponentVisible);
+  // };
 
   const handleRemoveFilter = (filterType) => () => {
     if (filterType === "landmark") setSelectedLandmark("");
@@ -154,115 +163,126 @@ const Tours = () => {
 
       <div className="tours-wrp">
         <div className="tours-filter">
-          <div className="tours-filter-wrp">
-            <div className="tours-filter-l">
-              <div className="tours-filter__select-wrp">
-                <CustomSelect
-                  options={landmarkOptions}
-                  value={selectedLandmark}
-                  onChange={handleFilterChange(setSelectedLandmark)}
-                  placeholder="Select Landmark"
-                />
+          <FiltersComponent>
+            <div className="tours-filter-wrp">
+              <div className="tours-filter-l">
+                <div className="tours-filter__select-wrp">
+                  <CustomSelect
+                    optionsClassName="tours-filter__options"
+                    options={landmarkOptions}
+                    value={selectedLandmark}
+                    onChange={handleFilterChange(setSelectedLandmark)}
+                    placeholder="Select Landmark"
+                  />
+                </div>
+                <div className="tours-filter__select-wrp">
+                  <CustomSelect
+                    optionsClassName="tours-filter__options"
+                    options={tourTypeOptions}
+                    value={selectedTourType}
+                    onChange={handleFilterChange(setSelectedTourType)}
+                    placeholder="Select Tour Type"
+                  />
+                </div>
+                <div className="tours-filter__select-wrp">
+                  <CustomSelect
+                    optionsClassName="tours-filter__options"
+                    options={activityLevelOptions}
+                    value={selectedActivityLevel}
+                    onChange={handleFilterChange(setSelectedActivityLevel)}
+                    placeholder="Select Activity Level"
+                  />
+                </div>
+                <div className="tours-filter__select-wrp">
+                  <CustomSelect
+                    optionsClassName="tours-filter__options"
+                    options={sortOptions}
+                    value={selectedSort}
+                    onChange={handleFilterChange(setSelectedSort)}
+                    placeholder="Sort by"
+                  />
+                </div>
               </div>
-              <div className="tours-filter__select-wrp">
-                <CustomSelect
-                  options={tourTypeOptions}
-                  value={selectedTourType}
-                  onChange={handleFilterChange(setSelectedTourType)}
-                  placeholder="Select Tour Type"
-                />
-              </div>
-              <div className="tours-filter__select-wrp">
-                <CustomSelect
-                  options={activityLevelOptions}
-                  value={selectedActivityLevel}
-                  onChange={handleFilterChange(setSelectedActivityLevel)}
-                  placeholder="Select Activity Level"
-                />
-              </div>
-              <div className="tours-filter__select-wrp">
-                <CustomSelect
-                  options={sortOptions}
-                  value={selectedSort}
-                  onChange={handleFilterChange(setSelectedSort)}
-                  placeholder="Sort by"
-                />
+              <div className="tours-filter-r">
+                <div className="tours-filter__select-wrp search-wrp">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search tours"
+                    className="tours-filter__search-input"
+                  />
+                  <img
+                    className="search-icon"
+                    src={searchIcon}
+                    alt="search icon"
+                  />
+                </div>
               </div>
             </div>
-            <div className="tours-filter-r">
-              <div className="tours-filter__select-wrp search-wrp">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search tours"
-                  className="tours-filter__search-input"
-                />
-                <img
-                  className="search-icon"
-                  src={searchIcon}
-                  alt="search icon"
-                />
-              </div>
-            </div>
-          </div>
+          </FiltersComponent>
         </div>
-        <div className="tours-filter-selections">
-          <div className="tours-filter__pills">
-            {selectedLandmark && (
-              <div className="tours-filter__pill">
-                {selectedLandmark}
-                <span
-                  className="tours-filter__pill__close"
-                  onClick={handleRemoveFilter("landmark")}
-                >
-                  &times;
-                </span>
+        {selectedLandmark ||
+          selectedTourType ||
+          selectedActivityLevel ||
+          (searchQuery && (
+            <div className="tours-filter-selections">
+              <div className="tours-filter__pills">
+                {selectedLandmark && (
+                  <div className="tours-filter__pill">
+                    {selectedLandmark}
+                    <span
+                      className="tours-filter__pill__close"
+                      onClick={handleRemoveFilter("landmark")}
+                    >
+                      &times;
+                    </span>
+                  </div>
+                )}
+                {selectedTourType && (
+                  <div className="tours-filter__pill">
+                    {selectedTourType}
+                    <span
+                      className="tours-filter__pill__close"
+                      onClick={handleRemoveFilter("tourType")}
+                    >
+                      &times;
+                    </span>
+                  </div>
+                )}
+                {selectedActivityLevel && (
+                  <div className="tours-filter__pill">
+                    {selectedActivityLevel}
+                    <span
+                      className="tours-filter__pill__close"
+                      onClick={handleRemoveFilter("activityLevel")}
+                    >
+                      &times;
+                    </span>
+                  </div>
+                )}
+                {searchQuery && (
+                  <div className="tours-filter__pill">
+                    {searchQuery}
+                    <span
+                      className="tours-filter__pill__close"
+                      onClick={handleRemoveFilter("searchQuery")}
+                    >
+                      &times;
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
-            {selectedTourType && (
-              <div className="tours-filter__pill">
-                {selectedTourType}
-                <span
-                  className="tours-filter__pill__close"
-                  onClick={handleRemoveFilter("tourType")}
-                >
-                  &times;
-                </span>
-              </div>
-            )}
-            {selectedActivityLevel && (
-              <div className="tours-filter__pill">
-                {selectedActivityLevel}
-                <span
-                  className="tours-filter__pill__close"
-                  onClick={handleRemoveFilter("activityLevel")}
-                >
-                  &times;
-                </span>
-              </div>
-            )}
-            {searchQuery && (
-              <div className="tours-filter__pill">
-                {searchQuery}
-                <span
-                  className="tours-filter__pill__close"
-                  onClick={handleRemoveFilter("searchQuery")}
-                >
-                  &times;
-                </span>
-              </div>
-            )}
-          </div>
 
-          {areFiltersApplied() && (
-            <Button
-              onClick={handleResetFilters}
-              className="btn btn--reset-filter"
-              text="Remove all filters"
-            />
-          )}
-        </div>
+              {areFiltersApplied() && (
+                <Button
+                  onClick={handleResetFilters}
+                  className="btn btn--reset-filter"
+                  text="Remove all filters"
+                />
+              )}
+            </div>
+          ))}
 
         {isLoading ? (
           <div className="tours-cards-skeleton">

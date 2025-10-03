@@ -233,7 +233,7 @@ const HelpContact = () => {
           {success && (
             <div className="contact-success">
               <Icon iconPath={iconCheck} />
-              We've sent a confirmation message to your email address
+              Message sent! We'll get back to you soon!
             </div>
           )}
         </form>

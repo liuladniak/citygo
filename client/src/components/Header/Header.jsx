@@ -147,7 +147,7 @@ function Header() {
             />
           </li>
           <li className="nav__list-item" onClick={closeMenu}>
-            <Link to="/wishlist">
+            <Link to="/wishlist" className="nav__item-link">
               {isOpen && <span className="wishlist-text">Wishlist</span>}
               <img className="wishlist-icon" src={saveIcon} alt="heart icon" />
             </Link>

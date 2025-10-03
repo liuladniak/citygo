@@ -13,6 +13,7 @@ import bookingRoutes from "./routes/bookingRoutes.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import paymentRoutes from "./routes/payment.js";
+import employeeRoutes from "./routes/employeeRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -68,7 +69,9 @@ app.use("/auth", authRoutes);
 app.use("/api/articles", articleRoutes(__dirname));
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 app.use("/articles", express.static(path.join(staticFilesPath, "articles")));
+app.use("/employees", express.static(path.join(staticFilesPath, "employees")));
 app.use("/api/payment", paymentRoutes);
+app.use("/api/employees", employeeRoutes);
 
 app.use((req, res) => {
   res.status(404).send("Route not found");

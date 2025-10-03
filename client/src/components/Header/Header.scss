@@ -229,7 +229,12 @@
   &__item-link {
     font-family: "Montserrat";
     width: 100%;
-    display: inline-block;
+    // display: inline-block;
+
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
     @include desktop-s {
       width: unset;
     }
