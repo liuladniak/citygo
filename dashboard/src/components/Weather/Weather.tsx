@@ -70,7 +70,7 @@ const Weather: React.FC<WeatherProps> = ({
   if (!weather) return <p>Weather data not available.</p>;
 
   return (
-    <div className="weather">
+    <div className="weather p-6">
       <div className="weather-current">
         <h2>Current Weather: </h2>
         <p>

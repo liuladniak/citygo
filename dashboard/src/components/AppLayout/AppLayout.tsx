@@ -2,6 +2,7 @@ import "./AppLayout.css";
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Nav from "../Nav/Nav";
+import Header from "../Header/Header";
 
 function AppLayout() {
   const location = useLocation();
@@ -14,8 +15,11 @@ function AppLayout() {
   return (
     <div className="layout">
       <Nav />
-      <main className="main bg-white mt-2 rounded-md">
-        <Outlet />
+      <main className="main bg-white rounded-md flex flex-col">
+        <Header pageTitle="" />
+        <div>
+          <Outlet />
+        </div>
       </main>
     </div>
   );

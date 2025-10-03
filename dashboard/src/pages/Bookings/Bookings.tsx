@@ -34,7 +34,7 @@ const Bookings = () => {
 
   return (
     <section className="bookings">
-      <Header pageTitle="Bookings" />
+      {/* <Header pageTitle="Bookings" /> */}
 
       <BookingsList />
 

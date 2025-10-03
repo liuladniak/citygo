@@ -13,12 +13,13 @@ const Icon: React.FC<IconProps> = ({
 }) => {
   return (
     <svg
-      className={className}
+      className={`${className} block`}
       width={size}
       height={size}
       viewBox="0 -960 960 960"
       fill={fill}
       xmlns="http://www.w3.org/2000/svg"
+      style={{ overflow: "visible" }}
     >
       <path d={iconPath} />
     </svg>

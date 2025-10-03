@@ -5,7 +5,7 @@ import { toolsIconPath } from "../../components/ui/SVGIcons/iconPaths";
 const UnderConstruction = () => {
   return (
     <div className="w-full min-h-screen">
-      <Header pageTitle="" />
+      {/* <Header pageTitle="" /> */}
       <div className=" h-full flex justify-center pt-80 gap-4">
         <h1>Page under Construction</h1>
 

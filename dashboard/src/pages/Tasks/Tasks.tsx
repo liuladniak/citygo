@@ -4,7 +4,8 @@ import "./Tasks.css";
 const Tasks = () => {
   return (
     <section className="tasks">
-      <Header pageTitle="Tasks" />
+      {/* <Header pageTitle="Tasks" /> */}
+      Tasks
     </section>
   );
 };

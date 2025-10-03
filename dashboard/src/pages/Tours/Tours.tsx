@@ -5,7 +5,7 @@ import ToursList from "../../components/ToursList/ToursList.jsx";
 const Tours = () => {
   return (
     <section className="tours ">
-      <Header pageTitle="" />
+      {/* <Header pageTitle="" /> */}
       <ToursList />
     </section>
   );

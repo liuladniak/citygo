@@ -310,7 +310,7 @@ const TourDetails = () => {
 
   return (
     <div className="">
-      <Header pageTitle="Edit Tour" />
+      {/* <Header pageTitle="Edit Tour" /> */}
       <section className="flex flex-col gap-6 p-6 ">
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between items-center">

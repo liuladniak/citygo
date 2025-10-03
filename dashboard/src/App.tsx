@@ -16,6 +16,11 @@ import Tours from "./pages/Tours/Tours";
 import TourDetails from "./pages/TourDetails/TourDetails";
 import AddTour from "./pages/AddTour/AddTour";
 import UnderConstruction from "./pages/UnderConstruction/UnderConstruction";
+import AddBooking from "./pages/AddBooking/AddBooking";
+import SingleBooking from "./pages/SingleBooking/SingleBooking";
+import Bookings from "./pages/Bookings/Bookings";
+import BookingDetails from "./pages/BookingDetails";
+import Analytics from "./pages/Analytics/Analytics";
 
 const router = createBrowserRouter([
   {
@@ -27,11 +32,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/analytics",
-        element: <UnderConstruction />,
+        element: <Analytics />,
       },
       {
         path: "/bookings",
-        element: <UnderConstruction />,
+        element: <Bookings />,
+      },
+      {
+        path: "/bookings/1",
+        element: <BookingDetails />,
       },
       {
         path: "/invoices",
@@ -77,6 +86,14 @@ const router = createBrowserRouter([
       {
         path: "/tours/add",
         element: <AddTour />,
+      },
+      {
+        path: "/booking/add",
+        element: <AddBooking />,
+      },
+      {
+        path: "/booking/:slug",
+        element: <SingleBooking />,
       },
     ],
   },

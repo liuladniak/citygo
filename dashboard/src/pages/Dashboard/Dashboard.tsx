@@ -1,12 +1,20 @@
 import "./Dashboard.css";
 import Header from "../../components/Header/Header";
-
-import TodaysBookingList from "../../components/TodaysBookingList/TodaysBookingList";
-import TodayTeam from "../../components/TodayTeam/TodayTeam";
-import arrowIcon from "../../assets/icons/arrow-up-right.svg";
 import Weather from "../../components/Weather/Weather";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Button from "../../components/ui/Button/Button";
+import {
+  addPath,
+  reportsIconPath,
+} from "../../components/ui/SVGIcons/iconPaths";
+import MyTasks from "../../components/MyTasks/MyTasks";
+import MyStats from "../../components/MyStats/MyStats";
+import Team from "../../components/Team/Team";
+import MainStats from "../../components/StatsDashboard/MainStats";
+import RecentBookings from "../../components/RecentBookings/RecentBookings";
+import PopularProducts from "../../components/PopularTours/PopularTours";
+import WebsiteVisitStats from "../../components/AppVisitStats/AppVisitStats";
 
 interface Booking {
   bookingId: number;
@@ -22,12 +30,13 @@ interface Booking {
   status: "Requires Action" | "Confirmed" | "In Progress" | "Completed";
 }
 
-const Dashboard = () => {
+const Dashboard: React.FC<{ pageTitle: string }> = ({ pageTitle }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [bookingsToday, setBookingsToday] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [itemsPerPage] = useState(10);
   const [todayBookingSearch, setTodayBookingSearch] = useState("");
+  const [filterBookings, setFilterBookings] = useState<string>("all");
   const API_URL = import.meta.env.VITE_API_KEY;
 
   const fetchBookings = async (filter = "all") => {
@@ -39,6 +48,7 @@ const Dashboard = () => {
       setBookings(response.data.data);
       console.log("Bookings", response.data.data);
       setIsLoading(false);
+      setFilterBookings(filter);
     } catch (error) {
       console.error("There was an error fetching the tours data!", error);
       setIsLoading(false);
@@ -66,44 +76,43 @@ const Dashboard = () => {
 
   return (
     <section className="w-full h-full">
-      <Header pageTitle="Dashboard" />
-      <div className="flex justify-between">
-        <div className="flex flex-col gap-10 mt-8 flex-3 p-4">
-          <div className="flex gap-10">
-            <div className="flex gap-10">
-              <div className="dashboard__stat flex items-end border border-blue-200  p-4 w-48 h-28 rounded-2xl">
-                <div className="dashboard__stat--rev flex flex-col justify-between gap-5 w-full h-full">
-                  <h3 className="text-sm">Total revenue today</h3>
-                  <span className="text-2xl">8,500</span>
-                </div>
-                <div className="w-8 h-8">
-                  <img src={arrowIcon} alt="arrow up right icon" />
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-b from-violet-200 to-transparent flex items-end border border-blue-200  p-4 w-48 h-28 rounded-2xl">
-                <div className="flex flex-col justify-between gap-5 w-full h-full">
-                  <h3 className="text-sm">Tours booked today</h3>
-                  <span className="text-2xl">{bookingsToday.length}</span>
-                </div>
-                <div className="w-8 h-8">
-                  <img src={arrowIcon} alt="arrow up right icon" />
-                </div>
-              </div>
-            </div>
+      {/* <Header /> */}
+      <div className="p-6 flex-1 bg-gray-50 overflow-auto">
+        <PageTitle pageTitle="Dashboard" />
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-600">
+            Welcome back! Here's what's happening with your tours today.
+          </p>{" "}
+          <div
+            className="flex gap-2
+          "
+          >
+            <Button to="/booking/add" IconPath={addPath} className="flex">
+              New Booking
+            </Button>
+            <Button IconPath={reportsIconPath}>Create Report</Button>
           </div>
-
-          <TodaysBookingList
-            bookings={bookings}
-            fetchBookings={fetchBookings}
-          />
         </div>
-        <div className="flex flex-col gap-6 flex-1 p-4">
-          <div className="">
+        <div className="flex justify-between">
+          <MainStats />
+          <WebsiteVisitStats />
+        </div>
+        <div className="flex items-center gap-6 mt-8">
+          <div className="flex flex-col gap-6 w-full lg:flex-row">
+            <MyTasks />
+
+            <RecentBookings />
+
+            <PopularProducts />
+          </div>
+        </div>
+        <div className="flex gap-6 mt-8  ">
+          <MyStats />
+          <Team />
+
+          <div className="flex-1 rounded-lg border  shadow-sm bg-white border-slate-200">
             <Weather lat="51.5074" lon="-0.1278" />
           </div>
-
-          <TodayTeam />
         </div>
       </div>
     </section>
@@ -111,3 +120,7 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+const PageTitle = ({ pageTitle }) => {
+  return <h1 className="text-xl font-semibold text-gray-900">{pageTitle}</h1>;
+};

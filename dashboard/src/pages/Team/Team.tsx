@@ -3,9 +3,7 @@ import "./Team.css";
 
 const Team = () => {
   return (
-    <section className="team">
-      <Header pageTitle="Team" />
-    </section>
+    <section className="team">{/* <Header pageTitle="Team" /> */}Team</section>
   );
 };
 

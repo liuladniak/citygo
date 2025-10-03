@@ -10,3 +10,11 @@
 .t-bookings__status--completed {
   color: #3d3d3d;
 }
+
+.custom-select {
+  appearance: none;
+  background-image: url("/path/to/triangle-icon.svg");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  padding-right: 2rem;
+}

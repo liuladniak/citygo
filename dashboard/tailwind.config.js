@@ -25,6 +25,9 @@ export default {
         brandRed: "#fc3a4f52",
         brandDarkRed: "#941a26",
         muted: "#A3A3C2",
+        warmBrown: "#845F52",
+        secondary: "#fff",
+        lightBlue: "",
       },
       maxWidth: {
         70: "70rem",

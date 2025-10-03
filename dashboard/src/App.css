@@ -1,3 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:-translate-y-1;
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -29,6 +39,11 @@ h6 {
   overflow-wrap: break-word;
 }
 
+input::placeholder,
+input::-webkit-input-placeholder {
+  line-height: normal;
+  overflow: visible;
+}
 html {
   scroll-behavior: smooth;
 }
