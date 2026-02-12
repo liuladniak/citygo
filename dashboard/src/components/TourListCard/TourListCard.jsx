@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import EditIcon from "../ui/SVGIcons/EditIcon";
 import Icon from "../ui/SVGIcons/Icon";
 import { scheduleIconPath } from "../ui/SVGIcons/iconPaths";
-import Button from "../ui/Button/Button";
+import Button from "../ui/CustomButton/CustomButton";
 
 const TourListCard = ({
   tour_image,
@@ -20,7 +20,7 @@ const TourListCard = ({
       to={`/tours/${slug}`}
       className="relative w-80 h-80 list-card text-sm flex flex-col rounded-md overflow-hidden shadow-md"
     >
-      <div className="absolute top-2 right-2 rounded-md flex items-center bg-green-100 py-0.5 px-2.5 border border-transparent text-sm text-green-800 transition-all shadow-sm">
+      <div className="absolute top-2 right-2 rounded-md flex items-center bg-green-100 py-0.5 px-2.5 border border-transparent text-sm text-green-800 transition-all shadow-xs">
         <div className="mx-auto block h-2 w-2 rounded-full bg-green-800 mr-2"></div>
         Active
       </div>
@@ -38,17 +38,17 @@ const TourListCard = ({
             <div className="flex gap-2 items-center ">
               <Icon
                 iconPath={scheduleIconPath}
-                className="w-4 h-4 fill-brandMaroon"
+                className="w-4 h-4 fill-brand-maroon"
               />
               <span className="leading-none text-sm">{duration}</span>
             </div>
             <div
-              className={`rounded-md flex items-center  py-0.5 px-2.5 border border-transparent text-sm  transition-all shadow-sm ${
+              className={`rounded-md flex items-center  py-0.5 px-2.5 border border-transparent text-sm  transition-all shadow-xs ${
                 category === "Guided tour"
-                  ? "bg-brandPurple text-brandDarkPurple"
+                  ? "bg-brand-purple text-brand-dark-purple"
                   : category === "Culinary tour"
-                  ? "bg-brandOrange text-brandDarkOrange"
-                  : "bg-brandRed text-brandDarkRed"
+                  ? "bg-brand-orange text-brand-dark-orange"
+                  : "bg-brand-red text-brand-dark-red"
               } `}
             >
               {category}

@@ -119,7 +119,7 @@ const TodaysBookingList: React.FC<TodaysBookingListProps> = ({
   };
 
   return (
-    <div className="flex-1 rounded-lg border  shadow-sm bg-white border-slate-200 p-6">
+    <div className="flex-1 rounded-lg border  shadow-xs bg-white border-slate-200 p-6">
       <div className="flex items-center justify-between ">
         <h2 className="t-bookings__heading text-base mt-4 mb-6 font-semibold">
           {filterBookings === "all"
@@ -128,7 +128,7 @@ const TodaysBookingList: React.FC<TodaysBookingListProps> = ({
         </h2>
         <Link
           to="/booking/add"
-          className="py-2 px-4 m-w grow-0 whitespace-nowrap bg-brandTeal text-white rounded-md"
+          className="py-2 px-4 m-w grow-0 whitespace-nowrap bg-brand-teal text-white rounded-md"
         >
           + Add New Booking
         </Link>
@@ -159,7 +159,7 @@ const TodaysBookingList: React.FC<TodaysBookingListProps> = ({
       </div>
 
       <ul className="flex flex-col gap-4 text-xs ">
-        <li className="font-semibold cursor-pointer flex justify-between w-full border border-lightGray rounded-md py-2 items-center">
+        <li className="font-semibold cursor-pointer flex justify-between w-full border border-light-gray rounded-md py-2 items-center">
           <span
             className="flex-1"
             onClick={() => handleSort("tour_title")}
@@ -245,7 +245,7 @@ const TodaysBookingList: React.FC<TodaysBookingListProps> = ({
             {filteredBookings.map((booking) => (
               <li key={booking.id} className="hover:bg-gray-100">
                 <Link
-                  className="cursor-pointer flex justify-between w-full border border-lightGray rounded-md py-2 items-center"
+                  className="cursor-pointer flex justify-between w-full border border-light-gray rounded-md py-2 items-center"
                   to={`/booking/${booking.id}`}
                 >
                   <span className="flex-1">{booking.tour_title}</span>

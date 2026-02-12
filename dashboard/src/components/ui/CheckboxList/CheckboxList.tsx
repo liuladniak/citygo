@@ -25,7 +25,7 @@ const CheckboxList: React.FC<CheckboxListProps> = ({
                   value={option}
                   onChange={onChange}
                   checked={selectedOptions.includes(option)}
-                  className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
+                  className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded-sm shadow-sm hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
                 />
                 <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <svg

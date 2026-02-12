@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import arrowBack from "../../assets/icons/arrowBack.svg";
 import Input from "../../components/ui/Input/Input";
 import SelectInput from "../../components/ui/SelectInput/SelectInput";
-import Button from "../../components/ui/Button/Button";
+import Button from "../../components/ui/CustomButton/CustomButton";
 import TextArea from "../../components/ui/TextArea/TextArea";
 import DeleteIcon from "../../components/ui/SVGIcons/DeleteIcon";
 import AddIcon from "../../components/ui/SVGIcons/AddIcon";
@@ -253,7 +253,7 @@ const AddTour = () => {
                   alt="arrow back icon"
                 />
               </Link>
-              <h1 className="m-4 text-xl font-semibold text-darkGray">
+              <h1 className="m-4 text-xl font-semibold text-dark-gray">
                 Add New Tour
               </h1>
             </div>
@@ -303,7 +303,7 @@ const AddTour = () => {
                   );
                 })}
             </div>
-            <div className="h-24 w-36 rounded-md overflow-hidden border border-dashed border-customBlue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
+            <div className="h-24 w-36 rounded-md overflow-hidden border border-dashed border-custom-blue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
               <label className="cursor-pointer flex flex-col">
                 <span className="text-2xl">+</span>
                 Add Image
@@ -324,7 +324,7 @@ const AddTour = () => {
             <h2 className="text-base font-medium">Tour Details</h2>
             <div className="flex gap-4">
               <div className="flex flex-col gap-2 w-full">
-                <label className="block text-sm/6 font-semibold text-darkGray ">
+                <label className="block text-sm/6 font-semibold text-dark-gray ">
                   Tour price for an adult
                 </label>
                 <Input
@@ -336,18 +336,6 @@ const AddTour = () => {
                 />
               </div>
 
-              {/* <div className="flex flex-col gap-2 w-full">
-              <label className="block text-sm/6 font-medium text-gray-900">
-                Tour price for a child
-              </label>
-              <Input
-                name="price_child"
-                type="number"
-                placeholder="$"
-                value={formData.childPrice}
-                onChange={handleInputChange}
-              />
-            </div> */}
               <div className="flex flex-col gap-2 w-full">
                 <label className="block text-sm/6 font-medium text-gray-900">
                   Tour Duration

@@ -9,7 +9,7 @@ import {
   phonePath,
   visibilityPath,
 } from "../ui/SVGIcons/iconPaths";
-import Button from "../ui/Button/Button";
+import Button from "../ui/CustomButton/CustomButton";
 import DropdownWrapper from "../ui/DropdownWrapper";
 
 const recentBookingsArray = [
@@ -90,7 +90,7 @@ const getStatusStyles = (status) => {
 
 const RecentBookings = () => {
   return (
-    <div className="flex-2  rounded-lg border shadow-sm bg-white border-slate-200">
+    <div className="flex-2  rounded-lg border shadow-xs bg-white border-slate-200">
       <div className="p-6 flex items-center justify-between space-y-0 pb-4">
         <div>
           <h3 className="tracking-tight text-lg font-semibold text-slate-900">
@@ -100,7 +100,7 @@ const RecentBookings = () => {
             Latest tour reservations and updates
           </p>
         </div>
-        <Button to="/bookings" className="text-warmBrown">
+        <Button to="/bookings" className="text-warm-brown">
           View All
         </Button>
       </div>
@@ -150,7 +150,7 @@ const RecentBookingCard = ({
         <div className="flex items-center gap-3 mb-2">
           <h4 className="font-medium text-slate-900">{title}</h4>
           <div
-            className={`inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 border-transparent text-xs px-2 py-1 ${statusStyles.bg} ${statusStyles.text}`}
+            className={`inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-offset-2 border-transparent text-xs px-2 py-1 ${statusStyles.bg} ${statusStyles.text}`}
           >
             {statusStyles.label}
           </div>
@@ -182,15 +182,15 @@ const RecentBookingCard = ({
             Guide:
             <span className="font-medium"> {guide}</span>
           </span>
-          <span className="font-medium text-warmBrown">{tourPrice}</span>
+          <span className="font-medium text-warm-brown">{tourPrice}</span>
         </div>
       </div>
       <DropdownWrapper
         isOpen={openDropdown === "RecentBookingCard"}
         onToggle={() => toggleDropdown("RecentBookingCard")}
-        trigger={<button className="text-warmBrown">...</button>}
+        trigger={<button className="text-warm-brown">...</button>}
       >
-        <ul className="text-warmBrown text-sm min-w-[145px] flex flex-col gap-1">
+        <ul className="text-warm-brown text-sm min-w-[145px] flex flex-col gap-1">
           <li className="px-3 py-2 hover:bg-gray-100 flex cursor-pointer">
             <Icon iconPath={visibilityPath} className="mr-2" />
             View Details

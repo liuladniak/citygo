@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./Weather.scss";
 
 interface WeatherData {
   current: {
@@ -70,8 +69,8 @@ const Weather: React.FC<WeatherProps> = ({
   if (!weather) return <p>Weather data not available.</p>;
 
   return (
-    <div className="weather p-6">
-      <div className="weather-current">
+    <div className="text-center max-w-[400px] p-6">
+      <div className="flex justify-center gap-6 mb-4">
         <h2>Current Weather: </h2>
         <p>
           {WEATHER_ICONS[weather.current.weathercode] || "❓"}{" "}
@@ -79,19 +78,14 @@ const Weather: React.FC<WeatherProps> = ({
         </p>
       </div>
 
-      {/* <h3>7-Day Forecast</h3> */}
-      <div className="forecast">
+      <div className="flex gap-2.5 overflow-x-scroll">
         {weather.daily.time.map((date, index) => (
-          <div key={index} className="day">
+          <div key={index} className="mb-4 bg-white p-2.5 rounded-lg shadow-md">
             <p>
               {new Date(date).toLocaleDateString("en-US", { weekday: "short" })}
             </p>
             <p>{WEATHER_ICONS[weather.daily.weathercode[index]] || "❓"}</p>
-            <p>
-              {Math.round(weather.daily.temperature_2m_max[index])}°
-              {/* /{" "} */}
-              {/* {weather.daily.temperature_2m_min[index]}° */}
-            </p>
+            <p>{Math.round(weather.daily.temperature_2m_max[index])}°</p>
           </div>
         ))}
       </div>

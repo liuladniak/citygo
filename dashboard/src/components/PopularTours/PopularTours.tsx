@@ -42,10 +42,10 @@ const popularTours = [
 
 const PopularTours = () => {
   return (
-    <div className="flex-1 rounded-lg border shadow-sm bg-white border-slate-20">
+    <div className="flex-1 rounded-lg border shadow-xs bg-white border-slate-20">
       <div className="p-6 flex items-center justify-between space-y-0 pb-4">
         <h3 className="tracking-tight text-lg font-semibold text-slate-900">
-          Popular Tours
+          Featured Tours
         </h3>
       </div>
       <div className="p-6 pt-0 space-y-3">
@@ -59,7 +59,7 @@ const PopularTours = () => {
         ))}
 
         <div className="pt-2 border-t border-slate-200">
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 rounded-md px-3 w-full text-warmBrown hover:text-travel-blue-700 hover:bg-travel-blue-50">
+          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 rounded-md px-3 w-full text-warm-brown hover:text-travel-blue-700 hover:bg-travel-blue-50">
             View All Products
           </button>
         </div>

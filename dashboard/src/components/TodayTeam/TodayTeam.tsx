@@ -81,7 +81,7 @@ const TodayTeam = () => {
   }, []);
 
   return (
-    <div className="flex-1 bg-white border p-4 shadow-sm border-slate-200 rounded-lg w-full">
+    <div className="flex-1 bg-white border p-4 shadow-xs border-slate-200 rounded-lg w-full">
       <h3 className="text-base mb-4">Available Team</h3>
 
       {isLoading ? (

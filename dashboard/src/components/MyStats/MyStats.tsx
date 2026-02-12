@@ -37,7 +37,7 @@ const personalStatsArray = [
 
 const MyStats = () => {
   return (
-    <div className="flex-1 rounded-lg border shadow-sm bg-gradient-to-br from-slate-50 to-blue-50 border-slate-200">
+    <div className="flex-1 rounded-lg border shadow-xs bg-linear-to-br from-slate-50 to-blue-50 border-slate-200">
       <div className="flex flex-col space-y-1.5 p-6 pb-3">
         <h3 className="tracking-tight text-lg font-semibold text-slate-900 flex items-center gap-2">
           <Icon iconPath={heartPath} size={16} className="fill-pink-500" /> My
@@ -75,7 +75,7 @@ const SingleStatCard = ({
   statIconColor,
 }) => {
   return (
-    <div className="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm">
+    <div className="flex items-center justify-between p-3 bg-white rounded-lg shadow-xs">
       <div className="flex items-center gap-3">
         <div className="p-2 rounded-full bg-slate-100">
           {" "}

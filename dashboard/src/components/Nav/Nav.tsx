@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
-
+import { sunnyPath } from "../ui/SVGIcons/iconPaths";
+import DropdownWrapper from "../ui/DropdownWrapper";
 import {
   busIconPath,
   lockIconPath,
@@ -17,6 +18,15 @@ import {
   dockToLeft,
 } from "../ui/SVGIcons/iconPaths";
 
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import "./Nav.css";
 import Icon from "../ui/SVGIcons/Icon";
 import { useState } from "react";
@@ -82,16 +92,18 @@ const navItems = [
 
 const Nav = () => {
   const [collapsed, setCollapsed] = useState(false);
-
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const toggleDropdown = (name: string) => {
+    setOpenDropdown((prev) => (prev === name ? null : name));
+  };
   return (
     <aside
-      className={` main-nav text-mediumGray flex flex-col h-screen border-r transition-all duration-300 ease-in-out 
+      className={` main-nav text-medium-gray flex flex-col h-screen border-r transition-all duration-300 ease-in-out 
 
         ${collapsed ? "w-16" : "w-56"}`}
     >
       <div className="p-4 border-b flex gap-4">
-        <Link to="/" className="logo flex items-center gap-3 text-darkGray">
-          {/* <div className="flex items-center gap-3 text-darkGray "> */}
+        <Link to="/" className="logo flex items-center gap-3 text-dark-gray">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center relative group">
             <Icon
               iconPath={busIconPath}
@@ -100,18 +112,6 @@ const Nav = () => {
               }`}
               size={20}
             />
-            {/* </div> */}
-            {/* 
-            <div
-              className={`flex flex-col transition-opacity duration-300 ${
-                collapsed ? "hidden" : "opacity-100 w-auto"
-              }`}
-            >
-              <h2 className="font-semibold text-gray-900 whitespace-nowrap">
-                CityGo
-              </h2>
-              <p className="text-xs text-gray-500 capitalize">Admin Panel</p>
-            </div> */}
 
             {collapsed && (
               <button
@@ -128,7 +128,6 @@ const Nav = () => {
             )}
           </div>
 
-          {/* {!collapsed && ( */}
           <div
             className={`flex flex-col overflow-hidden whitespace-nowrap transition-opacity duration-300 ${
               collapsed
@@ -139,18 +138,7 @@ const Nav = () => {
             <h2 className="font-semibold text-gray-900">CityGo</h2>
             <p className="text-xs text-gray-500 capitalize">Admin Panel</p>
           </div>
-          {/* )} */}
         </Link>
-        {/* <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-2 w-7 h-7 [&_svg]:shrink-0 flex items-center justify-center"
-        >
-          <Icon
-            iconPath={dockToLeft}
-            size={18}
-            className=" hover:bg-gray-100 rounded-lg hover:text-accent-foreground  transition-colors fill-stone-600 "
-          />
-        </button> */}
 
         {!collapsed && (
           <button
@@ -214,8 +202,8 @@ const Nav = () => {
           ))}
         </ul>
       </nav>
-      <div className="border-t ">
-        <div className="flex items-center p-4">
+      <div className="mb-12">
+        {/* <div className="flex items-center p-4">
           <div className="rounded-full w-8 h-8 bg-red-100 flex items-center justify-center">
             <span className="bg-travel-100 text-red-700">Z</span>
           </div>
@@ -223,11 +211,53 @@ const Nav = () => {
             <div className="text-sm font-medium text-gray-900 truncate">
               Zeynep Demir
             </div>
-            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 text-xs bg-red-100 text-red-800">
+            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-primary/80 text-xs bg-red-100 text-red-800">
               <span>Admin</span>
             </div>
           </div>
-        </div>
+        </div> */}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className=" bg-linear-to-br from-blue-500 to-blue-600 text-white cursor-pointer hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md user-nav-link justify-center whitespace-nowrap text-sm font-medium h-10 flex items-center gap-2 p-4 hover:text-accent-foreground rounded-lg">
+              <Icon iconPath={sunnyPath} className="text-yellow-500" />
+
+              <div className="text-left">
+                <p className="font-semibold text-lg ">19°C</p>
+
+                <p className="text-xs text-blue-100 capitalize">Sunny</p>
+              </div>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem className="">Sunny</DropdownMenuItem>
+            <DropdownMenuItem>Cloudy</DropdownMenuItem>
+            <DropdownMenuItem>Rain </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="bg-green-100 text-green-800 flex items-center">
+              <div className="mx-auto block h-2 w-2 rounded-full bg-green-800 mr-2"></div>
+              Clocked in
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem className="">
+              <div className=" block h-2 w-2 rounded-full bg-green-800 mr-2"></div>
+              Clock in
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <div className=" block h-2 w-2 rounded-full bg-yellow-600 mr-2"></div>
+              Meal Break
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <div className=" block h-2 w-2 rounded-full bg-red-800 mr-2"></div>
+              Clock out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu> */}
       </div>
     </aside>
   );

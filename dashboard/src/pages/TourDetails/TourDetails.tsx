@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import arrowBack from "../../assets/icons/arrowBack.svg";
 import Input from "../../components/ui/Input/Input";
 import SelectInput from "../../components/ui/SelectInput/SelectInput";
-import Button from "../../components/ui/Button/Button";
+import Button from "../../components/ui/CustomButton/CustomButton";
 import TextArea from "../../components/ui/TextArea/TextArea";
 import DeleteIcon from "../../components/ui/SVGIcons/DeleteIcon";
 import AddIcon from "../../components/ui/SVGIcons/AddIcon";
@@ -331,7 +331,7 @@ const TourDetails = () => {
           <div className="flex flex-col gap-2 w-full">
             <label
               htmlFor="tour_name"
-              className="block text-sm/6 font-semibold text-darkGray "
+              className="block text-sm/6 font-semibold text-dark-gray "
             >
               Tour Name
             </label>
@@ -362,7 +362,7 @@ const TourDetails = () => {
                       />
 
                       {index === 0 && (
-                        <div className="absolute top-0 right-0 py-1 px-2 bg-lightGray text-darkGray rounded-3xl m-1 text-xs">
+                        <div className="absolute top-0 right-0 py-1 px-2 bg-light-gray text-dark-gray rounded-3xl m-1 text-xs">
                           Main image
                         </div>
                       )}
@@ -399,7 +399,7 @@ const TourDetails = () => {
                     </div>
                   ))}
                 </div>
-                <div className="h-24 w-36 rounded-md  border border-dashed border-customBlue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
+                <div className="h-24 w-36 rounded-md  border border-dashed border-custom-blue flex flex-col gap-2 justify-center items-center text-sm cursor-pointer">
                   <label className="cursor-pointer flex flex-col">
                     <span className="text-2xl">+</span>
                     Add Image
@@ -420,7 +420,7 @@ const TourDetails = () => {
             <h2 className="text-base font-medium ">Tour Details</h2>
             <div className="flex gap-4">
               <div className="flex flex-col gap-2 w-full">
-                <label className="block text-sm/6 font-semibold text-darkGray">
+                <label className="block text-sm/6 font-semibold text-dark-gray">
                   Tour price for an adult
                 </label>
                 <Input
@@ -445,7 +445,7 @@ const TourDetails = () => {
               />
             </div> */}
               <div className="flex flex-col gap-2 w-full">
-                <label className="block text-sm/6 font-semibold text-darkGray">
+                <label className="block text-sm/6 font-semibold text-dark-gray">
                   Tour Duration
                 </label>
                 <Input
@@ -460,7 +460,7 @@ const TourDetails = () => {
             <div className="flex items-center gap-4">
               <div className="flex flex-col gap-2 w-full">
                 <label
-                  className="block text-sm/6 font-semibold text-darkGray"
+                  className="block text-sm/6 font-semibold text-dark-gray"
                   htmlFor="activity"
                 >
                   Activity level
@@ -476,7 +476,7 @@ const TourDetails = () => {
               </div>
               <div className="flex flex-col gap-2 w-full">
                 <label
-                  className="block text-sm/6 font-semibold text-darkGray"
+                  className="block text-sm/6 font-semibold text-dark-gray"
                   htmlFor="category"
                 >
                   Tour Category
@@ -491,7 +491,7 @@ const TourDetails = () => {
               </div>
               <div className="flex flex-col gap-2 w-full">
                 <label
-                  className="block text-sm/6 font-semibold text-darkGray"
+                  className="block text-sm/6 font-semibold text-dark-gray"
                   htmlFor="activity"
                 >
                   Landmark
@@ -507,7 +507,7 @@ const TourDetails = () => {
               </div>
             </div>
             <div className="flex flex-col gap-2 w-full ">
-              <label className="block text-sm/6 font-semibold text-darkGray">
+              <label className="block text-sm/6 font-semibold text-dark-gray">
                 Tour Overiew Title
               </label>
               <Input
@@ -521,7 +521,7 @@ const TourDetails = () => {
             </div>
             <div className="flex flex-col gap-2 w-full">
               <label
-                className="block text-sm/6 font-semibold text-darkGray"
+                className="block text-sm/6 font-semibold text-dark-gray"
                 htmlFor="overview"
               >
                 Tour Overview
@@ -534,7 +534,7 @@ const TourDetails = () => {
               />
             </div>
             <div className="flex flex-col gap-2 w-full">
-              <label className="block text-sm/6 font-semibold text-darkGray">
+              <label className="block text-sm/6 font-semibold text-dark-gray">
                 Highlights
               </label>
 

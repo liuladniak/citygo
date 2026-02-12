@@ -8,7 +8,6 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
-  // Close on Escape key
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -22,7 +21,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
-        {/* Header */}
         {title && (
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">{title}</h2>
@@ -35,7 +33,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
           </div>
         )}
 
-        {/* Content */}
         <div>{children}</div>
       </div>
     </div>

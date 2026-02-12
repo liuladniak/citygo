@@ -8,40 +8,47 @@ import {
   risingPath,
   trendingDown,
 } from "../ui/SVGIcons/iconPaths";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
 const performanceArray = [
   {
-    title: "Total Bookings",
+    title: "Today Bookings",
     cardIcon: calenderIconPath,
-    cardIconClass: "text-warmBrown",
-    value: "247",
+    cardIconClass: "text-warm-brown",
+    value: "12",
     trendIcon: risingPath,
     trendValuePercent: "+12%",
     timeframe: "from last month",
     trendColor: "green",
   },
   {
-    title: "New Guests",
+    title: "Currently running",
     cardIcon: groupIconPath,
     cardIconClass: "text-green-600",
-    value: "1340",
+    value: "6",
     trendIcon: risingPath,
     trendValuePercent: "+8%",
     timeframe: "from last month",
     trendColor: "green",
   },
   {
-    title: "Monthly Revenue",
+    title: "Upcoming bookings",
     cardIcon: moneyDollar,
     cardIconClass: "text-purple-600",
-    value: "$54,240",
+    value: "4",
     trendIcon: risingPath,
     trendValuePercent: "+23%",
     timeframe: "from last month",
     trendColor: "green",
   },
   {
-    title: "Support Tickets",
+    title: "Available Team",
     cardIcon: chatBubble,
     cardIconClass: "text-orange-600",
     value: "12",
@@ -54,21 +61,30 @@ const performanceArray = [
 
 const MainStats = () => {
   return (
-    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-      {performanceArray.map((statCard, i) => (
-        <StatsCard
-          key={i}
-          title={statCard.title}
-          cardIcon={statCard.cardIcon}
-          cardIconClass={statCard.cardIconClass}
-          value={statCard.value}
-          trendIcon={statCard.trendIcon}
-          trendValuePercent={statCard.trendValuePercent}
-          timeframe={statCard.timeframe}
-          trendColor={statCard.trendColor}
-        />
-      ))}
-    </div>
+    <Card className="h-full flex flex-col">
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Main Stats</CardTitle>
+        <CardDescription>Today</CardDescription>
+      </CardHeader>
+      <CardContent className="flex-1 pb-0">
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+          {/* <div className="flex justify-between mt-6"> */}
+          {performanceArray.map((statCard, i) => (
+            <StatsCard
+              key={i}
+              title={statCard.title}
+              cardIcon={statCard.cardIcon}
+              cardIconClass={statCard.cardIconClass}
+              value={statCard.value}
+              trendIcon={statCard.trendIcon}
+              trendValuePercent={statCard.trendValuePercent}
+              timeframe={statCard.timeframe}
+              trendColor={statCard.trendColor}
+            />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -87,24 +103,35 @@ const StatsCard = ({
   const isNegativeTrend = trendIcon === trendingDown;
 
   return (
-    <div className=" card-hover flex-1 flex-col rounded-lg border text-card-foreground shadow-sm transition-all duration-200 ease-in-out  bg-white border-slate-200 p-6">
+    <div className=" card-hover flex-1 flex-col rounded-lg border shadow-xs transition-all duration-200 ease-in-out  bg-card text-card-foreground p-6">
       <div className="flex justify-between">
-        <h3 className="tracking-tight text-sm font-medium text-slate-600">
+        <h3 className="tracking-tight text-sm font-medium text-muted-foreground">
           {title}
         </h3>
         <Icon iconPath={cardIcon} className={cardIconClass} size={16} />
       </div>
       <div>
-        <div className="text-2xl font-bold text-slate-900">{value}</div>
-        <div className="flex items-center text-xs text-slate-600 mt-1">
+        <div className="text-2xl font-bold text-foreground">{value}</div>
+        <div className="flex items-center text-xs text-muted-foreground mt-1">
           <div>
             <Icon
               iconPath={trendIcon}
               size={16}
-              className={isNegativeTrend ? "fill-red-600" : "fill-green-600"}
+              fill="currentColor"
+              className={
+                isNegativeTrend
+                  ? "text-destructive"
+                  : "text-emerald-600 dark:text-emerald-400"
+              }
             />
           </div>
-          <div className={isNegativeTrend ? "text-red-600" : "text-green-600"}>
+          <div
+            className={
+              isNegativeTrend
+                ? "text-destructive"
+                : "text-emerald-600 dark:text-emerald-400"
+            }
+          >
             {trendValuePercent}
           </div>
           <div className="ml-1">{timeframe}</div>

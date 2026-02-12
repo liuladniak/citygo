@@ -21,7 +21,7 @@ import SingleBooking from "./pages/SingleBooking/SingleBooking";
 import Bookings from "./pages/Bookings/Bookings";
 import BookingDetails from "./pages/BookingDetails";
 import Analytics from "./pages/Analytics/Analytics";
-
+import { RequireRole } from "@/components/RequireRole";
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         element: <Bookings />,
       },
       {
-        path: "/bookings/1",
+        path: "/bookings/:bookingId",
         element: <BookingDetails />,
       },
       {
@@ -72,7 +72,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/tours",
-        element: <Tours />,
+
+        element: (
+          <RequireRole allowed={["associate"]}>
+            <Tours />
+          </RequireRole>
+        ),
       },
       {
         path: "/tours/:slug",

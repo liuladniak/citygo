@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../ui/Button/Button";
+import Button from "../ui/CustomButton/CustomButton";
 import Modal from "../ui/Modal";
 import Icon from "../ui/SVGIcons/Icon";
 import {
@@ -124,7 +124,7 @@ const MyTasks = () => {
   };
 
   return (
-    <div className="flex-1 rounded-lg border  shadow-sm bg-white border-slate-200">
+    <div className="flex-1 rounded-lg border  shadow-xs bg-white border-slate-200">
       <div className="p-6 flex flex-row items-center justify-between pb-4">
         <h3 className="tracking-tight text-lg font-semibold text-slate-900 ">
           My Tasks
@@ -132,7 +132,7 @@ const MyTasks = () => {
         <Button
           onClick={() => setIsModalOpen(true)}
           IconPath={addPath}
-          className="text-warmBrown"
+          className="text-warm-brown"
         >
           Add Task
         </Button>
@@ -149,7 +149,7 @@ const MyTasks = () => {
               onChange={(e) =>
                 setNewTask((prev) => ({ ...prev, taskHeading: e.target.value }))
               }
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded-sm"
             />
             <textarea
               placeholder="Task description"
@@ -157,18 +157,18 @@ const MyTasks = () => {
               onChange={(e) =>
                 setNewTask((prev) => ({ ...prev, taskBody: e.target.value }))
               }
-              className="w-full px-3 py-2 border rounded"
+              className="w-full px-3 py-2 border rounded-sm"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 border rounded hover:bg-gray-100"
+                className="px-4 py-2 border rounded-sm hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddTask}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700"
               >
                 Add Task
               </button>
@@ -190,7 +190,7 @@ const MyTasks = () => {
         ))}
 
         <div className="pt-2 border-t border-slate-200">
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 rounded-md px-3 w-full text-warmBrown hover:text-travel-blue-700 hover:bg-travel-blue-50">
+          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2  focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-9 rounded-md px-3 w-full text-warm-brown hover:text-travel-blue-700 hover:bg-travel-blue-50">
             View All Tasks
           </button>
         </div>
@@ -218,7 +218,7 @@ const MyTask = ({
           <h4 className="text-sm font-medium text-slate-900 truncate">
             {taskHeading}
           </h4>
-          {/* <div className="inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-xs px-2 py-0.5 bg-red-100 text-red-800">
+          {/* <div className="inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-xs px-2 py-0.5 bg-red-100 text-red-800">
             <div className="flex items-center gap-1 ">
               <Icon iconPath={errorPath} size={12} />
               high
@@ -226,7 +226,7 @@ const MyTask = ({
           </div> */}
 
           <div
-            className={`inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-xs px-2 py-0.4 ${priorityStyles.bg} ${priorityStyles.text}`}
+            className={`inline-flex items-center rounded-full border font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-xs px-2 py-0.4 ${priorityStyles.bg} ${priorityStyles.text}`}
           >
             <div className="flex items-center gap-1">
               <Icon iconPath={priorityStyles.icon} size={12} />
@@ -237,7 +237,7 @@ const MyTask = ({
         <p className="text-xs text-slate-600 mb-2">{taskBody}</p>
         <div className="flex items-center justify-between">
           <span className="text-xs text-slate-500">{when}</span>
-          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground rounded-md h-6 text-xs px-2 text-warmBrown">
+          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground rounded-md h-6 text-xs px-2 text-warm-brown">
             Mark Done
           </button>
         </div>

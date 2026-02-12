@@ -1,3 +1,5 @@
+import animate from "tailwindcss-animate";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -29,9 +31,6 @@ export default {
         secondary: "#fff",
         lightBlue: "",
       },
-      maxWidth: {
-        70: "70rem",
-      },
       flex: {
         2: "2 2 0%",
         3: "3 3 0%",
@@ -39,6 +38,6 @@ export default {
         5: "5 5 0%",
       },
     },
-    plugins: [],
+    plugins: [animate],
   },
 };

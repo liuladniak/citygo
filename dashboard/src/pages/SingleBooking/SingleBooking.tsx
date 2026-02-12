@@ -10,6 +10,13 @@ const SingleBooking = () => {
       <p className="">Order details</p>
       <h1 className="header__heading">User Name #Booking Number</h1>
       <div>Booking</div>
+      {/* <div>
+        <span className="booking__status">{booking.status}</span>
+        <span className="booking__tour-name">
+          {booking.primary_contact_name || "Unnamed Contact"}
+        </span>
+        <span className="booking__tour-date">{booking.booking_date}</span>
+      </div> */}
     </section>
   );
 };

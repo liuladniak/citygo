@@ -13,7 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconClassName?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const CustomButton: React.FC<ButtonProps> = ({
   children,
   IconPath,
   to,
@@ -24,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "flex items-center justify-center gap-2 rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none";
+    "flex items-center justify-center gap-2 rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-xs hover:shadow-lg hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none";
 
   return to ? (
     <Link to={to} className={`${baseStyles} ${className}`}>
@@ -47,4 +47,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default CustomButton;
