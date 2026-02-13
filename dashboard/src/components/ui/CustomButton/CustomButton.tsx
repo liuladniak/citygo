@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import Icon from "../SVGIcons/Icon";
-// import "./Button.css";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  // IconComponent?: React.FC<React.SVGProps<SVGSVGElement>>;
+  IconComponent?: React.FC<React.SVGProps<SVGSVGElement>>;
   IconPath?: string;
   to?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
