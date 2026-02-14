@@ -20,12 +20,7 @@ function LayoutContent({ user, role }: HeaderProps) {
         <Header user={user} role={role} />
         <main className="flex-1 transition-all duration-300 w-full px-4">
           {/* <Outlet /> */}
-          <RequireRole
-            allowed={["admin", "manager", "associate"]}
-            user={user}
-            role={role}
-            loading={false}
-          >
+          <RequireRole allowed={["admin", "manager", "associate"]}>
             <Outlet />
           </RequireRole>
         </main>

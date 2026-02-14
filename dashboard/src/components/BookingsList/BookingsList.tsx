@@ -6,7 +6,6 @@ type BookingsListProps = {
 };
 
 const BookingsList = ({ bookings }: BookingsListProps) => {
-  console.log("Bookings list:", bookings);
   return (
     <section className="booking-list">
       <div>

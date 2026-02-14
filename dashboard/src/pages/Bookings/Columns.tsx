@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ActionsCell } from "./ActionsCell";
 import { Button } from "@/components/ui/button";
 
-export const columns: ColumnDef<Booking>[] = [
+export const Columns: ColumnDef<Booking>[] = [
   {
     id: "select",
     header: ({ table }) => (

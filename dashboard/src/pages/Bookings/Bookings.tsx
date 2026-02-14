@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Booking } from "@/types/booking";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { Columns } from "./Columns";
+import { DataTable } from "./DataTable";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import BackButton from "@/components/ui/BackButton";
 
@@ -38,7 +38,7 @@ const Bookings = () => {
         <BackButton />
         <CardTitle>Bookings List</CardTitle>
       </CardHeader>
-      <DataTable columns={columns} data={bookings} />
+      <DataTable columns={Columns} data={bookings} />
     </div>
   );
 };
