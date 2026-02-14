@@ -1,8 +1,6 @@
 import { useState } from "react";
-import Header from "../../components/Header/Header";
 import Icon from "../../components/ui/SVGIcons/Icon";
 import {
-  chevronDownPath,
   clockPath,
   creditCardPath,
   locationIconPath,

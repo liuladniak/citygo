@@ -36,52 +36,6 @@ interface RecentBookingCardProps {
   booking: Booking;
 }
 
-const latestBookings = [
-  {
-    title: "Johnson Family",
-    status: "confirmed",
-    bookingNumber: "BK-2024-0156",
-    tourName: "Golden Gate Bridge & Alcatraz",
-    tourDate: "Wed, Jul 17",
-    tourTime: "09:00 AM",
-    tourGuestsAmount: "4 guests",
-    guide: "Sarah Johnson",
-    tourPrice: "$480",
-  },
-  {
-    title: "Mike & Rachel Chen",
-    status: "pending",
-    bookingNumber: "BK-2024-0157",
-    tourName: "Fisherman's Wharf Food Tour",
-    tourDate: "Wed, Jul 17",
-    tourTime: "11:30 AM",
-    tourGuestsAmount: "2 guests",
-    guide: "David Park",
-    tourPrice: "$180",
-  },
-  {
-    title: "Thompson Group",
-    status: "confirmed",
-    bookingNumber: "BK-2024-0158",
-    tourName: "City Highlights Tour",
-    tourDate: "Thu, Jul 18",
-    tourTime: "02:00 PM",
-    tourGuestsAmount: "8 guests",
-    guide: "Emma Wilson",
-    tourPrice: "$640",
-  },
-  {
-    title: "Rodriguez Wedding Party",
-    status: "confirmed",
-    bookingNumber: "BK-2024-0159",
-    tourName: "Private Sunset Tour",
-    tourDate: "Fri, Jul 19",
-    tourTime: "06:00 PM",
-    tourGuestsAmount: "12 guests",
-    guide: "Lisa Rodriguez",
-    tourPrice: "$1,200",
-  },
-];
 function formatDate(dateString: string) {
   const date = new Date(dateString);
 

@@ -1,6 +1,3 @@
-import React from "react";
-import Header from "../../components/Header/Header";
-import { Link } from "react-router-dom";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import BackButton from "@/components/ui/BackButton";
 

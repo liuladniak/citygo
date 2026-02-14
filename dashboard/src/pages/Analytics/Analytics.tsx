@@ -1,6 +1,5 @@
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import BookingSummaryChart from "../../components/BookingSummaryChart/BookingSummaryChart";
-import Header from "../../components/Header/Header";
 import RevenueAreaChart from "../../components/RevenueAreaChart/RevenueAreaChart";
 import "./Analytics.css";
 import BackButton from "@/components/ui/BackButton";

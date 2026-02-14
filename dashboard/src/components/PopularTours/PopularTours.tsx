@@ -1,4 +1,3 @@
-import Icon from "../ui/SVGIcons/Icon";
 import {
   calenderIconPath,
   clockPath,

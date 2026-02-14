@@ -4,44 +4,6 @@ import "./BookingsList.css";
 type BookingsListProps = {
   bookings: Booking[];
 };
-const bookings = [
-  {
-    id: 1,
-    customerName: "John Doe",
-    tourName: "Bosponsors tour",
-    tourDate: "12/11/2024",
-    bookingTime: new Date(),
-    tourGuide: "Alex Smith",
-    status: "upcoming",
-  },
-  {
-    id: 2,
-    customerName: "John Doe",
-    tourName: "Bosponsors tour",
-    tourDate: "12/11/2024",
-    bookingTime: new Date(),
-    tourGuide: "Alex Smith",
-    status: "upcoming",
-  },
-  {
-    id: 3,
-    customerName: "John Doe",
-    tourName: "Bosponsors tour",
-    tourDate: "12/11/2024",
-    bookingTime: new Date(),
-    tourGuide: "Alex Smith",
-    status: "upcoming",
-  },
-  {
-    id: 4,
-    customerName: "John Doe",
-    tourName: "Bosponsors tour",
-    tourDate: "12/11/2024",
-    bookingTime: new Date(),
-    tourGuide: "Alex Smith",
-    status: "upcoming",
-  },
-];
 
 const BookingsList = ({ bookings }: BookingsListProps) => {
   console.log("Bookings list:", bookings);

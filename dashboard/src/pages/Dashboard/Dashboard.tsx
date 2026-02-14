@@ -1,39 +1,17 @@
 import "./Dashboard.css";
-import Header from "../../components/Header/Header";
-import Weather from "../../components/Weather/Weather";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CustomButton from "../../components/ui/CustomButton/CustomButton";
-import {
-  addPath,
-  reportsIconPath,
-} from "../../components/ui/SVGIcons/iconPaths";
-import MyTasks from "../../components/MyTasks/MyTasks";
-import MyStats from "../../components/MyStats/MyStats";
 import Team from "../../components/Team/Team";
 import MainStats from "../../components/StatsDashboard/MainStats";
-import RecentBookings from "../../components/RecentBookings/RecentBookings";
-import PopularProducts from "../../components/PopularTours/PopularTours";
-import WebsiteVisitStats from "../../components/AppVisitStats/AppVisitStats";
-import { Button } from "@/components/ui/button";
-import { FilePlus2 } from "lucide-react";
 import { ChartBarLabel } from "@/components/AppBarChart";
-import {
-  ChartAreaInteractive,
-  ChartBarMultiple,
-} from "@/components/ChartAreaDefault";
 import { ChartPieDonutText } from "@/components/AppPieChart";
 import CardList from "@/components/CardList";
 import TodoList from "@/components/TodoList";
 import { Booking } from "@/types/booking";
 
-const Dashboard: React.FC<{ pageTitle: string }> = ({ pageTitle }) => {
+const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [bookingsToday, setBookingsToday] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [itemsPerPage] = useState(10);
-  const [todayBookingSearch, setTodayBookingSearch] = useState("");
-  const [filterBookings, setFilterBookings] = useState<string>("all");
   const API_URL = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
@@ -83,7 +61,3 @@ const Dashboard: React.FC<{ pageTitle: string }> = ({ pageTitle }) => {
 };
 
 export default Dashboard;
-
-const PageTitle = ({ pageTitle }) => {
-  return <h1 className="text-xl font-semibold text-gray-900">{pageTitle}</h1>;
-};

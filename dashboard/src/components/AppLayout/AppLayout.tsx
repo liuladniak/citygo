@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header, { HeaderProps } from "../Header/Header";
 import { ThemeProvider } from "../providers/theme-provider";
-import { SidebarProvider, SidebarTrigger, useSidebar } from "../ui/sidebar";
+import { SidebarProvider } from "../ui/sidebar";
 import AppSidebar from "../AppSidebar";
 import Cookies from "js-cookie";
 import { useAuth } from "@/hooks/useAuth";

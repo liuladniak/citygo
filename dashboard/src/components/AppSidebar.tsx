@@ -9,7 +9,6 @@ import {
   ListTodo,
   UserSearch,
   Settings,
-  Bus,
   ChevronUp,
   User2,
   Plus,

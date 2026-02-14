@@ -1,6 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
 import { sunnyPath } from "../ui/SVGIcons/iconPaths";
-import DropdownWrapper from "../ui/DropdownWrapper";
 import {
   busIconPath,
   lockIconPath,
@@ -18,13 +17,10 @@ import {
   dockToLeft,
 } from "../ui/SVGIcons/iconPaths";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import "./Nav.css";

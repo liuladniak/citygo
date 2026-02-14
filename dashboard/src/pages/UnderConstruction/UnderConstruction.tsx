@@ -1,4 +1,3 @@
-import Header from "../../components/Header/Header";
 import Icon from "../../components/ui/SVGIcons/Icon";
 import { toolsIconPath } from "../../components/ui/SVGIcons/iconPaths";
 

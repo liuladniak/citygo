@@ -9,7 +9,6 @@ import TextArea from "../../components/ui/TextArea/TextArea";
 import DeleteIcon from "../../components/ui/SVGIcons/DeleteIcon";
 import AddIcon from "../../components/ui/SVGIcons/AddIcon";
 import CheckboxList from "../../components/ui/CheckboxList/CheckboxList";
-import Header from "../../components/Header/Header";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import BackButton from "@/components/ui/BackButton";
 

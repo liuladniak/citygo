@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import BookingsList from "../../components/BookingsList/BookingsList";
 import { Booking } from "@/types/booking";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";

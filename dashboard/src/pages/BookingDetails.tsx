@@ -17,7 +17,6 @@ import {
   Users,
   Globe,
   Mail,
-  Phone,
   CreditCard,
 } from "lucide-react";
 import BackButton from "@/components/ui/BackButton";

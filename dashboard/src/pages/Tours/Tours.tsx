@@ -1,4 +1,3 @@
-import Header from "../../components/Header/Header.js";
 import "./Tours.css";
 import ToursList from "../../components/ToursList/ToursList.jsx";
 import { CardHeader, CardTitle } from "@/components/ui/card.js";

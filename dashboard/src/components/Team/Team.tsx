@@ -1,4 +1,3 @@
-import React from "react";
 import Icon from "../ui/SVGIcons/Icon";
 import { circleFullPath, groupIconPath } from "../ui/SVGIcons/iconPaths";
 
