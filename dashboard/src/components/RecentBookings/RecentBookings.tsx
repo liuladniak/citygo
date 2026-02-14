@@ -209,6 +209,8 @@
 //   );
 // };
 
-return <div>RecentBookings</div>;
+const RecentBookings = () => {
+  return <div>RecentBookings</div>;
+};
 
 export default RecentBookings;

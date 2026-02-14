@@ -46,7 +46,7 @@ const TeamMembersArray = [
   },
 ];
 
-const getAvailabilityStatus = (availability) => {
+const getAvailabilityStatus = (availability: string) => {
   switch (availability) {
     case "offline":
       return {
