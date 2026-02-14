@@ -58,12 +58,12 @@ export type BookingFormState = {
   notes?: string;
 };
 
-type BookingSource =
-  | "website"
-  | "admin_dashboard"
-  | "walk_in"
-  | "phone"
-  | "email";
+// type BookingSource =
+//   | "website"
+//   | "admin_dashboard"
+//   | "walk_in"
+//   | "phone"
+//   | "email";
 
 const AddBooking = () => {
   const [formData, setFormData] = useState<BookingFormState>({
@@ -140,15 +140,15 @@ const AddBooking = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
-  const BOOKING_SOURCE: BookingSource = "admin_dashboard";
-  function deriveBookingStatus(
-    paymentStatus: BookingFormState["payment"]["status"]
-  ) {
-    if (paymentStatus === "paid" || paymentStatus === "partial") {
-      return "pending_assignment";
-    }
-    return "pending_payment";
-  }
+  // const BOOKING_SOURCE: BookingSource = "admin_dashboard";
+  // function deriveBookingStatus(
+  //   paymentStatus: BookingFormState["payment"]["status"]
+  // ) {
+  //   if (paymentStatus === "paid" || paymentStatus === "partial") {
+  //     return "pending_assignment";
+  //   }
+  //   return "pending_payment";
+  // }
   // const bookingPayload = {
   //   tour_id: formData.tour_id,
   //   date: formData.date,

@@ -1,5 +1,11 @@
 import Icon from "../ui/SVGIcons/Icon";
 import { circleFullPath, groupIconPath } from "../ui/SVGIcons/iconPaths";
+interface TeamMember {
+  name: string;
+  initials: string;
+  position: string;
+  availability: string;
+}
 
 const TeamMembersArray = [
   {
@@ -103,7 +109,12 @@ const Team = () => {
 
 export default Team;
 
-const TeamMemberCard = ({ name, initials, position, availability }) => {
+const TeamMemberCard = ({
+  name,
+  initials,
+  position,
+  availability,
+}: TeamMember) => {
   const availabilityStatus = getAvailabilityStatus(availability);
   return (
     <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors">

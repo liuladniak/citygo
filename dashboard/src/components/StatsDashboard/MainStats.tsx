@@ -15,6 +15,17 @@ import {
   CardTitle,
 } from "../ui/card";
 
+interface MainStatCard {
+  title: string;
+  cardIcon: string;
+  value: number | string;
+  trendIcon: string;
+  trendValuePercent: string;
+  timeframe: string;
+  trendColor?: string;
+  cardIconClass?: string;
+}
+
 const performanceArray = [
   {
     title: "Today Bookings",
@@ -96,9 +107,8 @@ const StatsCard = ({
   trendIcon,
   trendValuePercent,
   timeframe,
-  trendColor,
   cardIconClass,
-}) => {
+}: MainStatCard) => {
   const isNegativeTrend = trendIcon === trendingDown;
 
   return (

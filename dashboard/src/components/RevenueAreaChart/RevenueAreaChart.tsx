@@ -7,28 +7,25 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  TooltipProps,
 } from "recharts";
 
 const RevenueAreaChart = () => {
   const tooltipFormatter = (
     value: string | number,
     name: string,
-    props: TooltipProps<number | string, string>
-  ) => {
-    if (props && props.active && props.payload && props.payload.length > 0) {
-      const monthData = props.payload[0].payload;
-      if (monthData && typeof monthData === "object") {
-        const tours = Object.keys(monthData)
-          .filter((key) => key !== "month" && key !== "totalRevenue")
-          .map((key) => `${key}: $${monthData[key]}`)
-          .join(", ");
+    entry?: any
+  ): [string, string] => {
+    if (entry?.payload) {
+      const monthData = entry.payload;
+      const tours = Object.keys(monthData)
+        .filter((key) => key !== "month" && key !== "totalRevenue")
+        .map((key) => `${key}: $${monthData[key]}`)
+        .join(", ");
 
-        return [`Total Revenue: $${monthData.totalRevenue}`, tours];
-      }
+      return [`$${monthData.totalRevenue}`, tours];
     }
 
-    return [value, name];
+    return [`${value}`, `${name}`];
   };
 
   return (
@@ -38,6 +35,7 @@ const RevenueAreaChart = () => {
         <XAxis dataKey="month" />
         <YAxis />
         <Tooltip formatter={tooltipFormatter} />
+
         <Area
           type="monotone"
           dataKey="totalRevenue"

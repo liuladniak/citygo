@@ -8,6 +8,7 @@ import { ChartPieDonutText } from "@/components/AppPieChart";
 import CardList from "@/components/CardList";
 import TodoList from "@/components/TodoList";
 import { Booking } from "@/types/booking";
+import MyTasks from "@/components/MyTasks/MyTasks";
 
 const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
