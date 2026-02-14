@@ -9,8 +9,11 @@ export default defineConfig({
     postcss: "./postcss.config.js",
   },
   build: {
-    rollupOptions: {},
+    rollupOptions: {
+      input: path.resolve(__dirname, "index.html"),
+    },
   },
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
