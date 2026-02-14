@@ -23,7 +23,6 @@ const TodayTeam = () => {
     Record<string, boolean>
   >({});
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
 
   const filteredEmployees = employees.filter(
     (emp) =>

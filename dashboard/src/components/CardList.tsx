@@ -93,7 +93,7 @@ const CardList = ({ bookings }: BookingsListProps) => {
         </CustomButton>
       </CardHeader>
       <div className="flex flex-col gap-2 px-4">
-        {bookings.map((item, i) => (
+        {bookings.map((item) => (
           <RecentBookingCard key={item.id} booking={item} />
         ))}
       </div>

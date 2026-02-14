@@ -149,32 +149,32 @@ const AddBooking = () => {
     }
     return "pending_payment";
   }
-  const bookingPayload = {
-    tour_id: formData.tour_id,
-    date: formData.date,
-    start_time: formData.start_time,
+  // const bookingPayload = {
+  //   tour_id: formData.tour_id,
+  //   date: formData.date,
+  //   start_time: formData.start_time,
 
-    meeting_point: isCustomTour
-      ? formData.meeting_point
-      : selectedTour?.meeting_point,
+  //   meeting_point: isCustomTour
+  //     ? formData.meeting_point
+  //     : selectedTour?.meeting_point,
 
-    primary_contact: formData.primary_contact,
+  //   primary_contact: formData.primary_contact,
 
-    guests: formData.guest_counts,
+  //   guests: formData.guest_counts,
 
-    guest_names: formData.guest_names.filter((g) => g.full_name.trim()),
+  //   guest_names: formData.guest_names.filter((g) => g.full_name.trim()),
 
-    language: formData.language,
+  //   language: formData.language,
 
-    payment: {
-      ...formData.payment,
-      amount: totalPrice,
-    },
+  //   payment: {
+  //     ...formData.payment,
+  //     amount: totalPrice,
+  //   },
 
-    status: deriveBookingStatus(formData.payment.status),
+  //   status: deriveBookingStatus(formData.payment.status),
 
-    source: BOOKING_SOURCE,
-  };
+  //   source: BOOKING_SOURCE,
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

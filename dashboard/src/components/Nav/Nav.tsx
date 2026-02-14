@@ -88,10 +88,7 @@ const navItems = [
 
 const Nav = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const toggleDropdown = (name: string) => {
-    setOpenDropdown((prev) => (prev === name ? null : name));
-  };
+
   return (
     <aside
       className={` main-nav text-medium-gray flex flex-col h-screen border-r transition-all duration-300 ease-in-out 

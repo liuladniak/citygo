@@ -19,10 +19,6 @@ const range = (start: number, stop: number, step: number) =>
 const response = responses[0];
 
 const utcOffsetSeconds = response.utcOffsetSeconds();
-const timezone = response.timezone();
-const timezoneAbbreviation = response.timezoneAbbreviation();
-const latitude = response.latitude();
-const longitude = response.longitude();
 
 const hourly = response.hourly()!;
 

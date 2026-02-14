@@ -49,7 +49,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-primary-foreground p-4 rounded-lg lg:col-span-2 xl:col-span-1 2xl:col-span-2">
-          <CardList bookings={bookings} title="Latest Bookings" />
+          <CardList bookings={bookings} />
         </div>
         <div className="flex flex-col gap-4">
           {" "}

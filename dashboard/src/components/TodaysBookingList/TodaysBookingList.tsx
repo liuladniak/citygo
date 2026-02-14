@@ -57,10 +57,6 @@ const TodaysBookingList: React.FC<TodaysBookingListProps> = ({
     Completed: 6,
   };
 
-  const availableStatuses = Array.from(
-    new Set(bookings.map((booking) => booking.status))
-  );
-
   const handleSort = (column: keyof Booking) => {
     setSortConfig((prevSortConfig) => {
       if (prevSortConfig.column === column) {

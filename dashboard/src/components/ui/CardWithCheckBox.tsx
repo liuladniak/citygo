@@ -1,6 +1,10 @@
+import { ReactNode } from "react";
 import { useState } from "react";
 
-const CardWithCheckBox = (children) => {
+type CardWithCheckBoxProps = {
+  children: ReactNode;
+};
+const CardWithCheckBox = ({ children }: CardWithCheckBoxProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const handleCheck = () => {
     setIsChecked(!isChecked);

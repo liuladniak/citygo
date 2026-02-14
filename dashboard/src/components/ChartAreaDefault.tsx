@@ -174,7 +174,6 @@ export function ChartBarMultiple() {
   const {
     groups: filteredData,
     totalRevenue,
-    totalExpense,
     profit,
   } = React.useMemo(() => getAggregatedData(chartData, timeRange), [timeRange]);
 
