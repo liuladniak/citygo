@@ -10,6 +10,8 @@ import DeleteIcon from "../../components/ui/SVGIcons/DeleteIcon";
 import AddIcon from "../../components/ui/SVGIcons/AddIcon";
 import CheckboxList from "../../components/ui/CheckboxList/CheckboxList";
 import Header from "../../components/Header/Header";
+import { CardHeader, CardTitle } from "@/components/ui/card";
+import BackButton from "@/components/ui/BackButton";
 
 const optionsActivity = ["Easy", "Medium", "Hard"];
 const optionsCategory = ["Guided tour", "Culinary tour", "Experience"];
@@ -237,7 +239,10 @@ const AddTour = () => {
 
   return (
     <div>
-      <Header pageTitle="Add New Tour" />
+      <CardHeader className="flex items-center">
+        <BackButton />
+        <CardTitle>Add New Tour</CardTitle>
+      </CardHeader>
       <section className="flex flex-col gap-6 p-6 ">
         <form
           onSubmit={handleSubmit}

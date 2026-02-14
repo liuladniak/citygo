@@ -1,12 +1,17 @@
+import { CardHeader, CardTitle } from "@/components/ui/card";
 import BookingSummaryChart from "../../components/BookingSummaryChart/BookingSummaryChart";
 import Header from "../../components/Header/Header";
 import RevenueAreaChart from "../../components/RevenueAreaChart/RevenueAreaChart";
 import "./Analytics.css";
+import BackButton from "@/components/ui/BackButton";
 
 const Analytics = () => {
   return (
     <section className="analytics">
-      <Header pageTitle="Analytics" />
+      <CardHeader className="flex items-center">
+        <BackButton />
+        <CardTitle>Analytics</CardTitle>
+      </CardHeader>
 
       <div className="cards">
         <div className="dashboard__chart">

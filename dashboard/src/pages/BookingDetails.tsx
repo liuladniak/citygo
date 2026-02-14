@@ -20,6 +20,7 @@ import {
   Phone,
   CreditCard,
 } from "lucide-react";
+import BackButton from "@/components/ui/BackButton";
 
 export default function BookingDetailsPage() {
   const { bookingId } = useParams();
@@ -33,6 +34,10 @@ export default function BookingDetailsPage() {
 
   return (
     <div className="container mx-auto py-8 space-y-6">
+      <CardHeader className="flex items-center">
+        <BackButton />
+        <CardTitle>Booking Details</CardTitle>
+      </CardHeader>
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">

@@ -1,15 +1,6 @@
 import "./Header.css";
-import { Link } from "react-router-dom";
-import notifIcon from "../../assets/icons/notifications.svg";
 import Icon from "../ui/SVGIcons/Icon";
-import Input from "../ui/Input/Input";
-import { useState } from "react";
-import DropdownWrapper from "../ui/DropdownWrapper";
-import {
-  chevronDownPath,
-  dockToLeft,
-  sunnyPath,
-} from "../ui/SVGIcons/iconPaths";
+import { chevronDownPath } from "../ui/SVGIcons/iconPaths";
 import { Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +18,7 @@ import { SidebarTrigger } from "../ui/sidebar";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { Role } from "@/hooks/useRole";
 import { supabase } from "@/lib/supabaseClient";
+
 export type HeaderProps = {
   user: SupabaseUser;
   role: Role | null;

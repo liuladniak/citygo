@@ -1,11 +1,15 @@
+import { CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "../../components/Header/Header";
 import "./Tasks.css";
+import BackButton from "@/components/ui/BackButton";
 
 const Tasks = () => {
   return (
     <section className="tasks">
-      {/* <Header pageTitle="Tasks" /> */}
-      Tasks
+      <CardHeader className="flex items-center">
+        <BackButton />
+        <CardTitle>Tasks</CardTitle>
+      </CardHeader>
     </section>
   );
 };
