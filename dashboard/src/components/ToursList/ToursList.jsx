@@ -34,14 +34,14 @@ const ToursList = () => {
   }
 
   return (
-    <section className="max-w-[70]  w-full flex flex-col  mx-4 border-t  border-border-gray">
+    <section className="max-w-7xl  w-full flex flex-col mx-6 border-t  border-border-gray">
       <div className="flex w-full justify-between items-center">
         <h1 className="m-4 text-xl font-medium">Tours</h1>
-        <Button to="/tours/add" className="bg-brand-teal text-white">
+        <Button to="/tours/add" className="bg-brand-teal text-foreground">
           + Add new tour
         </Button>
       </div>
-      <div className="w-full flex flex-wrap justify-between gap-6">
+      <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6">
         {tours.length &&
           tours.map((tour) => {
             console.log(tour, "TOURs");

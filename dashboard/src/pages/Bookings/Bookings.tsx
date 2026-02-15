@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Booking } from "@/types/booking";
 import { Columns } from "./Columns";
-import { DataTable } from "./DataTable";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import BackButton from "@/components/ui/BackButton";
+import { DataTable } from "./DataTable";
 
 const Bookings = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
