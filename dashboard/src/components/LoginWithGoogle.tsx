@@ -1,16 +1,11 @@
-import { supabase } from "@/lib/supabaseClient";
+import { LoginForm } from "./LoginForm";
 
 export function LoginWithGoogle() {
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-
-    if (error) console.error(error);
-  };
-
-  return <button onClick={signInWithGoogle}>Sign in with Google</button>;
+  return (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <LoginForm />
+      </div>
+    </div>
+  );
 }
