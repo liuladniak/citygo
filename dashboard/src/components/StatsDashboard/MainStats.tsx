@@ -71,30 +71,45 @@ const performanceArray = [
 
 const MainStats = () => {
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>Main Stats</CardTitle>
-        <CardDescription>Today</CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 pb-0">
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-          {/* <div className="flex justify-between mt-6"> */}
-          {performanceArray.map((statCard, i) => (
-            <StatsCard
-              key={i}
-              title={statCard.title}
-              cardIcon={statCard.cardIcon}
-              cardIconClass={statCard.cardIconClass}
-              value={statCard.value}
-              trendIcon={statCard.trendIcon}
-              trendValuePercent={statCard.trendValuePercent}
-              timeframe={statCard.timeframe}
-              trendColor={statCard.trendColor}
-            />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    // <Card className="h-full flex flex-col">
+    //   <CardHeader className="items-center pb-0">
+    //     <CardTitle>Main Stats</CardTitle>
+    //     <CardDescription>Today</CardDescription>
+    //   </CardHeader>
+    //   <CardContent className="flex-1 pb-0">
+    //     {/* <div className=" grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6"> */}
+    //     <div className="flex justify-between mt-6 gap-6">
+    //       {performanceArray.map((statCard, i) => (
+    //         <StatsCard
+    //           key={i}
+    //           title={statCard.title}
+    //           cardIcon={statCard.cardIcon}
+    //           cardIconClass={statCard.cardIconClass}
+    //           value={statCard.value}
+    //           trendIcon={statCard.trendIcon}
+    //           trendValuePercent={statCard.trendValuePercent}
+    //           timeframe={statCard.timeframe}
+    //           trendColor={statCard.trendColor}
+    //         />
+    //       ))}
+    //     </div>
+    //   </CardContent>
+    // </Card>
+    <div className="flex justify-between gap-6">
+      {performanceArray.map((statCard, i) => (
+        <StatsCard
+          key={i}
+          title={statCard.title}
+          cardIcon={statCard.cardIcon}
+          cardIconClass={statCard.cardIconClass}
+          value={statCard.value}
+          trendIcon={statCard.trendIcon}
+          trendValuePercent={statCard.trendValuePercent}
+          timeframe={statCard.timeframe}
+          trendColor={statCard.trendColor}
+        />
+      ))}
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
-import * as React from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -8,11 +7,10 @@ import {
   VisibilityState,
   flexRender,
   getCoreRowModel,
+  useReactTable,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-  FilterFn,
 } from "@tanstack/react-table";
 
 import {
@@ -36,75 +34,110 @@ import { DataTablePagination } from "./DataTablePagination";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isServerSide: boolean;
+  page: number;
+  total: number;
+  limit: number;
+  search: string;
+  onPageChange: (page: number) => void;
+  onSearchChange: (value: string) => void;
+  isLoading?: boolean;
+  className?: string;
 }
-
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string | number }, TValue>({
   columns,
   data,
+  isServerSide,
+  page,
+  total,
+  limit,
+  onPageChange,
+  search,
+  onSearchChange,
+  isLoading,
+  className,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-
-  const [rowSelection, setRowSelection] = React.useState({});
+  const pageCount = Math.ceil(total / limit);
   const navigate = useNavigate();
 
-  const [globalFilter, setGlobalFilter] = React.useState("");
-  const bookingGlobalFilter: FilterFn<any> = (row, _columnId, filterValue) => {
-    const search = filterValue.toLowerCase();
+  const [inputValue, setInputValue] = useState(search);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
 
-    const values = [
-      row.original.primary_contact_email,
-      row.original.primary_contact_name,
-      row.original.booking_reference,
-      row.original.status,
-      row.original.tour_name,
-    ];
-
-    return values.some(
-      (value) => value && value.toString().toLowerCase().includes(search)
-    );
-  };
+  useEffect(() => {
+    if (!isServerSide) return;
+    const timeout = setTimeout(() => {
+      onSearchChange(inputValue);
+    }, 400);
+    return () => clearTimeout(timeout);
+  }, [inputValue, onSearchChange, isServerSide]);
 
   const table = useReactTable({
     data,
     columns,
-    globalFilterFn: bookingGlobalFilter,
-    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-      globalFilter,
-    },
+
+    ...(isServerSide
+      ? {
+          pageCount,
+          manualPagination: true,
+          manualFiltering: true,
+          manualSorting: true,
+          state: {
+            pagination: { pageIndex: page - 1, pageSize: limit },
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
+          },
+          onPaginationChange: (updater) => {
+            const next =
+              typeof updater === "function"
+                ? updater({ pageIndex: page - 1, pageSize: limit })
+                : updater;
+            onPageChange(next.pageIndex + 1);
+          },
+        }
+      : {
+          getPaginationRowModel: getPaginationRowModel(),
+          getSortedRowModel: getSortedRowModel(),
+          getFilteredRowModel: getFilteredRowModel(),
+          globalFilterFn: "includesString",
+          state: {
+            globalFilter,
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
+          },
+          onGlobalFilterChange: setGlobalFilter,
+        }),
   });
+
   return (
-    <div>
+    <div className={className}>
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Search bookings..."
-          value={globalFilter}
-          onChange={(e) => setGlobalFilter(e.target.value)}
+          value={isServerSide ? inputValue : globalFilter}
+          onChange={(e) =>
+            isServerSide
+              ? setInputValue(e.target.value)
+              : setGlobalFilter(e.target.value)
+          }
           className="max-w-sm"
         />
         <div className="flex items-center gap-6">
           <div className="text-muted-foreground flex-1 text-sm px-6">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {table.getSelectedRowModel().rows.length} of{" "}
+            {table.getRowModel().rows.length} row(s) selected.
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -156,7 +189,16 @@ export function DataTable<TData, TValue>({
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => {
                 const bookingId = row.original.id;
 

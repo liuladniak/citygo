@@ -73,7 +73,7 @@ const getAvailabilityStatus = (availability: string) => {
 
 const Team = () => {
   return (
-    <div className="flex-1 rounded-lg border shadow-xs bg-card text-card-foreground">
+    <div className="rounded-lg border shadow-xs bg-card text-card-foreground">
       <div className="flex flex-col space-y-1.5 p-6 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
