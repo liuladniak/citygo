@@ -1,1 +1,26 @@
+# Environment
 .env
+.env.local
+.env.production
+.env.*.local
+
+# Credentials
+client_secret_*.json
+*.credentials.json
+*.pem
+*.key
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
