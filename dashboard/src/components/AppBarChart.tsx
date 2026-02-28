@@ -36,7 +36,7 @@ const chartConfig = {
 
 export function ChartBarLabel() {
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-1 flex-col">
       <CardHeader>
         <CardTitle>Total Bookings</CardTitle>
         <CardDescription>Jun - Nov 2025</CardDescription>

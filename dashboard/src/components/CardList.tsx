@@ -27,24 +27,37 @@ import {
 } from "./ui/SVGIcons/iconPaths";
 import CustomButton from "./ui/CustomButton/CustomButton";
 import { Booking } from "@/types/booking";
+import { useNavigate } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+
+import { DashboardRange } from "@/types/dashboard";
 
 interface BookingsListProps {
   bookings: Booking[];
+  range: DashboardRange;
+  onRangeChange: (range: DashboardRange) => void;
 }
 
 interface RecentBookingCardProps {
   booking: Booking;
+  onClick?: () => void;
 }
 
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
+// function formatDate(dateString: string) {
+//   const date = new Date(dateString);
 
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+//   return date.toLocaleDateString("en-US", {
+//     month: "short",
+//     day: "numeric",
+//     year: "numeric",
+//   });
+// }
 
 const getStatusStyles = (status: string | null | undefined) => {
   switch (status?.toLowerCase()) {
@@ -74,28 +87,61 @@ const getStatusStyles = (status: string | null | undefined) => {
       };
   }
 };
-const formatTime = (timeStr: string | null | undefined): string => {
-  if (!timeStr) return "TBD";
-  const [hours, minutes] = timeStr.split(":");
-  const h = parseInt(hours);
-  if (isNaN(h)) return "TBD";
-  const ampm = h >= 12 ? "PM" : "AM";
-  return `${h % 12 || 12}:${minutes} ${ampm}`;
-};
+// const formatTime = (timeStr: string | null | undefined): string => {
+//   if (!timeStr) return "TBD";
+//   const [hours, minutes] = timeStr.split(":");
+//   const h = parseInt(hours);
+//   if (isNaN(h)) return "TBD";
+//   const ampm = h >= 12 ? "PM" : "AM";
+//   return `${h % 12 || 12}:${minutes} ${ampm}`;
+// };
 
-const CardList = ({ bookings }: BookingsListProps) => {
+const CardList = ({ bookings, range, onRangeChange }: BookingsListProps) => {
+  const navigate = useNavigate();
   return (
-    <Card className="py-6">
+    <Card className="py-6 flex-3">
       <CardHeader className="flex justify-between px-6">
         <CardTitle>Latest Bookings</CardTitle>
-        <CustomButton to="/booking/add" IconPath={addPath} className="flex">
-          New Booking
-        </CustomButton>
+        <div className="flex items-center gap-3">
+          <Select value={range} onValueChange={onRangeChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="upcoming">All Upcoming</SelectItem>
+              <SelectItem value="today">Today</SelectItem>
+              <SelectItem value="tomorrow">Tomorrow</SelectItem>
+              <SelectItem value="week">This Week</SelectItem>
+            </SelectContent>
+          </Select>
+          <CustomButton to="/booking/add" IconPath={addPath} className="flex">
+            New Booking
+          </CustomButton>
+        </div>
       </CardHeader>
       <div className="flex flex-col gap-2 px-4">
-        {bookings.map((item) => (
-          <RecentBookingCard key={item.id} booking={item} />
-        ))}
+        {bookings.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-8">
+            No bookings for this period.
+          </p>
+        ) : (
+          bookings.map((item) => (
+            <RecentBookingCard
+              key={item.id}
+              booking={item}
+              onClick={() => navigate(`/bookings/${item.id}`)}
+            />
+          ))
+        )}
+      </div>
+      <div className="px-6 pt-4 mt-2 border-t">
+        <Button
+          variant="ghost"
+          className="w-full text-sm text-muted-foreground"
+          onClick={() => navigate("/bookings")}
+        >
+          View all bookings →
+        </Button>
       </div>
     </Card>
   );
@@ -103,12 +149,18 @@ const CardList = ({ bookings }: BookingsListProps) => {
 
 export default CardList;
 
-export function RecentBookingCard({ booking }: RecentBookingCardProps) {
-  const statusStyles = getStatusStyles(status);
+export function RecentBookingCard({
+  booking,
+  onClick,
+}: RecentBookingCardProps) {
+  const statusStyles = getStatusStyles(booking.status);
   const balance = Number(booking.total_price) - Number(booking.amount_paid);
 
   return (
-    <Card className="flex items-center justify-between hover:bg-muted/30 transition-colors">
+    <Card
+      onClick={onClick}
+      className="flex items-center justify-between hover:bg-muted/30 transition-colors"
+    >
       <CardContent className="flex flex-col gap-2 p-4 w-full">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -154,17 +206,21 @@ export function RecentBookingCard({ booking }: RecentBookingCardProps) {
             </div>
             <div className="flex items-center gap-1">
               <Icon iconPath={calenderIconPath} />
-              {formatDate(booking.booking_date)}
+              {/* {formatDate(booking.booking_date)} */}
+              {booking.booking_date}
             </div>
             <div className="flex items-center gap-1">
               <Icon iconPath={clockPath} />
-              {booking.is_custom_tour
+              {/* {booking.is_custom_tour
                 ? `${formatTime(booking.start_time)} - ${formatTime(
                     booking.end_time
                   )}`
                 : `${formatTime(booking.display_start_time)} - ${formatTime(
                     booking.display_end_time
-                  )}`}
+                  )}`} */}
+              {booking.is_custom_tour
+                ? `${booking.start_time} - ${booking.end_time}`
+                : `${booking.display_start_time} - ${booking.display_end_time}`}
             </div>
             <div className="flex items-center gap-1">
               <Icon iconPath={groupIconPath} />

@@ -8,8 +8,31 @@ const router = express.Router();
 
 router.get("/all", async (req, res) => {
   try {
-    const { limit = 20, cursor, search, status } = req.query;
-    const pageSize = parseInt(limit);
+    const {
+      limit = 20,
+      page = 1,
+      search,
+      status,
+      dateFrom,
+      dateTo,
+    } = req.query;
+    const pageSize = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+    const pageNumber = Math.max(parseInt(page) || 1, 1);
+    const offset = (pageNumber - 1) * pageSize;
+
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    const validDateFrom =
+      dateFrom && dateRegex.test(dateFrom) && !isNaN(Date.parse(dateFrom))
+        ? dateFrom
+        : undefined;
+    const validDateTo =
+      dateTo && dateRegex.test(dateTo) && !isNaN(Date.parse(dateTo))
+        ? dateTo
+        : undefined;
+    const validStatuses = ["confirmed", "pending", "cancelled"];
+    const validStatus = validStatuses.includes(status) ? status : undefined;
+    const validSearch =
+      typeof search === "string" ? search.trim().slice(0, 100) : undefined;
 
     let query = knex("bookings")
       .leftJoin("tours", "bookings.tour_id", "tours.id")
@@ -30,18 +53,14 @@ router.get("/all", async (req, res) => {
         knex.raw(
           "COALESCE(employees.first_name || ' ' || employees.last_name, 'Unassigned') as guide_name"
         ),
-
         knex.raw(
           `(SELECT amount FROM booking_payments WHERE booking_id = bookings.id LIMIT 1) as total_price`
         ),
-
         knex.raw(
           `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`
         ),
-
         knex.raw(`(SELECT COALESCE(adults, 0) + COALESCE(children, 0) + COALESCE(infants, 0) 
                    FROM booking_guests WHERE booking_id = bookings.id) as total_guests`),
-
         knex.raw(
           "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time"
         ),
@@ -50,54 +69,147 @@ router.get("/all", async (req, res) => {
         ),
       ]);
 
-    if (status) query.where("bookings.status", status);
-    if (search) {
-      query.where(function () {
+    let countQuery = knex("bookings")
+      .leftJoin("tours", "bookings.tour_id", "tours.id")
+      .count("bookings.id as count");
+
+    if (validDateFrom) {
+      query.where("bookings.created_at", ">=", dateFrom);
+      countQuery.where("bookings.created_at", ">=", dateFrom);
+    }
+
+    if (validDateTo) {
+      query.where("bookings.booking_date", "<=", validDateTo);
+      countQuery.where("bookings.booking_date", "<=", validDateTo);
+    }
+
+    if (validStatus) {
+      query.where("bookings.status", status);
+      countQuery.where("bookings.status", status);
+    }
+
+    if (validSearch) {
+      const applySearch = function () {
         this.where("bookings.primary_contact_name", "ilike", `%${search}%`)
           .orWhere("bookings.booking_reference", "ilike", `%${search}%`)
           .orWhere("tours.tour_name", "ilike", `%${search}%`);
-      });
-    }
-
-    if (cursor) {
-      const lastItem = JSON.parse(Buffer.from(cursor, "base64").toString());
-      query.where(function () {
-        this.where("bookings.created_at", "<", lastItem.created_at).orWhere(
-          function () {
-            this.where(
-              "bookings.created_at",
-              "=",
-              lastItem.created_at
-            ).andWhere("bookings.id", "<", lastItem.id);
-          }
-        );
-      });
+      };
+      query.where(applySearch);
+      countQuery.where(applySearch);
     }
 
     query
       .orderBy("bookings.created_at", "desc")
       .orderBy("bookings.id", "desc")
-      .limit(pageSize);
+      .limit(pageSize)
+      .offset(offset);
 
-    const results = await query;
+    const [results, [{ count }]] = await Promise.all([query, countQuery]);
 
-    let nextCursor = null;
-    if (results.length === pageSize) {
-      const last = results[results.length - 1];
-      nextCursor = Buffer.from(
-        JSON.stringify({
-          created_at: last.created_at,
-          id: last.id,
-        })
-      ).toString("base64");
-    }
-
-    res.json({ data: results, nextCursor });
+    res.json({
+      data: results,
+      total: parseInt(count),
+      page: pageNumber,
+      limit: pageSize,
+    });
   } catch (error) {
     console.error("Knex Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// router.get("/all", async (req, res) => {
+//   try {
+//     const { limit = 20, cursor, search, status } = req.query;
+//     const pageSize = parseInt(limit);
+
+//     let query = knex("bookings")
+//       .leftJoin("tours", "bookings.tour_id", "tours.id")
+//       .leftJoin(
+//         "tour_time_slots",
+//         "bookings.time_slot_id",
+//         "tour_time_slots.id"
+//       )
+//       .leftJoin(
+//         "booking_assignments",
+//         "bookings.id",
+//         "booking_assignments.booking_id"
+//       )
+//       .leftJoin("employees", "booking_assignments.guide_id", "employees.id")
+//       .select([
+//         "bookings.*",
+//         "tours.tour_name",
+//         knex.raw(
+//           "COALESCE(employees.first_name || ' ' || employees.last_name, 'Unassigned') as guide_name"
+//         ),
+
+//         knex.raw(
+//           `(SELECT amount FROM booking_payments WHERE booking_id = bookings.id LIMIT 1) as total_price`
+//         ),
+
+//         knex.raw(
+//           `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`
+//         ),
+
+//         knex.raw(`(SELECT COALESCE(adults, 0) + COALESCE(children, 0) + COALESCE(infants, 0)
+//                    FROM booking_guests WHERE booking_id = bookings.id) as total_guests`),
+
+//         knex.raw(
+//           "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time"
+//         ),
+//         knex.raw(
+//           "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time"
+//         ),
+//       ]);
+
+//     if (status) query.where("bookings.status", status);
+//     if (search) {
+//       query.where(function () {
+//         this.where("bookings.primary_contact_name", "ilike", `%${search}%`)
+//           .orWhere("bookings.booking_reference", "ilike", `%${search}%`)
+//           .orWhere("tours.tour_name", "ilike", `%${search}%`);
+//       });
+//     }
+
+//     if (cursor) {
+//       const lastItem = JSON.parse(Buffer.from(cursor, "base64").toString());
+//       query.where(function () {
+//         this.where("bookings.created_at", "<", lastItem.created_at).orWhere(
+//           function () {
+//             this.where(
+//               "bookings.created_at",
+//               "=",
+//               lastItem.created_at
+//             ).andWhere("bookings.id", "<", lastItem.id);
+//           }
+//         );
+//       });
+//     }
+
+//     query
+//       .orderBy("bookings.created_at", "desc")
+//       .orderBy("bookings.id", "desc")
+//       .limit(pageSize);
+
+//     const results = await query;
+
+//     let nextCursor = null;
+//     if (results.length === pageSize) {
+//       const last = results[results.length - 1];
+//       nextCursor = Buffer.from(
+//         JSON.stringify({
+//           created_at: last.created_at,
+//           id: last.id,
+//         })
+//       ).toString("base64");
+//     }
+
+//     res.json({ data: results, nextCursor });
+//   } catch (error) {
+//     console.error("Knex Error:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 router.get("/:id", async (req, res) => {
   try {
