@@ -7,13 +7,6 @@ import {
   risingPath,
   trendingDown,
 } from "../ui/SVGIcons/iconPaths";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
 
 interface MainStatCard {
   title: string;
