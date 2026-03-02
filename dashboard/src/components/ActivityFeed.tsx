@@ -57,13 +57,6 @@ const activityConfig: Record<
   },
 };
 
-function getInitials(message: string): string {
-  const words = message.trim().split(" ");
-  return words.length >= 2
-    ? `${words[0][0]}${words[1][0]}`.toUpperCase()
-    : words[0][0].toUpperCase();
-}
-
 export function ActivityFeed() {
   return (
     <Card>
@@ -76,7 +69,6 @@ export function ActivityFeed() {
             const config = activityConfig[activity.type];
             return (
               <div key={activity.id} className="flex items-start gap-3">
-                {/* timeline line */}
                 <div className="flex flex-col items-center">
                   <div
                     className={`flex items-center justify-center rounded-full p-1.5 ${config.bg} ${config.text}`}
@@ -88,7 +80,6 @@ export function ActivityFeed() {
                   )}
                 </div>
 
-                {/* content */}
                 <div className="flex flex-col gap-0.5 pt-0.5 pb-2">
                   <p className="text-sm text-foreground leading-snug">
                     {activity.message}
