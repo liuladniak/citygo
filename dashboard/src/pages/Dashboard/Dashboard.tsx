@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "@/lib/apiClient";
 import { addDays, format } from "date-fns";
-import { useAuth } from "@/hooks/useAuth";
+// import { useAuth } from "@/hooks/useAuth";
 import { useEmployee } from "@/hooks/useEmployee";
-import { useRole } from "@/hooks/useRole";
+// import { useRole } from "@/hooks/useRole";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import CardList from "@/components/CardList";
 import MainStats from "@/components/MainStats";
@@ -35,9 +35,9 @@ const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [range, setRange] = useState<DashboardRange>("upcoming");
-  const { user } = useAuth();
-  const { role } = useRole(user?.id);
-  const isManager = role === "admin" || role === "manager";
+  // const { user } = useAuth();
+  // const { role } = useRole(user?.id);
+  // const isManager = role === "admin" || role === "manager";
   const { employee } = useEmployee();
 
   const getGreeting = () => {
@@ -102,7 +102,7 @@ const Dashboard = () => {
           </div>
           <div className="lg:col-span-2 flex flex-col gap-6">
             <TodoList />
-            <Team isManager={isManager} />
+            <Team />
           </div>
         </div>
       </div>

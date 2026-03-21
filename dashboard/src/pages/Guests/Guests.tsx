@@ -25,7 +25,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-
 const languageNames: Record<string, string> = {
   en: "English",
   fr: "French",
@@ -137,7 +136,7 @@ function GuestRow({ guest, onClick }: { guest: Guest; onClick: () => void }) {
   );
 }
 
-function GuestPanel({ guest, onClose }: { guest: Guest; onClose: () => void }) {
+function GuestPanel({ guest }: { guest: Guest; onClose: () => void }) {
   const totalBookings = parseInt(guest.total_bookings);
   const cancelledBookings = parseInt(guest.cancelled_bookings);
   const activeBookings = totalBookings - cancelledBookings;

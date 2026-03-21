@@ -88,7 +88,7 @@ function Avatar({ employee }: { employee: Employee }) {
     </div>
   );
 }
-export default function Team({ isManager = true }: { isManager?: boolean }) {
+export default function Team() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<"all" | "available" | "field">("all");
 
