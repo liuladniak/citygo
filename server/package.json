@@ -27,6 +27,9 @@
   },
   "author": "Liu Ladniak",
   "license": "ISC",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@getbrevo/brevo": "^5.0.1",
     "@supabase/supabase-js": "^2.99.1",
