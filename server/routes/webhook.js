@@ -49,7 +49,7 @@ async function addBookingsToDatabase(metadata) {
       if (key.startsWith("booking_")) {
         const index = key.split("_")[1];
 
-        const rawBookingDate = metadata[`booking_${index}_booking_date`];
+        const rawBookingDate = metadata[`booking_${index}_tour_date`];
         const sanitizedBookingDate = new Date(rawBookingDate);
 
         if (isNaN(sanitizedBookingDate.getTime())) {
@@ -61,7 +61,7 @@ async function addBookingsToDatabase(metadata) {
           user_id: metadata[`booking_${index}_user_id`],
           tour_id: metadata[`booking_${index}_tour_id`],
           time_slot_id: metadata[`booking_${index}_time_slot_id`],
-          booking_date: sanitizedBookingDate.toISOString().split("T")[0],
+          tour_date: sanitizedBookingDate.toISOString().split("T")[0],
           adults: Number(metadata[`booking_${index}_adults`]),
           children: Number(metadata[`booking_${index}_children`]),
           infants: Number(metadata[`booking_${index}_infants`]),
