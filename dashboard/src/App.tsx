@@ -1,18 +1,24 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AppLayout from "./components/AppLayout";
+import { RequireManager } from "./components/RequireManager";
+import Analytics from "./pages/Analytics/Analytics";
+import AddBooking from "./pages/AddBooking/AddBooking";
+import AddTour from "./pages/AddTour/AddTour";
+import BookingDetails from "./pages/BookingDetails";
+import Bookings from "./pages/Bookings/Bookings";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import EditTourPage from "./pages/TourDetails/EditTourPage";
+import Guests from "./pages/Guests/Guests";
+import Schedule from "./pages/Schedule/Schedule";
+import SettingsPage from "./pages/Settings/Settings";
+import TasksPage from "./pages/Tasks/Tasks";
+import Team from "./pages/Team/Team";
+import TourDetails from "./pages/TourDetails/TourDetails";
+import Tours from "./pages/Tours/Tours";
+import UnderConstruction from "./pages/UnderConstruction/UnderConstruction";
 import "./App.css";
 import "../src/styles/fonts.css";
-import AppLayout from "./components/AppLayout/AppLayout";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Tours from "./pages/Tours/Tours";
-import TourDetails from "./pages/TourDetails/TourDetails";
-import AddTour from "./pages/AddTour/AddTour";
-import UnderConstruction from "./pages/UnderConstruction/UnderConstruction";
-import AddBooking from "./pages/AddBooking/AddBooking";
-import SingleBooking from "./pages/SingleBooking/SingleBooking";
-import Bookings from "./pages/Bookings/Bookings";
-import BookingDetails from "./pages/BookingDetails";
-import Analytics from "./pages/Analytics/Analytics";
-import { RequireRole } from "@/components/RequireRole";
+
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -23,7 +29,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/analytics",
-        element: <Analytics />,
+        element: (
+          <RequireManager>
+            <Analytics />
+          </RequireManager>
+        ),
       },
       {
         path: "/bookings",
@@ -43,33 +53,33 @@ const router = createBrowserRouter([
       },
       {
         path: "/schedule",
-        element: <UnderConstruction />,
+        element: <Schedule />,
       },
       {
         path: "/settings",
-        element: <UnderConstruction />,
+        element: <SettingsPage />,
       },
       {
         path: "/tasks",
-        element: <UnderConstruction />,
+        element: <TasksPage />,
       },
       {
         path: "/team",
-        element: <UnderConstruction />,
+        element: (
+          <RequireManager>
+            <Team />
+          </RequireManager>
+        ),
       },
       {
         path: "/guests",
-        element: <UnderConstruction />,
-      },
-      {
-        path: "/tours",
-
         element: (
-          <RequireRole allowed={["associate"]}>
-            <Tours />
-          </RequireRole>
+          <RequireManager>
+            <Guests />
+          </RequireManager>
         ),
       },
+      { path: "/tours", element: <Tours /> },
       {
         path: "/tours/:slug",
         element: <TourDetails />,
@@ -77,7 +87,7 @@ const router = createBrowserRouter([
 
       {
         path: "/tours/:slug/edit",
-        element: <TourDetails />,
+        element: <EditTourPage />,
       },
       {
         path: "/tours/add",
@@ -89,7 +99,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/booking/:slug",
-        element: <SingleBooking />,
+        element: <BookingDetails />,
       },
     ],
   },

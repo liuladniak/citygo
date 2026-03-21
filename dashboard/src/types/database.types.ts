@@ -315,7 +315,7 @@ export type Database = {
       };
       bookings: {
         Row: {
-          booking_date: string;
+          tour_date: string;
           booking_reference: string | null;
           created_at: string | null;
           end_time: string | null;
@@ -335,7 +335,7 @@ export type Database = {
           updated_at: string | null;
         };
         Insert: {
-          booking_date: string;
+          tour_date: string;
           booking_reference?: string | null;
           created_at?: string | null;
           end_time?: string | null;
@@ -355,7 +355,7 @@ export type Database = {
           updated_at?: string | null;
         };
         Update: {
-          booking_date?: string;
+          tour_date?: string;
           booking_reference?: string | null;
           created_at?: string | null;
           end_time?: string | null;
@@ -387,7 +387,7 @@ export type Database = {
       bookings_old: {
         Row: {
           adults: number;
-          booking_date: string;
+          tour_date: string;
           children: number;
           created_at: string | null;
           id: number;
@@ -400,7 +400,7 @@ export type Database = {
         };
         Insert: {
           adults?: number;
-          booking_date: string;
+          tour_date: string;
           children?: number;
           created_at?: string | null;
           id?: number;
@@ -413,7 +413,7 @@ export type Database = {
         };
         Update: {
           adults?: number;
-          booking_date?: string;
+          tour_date?: string;
           children?: number;
           created_at?: string | null;
           id?: number;

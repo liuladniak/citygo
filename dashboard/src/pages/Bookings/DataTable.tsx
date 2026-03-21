@@ -64,7 +64,6 @@ export function DataTable<TData extends { id: string | number }, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
 
   useEffect(() => {
@@ -82,7 +81,6 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
 
     ...(isServerSide
       ? {
@@ -95,7 +93,6 @@ export function DataTable<TData extends { id: string | number }, TValue>({
             sorting,
             columnFilters,
             columnVisibility,
-            rowSelection,
           },
           onPaginationChange: (updater) => {
             const next =
@@ -115,7 +112,6 @@ export function DataTable<TData extends { id: string | number }, TValue>({
             sorting,
             columnFilters,
             columnVisibility,
-            rowSelection,
           },
           onGlobalFilterChange: setGlobalFilter,
         }),

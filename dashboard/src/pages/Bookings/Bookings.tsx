@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { Booking } from "@/types/booking";
-import { Columns } from "./Columns";
-import { CardHeader, CardTitle } from "@/components/ui/card";
-import BackButton from "@/components/ui/BackButton";
-import { DataTable } from "./DataTable";
+import axios from "@/lib/apiClient";
+import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
+import { subMonths, subYears, format } from "date-fns";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -12,12 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { subMonths, subYears, format } from "date-fns";
+import { Columns } from "./Columns";
+import { DataTable } from "./DataTable";
+import type { Booking } from "@/types/booking";
 
 type DateRange = "3months" | "6months" | "year" | "all";
 const Bookings = () => {
-  const API_URL = import.meta.env.VITE_API_KEY;
-
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dateRange, setDateRange] = useState<DateRange>("3months");
@@ -25,9 +24,10 @@ const Bookings = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const limit = 20;
-
   const isServerSide = dateRange === "year" || dateRange === "all";
+  const navigate = useNavigate();
 
   const getDateFrom = (range: DateRange): string | undefined => {
     const now = new Date();
@@ -52,8 +52,8 @@ const Bookings = () => {
         } else {
           params.limit = 9999;
         }
-
-        const response = await axios.get(`${API_URL}/api/bookings/all`, {
+        if (statusFilter !== "all") params.status = statusFilter;
+        const response = await axios.get(`/api/bookings/all`, {
           params,
         });
         setBookings(response.data.data);
@@ -83,15 +83,23 @@ const Bookings = () => {
   }
 
   return (
-    <div className="container mx-auto">
-      <CardHeader className="flex items-center px-0">
-        <BackButton />
-        <CardTitle>Bookings List</CardTitle>
-      </CardHeader>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Bookings</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            {total} bookings found
+          </p>
+        </div>
+        <Button onClick={() => navigate("/booking/add")}>
+          <Plus className="h-4 w-4 mr-2" />
+          New Booking
+        </Button>
+      </div>
 
-      <div className="mb-4">
+      <div className="flex items-center gap-3 mb-4 flex-wrap">
         <Select value={dateRange} onValueChange={handleDateRangeChange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[160px] h-9">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -99,6 +107,25 @@ const Bookings = () => {
             <SelectItem value="6months">Last 6 months</SelectItem>
             <SelectItem value="year">This year</SelectItem>
             <SelectItem value="all">All time</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={statusFilter}
+          onValueChange={(v) => {
+            setStatusFilter(v);
+            setPage(1);
+          }}
+        >
+          <SelectTrigger className="w-[140px] h-9">
+            <SelectValue placeholder="All statuses" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value="confirmed">Confirmed</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
           </SelectContent>
         </Select>
       </div>

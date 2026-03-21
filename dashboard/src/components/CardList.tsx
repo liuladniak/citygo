@@ -1,42 +1,32 @@
+import { useNavigate } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import Icon from "./ui/SVGIcons/Icon";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "./ui/button";
-import {
-  addPath,
-  calenderIconPath,
-  clockPath,
-  editPath,
-  groupIconPath,
-  locationIconPath,
-  phonePath,
-  visibilityPath,
-} from "./ui/SVGIcons/iconPaths";
-import CustomButton from "./ui/CustomButton/CustomButton";
-import { Booking } from "@/types/booking";
-import { useNavigate } from "react-router-dom";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-
-import { DashboardRange } from "@/types/dashboard";
+} from "@/components/ui/select";
+import { formatDate, formatTime } from "@/lib/utils";
+import Icon from "./ui/SVGIcons/Icon";
+import {
+  addPath,
+  editPath,
+  phonePath,
+  visibilityPath,
+} from "./ui/SVGIcons/iconPaths";
+import CustomButton from "./ui/CustomButton/CustomButton";
+import type { Booking } from "@/types/booking";
+import type { DashboardRange } from "@/types/dashboard";
 
 interface BookingsListProps {
   bookings: Booking[];
@@ -49,35 +39,38 @@ interface RecentBookingCardProps {
   onClick?: () => void;
 }
 
-// function formatDate(dateString: string) {
-//   const date = new Date(dateString);
-
-//   return date.toLocaleDateString("en-US", {
-//     month: "short",
-//     day: "numeric",
-//     year: "numeric",
-//   });
-// }
-
 const getStatusStyles = (status: string | null | undefined) => {
   switch (status?.toLowerCase()) {
-    case "cancelled":
+    case "confirmed":
       return {
-        bg: "bg-red-100",
-        text: "text-red-800",
-        label: "cancelled",
+        bg: "bg-green-100",
+        text: "text-green-800",
+        label: "confirmed",
       };
+
     case "pending":
       return {
         bg: "bg-yellow-100",
         text: "text-yellow-800",
         label: "pending",
       };
-    case "confirmed":
+    case "draft":
       return {
-        bg: "bg-green-100",
-        text: "text-green-800",
-        label: "confirmed",
+        bg: "bg-gray-100",
+        text: "text-gray-700",
+        label: "Draft",
+      };
+    case "completed":
+      return {
+        bg: "bg-blue-100",
+        text: "text-blue-800",
+        label: "Completed",
+      };
+    case "cancelled":
+      return {
+        bg: "bg-red-100",
+        text: "text-red-800",
+        label: "cancelled",
       };
     default:
       return {
@@ -87,14 +80,6 @@ const getStatusStyles = (status: string | null | undefined) => {
       };
   }
 };
-// const formatTime = (timeStr: string | null | undefined): string => {
-//   if (!timeStr) return "TBD";
-//   const [hours, minutes] = timeStr.split(":");
-//   const h = parseInt(hours);
-//   if (isNaN(h)) return "TBD";
-//   const ampm = h >= 12 ? "PM" : "AM";
-//   return `${h % 12 || 12}:${minutes} ${ampm}`;
-// };
 
 const CardList = ({ bookings, range, onRangeChange }: BookingsListProps) => {
   const navigate = useNavigate();
@@ -155,104 +140,115 @@ export function RecentBookingCard({
 }: RecentBookingCardProps) {
   const statusStyles = getStatusStyles(booking.status);
   const balance = Number(booking.total_price) - Number(booking.amount_paid);
+  const timeDisplay = booking.is_custom_tour
+    ? `${formatTime(booking.start_time)} – ${formatTime(booking.end_time)}`
+    : `${formatTime(booking.display_start_time)} – ${formatTime(
+        booking.display_end_time
+      )}`;
+
+  const accentColor: Record<string, string> = {
+    confirmed: "border-l-green-500",
+    pending: "border-l-yellow-400",
+    draft: "border-l-gray-300",
+    completed: "border-l-blue-400",
+    cancelled: "border-l-red-400",
+  };
+
+  const accent =
+    accentColor[booking.status?.toLowerCase() ?? ""] ?? "border-l-gray-200";
 
   return (
-    <Card
+    <div
       onClick={onClick}
-      className="flex items-center justify-between hover:bg-muted/30 transition-colors"
+      className={`flex items-center justify-between px-4 py-4 rounded-lg border border-border border-l-4 ${accent} bg-card hover:bg-muted/30 transition-colors cursor-pointer shadow-sm group`}
     >
-      <CardContent className="flex flex-col gap-2 p-4 w-full">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <CardTitle className="text-base font-medium">
-              {booking.primary_contact_name || "Unnamed Contact"}
-            </CardTitle>
-            <Badge
-              variant="secondary"
-              className={`${statusStyles.bg} ${statusStyles.text} text-xs font-semibold`}
-            >
-              {statusStyles.label}
-            </Badge>
-            <span className="text-sm text-muted-foreground">
-              {booking.booking_reference}
-            </span>
-          </div>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreHorizontal className="h-5 w-5 text-muted-foreground" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[180px]">
-              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                <Icon iconPath={visibilityPath} /> View Details
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                <Icon iconPath={editPath} /> Edit Booking
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                <Icon iconPath={phonePath} /> Contact Client
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        <CardDescription>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Icon iconPath={locationIconPath} />
-              {booking.is_custom_tour ? "Custom tour" : booking.tour_name}
-            </div>
-            <div className="flex items-center gap-1">
-              <Icon iconPath={calenderIconPath} />
-              {/* {formatDate(booking.booking_date)} */}
-              {booking.booking_date}
-            </div>
-            <div className="flex items-center gap-1">
-              <Icon iconPath={clockPath} />
-              {/* {booking.is_custom_tour
-                ? `${formatTime(booking.start_time)} - ${formatTime(
-                    booking.end_time
-                  )}`
-                : `${formatTime(booking.display_start_time)} - ${formatTime(
-                    booking.display_end_time
-                  )}`} */}
-              {booking.is_custom_tour
-                ? `${booking.start_time} - ${booking.end_time}`
-                : `${booking.display_start_time} - ${booking.display_end_time}`}
-            </div>
-            <div className="flex items-center gap-1">
-              <Icon iconPath={groupIconPath} />
-              <span>{booking.total_guests}</span>
-            </div>
-          </div>
-        </CardDescription>
-
-        <div className="flex items-center gap-6 text-sm mt-2">
-          <span className="text-muted-foreground">
-            Guide:{" "}
-            <span className="font-medium text-foreground">
-              {booking.guide_name}
-            </span>
+      <div className="flex flex-col gap-1.5 min-w-0">
+        <div className="flex items-center gap-2.5">
+          <span className="text-base font-semibold truncate">
+            {booking.primary_contact_name || "Unnamed"}
           </span>
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Paid:&nbsp;</span>
-              <span className="font-medium">
-                ${Number(booking.amount_paid).toFixed(2)}
-              </span>
-            </div>
-
-            {balance > 0 && (
-              <div className="flex justify-between text-xs text-red-500">
-                <span>Balance Due:&nbsp;</span>
-                <span> ${balance.toFixed(2)}</span>
-              </div>
-            )}
-          </div>
+          <Badge
+            variant="secondary"
+            className={`${statusStyles.bg} ${statusStyles.text} text-xs px-2 py-0.5 font-medium shrink-0`}
+          >
+            {statusStyles.label}
+          </Badge>
+          <span className="text-xs text-muted-foreground shrink-0">
+            {booking.booking_reference}
+          </span>
         </div>
-      </CardContent>
-    </Card>
+
+        <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+          <span className="font-medium text-foreground">
+            {booking.is_custom_tour ? "Custom Tour" : booking.tour_name}
+          </span>
+          <span>·</span>
+          <span>{formatDate(booking.tour_date)}</span>
+          <span>·</span>
+          <span>{timeDisplay}</span>
+          <span>·</span>
+          <span>{booking.total_guests} guests</span>
+        </div>
+
+        <div className="text-sm text-muted-foreground">
+          Staff:{" "}
+          {booking.staff && booking.staff.length > 0 ? (
+            <span className="inline-flex flex-wrap gap-x-2">
+              {booking.staff.map((s) => (
+                <span key={s.guide_id} className="font-medium text-foreground">
+                  {s.guide_name}
+                  <span className="text-muted-foreground font-normal ml-1 text-xs capitalize">
+                    ({s.role.replace("_", " ")})
+                  </span>
+                </span>
+              ))}
+            </span>
+          ) : (
+            <span className="font-medium text-orange-500">Unassigned</span>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 shrink-0 ml-6">
+        <div className="text-right">
+          <p className="text-sm font-semibold">
+            €{Number(booking.amount_paid).toFixed(2)}
+            <span className="text-xs text-muted-foreground font-normal ml-1">
+              paid
+            </span>
+          </p>
+          {balance > 0 ? (
+            <p className="text-xs text-red-500 mt-0.5">
+              €{balance.toFixed(2)} due
+            </p>
+          ) : (
+            <p className="text-xs text-emerald-500 mt-0.5">Paid in full</p>
+          )}
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-[180px]">
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <Icon iconPath={visibilityPath} /> View Details
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <Icon iconPath={editPath} /> Edit Booking
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <Icon iconPath={phonePath} /> Contact Client
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
   );
 }

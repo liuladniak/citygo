@@ -1,25 +1,35 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "@/lib/apiClient";
 import {
   Calendar,
-  Home,
-  Flag,
-  ClipboardList,
-  Users,
   ChartColumnBig,
-  TicketCheck,
-  ListTodo,
-  UserSearch,
-  Settings,
   ChevronUp,
-  User2,
-  Plus,
-  ChevronDown,
+  ClipboardList,
+  Flag,
+  Home,
+  ListTodo,
+  Settings,
+  UserSearch,
+  Users,
 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useEmployee } from "@/hooks/useEmployee";
+import { useRole } from "@/hooks/useRole";
+import { supabase } from "@/lib/supabaseClient";
+import logoIcon from "@/assets/logos/logo-icon.png";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -27,77 +37,53 @@ import {
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
-import logoIcon from "@/assets/logos/logo-icon.png";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@radix-ui/react-collapsible";
-
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const navItems = [
   { url: "/", title: "Dashboard", icon: Home },
   { url: "/tours", title: "Tours", icon: Flag },
-  {
-    url: "/schedule",
-    title: "Schedule",
-    icon: Calendar,
-  },
-  {
-    url: "/bookings",
-    title: "Bookings",
-    icon: ClipboardList,
-  },
-  {
-    url: "/team",
-    title: "Team",
-    icon: Users,
-  },
-  {
-    url: "/analytics",
-    title: "Analytics",
-    icon: ChartColumnBig,
-  },
-  {
-    url: "/invoices",
-    title: "Invoices",
-    icon: TicketCheck,
-  },
-  {
-    url: "/tasks",
-    title: "Tasks",
-    icon: ListTodo,
-  },
-  {
-    url: "/reports",
-    title: "Reports",
-    icon: ClipboardList,
-  },
-  {
-    url: "/guests",
-    title: "Guests",
-    icon: UserSearch,
-  },
-  {
-    url: "/settings",
-    title: "Settings",
-    icon: Settings,
-  },
+  { url: "/schedule", title: "Schedule", icon: Calendar },
+  { url: "/bookings", title: "Bookings", icon: ClipboardList, badge: true },
+  { url: "/team", title: "Team", icon: Users, managerOnly: true },
+  { url: "/analytics", title: "Analytics", icon: ChartColumnBig },
+  { url: "/tasks", title: "Tasks", icon: ListTodo },
+  { url: "/guests", title: "Guests", icon: UserSearch },
+  { url: "/settings", title: "Settings", icon: Settings },
 ];
+
 const AppSidebar = () => {
+  const { user } = useAuth();
+  const { role } = useRole(user?.id);
+  const { employee, googleAvatar } = useEmployee();
+  const navigate = useNavigate();
+
+  const { data: pendingCount } = useQuery({
+    queryKey: ["pending-bookings-count"],
+    queryFn: async () => {
+      const { data } = await axios.get(`/api/bookings/all`, {
+        params: { status: "pending", limit: 1 },
+      });
+      return data.total as number;
+    },
+    refetchInterval: 2 * 60 * 1000,
+  });
+
+  const displayName = employee
+    ? `${employee.first_name} ${employee.last_name}`
+    : user?.email ?? "User";
+
+  const avatarUrl = googleAvatar ?? employee?.profile_image ?? null;
+
+  const visibleItems = navItems.filter(
+    (item) => !item.managerOnly || role === "admin" || role === "manager"
+  );
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
+
   return (
     <Sidebar collapsible="icon" className="relative border-r h-screen">
       <ScrollArea className="h-full rounded-md border">
@@ -105,9 +91,9 @@ const AppSidebar = () => {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild className="p-0">
-                <Link to="/" className="overflow-visible ">
+                <Link to="/" className="overflow-visible">
                   <img src={logoIcon} className="w-5 h-5" alt="logo" />
-                  <span className="font-semibold text-brand-secondary ">
+                  <span className="font-semibold text-brand-secondary">
                     CityGo
                   </span>
                 </Link>
@@ -115,148 +101,66 @@ const AppSidebar = () => {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
+
         <SidebarSeparator className="w-full mx-0" />
+
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>
-              <span className="">Application</span>
-            </SidebarGroupLabel>
+            <SidebarGroupLabel>Application</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {navItems.map((item) => (
+                {visibleItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span className=" ">{item.title}</span>
-                      </a>
+                    <SidebarMenuButton onClick={() => navigate(item.url)}>
+                      <item.icon />
+                      <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {item.title === "Bookings" && (
-                      <SidebarMenuBadge>
-                        <span className="">12</span>
-                      </SidebarMenuBadge>
+                    {item.badge && pendingCount && pendingCount > 0 && (
+                      <SidebarMenuBadge>{pendingCount}</SidebarMenuBadge>
                     )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>
-              <span className="">Bookings</span>
-            </SidebarGroupLabel>
-            <SidebarGroupAction>
-              <Plus />
-              <span className="sr-only ">Add Booking</span>
-            </SidebarGroupAction>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/bookings">
-                      <ClipboardList />{" "}
-                      <span className="">See All Bookings</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/booking/add">
-                      <Plus />
-                      <span className="">Add New Booking</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <SidebarGroup className="">
-            <SidebarGroupLabel>
-              <span className="">Nested</span>
-            </SidebarGroupLabel>
-
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link to="/bookings">
-                      <ClipboardList />
-                      <span className="">See All Bookings</span>
-                    </Link>
-                  </SidebarMenuButton>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <Link to="/">
-                          <Plus />
-                          <span className="">Add Booking</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <Link to="/">
-                          <Plus /> <span className="">Add Category</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <Collapsible defaultOpen className="group/collapsible">
-            <SidebarGroup>
-              <SidebarGroupLabel asChild>
-                <CollapsibleTrigger>
-                  <span className="">Collapsible Group</span>
-                  <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                </CollapsibleTrigger>
-              </SidebarGroupLabel>
-              <CollapsibleContent>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link to="/bookings">
-                          <ClipboardList />
-                          <span className="">See All Bookings</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton asChild>
-                        <Link to="/booking/add">
-                          <Plus />
-                          <span className="">Add New Booking</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </CollapsibleContent>
-            </SidebarGroup>
-          </Collapsible>
-          <SidebarGroup />
         </SidebarContent>
+
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton>
-                    <User2 />
-
-                    <span className="">John Doe</span>
-                    <ChevronUp className="ml-auto" />
-                  </SidebarMenuButton>
+                  <button className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-muted transition-colors">
+                    {avatarUrl ? (
+                      <img
+                        src={avatarUrl}
+                        alt={displayName}
+                        className="w-6 h-6 rounded-full object-cover shrink-0"
+                      />
+                    ) : (
+                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-semibold text-primary-foreground shrink-0">
+                        {displayName?.[0]?.toUpperCase() ?? "?"}
+                      </div>
+                    )}
+                    <span className="flex-1 truncate text-left">
+                      {displayName}
+                    </span>
+                    <ChevronUp className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Account</DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Sign out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/settings")}>
+                    Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/settings")}>
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleSignOut}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    Sign out
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </SidebarMenuItem>

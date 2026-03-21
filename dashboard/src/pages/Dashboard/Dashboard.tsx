@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import Team from "../../components/Team/Team";
-import MainStats from "../../components/StatsDashboard/MainStats";
-import { ChartBarLabel } from "@/components/AppBarChart";
-import CardList from "@/components/CardList";
-import TodoList from "@/components/TodoList";
-import { Booking } from "@/types/booking";
-import { DashboardRange } from "@/types/dashboard";
-
-import { format, addDays } from "date-fns";
+import axios from "@/lib/apiClient";
+import { addDays, format } from "date-fns";
+import { useAuth } from "@/hooks/useAuth";
+import { useEmployee } from "@/hooks/useEmployee";
+import { useRole } from "@/hooks/useRole";
 import { ActivityFeed } from "@/components/ActivityFeed";
+import CardList from "@/components/CardList";
+import MainStats from "@/components/MainStats";
+import Team from "@/components/Team";
+import TodoList from "@/components/TodoList";
+import type { Booking } from "@/types/booking";
+import type { DashboardRange } from "@/types/dashboard";
 
 const getDateParams = (range: DashboardRange) => {
   const now = new Date();
@@ -34,7 +35,17 @@ const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [range, setRange] = useState<DashboardRange>("upcoming");
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const { user } = useAuth();
+  const { role } = useRole(user?.id);
+  const isManager = role === "admin" || role === "manager";
+  const { employee } = useEmployee();
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+  };
 
   useEffect(() => {
     const getDashboardBookings = async () => {
@@ -42,7 +53,7 @@ const Dashboard = () => {
         setIsLoading(true);
         const { dateFrom, dateTo } = getDateParams(range);
 
-        const response = await axios.get(`${API_URL}/api/bookings/all`, {
+        const response = await axios.get(`/api/bookings/all`, {
           params: {
             dateFrom,
             dateTo,
@@ -66,7 +77,18 @@ const Dashboard = () => {
   return (
     <section className="w-full h-full">
       <div className="flex flex-col gap-6 p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              {getGreeting()}, {employee?.first_name ?? "there"} 👋
+            </h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {format(new Date(), "EEEE, MMMM d, yyyy")}
+            </p>
+          </div>
+        </div>
         <MainStats />
+
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-3 flex flex-col gap-6">
             <div className="self-start w-full">
@@ -80,8 +102,7 @@ const Dashboard = () => {
           </div>
           <div className="lg:col-span-2 flex flex-col gap-6">
             <TodoList />
-            <Team />
-            <ChartBarLabel />
+            <Team isManager={isManager} />
           </div>
         </div>
       </div>
