@@ -749,7 +749,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", requireRole("admin", "manager"), async (req, res) => {
+router.post("/", async (req, res) => {
   const {
     user_id,
     tour_id,
@@ -760,31 +760,36 @@ router.post("/", requireRole("admin", "manager"), async (req, res) => {
     infants,
     status,
   } = req.body;
+
   if (!user_id || !tour_id || !tour_date || !time_slot_id)
     return res.status(400).json({ message: "Required fields are missing" });
 
   try {
-    const [id] = await knex("bookings")
-      .insert({
-        user_id,
-        tour_id,
-        tour_date,
-        time_slot_id,
-        adults,
-        children,
-        infants,
-        status: VALID_STATUSES.includes(status) ? status : "pending",
-      })
-      .returning("id");
-    res.status(201).json({
-      id,
-      user_id,
-      tour_id,
-      tour_date,
-      time_slot_id,
-      adults,
-      children,
-      infants,
+    await knex.transaction(async (trx) => {
+      const [newBooking] = await trx("bookings")
+        .insert({
+          user_id,
+          tour_id,
+          tour_date,
+          time_slot_id,
+          status: status || "pending",
+          source: "internal",
+          primary_contact_name: req.user.name || "Guest",
+          is_custom_tour: false,
+          booking_reference: `MANUAL-${Date.now()}`,
+        })
+        .returning("id");
+
+      await trx("booking_guests").insert({
+        booking_id: newBooking.id,
+        adults: adults || 1,
+        children: children || 0,
+        infants: infants || 0,
+      });
+
+      res
+        .status(201)
+        .json({ id: newBooking.id, message: "Booking created successfully" });
     });
   } catch (error) {
     console.error("Error creating booking:", error);

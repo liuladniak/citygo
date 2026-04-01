@@ -87,7 +87,7 @@ router.get("/", async (req, res) => {
 router.get("/simple", async (req, res) => {
   try {
     const tours = await knex("tours")
-      .select("id", "tour_name", "duration", "price", "category")
+      .select("id", "tour_name", "duration", "price", "category", "slug")
       .orderBy("tour_name");
     res.json({ data: tours });
   } catch (err) {
@@ -214,11 +214,35 @@ router.get("/:slug", async (req, res) => {
       { ...tour }
     );
 
+    const settings = await knex("company_settings").first();
+    const bookingWindowMonths = settings?.booking_window_months ?? 6;
+
+    const agencyUnavailableDates = await knex("agency_unavailable_dates")
+      .pluck("unavailable_date")
+      .then((dates) =>
+        dates.map((d) => {
+          const date = new Date(d);
+          return date.toISOString().split("T")[0];
+        })
+      );
+
+    const agencyRecurringDays = await knex(
+      "agency_recurring_unavailabilities"
+    ).pluck("day_of_week");
+
+    const tourRecurringDays = await knex("tour_recurring_unavailabilities")
+      .where("tour_id", tour.id)
+      .pluck("day_of_week");
+
     res.json({
       ...result,
       images: [...result.images],
       highlights: [...result.highlights],
       unavailable_dates: [...result.unavailable_dates],
+      unavailable_recurring_day_of_week: tourRecurringDays,
+      booking_window_months: bookingWindowMonths,
+      agency_unavailable_dates: agencyUnavailableDates,
+      agency_recurring_days: agencyRecurringDays,
     });
   } catch (err) {
     console.error(err);

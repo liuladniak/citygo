@@ -1,172 +1,178 @@
 import express from "express";
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
-import multer from "multer";
-import { join } from "path";
+import "dotenv/config";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
-import "dotenv/config";
 const router = express.Router();
 
-export default function createArticleRoutes(baseDir) {
-  const storage = (baseDir) =>
-    multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, join(baseDir, "public", "articles"));
-      },
-      filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-      },
+router.get("/", async (req, res) => {
+  const { page = 1, limit = 8, category } = req.query;
+
+  console.log("Searching for category:", category);
+
+  const offset = (page - 1) * limit;
+
+  try {
+    let baseQuery = knex("articles")
+      .leftJoin("authors", "articles.author_id", "authors.id")
+      .select(
+        "articles.*",
+        "authors.name as author_name",
+        "authors.profile_image as author_avatar"
+      );
+
+    if (category && category !== "all") {
+      baseQuery = baseQuery.where("articles.category", category);
+    }
+
+    let countQuery = knex("articles");
+    if (category && category !== "all") {
+      countQuery = countQuery.where("category", category);
+    }
+
+    const totalResult = await countQuery.countDistinct("id as count").first();
+    const total = parseInt(totalResult.count);
+
+    const articles = await baseQuery
+      .orderBy("articles.date_posted", "desc")
+      .offset(offset)
+      .limit(limit);
+
+    const articleIds = articles.map((a) => a.id);
+
+    const images = await knex("article_images")
+      .whereIn("article_id", articleIds)
+      .select("article_id", "image_url", "caption");
+
+    const imagesByArticleId = images.reduce((acc, img) => {
+      if (!acc[img.article_id]) acc[img.article_id] = [];
+      acc[img.article_id].push({ url: img.image_url, caption: img.caption });
+      return acc;
+    }, {});
+
+    const result = articles.map((a) => ({
+      ...a,
+      images: imagesByArticleId[a.id] ?? [],
+    }));
+
+    res.json({
+      data: result,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
+      total,
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
-  const upload = multer({ storage: storage(baseDir) });
-  const router = express.Router();
+router.get("/:slug", async (req, res) => {
+  try {
+    const article = await knex("articles")
+      .where("articles.slug", req.params.slug)
+      .leftJoin("authors", "articles.author_id", "authors.id")
+      .select(
+        "articles.*",
+        "authors.name as author_name",
+        "authors.bio as author_bio",
+        "authors.profile_image as author_avatar"
+      )
+      .first();
 
-  const getAllArticles = async (req, res) => {
-    const { page, limit } = req.query;
-    const offset = (page - 1) * limit;
-    try {
-      const totalArticlesResult = await knex("articles")
-        .countDistinct("articles.id as count")
-        .first();
-      const totalArticles = totalArticlesResult.count;
+    if (!article) return res.status(404).json({ message: "Article not found" });
 
-      const articles = await knex("articles")
-        .select("articles.*")
-        .offset(offset)
-        .limit(limit);
+    const images = await knex("article_images")
+      .where("article_id", article.id)
+      .select("image_url", "caption")
+      .orderBy("id");
 
-      const articleIds = articles.map((article) => article.id);
+    const related = await knex("articles")
+      .where("category", article.category)
+      .whereNot("articles.id", article.id)
+      .leftJoin("article_images", "articles.id", "article_images.article_id")
+      .select(
+        "articles.id",
+        "articles.title",
+        "articles.slug",
+        "articles.category",
+        "articles.date_posted",
+        "articles.read_time",
+        "articles.description",
+        "article_images.image_url"
+      )
+      .limit(3);
 
-      const detailedArticles = await knex("articles")
-        .select("articles.id", "article_images.image_url", "articles.*")
-        .leftJoin("article_images", "articles.id", "article_images.article_id")
-        .whereIn("articles.id", articleIds);
+    res.json({
+      ...article,
+      images: images.map((i) => ({ url: i.image_url, caption: i.caption })),
+      related,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
-      const groupedArticles = detailedArticles.reduce((acc, article) => {
-        const { id, image_url, ...articleData } = article;
-
-        if (!acc[id]) {
-          acc[id] = {
-            ...articleData,
-            images: [],
-          };
-        }
-
-        if (image_url && !acc[id].images.includes(image_url)) {
-          acc[id].images.push(image_url);
-        }
-
-        return acc;
-      }, {});
-
-      const finalResult = Object.values(groupedArticles);
-
-      const totalPages = Math.ceil(totalArticles / limit);
-      res.status(200).json({
-        data: finalResult,
-        currentPage: Number(page),
-        totalPages,
-        totalArticles,
-      });
-    } catch (error) {
-      console.error("Error fetching articles:", error);
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-  };
-
-  const addArticle = async (req, res) => {
-    const { article_title, content, author, category, description } = req.body;
-    const images = req.files;
-
-    try {
-      const [articleId] = await knex("articles")
-        .insert({
-          article_title,
-          content,
-          author,
-          category,
-          description,
-          created_at: knex.fn.now(),
-          updated_at: knex.fn.now(),
-        })
-        .returning("id");
-
-      if (images && images.length) {
-        const imageRecords = images.map((file) => ({
-          article_id: articleId,
-          image_url: file.filename,
-        }));
-        await knex("article_images").insert(imageRecords);
-      }
-
-      res.status(201).json({ message: "Article added successfully!" });
-    } catch (error) {
-      console.error("Error adding article:", error);
-      res.status(500).json({ message: "Failed to add article" });
-    }
-  };
-
-  const editArticle = async (req, res) => {
-    const { articleId } = req.params;
-    const { article_title, content, author, category, description } = req.body;
-    const images = req.files;
-
-    try {
-      await knex("articles").where({ id: articleId }).update({
-        article_title,
+router.post("/", async (req, res) => {
+  const { title, content, author_id, category, description, slug, images } =
+    req.body;
+  try {
+    const [article] = await knex("articles")
+      .insert({
+        title,
         content,
-        author,
+        author_id,
         category,
         description,
-        updated_at: knex.fn.now(),
-      });
+        slug,
+        date_posted: knex.fn.now(),
+      })
+      .returning("*");
 
-      await knex("article_images").where({ article_id: articleId }).del();
-      if (images && images.length) {
-        const imageRecords = images.map((file) => ({
-          article_id: articleId,
-          image_url: file.filename,
-        }));
-        await knex("article_images").insert(imageRecords);
-      }
-
-      res.status(200).json({ message: "Article updated successfully!" });
-    } catch (error) {
-      console.error("Error updating article:", error);
-      res.status(500).json({ message: "Failed to update article" });
+    if (images?.length) {
+      await knex("article_images").insert(
+        images.map((img) => ({
+          article_id: article.id,
+          image_url: img.url,
+          caption: img.caption ?? null,
+        }))
+      );
     }
-  };
+    res.status(201).json(article);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to create article" });
+  }
+});
 
-  const getArticleBySlug = async (req, res) => {
-    const { slug } = req.params;
-    try {
-      const article = await knex("articles").where({ slug }).first();
+router.put("/:id", async (req, res) => {
+  const { title, content, category, description, images } = req.body;
+  try {
+    await knex("articles").where("id", req.params.id).update({
+      title,
+      content,
+      category,
+      description,
+      updated_at: knex.fn.now(),
+    });
 
-      if (!article) {
-        return res.status(404).json({ message: "Article not found" });
-      }
-
-      const articleImages = await knex("article_images")
-        .select("image_url")
-        .where({ article_id: article.id });
-
-      const finalResult = {
-        ...article,
-        images: articleImages.map((image) => image.image_url),
-      };
-
-      res.status(200).json(finalResult);
-    } catch (error) {
-      console.error("Error fetching article:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    if (images?.length) {
+      await knex("article_images").where("article_id", req.params.id).del();
+      await knex("article_images").insert(
+        images.map((img) => ({
+          article_id: req.params.id,
+          image_url: img.url,
+          caption: img.caption ?? null,
+        }))
+      );
     }
-  };
+    res.json({ message: "Article updated" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update article" });
+  }
+});
 
-  router.get("/", getAllArticles);
-  router.get("/:slug", getArticleBySlug);
-  router.post("/", upload.array("images"), addArticle);
-  router.put("/:articleId", upload.array("images"), editArticle);
-
-  return router;
-}
+export default router;

@@ -4,7 +4,7 @@ import knexConfig from "../knexfile.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 const router = express.Router();
-const knex = initKnex(knexConfig["development"]);
+const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 import "dotenv/config";
 
 const verifyToken = (req, res, next) => {
@@ -50,7 +50,13 @@ router.post("/signup", async (req, res) => {
   };
 
   try {
-    await knex("users").insert(newUser);
+    const [newUser] = await knex("users").insert(newUser).returning("*");
+
+    await knex("bookings")
+      .where("primary_contact_email", email)
+      .whereNull("user_id")
+      .update({ user_id: newUser.id });
+
     res.status(201).send("Registered successfully");
   } catch (err) {
     console.error(err);
@@ -80,7 +86,7 @@ router.post("/login", async (req, res) => {
   if (!isPasswordCorrect) {
     return res.status(400).send("Invalid password");
   }
-  const expiresIn = 60 * 1000;
+  const expiresIn = 7 * 24 * 60 * 60;
   const token = jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET,

@@ -30,7 +30,7 @@ router.post(
           throw new Error("Metadata missing or invalid");
         }
 
-        await addBookingsToDatabase(metadata);
+        await addBookingsToDatabase(metadata, paymentIntent);
       }
       res.json({ received: true });
     } catch (err) {
@@ -40,48 +40,107 @@ router.post(
   }
 );
 
-async function addBookingsToDatabase(metadata) {
-  console.log("Adding bookings to database:", metadata);
+async function addBookingsToDatabase(metadata, paymentIntent) {
   try {
-    const bookings = new Set();
+    const userId = metadata.booking_1_user_id
+      ? parseInt(metadata.booking_1_user_id)
+      : null;
 
-    for (let key of Object.keys(metadata)) {
-      if (key.startsWith("booking_")) {
-        const index = key.split("_")[1];
+    const user = userId
+      ? await knex("users").where({ id: userId }).first()
+      : null;
 
-        const rawBookingDate = metadata[`booking_${index}_tour_date`];
-        const sanitizedBookingDate = new Date(rawBookingDate);
+    const indices = [
+      ...new Set(
+        Object.keys(metadata)
+          .filter((k) => k.startsWith("booking_"))
+          .map((k) => k.split("_")[1])
+      ),
+    ];
 
-        if (isNaN(sanitizedBookingDate.getTime())) {
-          console.error("Invalid booking date:", rawBookingDate);
-          continue;
-        }
+    await knex.transaction(async (trx) => {
+      for (const index of indices) {
+        const p = `booking_${index}_`;
 
-        const bookingEntry = {
-          user_id: metadata[`booking_${index}_user_id`],
-          tour_id: metadata[`booking_${index}_tour_id`],
-          time_slot_id: metadata[`booking_${index}_time_slot_id`],
-          tour_date: sanitizedBookingDate.toISOString().split("T")[0],
-          adults: Number(metadata[`booking_${index}_adults`]),
-          children: Number(metadata[`booking_${index}_children`]),
-          infants: Number(metadata[`booking_${index}_infants`]),
-          created_at: new Date(),
-          updated_at: new Date(),
-        };
+        const adults = parseInt(metadata[`${p}adults`] || 1);
+        const children = parseInt(metadata[`${p}children`] || 0);
+        const infants = parseInt(metadata[`${p}infants`] || 0);
+        const tourId = parseInt(metadata[`${p}tour_id`]);
 
-        bookings.add(JSON.stringify(bookingEntry));
+        const tour = await trx("tours")
+          .where("id", tourId)
+          .select("price", "featured")
+          .first();
+
+        const price = parseFloat(tour?.price ?? 0);
+        const totalPrice = adults * price + children * (price * 0.5);
+        const conversionRate = parseFloat(metadata.conversion_rate ?? 1);
+        const finalPriceConverted =
+          (tour?.featured ? totalPrice * 0.9 : totalPrice) * conversionRate;
+
+        const [{ max }] = await trx("bookings").max("id as max");
+        const nextId = (max || 0) + 1;
+        const bookingReference = `BK-${Date.now()}-${Math.random()
+          .toString(36)
+          .slice(2, 6)
+          .toUpperCase()}`;
+
+        const [booking] = await trx("bookings")
+          .insert({
+            user_id: userId,
+            tour_id: tourId,
+            time_slot_id: parseInt(metadata[`${p}time_slot_id`]),
+            tour_date: metadata[`${p}tour_date`],
+            status: "confirmed",
+            source: "website",
+            primary_contact_name:
+              metadata[`${p}contact_name`] ||
+              (user ? `${user.first_name} ${user.last_name}` : "Web Guest"),
+            primary_contact_email:
+              metadata[`${p}contact_email`] || user?.email || null,
+            primary_contact_phone:
+              metadata[`${p}contact_phone`] || user?.phone_number || null,
+            language: metadata[`${p}language`] ?? "en",
+            booking_reference: bookingReference,
+            total_price: finalPriceConverted,
+            is_custom_tour: false,
+            created_at: new Date(),
+            updated_at: new Date(),
+            notes: metadata[`${p}special_requirements`] ?? null,
+          })
+          .returning("*");
+
+        const bookingId = booking.id;
+
+        await trx("booking_guests").insert({
+          booking_id: bookingId,
+          adults,
+          children,
+          infants,
+        });
+
+        await trx("booking_guest_names").insert({
+          booking_id: bookingId,
+          full_name:
+            metadata[`${p}contact_name`] ||
+            (user ? `${user.first_name} ${user.last_name}` : "Web Guest"),
+        });
+
+        const amountPaid = paymentIntent.amount / 100;
+        await trx("booking_payments").insert({
+          booking_id: bookingId,
+          method: "card",
+          status: "paid",
+          amount: amountPaid,
+          paid_at: new Date(),
+          notes: `Stripe payment ${paymentIntent.id}`,
+        });
       }
-    }
+    });
 
-    const uniqueBookings = Array.from(bookings).map((booking) =>
-      JSON.parse(booking)
-    );
-
-    if (uniqueBookings.length > 0) {
-      await knex("bookings").insert(uniqueBookings);
-    }
+    console.log("✅ Booking, guests, names and payment saved.");
   } catch (error) {
-    console.error("Error adding bookings to database:", error);
+    console.error("❌ Transaction Error:", error.message);
     throw error;
   }
 }

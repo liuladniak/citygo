@@ -6,15 +6,16 @@ import cors from "cors";
 import cron from "node-cron";
 import dotenv from "dotenv";
 import express from "express";
-import helmet from "helmet";
 import morgan from "morgan";
 
 import { requireAuth } from "./middleware/auth.js";
 
 import activityRoutes from "./routes/activityRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
+
 import authRoutes from "./routes/auth.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import clientRoutes from "./routes/clientRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
 import paymentRoutes from "./routes/payment.js";
@@ -60,23 +61,23 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/", express.static(path.join(staticFilesPath, "tours")));
-app.use("/articles", express.static(path.join(staticFilesPath, "articles")));
-app.use("/employees", express.static(path.join(staticFilesPath, "employees")));
 
 app.use("/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/payment", paymentRoutes);
-app.use("/api/articles", articleRoutes(__dirname));
+app.use("/api/client", clientRoutes);
 
-app.use("/api/tours", requireAuth, tourRoutes);
+app.use("/api/tours", tourRoutes);
 app.use("/api/bookings", requireAuth, bookingRoutes);
 app.use("/api/employees", requireAuth, employeeRoutes);
 app.use("/api/activity", requireAuth, activityRoutes);
 app.use("/api/tasks", requireAuth, taskRoutes);
 app.use("/api/company", requireAuth, companyRoutes);
+
+app.use("/employees", express.static(path.join(staticFilesPath, "employees")));
+app.use("/", express.static(path.join(staticFilesPath, "tours")));
+app.use("/api/articles", articleRoutes);
 
 cron.schedule("0 * * * *", generateAutoTasks);
 cron.schedule(

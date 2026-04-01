@@ -51,7 +51,7 @@ router.post("/create-payment-intent", async (req, res) => {
     let totalAmount = 0;
     let metadata = {};
 
-    bookings.forEach((booking, index) => {
+    for (const [index, booking] of bookings.entries()) {
       const {
         user_id,
         tour_id,
@@ -68,51 +68,47 @@ router.post("/create-payment-intent", async (req, res) => {
       }
 
       let { price, featured } = tour;
+      const totalPrice = price * adults + price * 0.5 * children;
+      totalAmount += featured ? totalPrice * 0.9 : totalPrice;
 
-      const adultPrice = price * adults;
-      const childPrice = price * 0.5 * children;
-      const infantPrice = 0 * infants;
-      let totalPrice = adultPrice + childPrice + infantPrice;
-
-      if (featured) {
-        totalPrice *= 0.9;
-      }
-
-      totalAmount += totalPrice;
-
-      metadata[`booking_${index + 1}_user_id`] = user_id;
-      metadata[`booking_${index + 1}_tour_id`] = tour_id;
-      metadata[`booking_${index + 1}_time_slot_id`] = time_slot_id;
       const sanitizedBookingDate = new Date(tour_date);
       if (isNaN(sanitizedBookingDate.getTime())) {
         return res.status(400).json({ error: "Invalid booking date format." });
       }
-      metadata[`booking_${index + 1}_tour_date`] = sanitizedBookingDate
+
+      const prefix = `booking_${index + 1}_`;
+      metadata[`${prefix}user_id`] = user_id;
+      metadata[`${prefix}tour_id`] = tour_id;
+      metadata[`${prefix}time_slot_id`] = time_slot_id;
+      metadata[`${prefix}tour_date`] = sanitizedBookingDate
         .toISOString()
         .split("T")[0];
-
-      metadata[`booking_${index + 1}_adults`] = adults;
-      metadata[`booking_${index + 1}_children`] = children;
-      metadata[`booking_${index + 1}_infants`] = infants;
-    });
+      metadata[`${prefix}adults`] = adults;
+      metadata[`${prefix}children`] = children;
+      metadata[`${prefix}infants`] = infants;
+      metadata[`${prefix}contact_name`] = booking.contact_name ?? "";
+      metadata[`${prefix}contact_email`] = booking.contact_email ?? "";
+      metadata[`${prefix}language`] = booking.language ?? "en";
+      metadata[`${prefix}special_requirements`] =
+        booking.special_requirements ?? "";
+      metadata["conversion_rate"] = conversionRate.toString();
+    }
     console.log("Total Amount:", totalAmount);
     console.log("Metadata intent:", metadata);
     const totalAmountConverted = Math.round(totalAmount * conversionRate * 100);
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmountConverted,
-      currency: selectedCurrency,
+      currency: selectedCurrency.toLowerCase(),
       metadata,
     });
 
     res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
-    console.error("Error creating payment intent:", error);
-    console.error(
-      "Error details:",
-      error.response ? error.response.data : error.message
-    );
-    res.status(500).json({ error: "Failed to create payment intent." });
+    if (!res.headersSent) {
+      console.error("Error creating payment intent:", error);
+      res.status(500).json({ error: "Failed to create payment intent." });
+    }
   }
 });
 
