@@ -8,6 +8,7 @@
   ---break---
 */
 @custom-variant dark (&:is(.dark *));
+@import "react-day-picker/style.css";
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,

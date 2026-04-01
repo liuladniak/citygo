@@ -23,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import BackButton from "@/components/ui/BackButton";
+import { useTourAvailability } from "@/hooks/useTourAvailability";
+import { AvailabilityCalendar } from "@/components/AvailabilityCalendar";
 
 interface Tour {
   id: number;
@@ -30,6 +32,7 @@ interface Tour {
   duration: string;
   price: string;
   category: string;
+  slug: string;
 }
 
 interface TimeSlot {
@@ -193,6 +196,53 @@ function Step2({
     (s) => String(s.tour_id) === form.tour_id
   );
 
+  const { data: availability } = useTourAvailability(
+    selectedTour?.slug ?? null
+  );
+
+  const checkDateAvailability = (date: string) => {
+    if (!date || !availability) return { available: true, reason: null };
+
+    const dayOfWeek = new Date(date + "T12:00:00").getDay();
+    const recurringBlock = availability.recurring.find(
+      (r) => r.day_of_week === dayOfWeek
+    );
+    if (recurringBlock) {
+      return {
+        available: false,
+        reason: recurringBlock.reason
+          ? `Recurring block: ${recurringBlock.reason}`
+          : `This tour doesn't run on ${
+              [
+                "Sunday",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+              ][dayOfWeek]
+            }s`,
+      };
+    }
+
+    const specificBlock = availability.specific.find(
+      (s) => s.unavailable_date?.split("T")[0] === date
+    );
+    if (specificBlock) {
+      return {
+        available: false,
+        reason: specificBlock.reason
+          ? `Blocked: ${specificBlock.reason}`
+          : "This date is marked as unavailable",
+      };
+    }
+
+    return { available: true, reason: null };
+  };
+
+  const dateStatus = checkDateAvailability(form.tour_date);
+
   const formatTime = (t: string) => {
     const [h, m] = t.split(":");
     const hour = parseInt(h);
@@ -254,15 +304,37 @@ function Step2({
 
       <div className="space-y-2">
         <Label>Tour Date</Label>
-        <input
-          type="date"
-          value={form.tour_date}
-          min={new Date().toISOString().split("T")[0]}
-          onChange={(e) =>
-            setForm((p) => ({ ...p, tour_date: e.target.value }))
-          }
-          className="w-full h-10 px-3 border border-border rounded-md bg-background text-sm"
-        />
+        <div className="w-fit">
+          <AvailabilityCalendar
+            slug={!form.is_custom_tour ? selectedTour?.slug ?? null : null}
+            selected={
+              form.tour_date
+                ? new Date(form.tour_date + "T12:00:00")
+                : undefined
+            }
+            onSelect={(date) => {
+              if (!date) return;
+              setForm((p) => ({
+                ...p,
+                tour_date: date.toISOString().split("T")[0],
+              }));
+            }}
+          />
+        </div>
+        {form.tour_date && (
+          <p className="text-xs text-muted-foreground">
+            Selected:{" "}
+            {new Date(form.tour_date + "T12:00:00").toLocaleDateString(
+              "en-US",
+              {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              }
+            )}
+          </p>
+        )}
       </div>
 
       {!form.is_custom_tour && form.tour_id && availableSlots.length > 0 && (

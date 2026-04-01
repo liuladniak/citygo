@@ -12,6 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatTime } from "@/lib/utils";
+import { useTourAvailability } from "@/hooks/useTourAvailability";
+import apiClient from "@/lib/apiClient";
+import { AvailabilityCalendar } from "../AvailabilityCalendar";
 
 export default function EditDetailsModal({
   open,
@@ -38,8 +41,22 @@ export default function EditDetailsModal({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [tourSlug, setTourSlug] = useState<string | null>(null);
+  const { data: availability } = useTourAvailability(
+    !booking.is_custom_tour ? tourSlug : null
+  );
+
   useEffect(() => {
     if (!open || booking.is_custom_tour || !booking.tour_id) return;
+
+    apiClient.get(`/api/tours/simple`).then((res) => {
+      const tours = res.data.data ?? res.data;
+      const tour = tours.find(
+        (t: any) => String(t.id) === String(booking.tour_id)
+      );
+      if (tour) setTourSlug(tour.slug);
+    });
+
     axios
       .get(`/api/tours/time-slots`)
       .then((res) => {
@@ -50,6 +67,38 @@ export default function EditDetailsModal({
       })
       .catch(() => {});
   }, [open]);
+
+  const checkDateAvailability = (date: string) => {
+    if (!date || !availability || booking.is_custom_tour)
+      return { available: true, reason: null };
+
+    const dayOfWeek = new Date(date + "T12:00:00").getDay();
+    const recurringBlock = availability.recurring.find(
+      (r) => r.day_of_week === dayOfWeek
+    );
+    if (recurringBlock)
+      return {
+        available: false,
+        reason:
+          recurringBlock.reason ??
+          `Doesn't run on ${
+            ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek]
+          }`,
+      };
+
+    const specificBlock = availability.specific.find(
+      (s) => s.unavailable_date?.split("T")[0] === date
+    );
+    if (specificBlock)
+      return {
+        available: false,
+        reason: specificBlock.reason ?? "Date marked unavailable",
+      };
+
+    return { available: true, reason: null };
+  };
+
+  const dateStatus = checkDateAvailability(form.tour_date);
 
   const handleSubmit = async () => {
     setIsSaving(true);
@@ -102,16 +151,38 @@ export default function EditDetailsModal({
           <DialogTitle>Edit Experience Details</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-2">
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label>Date</Label>
-            <input
-              type="date"
-              value={form.tour_date}
-              onChange={(e) =>
-                setForm((p) => ({ ...p, tour_date: e.target.value }))
+
+            <AvailabilityCalendar
+              slug={tourSlug}
+              selected={
+                form.tour_date
+                  ? new Date(form.tour_date + "T12:00:00")
+                  : undefined
               }
-              className="w-full h-10 px-3 border border-border rounded-md bg-background text-sm"
+              onSelect={(date) => {
+                if (!date) return;
+                setForm((p) => ({
+                  ...p,
+                  tour_date: date.toISOString().split("T")[0],
+                }));
+              }}
             />
+            {form.tour_date && (
+              <p className="text-xs text-muted-foreground">
+                Selected:{" "}
+                {new Date(form.tour_date + "T12:00:00").toLocaleDateString(
+                  "en-US",
+                  {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  }
+                )}
+              </p>
+            )}
           </div>
 
           {!booking.is_custom_tour && timeSlots.length > 0 && (

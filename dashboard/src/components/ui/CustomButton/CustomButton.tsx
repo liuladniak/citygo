@@ -16,7 +16,6 @@ const CustomButton: React.FC<ButtonProps> = ({
   children,
   IconPath,
   to,
-  // onClick,
   className = "",
   textClassName = "",
   iconClassName = "",
@@ -33,11 +32,7 @@ const CustomButton: React.FC<ButtonProps> = ({
       <span className={`btn__text ${textClassName}`}>{children}</span>
     </Link>
   ) : (
-    <button
-      className={`${baseStyles} ${className}`}
-      // onClick={onClick}
-      {...props}
-    >
+    <button className={`${baseStyles} ${className}`} {...props}>
       {IconPath && (
         <Icon iconPath={IconPath} className={`w-6 h-6 ${iconClassName}`} />
       )}

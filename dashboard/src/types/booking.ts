@@ -20,7 +20,6 @@ export interface Booking extends BookingRow {
   display_start_time?: string;
   display_end_time?: string;
 }
-// export type Booking = Database["public"]["Tables"]["bookings"]["Row"];
 export type InsertBooking = Database["public"]["Tables"]["bookings"]["Insert"];
 export type UpdateBooking = Database["public"]["Tables"]["bookings"]["Update"];
 
