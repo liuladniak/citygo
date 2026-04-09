@@ -23,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import BackButton from "@/components/ui/BackButton";
-import { useTourAvailability } from "@/hooks/useTourAvailability";
 import { AvailabilityCalendar } from "@/components/AvailabilityCalendar";
 
 interface Tour {
@@ -195,53 +194,6 @@ function Step2({
   const availableSlots = timeSlots.filter(
     (s) => String(s.tour_id) === form.tour_id
   );
-
-  const { data: availability } = useTourAvailability(
-    selectedTour?.slug ?? null
-  );
-
-  const checkDateAvailability = (date: string) => {
-    if (!date || !availability) return { available: true, reason: null };
-
-    const dayOfWeek = new Date(date + "T12:00:00").getDay();
-    const recurringBlock = availability.recurring.find(
-      (r) => r.day_of_week === dayOfWeek
-    );
-    if (recurringBlock) {
-      return {
-        available: false,
-        reason: recurringBlock.reason
-          ? `Recurring block: ${recurringBlock.reason}`
-          : `This tour doesn't run on ${
-              [
-                "Sunday",
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-              ][dayOfWeek]
-            }s`,
-      };
-    }
-
-    const specificBlock = availability.specific.find(
-      (s) => s.unavailable_date?.split("T")[0] === date
-    );
-    if (specificBlock) {
-      return {
-        available: false,
-        reason: specificBlock.reason
-          ? `Blocked: ${specificBlock.reason}`
-          : "This date is marked as unavailable",
-      };
-    }
-
-    return { available: true, reason: null };
-  };
-
-  const dateStatus = checkDateAvailability(form.tour_date);
 
   const formatTime = (t: string) => {
     const [h, m] = t.split(":");

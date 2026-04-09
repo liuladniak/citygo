@@ -15,12 +15,16 @@ apiClient.interceptors.request.use(async (config) => {
   return config;
 });
 
+let isSigningOut = false;
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      supabase.auth.signOut();
-      window.location.href = "/";
+    if (error.response?.status === 401 && !isSigningOut) {
+      isSigningOut = true;
+      supabase.auth.signOut().finally(() => {
+        window.location.href = "/";
+      });
     }
     return Promise.reject(error);
   }

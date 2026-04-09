@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatTime } from "@/lib/utils";
-import { useTourAvailability } from "@/hooks/useTourAvailability";
 import apiClient from "@/lib/apiClient";
 import { AvailabilityCalendar } from "../AvailabilityCalendar";
 
@@ -42,9 +41,6 @@ export default function EditDetailsModal({
   const [error, setError] = useState<string | null>(null);
 
   const [tourSlug, setTourSlug] = useState<string | null>(null);
-  const { data: availability } = useTourAvailability(
-    !booking.is_custom_tour ? tourSlug : null
-  );
 
   useEffect(() => {
     if (!open || booking.is_custom_tour || !booking.tour_id) return;
@@ -67,38 +63,6 @@ export default function EditDetailsModal({
       })
       .catch(() => {});
   }, [open]);
-
-  const checkDateAvailability = (date: string) => {
-    if (!date || !availability || booking.is_custom_tour)
-      return { available: true, reason: null };
-
-    const dayOfWeek = new Date(date + "T12:00:00").getDay();
-    const recurringBlock = availability.recurring.find(
-      (r) => r.day_of_week === dayOfWeek
-    );
-    if (recurringBlock)
-      return {
-        available: false,
-        reason:
-          recurringBlock.reason ??
-          `Doesn't run on ${
-            ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dayOfWeek]
-          }`,
-      };
-
-    const specificBlock = availability.specific.find(
-      (s) => s.unavailable_date?.split("T")[0] === date
-    );
-    if (specificBlock)
-      return {
-        available: false,
-        reason: specificBlock.reason ?? "Date marked unavailable",
-      };
-
-    return { available: true, reason: null };
-  };
-
-  const dateStatus = checkDateAvailability(form.tour_date);
 
   const handleSubmit = async () => {
     setIsSaving(true);
