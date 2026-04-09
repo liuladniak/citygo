@@ -152,10 +152,9 @@ const Tour = () => {
     tour_itinerary_coordinates,
     tour_time_slots,
     images,
-    available_end_date,
     unavailable_recurring_day_of_week,
     unavailable_dates,
-    available_start_date,
+    booking_window_months,
   } = tour;
 
   console.log("Tour", tour);
@@ -174,7 +173,7 @@ const Tour = () => {
           <div className="tour-hero">
             <div className="tour__img-main">
               <img
-                src={`${API_URL}/${mainImage}`}
+                src={mainImage}
                 alt="tour image"
                 onClick={() => openModal(0)}
               />
@@ -262,7 +261,7 @@ const Tour = () => {
             {additionalImages.map((image, index) => (
               <div className="tour-hero__img-link" key={index}>
                 <img
-                  src={`${API_URL}/${image}`}
+                  src={image}
                   alt={`tour image ${index}`}
                   onClick={() => openModal(index + 1)}
                 />
@@ -371,14 +370,13 @@ const Tour = () => {
                 price={price}
                 slug={slug}
                 tour_id={id}
-                availableEndDate={available_end_date}
-                availableStartDate={available_start_date}
                 title={tour_name}
                 mainImage={mainImage}
                 unavailableRecurringDays={unavailable_recurring_day_of_week}
                 unavailableDates={unavailable_dates}
                 tour_time_slots={tour_time_slots}
                 featured={featured}
+                bookingWindowMonths={booking_window_months ?? 6}
               />
             </div>
           </div>

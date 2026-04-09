@@ -1,6 +1,6 @@
-import "./TravelGuide.scss";
 
-import Button from "../../components/Button/Button";
+
+import "./TravelGuide.scss";
 import BannerSlider from "../../components/BannerSlider/BannerSlider";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,102 +8,177 @@ import ToursSkeletonCard from "../../components/LoadingSceleton/ToursSkeletonCar
 import BannerSkeleton from "../../components/LoadingSceleton/BannerSkeleton";
 import { Link } from "react-router-dom";
 
+const CATEGORY_MAP = {
+  All: "all",
+  "Culture & History": "culture-history",
+  "Food & Drink": "food-drink",
+  "Nightlife & Views": "nightlife-views",
+  "Nature & Adventure": "nature-adventure",
+  Neighborhoods: "neighborhoods",
+  "Day Trips": "day-trips",
+};
+
 const TravelGuide = () => {
   const [articles, setArticles] = useState([]);
   const [bannerArticles, setBannerArticles] = useState([]);
   const [cardArticles, setCardArticles] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [category, setCategory] = useState("all");
   const API_URL = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
     const fetchArticles = async () => {
+      setIsLoading(true);
       try {
-        console.log("Fetching articles");
-        const response = await axios.get(
-          `${API_URL}/api/articles?limit=8&page=1`
-        );
-        setArticles(response.data.data);
-        setBannerArticles(response.data.data.slice(0, 3));
-        setCardArticles(response.data.data.slice(3));
-        console.log("articles response data:", response.data.data);
+        const params = { limit: 8, page };
+        if (category !== "all") params.category = category;
+
+        const response = await axios.get(`${API_URL}/api/articles`, { params });
+        const data = response.data.data;
+
+        setArticles(data);
+
+        // --- UX LOGIC: Handling "All" vs Specific Categories ---
+        if (category === "all") {
+          // Home page gets the magazine layout (Deduplicated)
+          setBannerArticles(data.slice(0, 3));
+          setCardArticles(data.slice(3));
+        } else {
+          // Category pages: Hide banner and show all items in the grid
+          setBannerArticles([]);
+          setCardArticles(data);
+        }
+
+        setTotalPages(response.data.totalPages);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching articles:", error);
         setError("Failed to load articles");
         setIsLoading(false);
       }
     };
-
     fetchArticles();
-  }, []);
+  }, [page, category, API_URL]);
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+  if (error)
+    return <div className="error-message p-10 text-center">{error}</div>;
 
   return (
     <div className="guide">
       <div className="tours-heading-wrp">
-        <h1 className="tours-heading">How we travel</h1>
+        <h1 className="tours-heading">Travel Guide</h1>
         <p className="tours-description">
-          Explore Istanbul's vibrant neighborhoods, serene islands, and iconic
-          spots. Whether you're seeking history, adventure, or relaxation, our
-          curated destinations offer something for everyone. Discover the magic
-          of Istanbul, one destination at a time.
+          Stories, tips and inspiration for your Istanbul adventure. From hidden
+          gems to iconic landmarks — everything you need to explore like a
+          local.
         </p>
       </div>
 
-      {isLoading ? (
-        <BannerSkeleton />
-      ) : (
-        <BannerSlider articles={bannerArticles} />
-      )}
+      {/* --- BANNER LOGIC --- */}
+      {/* We only show this on the "All" tab when content exists */}
+      {category === "all" &&
+        (isLoading ? (
+          <BannerSkeleton />
+        ) : (
+          bannerArticles.length > 0 && (
+            <BannerSlider articles={bannerArticles} />
+          )
+        ))}
+
+      {/* Category Filters */}
+      <div className="guide-filters">
+        {Object.keys(CATEGORY_MAP).map((catLabel) => {
+          const catValue = CATEGORY_MAP[catLabel];
+          return (
+            <button
+              key={catValue}
+              onClick={() => {
+                setCategory(catValue);
+                setPage(1);
+              }}
+              className={`guide-filter ${
+                category === catValue ? "guide-filter--active" : ""
+              }`}
+            >
+              {catLabel}
+            </button>
+          );
+        })}
+      </div>
 
       {isLoading ? (
         <div className="tour-cards--skeleton">
-          {Array(3)
-            .fill()
-            .map((_, index) => (
-              <ToursSkeletonCard
-                key={index}
-                className="tour-intro-card--skeleton"
-              />
+          {Array(6)
+            .fill(0)
+            .map((_, i) => (
+              <ToursSkeletonCard key={i} />
             ))}
         </div>
       ) : (
-        <div className="article-cards">
-          {cardArticles.map((article, i) => {
-            return (
-              <div
-                // <Link
-                // to={`/article/${article.slug}`}
-                key={i}
-                className="article-card"
-              >
-                <div className="article-card__img">
-                  <img
-                    src={`${API_URL}/articles/${article.images[0]}`}
-                    alt={article.title}
-                  />
-                </div>
-                <div className="article-card__desc">
-                  <span>{article.category}</span>
-                  <h3>{article.title}</h3>
-                </div>
-                {/* </Link> */}
-              </div>
-            );
-          })}
+        <div className="article-section">
+          {articles.length === 0 ? (
+            <div className="no-results text-center py-20">
+              <p>No articles found in this category.</p>
+            </div>
+          ) : (
+            <div className="article-cards">
+              {cardArticles.map((article) => (
+                <Link
+                  to={`/article/${article.slug}`}
+                  key={article.id}
+                  className="article-card"
+                >
+                  <div className="article-card__img">
+                    <img
+                      src={article.images[0]?.url}
+                      alt={article.title}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="article-card__desc">
+                    <span className="article-card__category">
+                      {article.category}
+                    </span>
+                    <h3 className="article-card__title">{article.title}</h3>
+                    <p className="article-card__excerpt">
+                      {article.description}
+                    </p>
+                    <span className="article-card__meta">
+                      {article.read_time > 0
+                        ? `${article.read_time} min read`
+                        : "Quick read"}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
-      <div className="guide-pagination">
-        <button className="btn btn--disabled" disabled>
-          More
-        </button>
-      </div>
+      {totalPages > 1 && (
+        <div className="guide-pagination">
+          <button
+            className="btn"
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Previous
+          </button>
+          <span className="guide-pagination__info">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            className="btn"
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

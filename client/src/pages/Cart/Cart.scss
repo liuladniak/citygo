@@ -1,33 +1,239 @@
+
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
 .cart {
-  margin-top: $space-large;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: $space-medium;
   max-width: $max-width;
-
-  &__heading {
-    font-size: 2rem;
-    font-weight: 400;
-  }
-  &__review {
-    display: flex;
-    justify-content: space-between;
-    gap: 9rem;
-  }
+  margin: $space-large auto;
 
   &-heading {
     font-size: 3.2rem;
-    z-index: 5;
+    font-weight: 700;
+    margin-bottom: $space-medium;
   }
 
-  &-list {
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-medium;
+    align-items: start;
+
+    @include tablet {
+      grid-template-columns: 1fr;
+    }
+
+    @include desktop-s {
+      grid-template-columns: 3fr 2fr; 
+    }
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: $space-small;
+    min-width: 0;
+  }
+
+  &__right {
+    min-width: 0;
+
+    @include desktop-s {
+      position: sticky;
+      top: 2rem;
+    }
+  }
+
+  &__section {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: $border-radius;
+    overflow: hidden;
+  }
+
+  &__section-heading {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $charcoal;
+    padding: 2rem 2.4rem;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  &__section-number {
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    background: $main-teal;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__continue-btn {
+    background: $main-maroon;
+    color: white;
+    border: none;
+    border-radius: $border-radius-main;
+    padding: 1.4rem 3.2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    align-self: flex-start;
+    margin-top: 0.8rem;
+
+    &:hover {
+      opacity: 0.88;
+    }
+  }
+
+  &__loading {
+    padding: 2.4rem;
+    font-size: 1.4rem;
+    color: #6b7280;
   }
 }
 
-.booking-summary {
-  flex: 2;
+.contact-form-section {
+  padding: 2.4rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+
+    @include tablet {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+
+  label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}
+
+.contact-input {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  padding: 1.1rem 1.4rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  color: $charcoal;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: $main-teal;
+    box-shadow: 0 0 0 3px rgba(30, 85, 109, 0.1);
+  }
+
+  &--textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+}
+
+.contact-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 2.4rem;
+  background: $supportive-2;
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: $main-teal;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      font-size: 1.4rem;
+      color: $charcoal;
+    }
+  }
+}
+
+.btn--edit-contact {
+  background: none;
+  border: none;
+  color: $main-teal;
+  font-size: 1.3rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+.sign-in-prompt {
+  padding: 2.4rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+
+  p {
+    font-size: 1.4rem;
+    color: #6b7280;
+  }
+}
+
+.sign-in-btn {
+  display: inline-block;
+  background: $main-maroon;
+  color: white;
+  padding: 1rem 2.4rem;
+  border-radius: $border-radius-main;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
 }

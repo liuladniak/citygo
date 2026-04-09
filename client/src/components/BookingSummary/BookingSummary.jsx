@@ -15,7 +15,7 @@ const BookingSummary = ({ totalPrice, bookings }) => {
 
   return (
     <div className="cart-product">
-      <h2 className="cart__heading">Total</h2>
+      <h2 className="cart-product__heading">Order Summary</h2>
       <ul className="cart-product__list">
         {bookings.map((booking, i) => {
           const { title, price, guests, featured } = booking;
@@ -30,16 +30,10 @@ const BookingSummary = ({ totalPrice, bookings }) => {
           if (featured) {
             totalTourPrice *= 0.9;
           }
-          console.log("Converted Price:", convertedPrice);
-          console.log("Adult Total:", adultTotal);
-          console.log("Child Total:", childTotal);
-          console.log("Total Tour Price:", totalTourPrice);
 
           return (
             <li key={i} className="cart-product__item">
-              <div className="cart-product__title">
-                <strong>{title}</strong>
-              </div>
+              <div className="cart-product__title">{title}</div>
               <div className="cart-product__details">
                 <p>
                   Adults: {guests.adults} ×{" "}

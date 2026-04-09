@@ -6,41 +6,39 @@ import useComponentVisible from "../../hooks/useComponentVisible";
 import closeIcon from "../../assets/icons/close.svg";
 
 const TourDatePicker = ({
-  availableStartDate,
-  availableEndDate,
+  bookingWindowMonths = 6,
   onDateSelected,
-  unavailableRecurringDays,
-  unavailableDates,
+  unavailableRecurringDays = [],
+  unavailableDates = [],
 }) => {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
 
-  const startDate = new Date(availableStartDate);
-  const endDate = new Date(availableEndDate);
-  console.log(availableStartDate, availableEndDate, startDate, endDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const windowEnd = new Date();
+  windowEnd.setMonth(windowEnd.getMonth() + bookingWindowMonths);
+  windowEnd.setHours(23, 59, 59, 999);
 
   const isDateAvailable = (date) => {
     const dayOfWeek = date.getDay();
     const formattedDate = date.toISOString().split("T")[0];
 
-    const isUnavailableRecurringDay =
-      unavailableRecurringDays.includes(dayOfWeek);
-    const isUnavailableDate = unavailableDates.includes(formattedDate);
-
     return (
-      date >= startDate &&
-      date <= endDate &&
-      !isUnavailableRecurringDay &&
-      !isUnavailableDate
+      date >= today &&
+      date <= windowEnd &&
+      !unavailableRecurringDays.includes(dayOfWeek) &&
+      !unavailableDates.includes(formattedDate)
     );
   };
 
   const isPastDate = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return date < d;
   };
 
   const handleDateClick = (event) => {

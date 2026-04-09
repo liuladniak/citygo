@@ -11,26 +11,8 @@
     gap: 3rem;
     margin-top: 4.5rem;
   }
+
   &-filter {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-
-    @include tablet {
-      flex-direction: row;
-    }
-
-    &__options {
-      position: unset;
-      box-shadow: none;
-
-      @include tablet {
-        position: absolute;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-    }
-
     &-wrp {
       display: flex;
       flex-direction: column;
@@ -43,224 +25,229 @@
         flex-direction: row;
       }
     }
+
     &-l {
       flex: 4;
       display: flex;
-      width: 100%;
       flex-direction: column;
+      width: 100%;
 
       @include tablet {
-        flex: 4;
-        display: flex;
-        width: 100%;
         flex-direction: row;
       }
     }
+
     &-r {
       flex: 1;
       width: 100%;
     }
-    &__select {
-      font-family: Montserrat;
-      border: none;
-      font-size: 1.6rem;
-      color: #333;
-      background-color: #fff;
-      appearance: none;
 
-      &-wrp {
-        flex: 1;
-        border-right: 1px solid #ecedeb;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
+    &__select-wrp {
+      flex: 1;
+      border-right: 1px solid #ecedeb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    &__options {
+      position: unset;
+      box-shadow: none;
+
+      @include tablet {
+        position: absolute;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       }
     }
 
-    &__search {
-      font-weight: 400;
+    &__search-input {
+      padding: 0.8rem 3.8rem;
+      width: 100%;
+      border: 1px solid lightgray;
+      height: 100%;
+      font-family: Montserrat;
       font-size: 1.6rem;
-      width: fit-content;
+      color: black;
+      margin: 0.8rem;
 
-      &-input {
-        border-radius: 3rem;
+      @include tablet {
         border: none;
+        padding: 0 0 0 3.8rem;
+        margin: 0;
       }
     }
 
     &-selections {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
+      gap: 1.2rem;
     }
   }
-  &-list {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    gap: $space-large;
-  }
-  &-list__filtered,
-  &-list__remaining {
+
+  &-filter__pills {
     display: flex;
     flex-wrap: wrap;
-    gap: $space-large;
+    gap: 0.8rem;
+    align-items: center;
   }
-  &-list__filtered {
-    border-bottom: 1px solid #eee;
-    padding-bottom: $space-large;
+
+  &-filter__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background-color: $supportive-2;
+    color: $main-teal;
+    border: 1px solid $supportive-4;
+    border-radius: $border-radius-main;
+    padding: 0.4rem 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+
+    &__close {
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &--reset {
+      background: none;
+      border: 1px solid #ddd;
+      color: #6b7280;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+
+      &:hover {
+        border-color: $main-maroon;
+        color: $main-maroon;
+      }
+    }
+  }
+
+  &-filter__count {
+    font-size: 1.3rem;
+    color: #9ca3af;
+    white-space: nowrap;
+  }
+
+  &-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-large;
 
     @include tablet {
-      margin-top: $space-medium;
+      grid-template-columns: repeat(2, 1fr);
     }
+    @include desktop {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
 
-    &-heading {
-      font-size: 1.8rem;
-      font-weight: 400;
-      padding: 1.6rem;
-    }
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6rem;
+    padding: $space-large;
+    color: #6b7280;
+    font-size: 1.6rem;
+    text-align: center;
   }
 
   &-pagination {
     display: flex;
-    gap: $space-medium;
-    font-size: 1.4rem;
-    font-weight: 600;
     justify-content: center;
     align-items: center;
-  }
-  &-prev {
+    gap: $space-medium;
+    margin-top: $space-medium;
+
+    button {
+      padding: 1.2rem 2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #e9eef0;
+      font-size: 1.4rem;
+      font-weight: 600;
+      transition: background-color 0.3s;
+
+      &.active {
+        background-color: $main-teal;
+        color: white;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: #bcccd3;
+      }
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+
+    .tours-prev,
+    .tours-next {
+      padding: 0;
+      background: none;
+    }
+
+    .pagination-controls {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
   }
 
-  &-next {
+  &-suggestions {
+    &__heading {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: $space-medium;
+      color: $charcoal;
+    }
   }
-  &-prev,
-  &-next {
-    cursor: pointer;
-    background-color: $main-maroon;
-    border: none;
-    color: white;
-    padding: 0.8rem 1.6rem;
+
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6rem;
+    padding: $space-medium 0;
+    color: #6b7280;
+    font-size: 1.6rem;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    margin-bottom: $space-medium;
   }
 }
 
-.tours-filter__search-input {
-  padding: 0.8rem 3.8rem;
-  width: 100%;
-  border: none;
-  height: 100%;
-  font-family: Montserrat;
-  font-size: 1.6rem;
-  color: black;
+.search-wrp {
   position: relative;
-  border: 1px solid lightgray;
-  margin: 0.8rem;
+  border: none;
+  width: fit-content;
+  margin: 0 auto;
 
   @include tablet {
-    border: none;
-    padding: 0 0 0 3.8rem;
-  }
-
-  & ::placeholder {
-    color: black;
+    margin: auto;
+    width: unset;
   }
 }
 
-.search {
-  &-wrp {
-    position: relative;
-    border: none;
-    width: fit-content;
-    margin: 0 auto;
+.search-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  position: absolute;
+  left: 1.6rem;
+  top: 50%;
+  transform: translateY(-45%);
 
-    @include tablet {
-      margin: auto;
-      width: unset;
-    }
+  @include tablet {
+    left: 0.8rem;
   }
-
-  &-icon {
-    width: 2.4rem;
-    height: 2.4rem;
-    position: absolute;
-    left: 1.6rem;
-    top: 50%;
-    transform: translateY(-45%);
-
-    @include tablet {
-      left: 0.8rem;
-    }
-  }
-}
-
-.tours-filter__pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.tours-filter__pill {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: $main-teal;
-  color: white;
-  border-radius: 20px;
-  padding: 0.4rem 1.6rem;
-  font-size: 1.4rem;
-
-  &__close {
-    margin-left: 0.5rem;
-    font-size: 3.2rem;
-    line-height: 3.2rem;
-    cursor: pointer;
-  }
-}
-
-.tours-pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-
-  button {
-    margin: 0 5px;
-    padding: 1.2rem 2rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #e9eef0;
-    transition: background-color 0.3s ease;
-
-    &.active {
-      background-color: $main-teal;
-      color: white;
-    }
-
-    &:hover:not(:disabled) {
-      background-color: #bcccd3;
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      background-color: #e4e0e0;
-    }
-  }
-  & .tours-prev,
-  & .tours-next {
-    padding: 0;
-  }
-
-  & .pagination-controls {
-    width: 3.2rem;
-    height: 3.2rem;
-  }
-}
-
-.tours-cards-skeleton {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $space-large;
-  justify-content: center;
 }

@@ -23,14 +23,12 @@ const TourCard = ({
   category,
   images = [],
   tourCardImg = "",
-  cardWrp = "",
 }) => {
   const selectedCurrency = useSelector(
     (state) => state.currency.selectedCurrency
   );
   const exchangeRates = useSelector((state) => state.currency.exchangeRates);
 
-  const API_URL = import.meta.env.VITE_API_KEY;
   const highlightsList = highlights.join(", ");
 
   const convertPrice = (price) => {

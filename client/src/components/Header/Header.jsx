@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import "./Header.scss";
 import Button from "../Button/Button";
 import HamburgerIcon from "../../assets/icons/burger-menu-svgrepo-com.svg";
-import logoutIcon from "../../assets/icons/logout.svg";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import cartIcon from "../../assets/icons/cart.svg";
 import phoneIcon from "../../assets/icons/phone.svg";
@@ -16,7 +15,7 @@ import {
   fetchExchangeRates,
   setCurrency,
 } from "../../features/currency/currencySlice";
-import { logout, checkToken } from "../../features/auth/authSlice";
+import { logout } from "../../features/auth/authSlice";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Icon from "../UI/Icon";
 import { iconArrowDown, iconArrowUp, iconSignout } from "../UI/iconsPaths";

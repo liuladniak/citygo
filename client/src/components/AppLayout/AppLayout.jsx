@@ -8,7 +8,7 @@ import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Banner from "../Banner/Banner";
 import { useDispatch } from "react-redux";
 import { checkToken } from "../../features/auth/authSlice";
-import ChatbotWidget from "../Chatbot/Chatbot";
+import MiloChat from "../MiloChat/MiloChat";
 
 function AppLayout() {
   const location = useLocation();
@@ -34,7 +34,7 @@ function AppLayout() {
         <Subscribe />
       </main>
       <Footer />
-      <ChatbotWidget />
+      <MiloChat />
     </div>
   );
 }

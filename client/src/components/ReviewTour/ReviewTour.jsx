@@ -8,7 +8,6 @@ import EditDateModal from "../EditDateModal/EditDateModal";
 import EditTimeSlotModal from "../EditTimeSlotModal/EditTimeSlotModal";
 import EditGuestsModal from "../EditGuestsModal/EditGuestsModal";
 import { Link } from "react-router-dom";
-import Button from "../Button/Button";
 import { iconDelete } from "../UI/iconsPaths";
 import Icon from "../UI/Icon";
 
@@ -16,7 +15,6 @@ const ReviewTour = ({ bookings }) => {
   const dispatch = useDispatch();
   const [editingBooking, setEditingBooking] = useState(null);
   const [editingDetail, setEditingDetail] = useState(null);
-  const API_URL = import.meta.env.VITE_API_KEY;
 
   const handleRemoveBooking = (id) => {
     dispatch(removeBooking(id));
@@ -40,7 +38,7 @@ const ReviewTour = ({ bookings }) => {
                 to={`/tours/${booking.slug}`}
                 className="review-details__img"
               >
-                <img src={`${API_URL}/${booking.mainImage}`} alt="Tour" />
+                <img src={booking.mainImage} alt="Tour" />
               </Link>
               <div className="review-details__fields">
                 <div className="review-details__item">

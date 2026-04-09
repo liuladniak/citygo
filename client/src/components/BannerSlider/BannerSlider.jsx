@@ -6,7 +6,6 @@ const BannerSlider = ({ articles }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const sliderRef = useRef(null);
   const intervalRef = useRef(null);
-  const API_URL = import.meta.env.VITE_API_KEY;
   console.log("banner images", articles);
   const slides = [articles[articles.length - 1], ...articles, articles[0]];
 
@@ -101,7 +100,7 @@ const BannerSlider = ({ articles }) => {
             <article key={index} className="slider-card">
               <div className="slider-card__wrp">
                 <img
-                  src={`${API_URL}/articles/${article.images[0]}`}
+                  src={article.images[0]?.url}
                   alt={`Slide ${index}`}
                   className="slider-image"
                 />

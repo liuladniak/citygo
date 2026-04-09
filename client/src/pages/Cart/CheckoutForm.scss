@@ -1,35 +1,55 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
-.success-message {
-  color: green;
-  font-weight: bold;
-  margin-top: 1rem;
-}
 .checkout-form {
   display: flex;
   flex-direction: column;
-  gap: $space-medium;
-}
-
-.test-card-note {
-  font-size: 1.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: $space-x-small;
+  gap: $space-small;
 }
 
 .disclaimer-alert {
-  font-size: 1.6rem;
-  background: #ff5a5f;
-  // color: white;
+  background: #fff8e1;
+  border: 1px solid #f59e0b;
   border-radius: $border-radius;
-  padding: $space-x-small;
+  padding: 1.6rem;
+  font-size: 1.3rem;
+  color: #92400e;
+  line-height: 1.5;
 
   &__heading {
-    font-size: 2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
   }
+}
 
-  &_desc {
+.test-card-note {
+  font-size: 1.3rem;
+  color: #6b7280;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.2rem 1.6rem;
+  background: $warm-gray;
+  border-radius: 0.8rem;
+
+  strong {
+    color: $charcoal;
   }
+}
+
+.success-message {
+  color: $success;
+  font-weight: 600;
+  font-size: 1.4rem;
+  text-align: center;
+  padding: 1.6rem;
+  background: #f0fdf4;
+  border-radius: $border-radius;
+}
+
+.error {
+  color: $main-maroon;
+  font-size: 1.3rem;
+  text-align: center;
 }

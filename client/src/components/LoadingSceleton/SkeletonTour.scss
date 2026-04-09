@@ -1,67 +1,168 @@
+// @use "../../styles/partials/variables" as *;
+// @use "../../styles/partials/mixins" as *;
+
+// .skeleton {
+//   background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+//   background-size: 200% 100%;
+//   animation: shimmer 1.5s infinite linear;
+//   border-radius: 8px;
+// }
+
+// @keyframes shimmer {
+//   0% {
+//     background-position: -200% 0;
+//   }
+//   100% {
+//     background-position: 200% 0;
+//   }
+// }
+
+// .skeleton-img-main {
+//   width: 100%;
+//   height: 300px;
+//   grid-area: main-img;
+// }
+
+// .skeleton-heading {
+//   width: 60%;
+//   height: 24px;
+//   margin: 16px 0;
+// }
+
+// .skeleton-tag {
+//   width: 120px;
+//   height: 20px;
+//   margin-bottom: 10px;
+// }
+
+// .skeleton-btn {
+//   width: 100px;
+//   height: 30px;
+// }
+
+// .skeleton-img-secondary {
+//   width: 30%;
+//   height: 20rem;
+//   margin-top: 10px;
+
+//   &:nth-child(1) {
+//     grid-area: sec-img;
+//   }
+//   &:nth-child(2) {
+//     grid-area: third-img;
+//   }
+//   &:nth-child(3) {
+//     grid-area: forth-img;
+//   }
+// }
+
+// .skeleton-text {
+//   grid-area: desc;
+// }
+
+// .skeleton-tags {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+// }
+
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
 .skeleton {
-  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite linear;
+  background: #eee;
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
   border-radius: 8px;
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
+@keyframes shine {
+  to {
+    background-position-x: -200%;
   }
 }
 
+// Layout mimics
 .skeleton-img-main {
-  width: 100%;
-  height: 300px;
   grid-area: main-img;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+}
+
+.skeleton-img-link {
+  width: 100%;
+  height: 100%;
+  min-height: 10rem;
+
+  @include tablet {
+    height: 20rem;
+  }
+
+  &:nth-of-type(1) {
+    grid-area: sec-img;
+  }
+  &:nth-of-type(2) {
+    grid-area: third-img;
+  }
+  &:nth-of-type(3) {
+    grid-area: forth-img;
+    display: none;
+    @include tablet {
+      display: block;
+    }
+  }
 }
 
 .skeleton-heading {
-  width: 60%;
-  height: 24px;
-  margin: 16px 0;
+  width: 80%;
+  height: 3.2rem;
+  margin-bottom: 1rem;
 }
 
 .skeleton-tag {
-  width: 120px;
-  height: 20px;
-  margin-bottom: 10px;
-}
-
-.skeleton-btn {
   width: 100px;
-  height: 30px;
-}
-
-.skeleton-img-secondary {
-  width: 30%;
-  height: 20rem;
-  margin-top: 10px;
-
-  &:nth-child(1) {
-    grid-area: sec-img;
-  }
-  &:nth-child(2) {
-    grid-area: third-img;
-  }
-  &:nth-child(3) {
-    grid-area: forth-img;
+  height: 4rem;
+  @include tablet {
+    width: 140px;
   }
 }
 
-.skeleton-text {
-  grid-area: desc;
+.skeleton-icon-btn {
+  width: 80px;
+  height: 24px;
 }
 
-.skeleton-tags {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.skeleton-nav {
+  width: 100%;
+  height: 50px;
+  margin: 2rem 0;
+}
+
+.skeleton-title-sm {
+  width: 200px;
+  height: 24px;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-paragraph {
+  width: 100%;
+  height: 14px;
+  margin-bottom: 1rem;
+  &:last-child {
+    width: 60%;
+  }
+}
+
+.skeleton-list-item {
+  width: 90%;
+  height: 20px;
+  margin-bottom: 1.2rem;
+}
+
+.skeleton-booking-card {
+  width: 100%;
+  height: 500px; // Mimics the height of your BookingForm
+  @include border-radius;
 }

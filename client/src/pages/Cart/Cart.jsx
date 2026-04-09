@@ -18,6 +18,15 @@ const Cart = () => {
   const API_URL = import.meta.env.VITE_API_KEY;
   const [user, setUser] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
+  const [contactDetails, setContactDetails] = useState({
+    contact_name: "",
+    contact_email: "",
+    contact_phone: "",
+    language: "en",
+    special_requirements: "",
+  });
+  const [contactReady, setContactReady] = useState(false);
+
   const bookings = useSelector((state) => state.cart.bookings);
   const selectedCurrency = useSelector(
     (state) => state.currency.selectedCurrency
@@ -64,59 +73,192 @@ const Cart = () => {
 
     return bookings.reduce((total, booking) => {
       const { price, guests, featured } = booking;
-      let totalPrice = 0;
-
-      totalPrice += guests.adults * price * exchangeRate;
+      let totalPrice = guests.adults * price * exchangeRate;
       totalPrice += guests.children * (price * 0.5 * exchangeRate);
-      totalPrice += guests.infants * 0;
-
-      if (featured) {
-        totalPrice *= 0.9;
-      }
-
+      if (featured) totalPrice *= 0.9;
       return total + totalPrice;
     }, 0);
   };
 
+  const handleContactChange = (e) => {
+    setContactDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    if (!contactDetails.contact_name || !contactDetails.contact_email) return;
+    setContactReady(true);
+  };
+
   useEffect(() => {
-    if (bookings.length > 0 && user && !clientSecret) {
-      console.log("Booking Payload:", bookings);
+    if (bookings.length > 0 && user && contactReady && !clientSecret) {
+      console.log("Contact details being sent:", contactDetails);
       axios
         .post(`${API_URL}/api/payment/create-payment-intent`, {
-          selectedCurrency: selectedCurrency,
+          selectedCurrency,
           bookings: bookings.map((booking) => ({
             user_id: user.id,
             tour_id: booking.tour_id,
             time_slot_id: booking.timeSlot.id,
-            booking_date: booking.date,
+            tour_date: booking.date,
             adults: booking.guests.adults,
             children: booking.guests.children,
             infants: booking.guests.infants,
+            contact_name: contactDetails.contact_name,
+            contact_email: contactDetails.contact_email,
+            contact_phone: contactDetails.contact_phone,
+            language: contactDetails.language,
+            special_requirements: contactDetails.special_requirements,
           })),
         })
         .then((res) => setClientSecret(res.data.clientSecret))
         .catch((err) => console.error("Error fetching payment intent:", err));
     }
-  }, [bookings, clientSecret, user, selectedCurrency]);
+  }, [bookings, clientSecret, user, selectedCurrency, contactReady]);
 
   console.log("Bookings %%%:", bookings, "user%", user);
 
+  if (bookings.length === 0) {
+    return (
+      <div className="cart">
+        <h1 className="cart-heading">Cart</h1>
+        <p className="cart__heading">Your cart is empty.</p>
+      </div>
+    );
+  }
+
+
   return (
     <div className="cart">
-      <h1 className="cart-heading">Cart</h1>
-      <div className="cart-list">
-        {bookings.length === 0 ? (
-          <p className="cart__heading">Your cart is empty.</p>
-        ) : (
-          <div className="cart__review">
+      <h1 className="cart-heading">Review & Book</h1>
+      <div className="cart__layout">
+        <div className="cart__left">
+          <div className="cart__section">
+            <h2 className="cart__section-heading">
+              <span className="cart__section-number">1</span>
+              Your Trip
+            </h2>
             <ReviewTour bookings={bookings} />
-            <div className="booking-summary">
-              <BookingSummary
-                bookings={bookings}
-                totalPrice={calculateTotal()}
-              />
-              {user ? (
-                clientSecret ? (
+          </div>
+
+          <div className="cart__section">
+            <h2 className="cart__section-heading">
+              <span className="cart__section-number">2</span>
+              Your Details
+            </h2>
+
+            {!user ? (
+              <div className="sign-in-prompt">
+                <p>Sign in to complete your booking.</p>
+                <Link to="/login" className="sign-in-btn">
+                  Sign In
+                </Link>
+              </div>
+            ) : !contactReady ? (
+              <div className="contact-form-section">
+                <form className="contact-form" onSubmit={handleContactSubmit}>
+                  <div className="contact-form__row">
+                    <div className="contact-field">
+                      <label>Full Name *</label>
+                      <input
+                        type="text"
+                        name="contact_name"
+                        value={contactDetails.contact_name}
+                        onChange={handleContactChange}
+                        placeholder="John Smith"
+                        required
+                        className="contact-input"
+                      />
+                    </div>
+                    <div className="contact-field">
+                      <label>Email *</label>
+                      <input
+                        type="email"
+                        name="contact_email"
+                        value={contactDetails.contact_email}
+                        onChange={handleContactChange}
+                        placeholder="john@example.com"
+                        required
+                        className="contact-input"
+                      />
+                    </div>
+                  </div>
+                  <div className="contact-form__row">
+                    <div className="contact-field">
+                      <label>Phone (optional)</label>
+                      <input
+                        type="tel"
+                        name="contact_phone"
+                        value={contactDetails.contact_phone}
+                        onChange={handleContactChange}
+                        placeholder="+1 234 567 890"
+                        className="contact-input"
+                      />
+                    </div>
+                    <div className="contact-field">
+                      <label>Language preference</label>
+                      <select
+                        name="language"
+                        value={contactDetails.language}
+                        onChange={handleContactChange}
+                        className="contact-input"
+                      >
+                        <option value="en">English</option>
+                        <option value="tr">Turkish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="es">Spanish</option>
+                        <option value="ar">Arabic</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="contact-field">
+                    <label>Special requirements (optional)</label>
+                    <textarea
+                      name="special_requirements"
+                      value={contactDetails.special_requirements}
+                      onChange={handleContactChange}
+                      placeholder="Accessibility needs, dietary requirements..."
+                      className="contact-input contact-input--textarea"
+                      rows={3}
+                    />
+                  </div>
+                  <button type="submit" className="cart__continue-btn">
+                    Continue to Payment →
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <div className="contact-summary">
+                <div className="contact-summary__details">
+                  <h3>Contact Details</h3>
+                  <p>{contactDetails.contact_name}</p>
+                  <p>{contactDetails.contact_email}</p>
+                  {contactDetails.contact_phone && (
+                    <p>{contactDetails.contact_phone}</p>
+                  )}
+                </div>
+                <button
+                  className="btn--edit-contact"
+                  onClick={() => {
+                    setContactReady(false);
+                    setClientSecret(null);
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
+            )}
+          </div>
+
+          {contactReady && user && (
+            <div className="cart__section">
+              <h2 className="cart__section-heading">
+                <span className="cart__section-number">3</span>
+                Payment
+              </h2>
+              {clientSecret ? (
+                <div className="contact-form-section">
                   <Elements stripe={stripePromise} options={{ clientSecret }}>
                     <CheckoutForm
                       bookings={bookings}
@@ -125,20 +267,17 @@ const Cart = () => {
                       clientSecret={clientSecret}
                     />
                   </Elements>
-                ) : (
-                  <p>Loading payment options...</p>
-                )
-              ) : (
-                <div className="sign-in-prompt">
-                  <p>You need to sign in to proceed with booking.</p>
-                  <Link to="/login" className="sign-in-btn">
-                    Sign In
-                  </Link>
                 </div>
+              ) : (
+                <p className="cart__loading">Loading payment options...</p>
               )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        <div className="cart__right">
+          <BookingSummary bookings={bookings} totalPrice={calculateTotal()} />
+        </div>
       </div>
     </div>
   );

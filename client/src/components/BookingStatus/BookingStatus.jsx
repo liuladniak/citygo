@@ -1,5 +1,4 @@
 // BookingStatus.jsx
-import React from "react";
 import "./BookingStatus.scss";
 
 const BookingStatus = ({ status }) => {

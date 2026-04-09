@@ -35,5 +35,3 @@ store.subscribe(() => {
   saveToLocalStorage("cart", store.getState().cart);
   saveToLocalStorage("wishlist", store.getState().wishlist);
 });
-
-export default store;

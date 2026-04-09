@@ -50,7 +50,15 @@
   border-radius: 1.6rem;
 }
 
+// @mixin layout-constrain {
+//   max-width: $max-width;
+//   width: 100%;
+// }
+
+// mixins.scss
 @mixin layout-constrain {
-  max-width: $max-width;
   width: 100%;
+  max-width: 1200px; // Or whatever your site's max width is
+  margin: 0 auto; // This is the magic line that centers the container
+  padding: 0 1.6rem; // Typical mobile gutter
 }

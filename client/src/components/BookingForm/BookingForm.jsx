@@ -16,8 +16,7 @@ const BookingForm = ({
   slug,
   featured,
   tour_id,
-  availableStartDate,
-  availableEndDate,
+  bookingWindowMonths = 6,
   title,
   mainImage,
   unavailableRecurringDays,
@@ -34,10 +33,10 @@ const BookingForm = ({
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const bookings = useSelector((state) => state.cart.bookings);
-
   const toggleDropdown = () => {
     setIsComponentVisible(!isComponentVisible);
   };
@@ -61,18 +60,6 @@ const BookingForm = ({
     }
   };
 
-  // const timeSlotOptions = tour_time_slots.map(
-  //   (slot) => `${slot.start_time} - ${slot.end_time}`
-  // );
-  // console.log(timeSlotOptions);
-
-  // const handleTimeSlotChange = (selectedId) => {
-  //   const selectedSlot = tour_time_slots.find((slot) => slot.id === selectedId);
-  //   if (selectedSlot) {
-  //     setSelectedTimeSlot(selectedSlot);
-  //   }
-  // };
-
   const formatDate = (date) => {
     if (!date) return "";
     const year = date.getFullYear();
@@ -81,30 +68,28 @@ const BookingForm = ({
     return `${year}-${month}-${day}`;
   };
   const handleAddToCart = () => {
+    if (!selectedDate) {
+      alert("Please select a date");
+      return;
+    }
+
     const booking = {
       id: uuidv4(),
-      tour_id: tour_id,
+      tour_id,
       title,
       mainImage,
       date: formatDate(selectedDate),
       timeSlot: selectedTimeSlot,
       tour_time_slots,
       slug,
-      availableStartDate,
-      availableEndDate,
       unavailableRecurringDays,
       unavailableDates,
-      guests: {
-        adults,
-        children,
-        infants,
-      },
+      guests: { adults, children, infants },
+
       price,
       featured,
     };
-    console.log("Booking before dispatch in Booking form:", booking);
     dispatch(addBooking(booking));
-
     navigate("/cart");
   };
 
@@ -120,6 +105,7 @@ const BookingForm = ({
     "Selected time slot",
     selectedTimeSlot
   );
+
   return (
     <div className="booking-form-wrp">
       <div className="booking-form__heading-wrp">
@@ -127,8 +113,7 @@ const BookingForm = ({
         <img src={calendarIcon} alt="calendar icon" />
       </div>
       <TourDatePicker
-        availableStartDate={availableStartDate}
-        availableEndDate={availableEndDate}
+        bookingWindowMonths={bookingWindowMonths}
         onDateSelected={handleDateSelected}
         unavailableDates={unavailableDates}
         unavailableRecurringDays={unavailableRecurringDays}
@@ -230,6 +215,7 @@ const BookingForm = ({
           }
           options={timeSlotOptions.map((opt) => opt.label)}
         />
+
         <Button
           type="button"
           onClick={handleAddToCart}

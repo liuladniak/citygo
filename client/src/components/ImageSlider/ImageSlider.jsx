@@ -19,14 +19,11 @@ const ImageSlider = ({ images, startIndex, className }) => {
     const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
   };
+
   console.log(`${API_URL}/${images[currentIndex]}`, "image slider path");
   return (
     <div className={`image-slider image-slider--card ${className}`}>
-      <img
-        className="slider-image"
-        src={`${API_URL}/${images[currentIndex]}`}
-        alt=""
-      />
+      <img className="slider-image" src={images[currentIndex]} alt="" />
       <div className="slider-buttons slider-buttons__card">
         <div
           className="slider-button prev slider-button__card--prev"

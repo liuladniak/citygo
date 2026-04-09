@@ -1,0 +1,6 @@
+node_modules
+*.epub
+*.pdf
+*.zip
+*.dmg
+.DS_Store

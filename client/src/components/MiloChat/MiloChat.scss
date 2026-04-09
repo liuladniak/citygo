@@ -1,0 +1,207 @@
+$primary-color: #2563eb;
+$accent-color: #f59e0b;
+$bg-light: #f8fafc;
+$white: #ffffff;
+$text-dark: #1e293b;
+$shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+.milo-wrapper {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 999;
+  font-family: "Inter", sans-serif;
+
+  .milo-launcher {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: $primary-color;
+    color: $white;
+    border: none;
+    cursor: pointer;
+    box-shadow: $shadow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .milo-container {
+    width: 360px;
+    height: 500px;
+    background: $white;
+    border-radius: 1rem;
+    box-shadow: $shadow;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+
+    .milo-header {
+      background: $primary-color;
+      padding: 1rem;
+      color: $white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .milo-profile {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        .milo-avatar {
+          width: 35px;
+          height: 35px;
+          background: $accent-color;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .milo-info {
+          display: flex;
+          flex-direction: column;
+
+          .milo-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+          }
+
+          .milo-status {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+          }
+        }
+      }
+
+      .milo-close {
+        background: transparent;
+        border: none;
+        color: $white;
+        cursor: pointer;
+        opacity: 0.7;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .milo-messages {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background: $bg-light;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .message-row {
+        display: flex;
+        &.user {
+          justify-content: flex-end;
+        }
+        &.model {
+          justify-content: flex-start;
+        }
+
+        .message-bubble {
+          max-width: 85%;
+          padding: 0.75rem 1rem;
+          font-size: 0.85rem;
+          line-height: 1.4;
+          border-radius: 1rem;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+          strong {
+            color: $primary-color;
+          }
+        }
+
+        &.user .message-bubble {
+          background: $primary-color;
+          color: $white;
+          border-bottom-right-radius: 0;
+        }
+
+        &.model .message-bubble {
+          background: $white;
+          color: $text-dark;
+          border-bottom-left-radius: 0;
+        }
+      }
+
+      .milo-suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+
+        .suggestion-chip {
+          background: $white;
+          border: 1px solid lighten($primary-color, 30%);
+          color: $primary-color;
+          padding: 0.4rem 0.8rem;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background: $primary-color;
+            color: $white;
+          }
+        }
+      }
+    }
+
+    .milo-footer {
+      padding: 1rem;
+      border-top: 1px solid #eee;
+
+      form {
+        display: flex;
+        gap: 0.5rem;
+
+        input {
+          flex: 1;
+          padding: 0.6rem 1rem;
+          border-radius: 20px;
+          border: 1px solid #ddd;
+          font-size: 0.85rem;
+          outline: none;
+          &:focus {
+            border-color: $primary-color;
+          }
+        }
+
+        button {
+          background: $primary-color;
+          color: $white;
+          border: none;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}

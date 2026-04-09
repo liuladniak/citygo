@@ -143,18 +143,18 @@ const Destinations = () => {
         </p>
 
         {isLoading ? (
-          <div className="tour-cards--skeleton">
+          <div className="tour-cards--skeleton destination-styles--skeleton">
             {Array(3)
               .fill()
               .map((_, index) => (
                 <ToursSkeletonCard
                   key={index}
-                  className="tour-intro-card--skeleton"
+                  className="tour-intro-card--skeleton destinations-styles "
                 />
               ))}
           </div>
         ) : (
-          <div className="destination-cards">
+          <div className="destination-cards flex">
             {selectedTours.map((tour) => (
               <TourCard
                 key={tour.id}
@@ -165,7 +165,7 @@ const Destinations = () => {
                 duration={tour.duration}
                 price={tour.price}
                 category={tour.category}
-                className="tour-intro-card"
+                className="tour-intro-card destinations-styles"
                 images={tour.images}
               />
             ))}

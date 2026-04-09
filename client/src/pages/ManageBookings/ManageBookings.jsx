@@ -2,12 +2,11 @@ import "./ManageBookings.scss";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Button from "../../components/Button/Button";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import BookingStatus from "../../components/BookingStatus/BookingStatus";
 
 function ManageBookings() {
   const API_URL = import.meta.env.VITE_API_KEY;
-  const dispatch = useDispatch();
   const [failedAuth, setFailedAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
@@ -16,15 +15,14 @@ function ManageBookings() {
 
   const fetchBookings = async (userId, token) => {
     try {
-      const response = await axios.get(
-        `${API_URL}/api/bookings?userId=${userId}`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/client/bookings`, {
+        params: { userId },
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
 
+      console.log("booking111", response.data);
       setBookings(response.data);
     } catch (error) {
       console.error(error);
@@ -79,33 +77,46 @@ function ManageBookings() {
               <li className="bookings-list-item" key={booking.id}>
                 <div className="booking-card-img">
                   <img
-                    src={`${API_URL}/${booking.tour_images[0]}`}
+                    src={
+                      booking.tour_images[0]?.startsWith("http")
+                        ? booking.tour_images[0]
+                        : `${API_URL}/${booking.tour_images[0]}`
+                    }
                     alt="tour thumbnail"
                   />
                 </div>
 
                 <div className="bookings-details">
-                  <div>
-                    <h2 className="bookings-tour-title">
-                      Tour: {booking.tour_title}
-                    </h2>
-                  </div>
-                  <div className="booking-price">
-                    Total price: USD {booking.tour_price * 3}
+                  <h2 className="bookings-tour-title">{booking.tour_title}</h2>
+
+                  <div className="booking-ref">
+                    Ref: {booking.booking_reference}
                   </div>
                   <div className="booking-date">
                     Tour Date:{" "}
-                    {new Date(booking.booking_date).toLocaleDateString()}
+                    {new Date(booking.tour_date).toLocaleDateString("en-GB", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
                   </div>
-                  <div className="booking-people">
-                    Number of Guests:
-                    <span> Adults: {booking.adults}</span>
-                    {booking.children > 0 && (
-                      <span>Children: {booking.children}</span>
-                    )}
-                    {booking.infants > 0 && (
-                      <span>Infants: {booking.infants}</span>
-                    )}
+                  <div className="booking-time">
+                    Time: {booking.display_start_time?.slice(0, 5)}
+                    {booking.display_end_time &&
+                      ` – ${booking.display_end_time.slice(0, 5)}`}
+                  </div>
+                  <div className="booking-guests">
+                    Guests: {booking.total_guests}
+                  </div>
+                  <div className="booking-price">
+                    Total:{" "}
+                    {booking.total_price
+                      ? `€${parseFloat(booking.total_price).toFixed(2)}`
+                      : "—"}
+                  </div>
+                  <div className="booking-paid">
+                    Paid: €{parseFloat(booking.amount_paid ?? 0).toFixed(2)}
                   </div>
                 </div>
                 <div className="booking-actions">

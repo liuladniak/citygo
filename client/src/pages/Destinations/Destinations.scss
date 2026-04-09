@@ -209,3 +209,24 @@
 .romantic {
   display: none;
 }
+
+.destinations-styles {
+  flex: 1;
+
+  &--skeleton {
+    display: flex;
+  }
+}
+
+.destination-styles--skeleton {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-large;
+  justify-content: center;
+  margin-top: $space-medium;
+  flex-direction: column;
+
+  @include tablet {
+    flex-direction: row;
+  }
+}

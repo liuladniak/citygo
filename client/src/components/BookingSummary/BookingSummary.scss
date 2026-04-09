@@ -1,57 +1,79 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
-
-.booking-section {
-  padding: 20px;
-  text-align: center;
-}
-
-.sign-in-prompt {
-  background: #ffefef;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.sign-in-btn {
-  background: #ff5a5f;
-  color: white;
-  padding: 10px 15px;
-  text-decoration: none;
-  border-radius: 5px;
-  display: inline-block;
-  margin-top: 10px;
-}
-
 .cart-product {
-  display: flex;
-  flex-direction: column;
-  gap: $space-x-small;
-  margin-bottom: $space-large;
-}
-.cart-product {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: $border-radius;
   font-size: 1.4rem;
-  text-align: right;
+  overflow: hidden;
+
+  &__heading {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: $charcoal;
+    padding: 2rem 2.4rem;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem 2.4rem;
+    gap: 1.2rem;
+  }
 
   &__item {
     display: flex;
-    gap: $space-large;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid #f3f4f6;
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-weight: 600;
+    color: $charcoal;
   }
 
   &__details {
     display: flex;
     flex-direction: column;
-    gap: $space-x-small;
+    gap: 0.3rem;
+    color: #6b7280;
   }
 
-  &__title {
-    text-align: left;
+  &__discount {
+    color: $main-maroon;
+    font-weight: 500;
+  }
+
+  &__subtotal {
+    color: $charcoal;
+    font-weight: 600;
+    padding-top: 0.4rem;
   }
 }
 
-.cart__fees,
+.cart__fees {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 2.4rem;
+  font-size: 1.4rem;
+  color: #6b7280;
+}
+
 .cart__total {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2.4rem;
+  border-top: 2px solid #e5e7eb;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: $charcoal;
 }
