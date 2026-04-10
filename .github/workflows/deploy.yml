@@ -19,18 +19,15 @@ jobs:
       - name: Deploy via Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
-            # 1. Exit immediately if any command fails
             set -e
-
             cd /var/www/citygo
             
-            # 2. Force the local VPS branch to match GitHub exactly
             git fetch origin main
             git reset --hard origin/main
             
-            # 3. Rebuild only the services that changed
-            docker-compose up -d --build
+            # Use 'docker compose' (modern) instead of 'docker-compose'
+            # If your server is very old, keep the hyphen, but 99% of 2026 setups use no hyphen
+            docker compose up -d --build
             
-            # 4. Cleanup
             docker image prune -f
           EOF
