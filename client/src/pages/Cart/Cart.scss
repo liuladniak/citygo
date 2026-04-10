@@ -1,4 +1,3 @@
-
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
@@ -24,7 +23,7 @@
     }
 
     @include desktop-s {
-      grid-template-columns: 3fr 2fr; 
+      grid-template-columns: 3fr 2fr;
     }
   }
 
@@ -106,11 +105,13 @@
   padding: 2.4rem;
 }
 
-.contact-form {
+.contact-form-cart {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+}
 
+.contact-form {
   &__row {
     display: grid;
     grid-template-columns: 1fr;

@@ -127,7 +127,6 @@ const Cart = () => {
     );
   }
 
-
   return (
     <div className="cart">
       <h1 className="cart-heading">Review & Book</h1>
@@ -156,7 +155,10 @@ const Cart = () => {
               </div>
             ) : !contactReady ? (
               <div className="contact-form-section">
-                <form className="contact-form" onSubmit={handleContactSubmit}>
+                <form
+                  className="contact-form-cart"
+                  onSubmit={handleContactSubmit}
+                >
                   <div className="contact-form__row">
                     <div className="contact-field">
                       <label>Full Name *</label>
