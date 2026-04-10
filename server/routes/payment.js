@@ -8,7 +8,7 @@ import knexConfig from "../knexfile.js";
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const CLIENT_URLS = process.env.CLIENT_URLS.split(",");
+const CLIENT_URLS = process.env.ALLOWED_ORIGINS.split(",");
 
 const getClientUrl = (req) => {
   const origin = req.headers.origin;
