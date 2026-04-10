@@ -1,25 +1,36 @@
 services:
-  # --- THE BACKEND (NODE.JS) ---
+  # --- NEW RECEPTIONIST (Nginx Proxy Manager) ---
+  nginx-proxy:
+    image: "jc21/nginx-proxy-manager:latest"
+    container_name: citygo-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+
+  # --- YOUR APPS ---
   main-api:
     build: ./server
     container_name: citygo-api
     restart: always
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     env_file:
       - .env
 
-  # --- THE AI SERVICE (PYTHON/FASTAPI) ---
   ai-service:
     build: ./ai-service
     container_name: citygo-ai
     restart: always
-    ports:
-      - "8081:8000" # Internal Python 8000 -> VPS 8081
+    expose:
+      - "80"
     env_file:
       - .env
 
-  # --- THE TRAVELER APP (REACT/NGINX) ---
   client-app:
     build:
       context: ./client
@@ -28,10 +39,9 @@ services:
         - VITE_STRIPE_PUBLIC_KEY=${VITE_STRIPE_PUBLIC_KEY}
     container_name: citygo-client
     restart: always
-    ports:
-      - "3000:80" # Nginx 80 -> VPS 3000
+    expose:
+      - "80"
 
-  # --- THE WORKER DASHBOARD (REACT/NGINX) ---
   admin-dashboard:
     build:
       context: ./dashboard
@@ -41,5 +51,5 @@ services:
         - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
     container_name: citygo-dashboard
     restart: always
-    ports:
-      - "3001:80" # Nginx 80 -> VPS 3001
+    expose:
+      - "80"
