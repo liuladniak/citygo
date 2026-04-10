@@ -34,17 +34,37 @@ const PORT = process.env.PORT || 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticFilesPath = path.resolve("public");
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
+// const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map((origin) =>
+  origin.trim().replace(/\/$/, "")
+);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin))
+      if (!origin) return callback(null, true);
+
+      const cleanOrigin = origin.replace(/\/$/, "");
+
+      if (allowedOrigins.includes(cleanOrigin)) {
         return callback(null, true);
+      }
+
       return callback(new Error("Not allowed by CORS"));
     },
+    credentials: true,
   })
 );
+
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin))
+//         return callback(null, true);
+//       return callback(new Error("Not allowed by CORS"));
+//     },
+//   })
+// );
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
