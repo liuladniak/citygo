@@ -22,7 +22,7 @@ export default {
   production: {
     client: "pg",
     connection: {
-      connectionString: process.env.DB_URL,
+      connectionString: process.env.DATABASE_URL,
       ssl: { rejectUnauthorized: false },
     },
     migrations: {

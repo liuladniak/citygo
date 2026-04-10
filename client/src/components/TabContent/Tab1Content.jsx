@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 
 const Tab1Content = ({ user }) => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const [isEditing, setIsEditing] = useState({
     legalName: false,
     preferred_name: false,

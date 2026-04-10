@@ -21,15 +21,26 @@ const logTourActivity = async (tourId, action, message, actorId = null) => {
 };
 
 router.get("/", async (req, res) => {
-  const { page = 1, limit = 12, search, category, status } = req.query;
+  const {
+    page = 1,
+    limit = 12,
+    search,
+    category,
+    status,
+    activity_level,
+    landmarks,
+  } = req.query;
   const offset = (page - 1) * limit;
   try {
-    let baseQuery = knex("tours");
+    let baseQuery = knex("tours").where("status", "!=", "draft");
     if (search)
       baseQuery = baseQuery.where("tour_name", "ilike", `%${search}%`);
     if (category && category !== "all")
       baseQuery = baseQuery.where("category", category);
     if (status) baseQuery = baseQuery.where("status", status);
+    if (activity_level)
+      baseQuery = baseQuery.where("activity_level", activity_level);
+    if (landmarks) baseQuery = baseQuery.where("landmarks", landmarks);
 
     const totalResult = await baseQuery
       .clone()

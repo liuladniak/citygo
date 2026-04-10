@@ -13,7 +13,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const { setAuth } = useContext(AuthContext);
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();

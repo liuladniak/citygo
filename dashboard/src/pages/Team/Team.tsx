@@ -19,7 +19,7 @@ import AddEmployeeModal from "@/components/modals/AddEmployeeModal";
 import EmployeePanel from "@/components/panels/EmployeePanel";
 
 const FIELD_POSITIONS = ["Lead Guide", "Assistant Guide", "Driver"];
-const API_URL = import.meta.env.VITE_API_KEY;
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface Employee {
   id: number;

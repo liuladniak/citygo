@@ -2,7 +2,7 @@ import axios from "axios";
 import { supabase } from "./supabaseClient";
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_KEY,
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 apiClient.interceptors.request.use(async (config) => {

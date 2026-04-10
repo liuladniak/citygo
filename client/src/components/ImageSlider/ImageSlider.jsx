@@ -5,7 +5,7 @@ import iconRight from "../../assets/icons/chevron-right-white.svg";
 
 const ImageSlider = ({ images, startIndex, className }) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const nextSlide = (e) => {
     e.preventDefault();
     e.stopPropagation();

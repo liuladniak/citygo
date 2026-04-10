@@ -21,7 +21,7 @@ const Account = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const login = async () => {
     const token = localStorage.getItem("token");

@@ -1,3 +1,15 @@
+# Ignore Mac system files
+.DS_Store
+**/.DS_Store
+
+# Ignore environment variables
+.env
+**/.env
+
+# Ignore node_modules everywhere
+node_modules/
+**/node_modules/
+
 # Environment
 .env
 .env.local

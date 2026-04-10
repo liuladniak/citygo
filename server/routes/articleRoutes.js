@@ -9,8 +9,6 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const { page = 1, limit = 8, category } = req.query;
 
-  console.log("Searching for category:", category);
-
   const offset = (page - 1) * limit;
 
   try {

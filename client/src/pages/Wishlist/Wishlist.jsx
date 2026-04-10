@@ -7,7 +7,7 @@ import axios from "axios";
 
 const Wishlist = () => {
   const favorites = useSelector((state) => state.wishlist.favorites);
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const [tours, setTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 

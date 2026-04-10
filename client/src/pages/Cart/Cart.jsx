@@ -15,7 +15,7 @@ import CheckoutForm from "./CheckoutForm";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const [user, setUser] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [contactDetails, setContactDetails] = useState({

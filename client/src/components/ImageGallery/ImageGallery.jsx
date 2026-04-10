@@ -5,7 +5,7 @@ import iconRight from "../../assets/icons/chevron-right-white.svg";
 
 const ImageGallery = ({ images, startIndex }) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);

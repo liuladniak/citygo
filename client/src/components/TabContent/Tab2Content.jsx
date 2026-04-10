@@ -4,7 +4,7 @@ import "./Tab2Content.scss";
 import "./TabContent.scss";
 
 const Tab2Content = ({ bookings }) => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   console.log("Account bookings: " + bookings);
   return (
     <div>

@@ -51,7 +51,7 @@ interface Props {
   isAdmin: boolean;
 }
 
-const API_URL = import.meta.env.VITE_API_KEY;
+const API_URL = import.meta.env.VITE_API_URL;
 export default function EmployeePanel({ employeeId, onClose, isAdmin }: Props) {
   const queryClient = useQueryClient();
   const [imgError, setImgError] = useState(false);

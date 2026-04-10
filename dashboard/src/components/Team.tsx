@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const FIELD_POSITIONS = ["Lead Guide", "Assistant Guide", "Driver"];
-const API_URL = import.meta.env.VITE_API_KEY;
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface Employee {
   id: number;

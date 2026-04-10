@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import BookingStatus from "../../components/BookingStatus/BookingStatus";
 
 function ManageBookings() {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const [failedAuth, setFailedAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [bookings, setBookings] = useState([]);

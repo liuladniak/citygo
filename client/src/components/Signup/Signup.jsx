@@ -6,7 +6,7 @@ import Input from "../../components/Input/Input";
 import Button from "../Button/Button";
 
 function Signup() {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);

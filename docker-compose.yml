@@ -1,0 +1,41 @@
+services:
+  # --- THE BACKEND (NODE.JS) ---
+  main-api:
+    build: ./server
+    container_name: citygo-api
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file: ./server/.env
+
+  # --- THE AI SERVICE (PYTHON/FASTAPI) ---
+  ai-service:
+    build: ./ai-service
+    container_name: citygo-ai
+    restart: always
+    ports:
+      - "8081:8000" # Internal Python 8000 -> VPS 8081
+    env_file: ./ai-service/.env
+
+  # --- THE TRAVELER APP (REACT/NGINX) ---
+  client-app:
+    build: ./client
+    args:
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_STRIPE_PUBLIC_KEY=${VITE_STRIPE_PUBLIC_KEY}
+    container_name: citygo-client
+    restart: always
+    ports:
+      - "3000:80" # Nginx 80 -> VPS 3000
+
+  # --- THE WORKER DASHBOARD (REACT/NGINX) ---
+  admin-dashboard:
+    build: ./dashboard
+    args:
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+    container_name: citygo-dashboard
+    restart: always
+    ports:
+      - "3001:80" # Nginx 80 -> VPS 3001

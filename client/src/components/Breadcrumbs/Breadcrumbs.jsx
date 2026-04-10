@@ -14,7 +14,7 @@ const getBreadcrumbName = (value, tourName) => {
 };
 
 const Breadcrumbs = () => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);

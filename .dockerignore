@@ -1,0 +1,16 @@
+# Ignore the hidden git history
+.git
+.github
+
+# Ignore any root-level env or logs
+*.log
+.env
+
+# Ignore OS junk
+.DS_Store
+
+# Prevent subfolder node_modules from being "sent" to the docker daemon 
+# (This makes the 'sending build context' step instant)
+**/node_modules
+**/dist
+**/build

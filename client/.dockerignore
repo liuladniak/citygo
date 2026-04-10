@@ -4,3 +4,6 @@ node_modules
 *.zip
 *.dmg
 .DS_Store
+dist
+.env
+.git

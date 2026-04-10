@@ -27,7 +27,7 @@ const TravelGuide = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [category, setCategory] = useState("all");
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchArticles = async () => {

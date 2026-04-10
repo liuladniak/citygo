@@ -8,7 +8,7 @@
 // import { iconChevronLeft, iconChevronRight } from "../UI/iconsPaths";
 
 // const ToursIntroList = () => {
-//   const API_URL = import.meta.env.VITE_API_KEY;
+//   const API_URL = import.meta.env.VITE_API_URL;
 
 //   const [tours, setTours] = useState([]);
 //   const [isLoading, setIsLoading] = useState(true);
@@ -180,7 +180,7 @@ import timeIcon from "../../assets/icons/time-icon-red.png";
 import { generateSlug } from "../../utils/generateSlug";
 
 const ToursIntroList = () => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const [tours, setTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const trackRef = useRef(null);

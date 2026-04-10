@@ -64,7 +64,7 @@ const immersive = [
 ];
 
 const Destinations = () => {
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const [articles, setArticles] = useState([]);
   const [articlesSmall, setArticlesSmall] = useState([]);
   const [error, setError] = useState(null);

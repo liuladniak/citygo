@@ -11,8 +11,8 @@ import morgan from "morgan";
 import { requireAuth } from "./middleware/auth.js";
 
 import activityRoutes from "./routes/activityRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
-
 import authRoutes from "./routes/auth.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticFilesPath = path.resolve("public");
-const allowedOrigins = process.env.CLIENT_URLS.split(",");
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",");
 
 app.use(
   cors({
@@ -75,9 +75,11 @@ app.use("/api/activity", requireAuth, activityRoutes);
 app.use("/api/tasks", requireAuth, taskRoutes);
 app.use("/api/company", requireAuth, companyRoutes);
 
-app.use("/employees", express.static(path.join(staticFilesPath, "employees")));
+// app.use("/employees", express.static(path.join(staticFilesPath, "employees")));
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 app.use("/api/articles", articleRoutes);
+
+app.use("/api/ai", aiRoutes);
 
 cron.schedule("0 * * * *", generateAutoTasks);
 cron.schedule(

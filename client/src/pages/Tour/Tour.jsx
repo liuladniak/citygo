@@ -22,7 +22,7 @@ import SkeletonTour from "../../components/LoadingSceleton/SkeletonTour";
 const Tour = () => {
   const dispatch = useDispatch();
 
-  const API_URL = import.meta.env.VITE_API_KEY;
+  const API_URL = import.meta.env.VITE_API_URL;
   const selectedCurrency = useSelector(
     (state) => state.currency.selectedCurrency
   );
