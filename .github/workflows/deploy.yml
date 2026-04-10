@@ -1,4 +1,22 @@
-- name: Deploy via Docker Compose
+name: Deploy CityGo to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy via Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
             # 1. Exit immediately if any command fails
@@ -11,7 +29,6 @@
             git reset --hard origin/main
             
             # 3. Rebuild only the services that changed
-            # --pull ensures Docker tries to grab newer base images if they exist
             docker-compose up -d --build
             
             # 4. Cleanup
