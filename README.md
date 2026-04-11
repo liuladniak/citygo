@@ -1,61 +1,85 @@
-# CityGo Travel Booking App
+# CityGo — Travel Booking Platform
 
-  The app addresses the common challenges travelers encounter when planning city tours, such as cumbersome booking processes and unclear navigation. By providing a streamlined user experience, the app ensures secure user management and simplifies the booking journey. With CityGo, travelers can easily discover and book their ideal city tours, making their travel planning efficient and enjoyable.
-
----
-
-## 🏛 Features Implemented
-
-- **User Authentication**: Secure user access with JWT-based authentication using Node.js and Express.
-- **Shopping Cart Management**: Easily review and manage selected tours with Redux for efficient state management.
-- **Tour Filtering**: Filter tours by location, duration, and price using React Hooks for seamless state handling.
-- **Quick Tour Search**: Find specific tours with keyword search, powered by Elasticsearch.
-- **Booking Process**: Guided booking for dates and group sizes, implemented with React Router.
-- **Interactive Availability Calendar**: Visual calendar for selecting available dates using a custom React component.
-- **Responsive Design**: Optimized for mobile and desktop devices with CSS Grid and Flexbox.
-- **Database Integration**: Efficient data storage and retrieval using PostgreSQL with Knex.js.
-- **Interactive Tour Map**: Visualize tour locations on an interactive map powered by the Leaflet Maps API.
+A production-ready full-stack travel booking platform for city tours. CityGo consists of three interconnected systems: a customer-facing booking app, an internal admin dashboard, and a shared Node.js/PostgreSQL backend — all deployed via Docker on a VPS with GitHub Actions CI/CD.
 
 ---
 
-## 🎥 Demo
+## 🌐 Live
 
-Check out the live demo, while it's still work in progress, feel free to share your feedback or suggestions:
-
-- [**Live Demo - CityGo app**](https://citygo.liuladniak.com/)
-
----
-
-## 🛠️ Features in Progress
-
-- **User Comments**: Enable users to leave feedback and reviews.
-- **Currency Converter**: Convert prices into different currencies for a global user base.
-- **Google Authentication**: Simplified sign-in using Google accounts.
-- **Stripe Checkout**: Secure payment processing via Stripe integration.
-- **Enhanced Map Functionality**: Improved map features for enhanced navigation.
-- **AI-Powered Recommendations**: Personalized tour suggestions using AI for tailored experiences.
+| App | URL |
+|-----|-----|
+| Client App | [citygo.liuladniak.com](https://citygo.liuladniak.com) |
+| Admin Dashboard | [citygo-dashboard.liuladniak.com](https://citygo-dashboard.liuladniak.com) |
 
 ---
 
-## 📈 Next Steps
+## 🏗️ Architecture
+citygo/
+├── client/          # React customer-facing app
+├── dashboard/       # React + TypeScript admin panel
+└── server/          # Node.js + Express shared backend
+└── ai-service/      # Python/FastApi + Gemini
 
-The focus is on continuously improving the CityGo app’s user experience by adding more features that make booking smoother and more valuable. Feedback is highly appreciated to help enhance this feature-rich travel booking app.
+Three separate deployments on a single VPS, managed with Dokploy and Docker. Each service has its own GitHub Actions workflow triggered on push to `main`.
 
---- 
-## 💼 Dashboard / Admin Panel
+---
 
-The **CityGo Dashboard** is an admin panel for managing the backend of the CityGo Travel Booking app. This dashboard allows administrators to perform key tasks such as managing tours, assigning tasks, viewing bookings, and analyzing booking activity. It features secure login for admin users, role-based access controls, and an easy-to-navigate interface built with React and Redux for efficient state management.
+## ✨ Client App Features
 
-The dashboard integrates with the same PostgreSQL database as the main app, ensuring seamless synchronization of data. Admin users can update tour details, manage user accounts, and monitor bookings through a clean and intuitive UI.
+- **JWT Authentication** — login, signup, token refresh, booking history per account
+- **Tour Browsing** — server-side filtering by category, activity level, keyword search with pagination
+- **Availability System** — rolling booking window, tour-level and agency-level blocked dates and recurring days
+- **Stripe Payments** — Payment Intents, webhook-driven booking creation, multi-currency support
+- **Shopping Cart** — multi-tour cart with Redux persistence, contact details collection, two-step checkout
+- **Interactive Map** — Leaflet map with tour itinerary waypoints and Istanbul landmarks
+- **Travel Guide** — editorial article system with categories, author profiles, related articles
+- **Multi-Currency** — live exchange rates with real-time price conversion
+- **Manage Bookings** — authenticated users view current and past bookings matched by user ID and email
+- **Responsive Design** — mobile-first SCSS with a consistent design token system
 
-## 🎥 Demo
+---
 
-Check out the live demo, while it's still work in progress, feel free to share your feedback or suggestions:
+## 📈 Admin Dashboard Features
 
-- [**Live Demo - CityGo Admin Dashboard app**](https://citygo-dashboard.liuladniak.com/)
+- **Role-Based Access Control** — admin / manager / associate tiers via Supabase Auth, route guards and field-level permissions
+- **Google OAuth** — staff login via Supabase Google OAuth
+- **Booking Management** — full lifecycle (draft → pending → confirmed → completed → cancelled), payment recording, guest manifest
+- **Multi-Step Booking Creation** — 5-step guided form: type, tour & date, guests, payment, guide assignment
+- **Availability Management** — interactive availability calendar with visual blocked dates and agent override capability
+- **Guide Assignment** — assign staff with roles (lead, assistant, driver), availability by date, booking counts
+- **Payment Tracking** — record payments, track balance due, full payment history per booking
+- **Email Notifications** — Brevo transactional emails: confirmation, 24h reminders (cron), cancellation, guide assignment
+- **Tour Management** — full CRUD: details, images via Supabase Storage, time slots, itinerary, availability
+- **Analytics** — booking volume, revenue, occupancy trends (manager+ only)
+- **Activity Log** — per-tour and per-booking timeline of all changes
+- **Auto Task Generation** — cron-based operational tasks from upcoming bookings
+
+---
+
+## 🛠️ Tech Stack
+
+### Client
+`React` `Redux Toolkit` `React Router v6` `SCSS` `Stripe.js` `Leaflet` `Axios`
+
+### Dashboard
+`React` `TypeScript` `TanStack Query` `shadcn/ui` `Tailwind CSS`
+
+### Server
+`Node.js` `Express` `Knex.js` `PostgreSQL` `Supabase` `Stripe` `Brevo` `node-cron` `JWT`
+
+### AI Service
+`Python` `FastAPI` `Gemini-2.5-flash`
+
+### Infrastructure
+`Docker` `Dokploy` `GitHub Actions` `Hostinger VPS` `Supabase Storage`
+
+---
+
+## 🤖 In Progress
+
+**Milo** — an AI-powered chat assistant built with FastAPI and Python, integrated into the client app to help users find tours and navigate the booking process.
 
 ---
 
 ## Project Setup 
-
 Instructions are comming soon
