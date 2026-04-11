@@ -14,12 +14,14 @@ A production-ready full-stack travel booking platform for city tours. CityGo con
 ---
 
 ## 🏗️ Architecture
-citygo/
-├── client/          # React customer-facing app
-├── dashboard/       # React + TypeScript admin panel
-└── server/          # Node.js + Express shared backend
-└── ai-service/      # Python/FastApi + Gemini
 
+```text
+citygo/
+├── client/       # React customer-facing app
+├── dashboard/    # React + TypeScript admin panel
+├── server/       # Node.js + Express shared backend
+└── ai-service/   # Python/FastAPI + Gemini
+```
 Three separate deployments on a single VPS, managed with Dokploy and Docker. Each service has its own GitHub Actions workflow triggered on push to `main`.
 
 ---
