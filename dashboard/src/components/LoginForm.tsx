@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabaseClient";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronDown } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -20,7 +20,12 @@ export function LoginForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [demoLoading, setDemoLoading] = useState<
+    "manager" | "associate" | null
+  >(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [demoError, setDemoError] = useState<string | null>(null);
+  const [showEmailForm, setShowEmailForm] = useState(false);
 
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -32,19 +37,21 @@ export function LoginForm({
 
   const signInWithEmail = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+    setEmailError(null);
     setIsLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    if (error) setError("Invalid email or password");
+    if (error) {
+      setEmailError("invalid");
+    }
     setIsLoading(false);
   };
 
   const signInAsDemo = async (role: "manager" | "associate") => {
-    setError(null);
-    setIsLoading(true);
+    setDemoError(null);
+    setDemoLoading(role);
     const demoEmail =
       role === "manager"
         ? "demo.manager@citygo.com"
@@ -53,11 +60,8 @@ export function LoginForm({
       email: demoEmail,
       password: "CityGoDemo2026",
     });
-    if (error) {
-      console.error("Full error:", error.message, error.status, error);
-      setError(error.message);
-    }
-    setIsLoading(false);
+    if (error) setDemoError(error.message);
+    setDemoLoading(null);
   };
 
   return (
@@ -68,44 +72,6 @@ export function LoginForm({
           <CardDescription>Sign in to access the dashboard</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form onSubmit={signInWithEmail} className="space-y-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {error && <p className="text-xs text-destructive">{error}</p>}
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
-              Sign In
-            </Button>
-          </form>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs text-muted-foreground">
-              <span className="bg-card px-2">or continue with</span>
-            </div>
-          </div>
-
           <Button
             variant="outline"
             className="w-full"
@@ -145,25 +111,130 @@ export function LoginForm({
             <Button
               variant="outline"
               onClick={() => signInAsDemo("manager")}
-              disabled={isLoading}
+              disabled={!!demoLoading}
               className="flex flex-col h-auto py-3 gap-1"
             >
-              <span className="text-sm font-semibold">Manager</span>
-              <span className="text-xs text-muted-foreground font-normal">
-                Full access
-              </span>
+              {demoLoading === "manager" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  <span className="text-sm font-semibold">Manager</span>
+                  <span className="text-xs text-muted-foreground font-normal">
+                    Full access
+                  </span>
+                </>
+              )}
             </Button>
             <Button
               variant="outline"
               onClick={() => signInAsDemo("associate")}
-              disabled={isLoading}
+              disabled={!!demoLoading}
               className="flex flex-col h-auto py-3 gap-1"
             >
-              <span className="text-sm font-semibold">Associate</span>
-              <span className="text-xs text-muted-foreground font-normal">
-                Guide access
-              </span>
+              {demoLoading === "associate" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  <span className="text-sm font-semibold">Associate</span>
+                  <span className="text-xs text-muted-foreground font-normal">
+                    Guide access
+                  </span>
+                </>
+              )}
             </Button>
+          </div>
+
+          {demoError && (
+            <div className="flex items-start gap-2 rounded-md bg-amber-50 border border-amber-200 px-3 py-2">
+              <span className="text-amber-500 text-sm mt-0.5">⚠</span>
+              <p className="text-xs text-amber-700 leading-relaxed">
+                Demo login failed. Please try again or contact the
+                administrator.
+              </p>
+            </div>
+          )}
+
+          <div className="pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                setShowEmailForm((p) => !p);
+                setEmailError(null);
+              }}
+              className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mx-auto"
+            >
+              <span>Sign in with email</span>
+              <ChevronDown
+                className={`h-3 w-3 transition-transform duration-200 ${
+                  showEmailForm ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {showEmailForm && (
+              <form onSubmit={signInWithEmail} className="space-y-3 mt-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-xs">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setEmailError(null);
+                    }}
+                    required
+                    className="h-8 text-sm"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="password" className="text-xs">
+                    Password
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setEmailError(null);
+                    }}
+                    required
+                    className="h-8 text-sm"
+                  />
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  Staff accounts are provisioned by an administrator.
+                </p>
+
+                {emailError && (
+                  <div className="flex items-start gap-2 rounded-md bg-amber-50 border border-amber-200 px-3 py-2">
+                    <span className="text-amber-500 text-sm mt-0.5">⚠</span>
+                    <p className="text-xs text-amber-700 leading-relaxed">
+                      No account found with these credentials. Staff accounts
+                      are created by an administrator — try a demo account above
+                      or sign in with Google.
+                    </p>
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  {isLoading && (
+                    <Loader2 className="h-3 w-3 animate-spin mr-2" />
+                  )}
+                  Sign In
+                </Button>
+              </form>
+            )}
           </div>
         </CardContent>
       </Card>
