@@ -19,6 +19,7 @@ import { logout } from "../../features/auth/authSlice";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Icon from "../UI/Icon";
 import { iconArrowDown, iconArrowUp, iconSignout } from "../UI/iconsPaths";
+import { selectTotalBookings } from "@/features/cart/cartSlice";
 
 function Header() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ function Header() {
   );
   const currencyOptions = ["USD", "EUR", "TRY"];
 
-  const totalBookings = useSelector((state) => state.cart.totalBookings);
+  const totalBookings = useSelector(selectTotalBookings);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

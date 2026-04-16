@@ -4,15 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [tailwindcss(), react()],
-  // css: {
-  //   postcss: "./postcss.config.js",
-  // },
-  // build: {
-  //   rollupOptions: {},
-  // },
-  // resolve: {
-  //   alias: {
-  //     "@": "/src",
-  //   },
-  // },
+  test: {
+    globals: true,
+    environment: "node",
+  },
 });

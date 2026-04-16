@@ -15,6 +15,11 @@ import wishlistReducer, {
 } from "./features/wishlist/wishlistSlice";
 
 const persistedCartState = loadFromLocalStorage("cart") || cartInitialState;
+
+const sanitisedCartState = persistedCartState
+  ? { bookings: persistedCartState.bookings ?? [] }
+  : cartInitialState;
+
 const persistedWishlistState =
   loadFromLocalStorage("wishlist") || wishlistInitialState;
 
@@ -26,7 +31,7 @@ export const store = configureStore({
     currency: currencyReducer,
   },
   preloadedState: {
-    cart: persistedCartState || undefined,
+    cart: sanitisedCartState || undefined,
     wishlist: persistedWishlistState,
   },
 });

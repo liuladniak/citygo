@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   bookings: [],
-  totalBookings: 0,
 };
 
 const cartSlice = createSlice({
@@ -11,13 +10,11 @@ const cartSlice = createSlice({
   reducers: {
     addBooking: (state, action) => {
       state.bookings.push(action.payload);
-      state.totalBookings = state.bookings.length;
     },
     removeBooking: (state, action) => {
       state.bookings = state.bookings.filter(
         (booking) => booking.id !== action.payload
       );
-      state.totalBookings = state.bookings.length;
     },
     updateBooking: (state, action) => {
       const index = state.bookings.findIndex(
@@ -29,10 +26,13 @@ const cartSlice = createSlice({
     },
     clearCart: (state) => {
       state.bookings = [];
-      state.totalBookings = 0;
     },
   },
 });
+
+export const selectBookings = (state) => state.cart.bookings;
+export const selectTotalBookings = (state) => state.cart.bookings.length;
+export const selectIsCartEmpty = (state) => state.cart.bookings.length === 0;
 
 export const { addBooking, removeBooking, updateBooking, clearCart } =
   cartSlice.actions;
