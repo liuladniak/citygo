@@ -19,7 +19,7 @@ import { logout } from "../../features/auth/authSlice";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Icon from "../UI/Icon";
 import { iconArrowDown, iconArrowUp, iconSignout } from "../UI/iconsPaths";
-import { selectTotalBookings } from "@/features/cart/cartSlice";
+import { selectTotalBookings } from "../../features/cart/cartSlice";
 
 function Header() {
   const navigate = useNavigate();
