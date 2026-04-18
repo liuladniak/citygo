@@ -82,8 +82,8 @@ const BookingForm = ({
       timeSlot: selectedTimeSlot,
       tour_time_slots,
       slug,
-      unavailableRecurringDays,
-      unavailableDates,
+      // unavailableRecurringDays,
+      // unavailableDates,
       guests: { adults, children, infants },
 
       price,

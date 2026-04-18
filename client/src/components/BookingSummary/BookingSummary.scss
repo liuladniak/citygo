@@ -57,6 +57,54 @@
     font-weight: 600;
     padding-top: 0.4rem;
   }
+
+  &__loading {
+    padding: 1.6rem 2.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  &__skeleton {
+    height: 1.6rem;
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 0.4rem;
+    width: 100%;
+
+    &--short {
+      width: 60%;
+    }
+  }
+
+  &__error {
+    padding: 1.6rem 2.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: flex-start;
+
+    p {
+      font-size: 1.3rem;
+      color: #92400e;
+    }
+  }
+
+  &__retry {
+    background: none;
+    border: 1px solid #d97706;
+    color: #d97706;
+    border-radius: 0.6rem;
+    padding: 0.6rem 1.4rem;
+    font-size: 1.3rem;
+    cursor: pointer;
+    font-family: inherit;
+
+    &:hover {
+      background: #fffbeb;
+    }
+  }
 }
 
 .cart__fees {
@@ -76,4 +124,13 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: $charcoal;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

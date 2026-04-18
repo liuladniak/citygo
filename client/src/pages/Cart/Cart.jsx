@@ -1,23 +1,40 @@
 import "./Cart.scss";
 import ReviewTour from "../../components/ReviewTour/ReviewTour";
 import { useSelector } from "react-redux";
-
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
 import { clearCart } from "../../features/cart/cartSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 import BookingSummary from "../../components/BookingSummary/BookingSummary";
 import CheckoutForm from "./CheckoutForm";
 import { Link } from "react-router-dom";
 
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const API_URL = import.meta.env.VITE_API_URL;
+
+const decodeJWT = (token) => {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(base64));
+    if (payload.exp * 1000 < Date.now()) {
+      localStorage.removeItem("token");
+      return null;
+    }
+    return payload;
+  } catch {
+    return null;
+  }
+};
+
 const Cart = () => {
-  const API_URL = import.meta.env.VITE_API_URL;
   const [user, setUser] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
+  const [quote, setQuote] = useState(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quoteError, setQuoteError] = useState(null);
+  const [contactReady, setContactReady] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     contact_name: "",
     contact_email: "",
@@ -25,60 +42,69 @@ const Cart = () => {
     language: "en",
     special_requirements: "",
   });
-  const [contactReady, setContactReady] = useState(false);
+  const contactDetailsRef = useRef(contactDetails);
 
   const bookings = useSelector((state) => state.cart.bookings);
   const selectedCurrency = useSelector(
     (state) => state.currency.selectedCurrency
   );
-  const exchangeRates = useSelector((state) => state.currency.exchangeRates);
-
-  console.log("Bookings in cart from the redux state", bookings);
-  const decodeJWT = (token) => {
-    try {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = JSON.parse(atob(base64));
-
-      const isExpired = jsonPayload.exp * 1000 < Date.now();
-      if (isExpired) {
-        localStorage.removeItem("token");
-        return null;
-      }
-
-      return jsonPayload;
-    } catch (error) {
-      console.error("Invalid token:", error);
-      return null;
-    }
-  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decodedToken = decodeJWT(token);
-        setUser(decodedToken);
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
-    }
+    if (token) setUser(decodeJWT(token));
   }, []);
 
-  const calculateTotal = () => {
-    const exchangeRate =
-      selectedCurrency === "USD"
-        ? 1
-        : exchangeRates[selectedCurrency.toLowerCase()] || 1;
+  const fetchQuote = useCallback(async () => {
+    if (bookings.length === 0) return;
+    setQuoteLoading(true);
+    setQuoteError(null);
+    try {
+      const { data } = await axios.post(`${API_URL}/api/payment/cart/quote`, {
+        selectedCurrency,
+        bookings: bookings.map((b) => ({
+          tour_id: b.tour_id,
+          adults: b.guests.adults,
+          children: b.guests.children,
+          infants: b.guests.infants,
+        })),
+      });
+      setQuote(data);
+    } catch (err) {
+      console.error("Failed to fetch price quote:", err);
+      setQuoteError("Unable to load pricing. Please try again.");
+    } finally {
+      setQuoteLoading(false);
+    }
+  }, [bookings, selectedCurrency]);
 
-    return bookings.reduce((total, booking) => {
-      const { price, guests, featured } = booking;
-      let totalPrice = guests.adults * price * exchangeRate;
-      totalPrice += guests.children * (price * 0.5 * exchangeRate);
-      if (featured) totalPrice *= 0.9;
-      return total + totalPrice;
-    }, 0);
-  };
+  useEffect(() => {
+    fetchQuote();
+  }, [fetchQuote]);
+
+  useEffect(() => {
+    if (!bookings.length || !user || !contactReady || clientSecret) return;
+    const details = contactDetailsRef.current;
+    axios
+      .post(`${API_URL}/api/payment/create-payment-intent`, {
+        selectedCurrency,
+        bookings: bookings.map((b) => ({
+          user_id: user.id,
+          tour_id: b.tour_id,
+          time_slot_id: b.timeSlot.id,
+          tour_date: b.date,
+          adults: b.guests.adults,
+          children: b.guests.children,
+          infants: b.guests.infants,
+          contact_name: details.contact_name,
+          contact_email: details.contact_email,
+          contact_phone: details.contact_phone,
+          language: details.language,
+          special_requirements: details.special_requirements,
+        })),
+      })
+      .then((res) => setClientSecret(res.data.clientSecret))
+      .catch((err) => console.error("Error creating payment intent:", err));
+  }, [bookings, user, contactReady, clientSecret, selectedCurrency]);
 
   const handleContactChange = (e) => {
     setContactDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -87,42 +113,15 @@ const Cart = () => {
   const handleContactSubmit = (e) => {
     e.preventDefault();
     if (!contactDetails.contact_name || !contactDetails.contact_email) return;
+    contactDetailsRef.current = contactDetails;
     setContactReady(true);
   };
-
-  useEffect(() => {
-    if (bookings.length > 0 && user && contactReady && !clientSecret) {
-      console.log("Contact details being sent:", contactDetails);
-      axios
-        .post(`${API_URL}/api/payment/create-payment-intent`, {
-          selectedCurrency,
-          bookings: bookings.map((booking) => ({
-            user_id: user.id,
-            tour_id: booking.tour_id,
-            time_slot_id: booking.timeSlot.id,
-            tour_date: booking.date,
-            adults: booking.guests.adults,
-            children: booking.guests.children,
-            infants: booking.guests.infants,
-            contact_name: contactDetails.contact_name,
-            contact_email: contactDetails.contact_email,
-            contact_phone: contactDetails.contact_phone,
-            language: contactDetails.language,
-            special_requirements: contactDetails.special_requirements,
-          })),
-        })
-        .then((res) => setClientSecret(res.data.clientSecret))
-        .catch((err) => console.error("Error fetching payment intent:", err));
-    }
-  }, [bookings, clientSecret, user, selectedCurrency, contactReady]);
-
-  console.log("Bookings %%%:", bookings, "user%", user);
 
   if (bookings.length === 0) {
     return (
       <div className="cart">
         <h1 className="cart-heading">Cart</h1>
-        <p className="cart__heading">Your cart is empty.</p>
+        <p className="cart__empty">Your cart is empty.</p>
       </div>
     );
   }
@@ -145,7 +144,6 @@ const Cart = () => {
               <span className="cart__section-number">2</span>
               Your Details
             </h2>
-
             {!user ? (
               <div className="sign-in-prompt">
                 <p>Sign in to complete your booking.</p>
@@ -278,7 +276,12 @@ const Cart = () => {
         </div>
 
         <div className="cart__right">
-          <BookingSummary bookings={bookings} totalPrice={calculateTotal()} />
+          <BookingSummary
+            quote={quote}
+            quoteLoading={quoteLoading}
+            quoteError={quoteError}
+            onRetry={fetchQuote}
+          />
         </div>
       </div>
     </div>

@@ -1,85 +1,91 @@
 import "./BookingSummary.scss";
 import { formatCurrency } from "../../utils/formatCurrency";
-import { useSelector } from "react-redux";
 
-const BookingSummary = ({ totalPrice, bookings }) => {
-  const selectedCurrency = useSelector(
-    (state) => state.currency.selectedCurrency
-  );
-  console.log("Selected currency: " + selectedCurrency);
-  const exchangeRates = useSelector((state) => state.currency.exchangeRates);
-  const exchangeRate =
-    selectedCurrency === "USD"
-      ? 1
-      : exchangeRates[selectedCurrency.toLowerCase()] || 1;
+const BookingSummary = ({ quote, quoteLoading, quoteError, onRetry }) => {
+  const currency = quote?.currency ?? "USD";
+
+  if (quoteLoading) {
+    return (
+      <div className="cart-product">
+        <h2 className="cart-product__heading">Order Summary</h2>
+        <div className="cart-product__loading">
+          <div className="cart-product__skeleton" />
+          <div className="cart-product__skeleton cart-product__skeleton--short" />
+          <div className="cart-product__skeleton" />
+        </div>
+      </div>
+    );
+  }
+
+  if (quoteError) {
+    return (
+      <div className="cart-product">
+        <h2 className="cart-product__heading">Order Summary</h2>
+        <div className="cart-product__error">
+          <p>{quoteError}</p>
+          <button className="cart-product__retry" onClick={onRetry}>
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!quote) return null;
 
   return (
     <div className="cart-product">
       <h2 className="cart-product__heading">Order Summary</h2>
+
       <ul className="cart-product__list">
-        {bookings.map((booking, i) => {
-          const { title, price, guests, featured } = booking;
-          const convertedPrice = price * exchangeRate;
-          const adultTotal = guests.adults * price * exchangeRate;
-          const childTotal = guests.children
-            ? guests.children * (price * 0.5 * exchangeRate)
-            : 0;
-          const infantTotal = guests.infants ? guests.infants * 0 : 0;
-          let totalTourPrice = adultTotal + childTotal + infantTotal;
+        {quote.breakdown.map((item, i) => (
+          <li key={i} className="cart-product__item">
+            <div className="cart-product__title">{item.tour_name}</div>
+            <div className="cart-product__details">
+              <p>
+                Adults: {item.guests.adults} ×{" "}
+                {formatCurrency(item.base_price, currency)} ={" "}
+                {formatCurrency(item.adult_total, currency)}
+              </p>
 
-          if (featured) {
-            totalTourPrice *= 0.9;
-          }
-
-          return (
-            <li key={i} className="cart-product__item">
-              <div className="cart-product__title">{title}</div>
-              <div className="cart-product__details">
+              {item.guests.children > 0 && (
                 <p>
-                  Adults: {guests.adults} ×{" "}
-                  {formatCurrency(convertedPrice, selectedCurrency)} ={" "}
-                  {formatCurrency(adultTotal, selectedCurrency)}
+                  Children: {item.guests.children} ×{" "}
+                  {formatCurrency(item.base_price * 0.5, currency)} ={" "}
+                  {formatCurrency(item.child_total, currency)}
                 </p>
-                {guests.children > 0 && (
-                  <p>
-                    Children: {guests.children} ×{" "}
-                    {formatCurrency(convertedPrice * 0.5, selectedCurrency)} ={" "}
-                    {formatCurrency(childTotal, selectedCurrency)}
-                  </p>
-                )}
+              )}
 
-                {guests.infants > 0 && (
-                  <p>
-                    Infants: {guests.infants} × $0.00 ={" "}
-                    {formatCurrency(infantTotal, selectedCurrency)}
-                  </p>
-                )}
-                {featured && (
-                  <p className="cart-product__discount">
-                    Featured Discount: -10%
-                  </p>
-                )}
-                <p className="cart-product__subtotal">
-                  <strong>
-                    Subtotal: {formatCurrency(totalTourPrice, selectedCurrency)}
-                  </strong>
+              {item.guests.infants > 0 && (
+                <p>
+                  Infants: {item.guests.infants} × {formatCurrency(0, currency)}
                 </p>
-              </div>
-            </li>
-          );
-        })}
+              )}
+
+              {item.featured && (
+                <p className="cart-product__discount">
+                  Featured Discount: -{formatCurrency(item.discount, currency)}
+                </p>
+              )}
+
+              <p className="cart-product__subtotal">
+                <strong>
+                  Subtotal: {formatCurrency(item.subtotal, currency)}
+                </strong>
+              </p>
+            </div>
+          </li>
+        ))}
       </ul>
 
       <div className="cart__fees">
         <h4>Additional fees</h4>
-        <span>{formatCurrency(0.0, selectedCurrency)}</span>
+        <span>{formatCurrency(0, currency)}</span>
       </div>
+
       <div className="cart__total">
         <h4>Total</h4>
-        <p>
-          {" "}
-          <strong>{formatCurrency(totalPrice, selectedCurrency)}</strong>
-        </p>
+        <strong>{formatCurrency(quote.grand_total, currency)}</strong>
       </div>
     </div>
   );

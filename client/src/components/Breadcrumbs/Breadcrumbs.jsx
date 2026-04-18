@@ -7,6 +7,14 @@ const breadcrumbNames = {
   tours: "All Tours",
   category: "Categories",
   cart: "Cart",
+  bookings: "My Bookings",
+  account: "My Account",
+  wishlist: "Wishlist",
+  contact: "Help & Contact",
+  about: "About Us",
+  destinations: "Destinations",
+  "travel-guide": "Travel Guide",
+  success: "Booking Confirmed",
 };
 
 const getBreadcrumbName = (value, tourName) => {
@@ -15,44 +23,33 @@ const getBreadcrumbName = (value, tourName) => {
 
 const Breadcrumbs = () => {
   const API_URL = import.meta.env.VITE_API_URL;
-
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
   const [tourName, setTourName] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 480);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 480);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth < 480);
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    const tourSlug = pathnames[pathnames.length - 1];
+    const pathnames = location.pathname.split("/").filter((x) => x);
+    const isTourDetailPage = pathnames[0] === "tours" && pathnames.length === 2;
 
-    if (tourSlug && !tourName) {
-      fetchTourName(tourSlug);
+    if (isTourDetailPage) {
+      const slug = pathnames[1];
+      axios
+        .get(`${API_URL}/api/tours/${slug}`)
+        .then((res) => setTourName(res.data.tour_name))
+        .catch((err) => console.error("Error fetching tour name:", err));
+    } else {
+      setTourName("");
     }
-  }, [location, pathnames, tourName]);
+  }, [location.pathname, API_URL]);
 
-  const fetchTourName = async (slug) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/tours/${slug}`);
-      setTourName(response.data.tour_name);
-    } catch (error) {
-      console.error("Error fetching tour name:", error);
-    }
-  };
-
-  if (pathnames.length === 0) {
-    return null;
-  }
+  if (pathnames.length === 0) return null;
 
   return (
     <nav className="breadcrumb-nav" aria-label="breadcrumb">
@@ -64,14 +61,13 @@ const Breadcrumbs = () => {
           <>
             <li className="breadcrumb-item">...</li>
             <li className="breadcrumb-item active" aria-current="page">
-              {tourName}
+              {tourName || getBreadcrumbName(pathnames[pathnames.length - 1])}
             </li>
           </>
         ) : (
           pathnames.map((value, index) => {
             const to = `/${pathnames.slice(0, index + 1).join("/")}`;
             const isLast = index === pathnames.length - 1;
-
             return (
               <li key={to} className="breadcrumb-item">
                 {!isLast ? (
