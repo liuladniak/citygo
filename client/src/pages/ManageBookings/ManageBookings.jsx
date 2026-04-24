@@ -57,7 +57,7 @@ function ManageBookings() {
   if (isLoading) {
     return (
       <main className="dashboard">
-        <p>Loading...</p>
+        <p className="loading">Loading...</p>
       </main>
     );
   }

@@ -2,68 +2,360 @@
 @use "../../styles/partials/variables" as *;
 
 .login-page {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
-  flex-direction: column;
-  margin-top: 3.2rem;
   align-items: center;
+  justify-content: center;
+  padding: 2.4rem;
 }
 
-.login {
+.login-card {
+  width: 100%;
+  max-width: 42rem;
+  background: white;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 3.2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
-  width: 40rem;
-  margin-bottom: 1rem;
+  gap: 2rem;
 
-  &-wrp {
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    border-radius: $border-radius;
-    padding: 2.4rem $space-large;
+  &__title {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: $charcoal;
+    margin: 0;
+    text-align: center;
   }
 
-  &-or {
-    font-size: 1.6rem;
+  &__subtitle {
+    font-size: 1.4rem;
+    color: #6b7280;
+    text-align: center;
+    margin: -1.2rem 0 0;
+  }
+
+  &__form {
     display: flex;
-    align-items: center;
-    gap: $space-x-small;
-    margin: $space-small 0;
-    &::before,
-    &::after {
-      content: "";
-      display: inline-block;
-      width: 100%;
-      height: 1px;
-      background-color: #ccc;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  &__error {
+    font-size: 1.3rem;
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.8rem;
+    padding: 1rem 1.2rem;
+    margin: 0;
+  }
+
+  &__success {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    font-size: 1.4rem;
+    color: #166534;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 0.8rem;
+    padding: 1.6rem;
+    text-align: center;
+  }
+
+  &__link {
+    background: none;
+    border: none;
+    color: $main-teal;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+
+    &:hover {
+      opacity: 0.75;
     }
   }
 
-  &__title {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-
+  &__footer {
+    font-size: 1.4rem;
+    color: #6b7280;
     text-align: center;
-    font-size: 3.2rem;
-    padding-bottom: 0.5rem;
-    align-self: center;
-  }
-
-  &__message {
-    border-left: 5px solid #f19e39;
-    padding: 0.8rem;
-    margin-top: 2rem;
-    font-size: 1.2rem;
+    margin: 0;
   }
 }
 
-.signup {
-  &-cta {
-    margin: $space-medium 0;
-    font-size: 1.6rem;
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  label {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $charcoal;
   }
-  &-link {
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.login-input {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  padding: 1.1rem 1.4rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  color: $charcoal;
+  width: 100%;
+  box-sizing: border-box;
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $main-teal;
+    box-shadow: 0 0 0 3px rgba(30, 85, 109, 0.1);
+  }
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.2rem 2rem;
+  border-radius: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s, box-shadow 0.2s;
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: $main-maroon;
+    color: white;
+
+    &:hover:not(:disabled) {
+      opacity: 0.88;
+    }
+  }
+
+  &--google {
+    background: white;
+    color: $charcoal;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    &:hover:not(:disabled) {
+      background: #f9fafb;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  &__icon {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+  }
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+
+  &__line {
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+  }
+
+  &__text {
+    font-size: 1.2rem;
+    color: #9ca3af;
+    white-space: nowrap;
+  }
+}
+
+.login-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  background: #f9fafb;
+  border-radius: 0.8rem;
+  border: 1px dashed #e5e7eb;
+
+  &__label {
+    font-size: 1.3rem;
+    color: #6b7280;
+  }
+
+  &__btn {
+    background: none;
+    border: none;
+    color: $main-teal;
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
     text-decoration: underline;
-    font-size: 1.8rem;
+    text-underline-offset: 0.2rem;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+}
+
+.password-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .login-input {
+    padding-right: 4.4rem;
+  }
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $charcoal;
+  }
+}
+
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+
+  &__bar {
+    flex: 1;
+    height: 0.4rem;
+    background: #f3f4f6;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+
+    &--weak {
+      background: #ef4444;
+    }
+    &--fair {
+      background: #f59e0b;
+    }
+    &--strong {
+      background: #22c55e;
+    }
+  }
+
+  &__label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    &--weak {
+      color: #ef4444;
+    }
+    &--fair {
+      color: #f59e0b;
+    }
+    &--strong {
+      color: #22c55e;
+    }
+  }
+}
+
+.password-reqs {
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.2rem;
+    color: #9ca3af;
+    transition: color 0.2s;
+
+    &--met {
+      color: #22c55e;
+    }
+  }
+
+  &__icon {
+    font-size: 1.1rem;
+    width: 1.4rem;
+    text-align: center;
+  }
+}
+
+.login-input {
+  &--error {
+    border-color: #ef4444;
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  &--success {
+    border-color: #22c55e;
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+    }
+  }
+}
+
+.login-field {
+  &__hint {
+    font-size: 1.2rem;
+    margin: 0.4rem 0 0;
+
+    &--error {
+      color: #ef4444;
+    }
+    &--success {
+      color: #22c55e;
+    }
   }
 }

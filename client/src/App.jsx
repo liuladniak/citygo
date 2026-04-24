@@ -18,7 +18,8 @@ import Account from "./pages/Profile/Account";
 import HelpContact from "./pages/HelpContact/HelpContact";
 import About from "./pages/About/About";
 import Wishlist from "./pages/Wishlist/Wishlist";
-
+import AuthCallback from "./pages/AuthCallback/AuthCallback";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import Success from "./pages/Success/Success";
 import Article from "./pages/Article/Article";
 import CheckoutForm from "./pages/Cart/CheckoutForm";
@@ -31,6 +32,9 @@ const router = createBrowserRouter([
         path: "/",
         element: <Homepage />,
       },
+      { path: "/auth/callback", element: <AuthCallback /> },
+
+      { path: "/reset-password", element: <ResetPassword /> },
       {
         path: "/login",
         element: <Login />,

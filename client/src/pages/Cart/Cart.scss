@@ -8,7 +8,7 @@
 
   &-heading {
     font-size: 3.2rem;
-    font-weight: 700;
+    color: $main-teal;
     margin-bottom: $space-medium;
   }
 
@@ -98,6 +98,56 @@
     padding: 2.4rem;
     font-size: 1.4rem;
     color: #6b7280;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6.4rem 2.4rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: $border-radius;
+    gap: 1.6rem;
+  }
+
+  &__empty-icon {
+    font-size: 4.8rem;
+    line-height: 1;
+  }
+
+  &__empty-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: $charcoal;
+    margin: 0;
+  }
+
+  &__empty-text {
+    font-size: 1.5rem;
+    color: #6b7280;
+    max-width: 40rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  &__empty-btn {
+    display: inline-block;
+    background: $main-maroon;
+    color: white;
+    padding: 1.2rem 3.2rem;
+    border-radius: $border-radius-main;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 0.8rem;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.88;
+    }
   }
 }
 

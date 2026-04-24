@@ -120,8 +120,18 @@ const Cart = () => {
   if (bookings.length === 0) {
     return (
       <div className="cart">
-        <h1 className="cart-heading">Cart</h1>
-        <p className="cart__empty">Your cart is empty.</p>
+        <h1 className="cart-heading">Your Cart</h1>
+        <div className="cart__empty">
+          <div className="cart__empty-icon">🧳</div>
+          <h2 className="cart__empty-title">Your cart is empty</h2>
+          <p className="cart__empty-text">
+            You haven't added any tours yet. Browse our experiences and start
+            planning your Istanbul adventure.
+          </p>
+          <Link to="/tours" className="cart__empty-btn">
+            Explore Tours
+          </Link>
+        </div>
       </div>
     );
   }
