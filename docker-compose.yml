@@ -37,6 +37,8 @@ services:
       args:
         - VITE_API_URL=${VITE_API_URL}
         - VITE_STRIPE_PUBLIC_KEY=${VITE_STRIPE_PUBLIC_KEY}
+        - VITE_TEST_EMAIL=${VITE_TEST_EMAIL}
+        - VITE_TEST_PASSWORD=${VITE_TEST_PASSWORD}
     container_name: citygo-client
     restart: always
     expose:
