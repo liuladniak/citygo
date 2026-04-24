@@ -106,10 +106,10 @@ const Header = ({ user, role }: HeaderProps) => {
                     <p className="text-muted-foreground">{user.email}</p>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  {/* <DropdownMenuItem>
                     <User className="h-[1.2rem] w-[1.2rem] mr-2" />
                     Profile
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuItem onClick={() => navigate("/settings")}>
                     <Settings className="h-[1.2rem] w-[1.2rem] mr-2" />
                     Settings
