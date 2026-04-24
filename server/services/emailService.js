@@ -5,6 +5,17 @@ const brevo = new BrevoClient({
   apiKey: process.env.BREVO_API_KEY,
 });
 
+const getClientUrl = () => {
+  const origins =
+    process.env.ALLOWED_ORIGINS?.split(",").map((o) => o.trim()) ?? [];
+  if (process.env.NODE_ENV === "production") {
+    return (
+      origins.find((o) => o.includes("citygo.") && !o.includes("dashboard")) ??
+      origins[0]
+    );
+  }
+  return origins.find((o) => o.includes("5173")) ?? origins[0];
+};
 const FROM = { name: "CityGo Tours", email: "citygo@liuladniak.com" };
 
 const formatDate = (dateStr) =>
@@ -401,6 +412,167 @@ export const sendGuideUnassignment = async ({
     subject: `Assignment Removed — ${
       booking.tour_name ?? "Custom Tour"
     } on ${formatDate(booking.tour_date)}`,
+    html,
+  });
+};
+
+export const sendPasswordReset = async ({
+  to,
+  name,
+  resetUrl,
+  isGoogleAccount = false,
+}) => {
+  const html = isGoogleAccount
+    ? `
+    <div style="${baseStyle}">
+      <div style="background:#1e556d;padding:24px 32px;border-radius:12px 12px 0 0">
+        <h1 style="color:white;margin:0;font-size:22px">Password reset</h1>
+        <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours</p>
+      </div>
+      <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+        <p style="font-size:16px">Hi <strong>${name}</strong>,</p>
+        <p>We received a password reset request for this email address.</p>
+        <p>Your CityGo account was created using <strong>Google sign-in</strong> — 
+        there is no password to reset.</p>
+        <p>To access your account, click <strong>Continue with Google</strong> on the sign-in page.</p>
+        <p style="font-size:13px;color:#6b7280">
+          If you didn't request this, you can safely ignore this email.
+        </p>
+        <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;
+                    font-size:12px;color:#aaa;text-align:center">
+          CityGo Tours · Istanbul City Experiences
+        </div>
+      </div>
+    </div>
+  `
+    : `
+    <div style="${baseStyle}">
+      <div style="background:#1e556d;padding:24px 32px;border-radius:12px 12px 0 0">
+        <h1 style="color:white;margin:0;font-size:22px">Reset your password</h1>
+        <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours</p>
+      </div>
+      <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+        <p style="font-size:16px">Hi <strong>${name}</strong>,</p>
+        <p>We received a request to reset your CityGo password. Click the button below to choose a new one.</p>
+        <div style="text-align:center;margin:32px 0">
+          <a href="${resetUrl}"
+             style="background:#9b1c1c;color:white;padding:14px 32px;border-radius:8px;
+                    text-decoration:none;font-size:16px;font-weight:600;display:inline-block">
+            Reset Password
+          </a>
+        </div>
+        <p style="font-size:13px;color:#6b7280">
+          This link expires in <strong>1 hour</strong>. If you didn't request a password reset,
+          you can safely ignore this email — your password won't change.
+        </p>
+        <p style="font-size:13px;color:#9ca3af;word-break:break-all">
+          Or copy this link: ${resetUrl}
+        </p>
+        <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;
+                    font-size:12px;color:#aaa;text-align:center">
+          CityGo Tours · Istanbul City Experiences
+        </div>
+      </div>
+    </div>
+  `;
+
+  await send({
+    to,
+    subject: isGoogleAccount
+      ? "Password reset request — CityGo"
+      : "Reset your CityGo password",
+    html,
+  });
+};
+
+export const sendWelcome = async ({ to, name }) => {
+  const html = `
+    <div style="${baseStyle}">
+      <div style="background:#1e556d;padding:24px 32px;border-radius:12px 12px 0 0">
+        <h1 style="color:white;margin:0;font-size:22px">Welcome to CityGo 🌍</h1>
+        <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">Istanbul City Experiences</p>
+      </div>
+      <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+        <p style="font-size:16px">Hi <strong>${name}</strong>,</p>
+        <p>Welcome to CityGo — we're glad you're here.</p>
+        <p>You can now browse and book Istanbul's best guided experiences, manage your bookings, and save your favourite tours.</p>
+
+        <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:24px 0">
+          <p style="margin:0 0 12px;font-weight:600;font-size:15px">What you can do:</p>
+          <p style="margin:4px 0;font-size:14px">🗺️ Browse curated city tours</p>
+          <p style="margin:4px 0;font-size:14px">📅 Book and manage your experiences</p>
+          <p style="margin:4px 0;font-size:14px">❤️ Save tours to your wishlist</p>
+          <p style="margin:4px 0;font-size:14px">📖 Read our Istanbul travel guide</p>
+        </div>
+
+        <div style="text-align:center;margin:32px 0">
+          <a href="${getClientUrl()}/tours"
+             style="background:#9b1c1c;color:white;padding:14px 32px;border-radius:8px;
+                    text-decoration:none;font-size:16px;font-weight:600;display:inline-block">
+            Explore Tours
+          </a>
+        </div>
+
+        <p style="font-size:13px;color:#6b7280">
+          Questions? We're always happy to help at hello@citygo.com
+        </p>
+
+        <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;
+                    font-size:12px;color:#aaa;text-align:center">
+          CityGo Tours · Istanbul City Experiences
+        </div>
+      </div>
+    </div>
+  `;
+
+  await send({
+    to,
+    subject: "Welcome to CityGo 🌍",
+    html,
+  });
+};
+
+export const sendPasswordChanged = async ({ to, name }) => {
+  const html = `
+    <div style="${baseStyle}">
+      <div style="background:#1e556d;padding:24px 32px;border-radius:12px 12px 0 0">
+        <h1 style="color:white;margin:0;font-size:22px">Password updated</h1>
+        <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours</p>
+      </div>
+      <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+        <p style="font-size:16px">Hi <strong>${name}</strong>,</p>
+        <p>Your CityGo password was successfully updated.</p>
+
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;
+                    padding:16px;margin:20px 0">
+          <p style="margin:0;font-size:14px;color:#166534">
+            ✓ Password changed successfully
+          </p>
+        </div>
+
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;
+                    padding:16px;margin:20px 0">
+          <p style="margin:0;font-size:14px;color:#c2410c">
+            <strong>Wasn't you?</strong> If you didn't make this change, 
+            please contact us immediately at hello@citygo.com
+          </p>
+        </div>
+
+        <p style="font-size:13px;color:#6b7280">
+          For security, you may need to sign in again on your devices.
+        </p>
+
+        <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;
+                    font-size:12px;color:#aaa;text-align:center">
+          CityGo Tours · Istanbul City Experiences
+        </div>
+      </div>
+    </div>
+  `;
+
+  await send({
+    to,
+    subject: "Your CityGo password has been updated",
     html,
   });
 };

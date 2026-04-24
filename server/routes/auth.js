@@ -3,9 +3,22 @@ import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 const router = express.Router();
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 import "dotenv/config";
+import crypto from "crypto";
+import {
+  sendPasswordReset,
+  sendWelcome,
+  sendPasswordChanged,
+} from "../services/emailService.js";
+
+const DEMO_EMAILS = [
+  "test@example.com",
+  "demo.manager@citygo.com",
+  "demo.associate@citygo.com",
+];
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -30,70 +43,141 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+const getClientUrl = (req) => {
+  const origins = process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim());
+
+  if (process.env.NODE_ENV === "production") {
+    return origins.find(
+      (o) => o.includes("citygo.") && !o.includes("dashboard")
+    );
+  }
+
+  if (req.session?.clientOrigin) {
+    return req.session.clientOrigin;
+  }
+
+  return origins.find(
+    (o) => o.includes("localhost") && !o.includes("3000") && !o.includes("8080")
+  );
+};
+
 router.post("/signup", async (req, res) => {
-  const { first_name, last_name, phone_number, email, password } = req.body;
+  let { first_name, last_name, email, password } = req.body;
+
+  first_name = first_name?.trim();
+  last_name = last_name?.trim();
+  email = email?.trim().toLowerCase();
 
   if (!first_name || !last_name || !email || !password) {
-    return res.status(400).send("Please enter the required fields");
+    return res
+      .status(400)
+      .json({ error: "Please fill in all required fields." });
+  }
+  if (password.length < 8) {
+    return res
+      .status(400)
+      .json({ error: "Password must be at least 8 characters." });
+  }
+  if (first_name.length > 100 || last_name.length > 100) {
+    return res.status(400).json({ error: "Name is too long." });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res
+      .status(400)
+      .json({ error: "Please enter a valid email address." });
+  }
+
+  const existing = await knex("users").where({ email }).first();
+  if (existing) {
+    return res.status(409).json({
+      error: "An account with this email already exists.",
+      hint: "login",
+    });
   }
 
   const hashedPassword = bcrypt.hashSync(password);
 
-  const phoneNumber = req.body.phone_number || null;
-
-  const newUser = {
-    first_name,
-    last_name,
-    phone_number: phoneNumber,
-    email,
-    password: hashedPassword,
-  };
-
   try {
-    const [newUser] = await knex("users").insert(newUser).returning("*");
+    const [newUser] = await knex("users")
+      .insert({
+        first_name,
+        last_name,
+        phone_number: req.body.phone_number?.trim() || null,
+        email,
+        password: hashedPassword,
+      })
+      .returning("*");
 
     await knex("bookings")
       .where("primary_contact_email", email)
       .whereNull("user_id")
       .update({ user_id: newUser.id });
 
-    res.status(201).send("Registered successfully");
+    sendWelcome({ to: email, name: first_name }).catch((err) =>
+      console.error("Welcome email failed:", err)
+    );
+
+    res.status(201).json({ message: "Registered successfully" });
   } catch (err) {
-    console.error(err);
-    res.status(400).send("Failed registration");
+    console.error("Signup error:", err);
+    res.status(500).json({ error: "Registration failed. Please try again." });
   }
 });
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
+
+  email = email?.trim().toLowerCase();
 
   if (!email || !password) {
-    return res.status(400).send("Please enter the required fields");
+    return res
+      .status(400)
+      .json({ error: "Please enter your email and password." });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res
+      .status(400)
+      .json({ error: "Please enter a valid email address." });
   }
 
   let user;
   try {
-    user = await knex("users").where({ email: email }).first();
-    if (!user) {
-      return res.status(404).send("Invalid email");
-    }
+    user = await knex("users").where({ email }).first();
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Server errored out");
+    console.error("Login DB error:", err);
+    return res
+      .status(500)
+      .json({ error: "Something went wrong. Please try again." });
+  }
+
+  if (!user) {
+    return res.status(401).json({ error: "Incorrect email or password." });
+  }
+
+  if (!user.password) {
+    return res.status(400).json({
+      error:
+        "This account was created with Google. Please sign in with Google instead.",
+    });
   }
 
   const isPasswordCorrect = bcrypt.compareSync(password, user.password);
   if (!isPasswordCorrect) {
-    return res.status(400).send("Invalid password");
+    return res.status(401).json({ error: "Incorrect email or password." });
   }
+
   const expiresIn = 7 * 24 * 60 * 60;
   const token = jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET,
-    { expiresIn: expiresIn }
+    { expiresIn }
   );
 
-  res.send({ token: token, expiresIn: expiresIn });
+  res.json({ token, expiresIn });
 });
 
 router.get("/profile", async (req, res) => {
@@ -229,6 +313,183 @@ router.put("/profile", verifyToken, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error while updating user profile");
+  }
+});
+
+router.get("/google", (req, res, next) => {
+  const origin = req.headers.referer || req.headers.origin;
+  if (origin) {
+    const matchedOrigin = process.env.ALLOWED_ORIGINS.split(",")
+      .map((o) => o.trim())
+      .find((o) => origin.startsWith(o));
+    if (matchedOrigin) req.session.clientOrigin = matchedOrigin;
+  }
+  passport.authenticate("google", { scope: ["profile", "email"] })(
+    req,
+    res,
+    next
+  );
+});
+
+router.get("/google/callback", (req, res, next) => {
+  passport.authenticate("google", { session: false }, (err, user) => {
+    const clientUrl = getClientUrl(req);
+    console.log("Client URL:", clientUrl);
+
+    if (err) {
+      console.error("Google auth error:", err.code, err.message);
+      if (err.code === "invalid_grant") {
+        return res.redirect(`${clientUrl}/login?error=try_again`);
+      }
+      return res.redirect(`${clientUrl}/login?error=google_failed`);
+    }
+
+    if (!user) {
+      return res.redirect(`${clientUrl}/login?error=google_failed`);
+    }
+
+    try {
+      const expiresIn = 7 * 24 * 60 * 60;
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.JWT_SECRET,
+        { expiresIn }
+      );
+      const expirationTime = Date.now() + expiresIn * 1000;
+      const redirectUrl = `${clientUrl}/auth/callback?token=${token}&expires=${expirationTime}`;
+      console.log("Redirecting to:", redirectUrl);
+      return res.redirect(redirectUrl);
+    } catch (jwtErr) {
+      console.error("JWT error:", jwtErr);
+      return res.redirect(`${clientUrl}/login?error=google_failed`);
+    }
+  })(req, res, next);
+});
+
+const isDemoAccount = (email) =>
+  DEMO_EMAILS.includes(email.trim().toLowerCase());
+
+router.post("/forgot-password", async (req, res) => {
+  let { email } = req.body;
+  email = email?.trim().toLowerCase();
+
+  if (!email) {
+    return res.status(400).json({ error: "Please provide an email address." });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res
+      .status(400)
+      .json({ error: "Please enter a valid email address." });
+  }
+
+  if (isDemoAccount(email)) {
+    return res.status(200).json({
+      message:
+        "If an account exists with this email, a reset link has been sent.",
+    });
+  }
+
+  const clientUrl = getClientUrl(req);
+
+  res.status(200).json({
+    message:
+      "If an account exists with this email, a reset link has been sent.",
+  });
+
+  try {
+    console.log("Starting async reset for:", email);
+    const user = await knex("users").where({ email }).first();
+    console.log("User found:", !!user);
+    if (!user) return;
+
+    if (!user.password && user.google_id) {
+      await sendPasswordReset({
+        to: email,
+        name: user.first_name,
+        resetUrl: null,
+        isGoogleAccount: true,
+      });
+      return;
+    }
+
+    await knex("password_reset_tokens")
+      .where({ user_id: user.id })
+      .whereNull("used_at")
+      .delete();
+    console.log("Old tokens cleared");
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+
+    await knex("password_reset_tokens").insert({
+      user_id: user.id,
+      token,
+      expires_at: expiresAt,
+    });
+    console.log("Token inserted");
+
+    const resetUrl = `${clientUrl}/reset-password?token=${token}`;
+    console.log("Reset URL:", resetUrl);
+
+    await sendPasswordReset({ to: email, name: user.first_name, resetUrl });
+    console.log("Email sent");
+  } catch (err) {
+    console.error("Forgot password async error:", err);
+  }
+});
+
+router.post("/reset-password", async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return res.status(400).json({ error: "Token and password are required." });
+  }
+
+  if (password.length < 8) {
+    return res.status(400).json({
+      error: "Password must be at least 8 characters.",
+    });
+  }
+
+  try {
+    const resetRecord = await knex("password_reset_tokens")
+      .where({ token })
+      .whereNull("used_at")
+      .where("expires_at", ">", new Date())
+      .first();
+
+    if (!resetRecord) {
+      return res.status(400).json({
+        error:
+          "This reset link is invalid or has expired. Please request a new one.",
+      });
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    await knex("users")
+      .where({ id: resetRecord.user_id })
+      .update({ password: hashedPassword });
+
+    await knex("password_reset_tokens")
+      .where({ id: resetRecord.id })
+      .update({ used_at: new Date() });
+
+    const user = await knex("users")
+      .where({ id: resetRecord.user_id })
+      .select("first_name", "email")
+      .first();
+
+    sendPasswordChanged({ to: user.email, name: user.first_name }).catch(
+      (err) => console.error("Password changed email failed:", err)
+    );
+
+    res.json({ message: "Password updated successfully." });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    res.status(500).json({ error: "Something went wrong. Please try again." });
   }
 });
 
