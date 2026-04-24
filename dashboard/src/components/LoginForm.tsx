@@ -27,13 +27,13 @@ export function LoginForm({
   const [demoError, setDemoError] = useState<string | null>(null);
   const [showEmailForm, setShowEmailForm] = useState(false);
 
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) console.error(error);
-  };
+  // const signInWithGoogle = async () => {
+  //   const { error } = await supabase.auth.signInWithOAuth({
+  //     provider: "google",
+  //     options: { redirectTo: window.location.origin },
+  //   });
+  //   if (error) console.error(error);
+  // };
 
   const signInWithEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +72,7 @@ export function LoginForm({
           <CardDescription>Sign in to access the dashboard</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button
+          {/* <Button
             variant="outline"
             className="w-full"
             onClick={signInWithGoogle}
@@ -96,16 +96,16 @@ export function LoginForm({
               />
             </svg>
             Sign in with Google
-          </Button>
+          </Button> */}
 
-          <div className="relative">
+          {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs text-muted-foreground">
               <span className="bg-card px-2">try a demo account</span>
             </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2 gap-2">
             <Button
