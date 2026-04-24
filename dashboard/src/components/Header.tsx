@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
-import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
+import { LogOut, Moon, Settings, Sun } from "lucide-react";
 import { useEmployee } from "@/hooks/useEmployee";
 import { useTheme } from "@/components/providers/theme-provider";
 import { supabase } from "@/lib/supabaseClient";
