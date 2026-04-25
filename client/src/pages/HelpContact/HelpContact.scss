@@ -3,6 +3,7 @@
 
 .contact {
   width: 100%;
+
   &-banner {
     background-image: url("../../assets/images/guide-1.webp");
     background-position: center center;
@@ -17,24 +18,20 @@
     position: relative;
     margin-bottom: $space-large;
   }
+
   &-heading--main {
     font-size: 3.2rem;
     z-index: 0;
     color: #fff;
   }
+
   &__heading {
     font-size: 2.4rem;
     z-index: 0;
     margin: $space-medium auto;
     @include layout-constrain;
   }
-  &-success {
-    color: $success;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    fill: $success;
-  }
+
   &__social {
     display: flex;
     gap: $space-small;
@@ -42,12 +39,14 @@
 
   &-main {
     @include layout-constrain;
-
     display: flex;
-
     width: 100%;
     gap: $space-large;
     margin: $space-large auto;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
 
     &__col {
       flex: 1;
@@ -59,8 +58,6 @@
       gap: $space-medium;
       font-size: 1.6rem;
     }
-    &__map {
-    }
 
     &__title {
       font-weight: 600;
@@ -69,6 +66,7 @@
     &__el {
       display: flex;
       gap: $space-small;
+      align-items: flex-start;
 
       &--socials {
         display: flex;
@@ -78,71 +76,237 @@
         margin: $space-medium 0;
       }
     }
-  }
 
-  &-form {
-    display: flex;
-    flex-direction: column;
-    gap: $space-medium;
-    font-size: 1.6rem;
-    max-width: 50%;
-    border-radius: $border-radius;
-    flex: 1;
-    padding: $space-medium;
-    &__el {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    &__label {
-      margin-bottom: 0.8rem;
-    }
-
-    &__input {
-      border-radius: 0.8rem;
-      border: 1px solid gray;
-      padding: 0.8rem 1.6rem;
-      font-family: "Montserrat", sans-serif;
-      letter-spacing: 1.1;
-    }
-
-    &__name {
-      display: flex;
-      gap: $space-large;
+    &__desc {
+      font-size: 1.5rem;
+      color: #4b5563;
+      line-height: 1.5;
     }
   }
 
-  &-faq__heading {
-    font-size: 2.4rem;
-    font-weight: 600;
-    margin-bottom: $space-small;
+  &-faq {
+    &__heading {
+      font-size: 2.4rem;
+      font-weight: 600;
+      margin-bottom: $space-small;
+    }
   }
 }
 
 .form-section {
-  box-shadow: 0px 2px 10px rgb(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   border-radius: $border-radius;
   @include layout-constrain;
-  margin: 0 auto;
+  margin: 0 auto $space-large;
   display: flex;
-  gap: $space-large;
-  margin-bottom: $space-large;
+  gap: 0;
+  overflow: hidden;
+  background: white;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 }
+
 .form-heading {
   font-size: 3.4rem;
   text-align: center;
   margin-bottom: 2.4rem;
 }
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  flex: 1;
+  padding: $space-large;
+
+  &__header {
+    margin-bottom: 0.8rem;
+  }
+
+  &__title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: $charcoal;
+    margin: 0 0 0.4rem;
+  }
+
+  &__subtitle {
+    font-size: 1.4rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  &__name,
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__el {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  &__label {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $charcoal;
+  }
+
+  &__required {
+    color: $main-maroon;
+    margin-left: 0.2rem;
+  }
+
+  &__optional {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #9ca3af;
+    margin-left: 0.4rem;
+  }
+
+  &__input {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.8rem;
+    padding: 1.1rem 1.4rem;
+    font-size: 1.4rem;
+    font-family: inherit;
+    color: $charcoal;
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $main-teal;
+      box-shadow: 0 0 0 3px rgba(30, 85, 109, 0.1);
+    }
+
+    &--error {
+      border-color: #ef4444;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 12rem;
+    line-height: 1.6;
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 1.8rem;
+  }
+
+  &__error {
+    font-size: 1.2rem;
+    color: #ef4444;
+  }
+
+  &__count {
+    font-size: 1.2rem;
+    color: #9ca3af;
+    margin-left: auto;
+  }
+
+  &__server-error {
+    font-size: 1.3rem;
+    color: #b91c1c;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 0.8rem;
+    padding: 1rem 1.2rem;
+  }
+
+  &__submit {
+    background: $main-maroon;
+    color: white;
+    border: none;
+    border-radius: 0.8rem;
+    padding: 1.3rem 2.4rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    align-self: flex-start;
+
+    &:hover:not(:disabled) {
+      opacity: 0.88;
+    }
+
+    &:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.contact-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.8rem;
+  padding: 2rem;
+  fill: #166534;
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #166534;
+    margin: 0 0 0.4rem;
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    color: #166534;
+    margin: 0;
+  }
+}
+
 .contact-img {
   flex: 1;
-  border-radius: $border-radius;
   overflow: hidden;
+  min-height: 40rem;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 900px) {
+    min-height: 25rem;
+  }
 }
 
 .map-office {
   height: 30rem;
 }
 
-.error {
-  color: #ff5a5f;
+.container-centered {
+  @include layout-constrain;
+  margin: $space-large auto;
 }

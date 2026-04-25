@@ -1,7 +1,6 @@
 import "./HelpContact.scss";
 import Map from "../../components/Map/Map";
 import Accordion from "../../components/Accordion/Accordion";
-import Button from "../../components/Button/Button";
 import Icon from "../../components/UI/Icon";
 import {
   iconCall,
@@ -11,11 +10,12 @@ import {
   iconPhone,
   iconSchedule,
 } from "../../components/UI/iconsPaths";
-// import IconInstagram from "../../components/UI/IconInstagram";
-// import IconTikTok from "../../components/UI/IconTikTok";
-// import IconYoutube from "../../components/UI/IconYouTube";
 import contactImg from "../../assets/images/office.jpg";
 import { useState } from "react";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 const faqs = [
   {
     id: 1,
@@ -35,8 +35,6 @@ const faqs = [
 ];
 
 const HelpContact = () => {
-  const [success, setSuccess] = useState(false);
-  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -44,60 +42,81 @@ const HelpContact = () => {
     phone: "",
     message: "",
   });
-  const validateForm = (data) => {
-    const errors = {};
-    if (!data.first_name.trim()) {
-      errors.first_name = "First name is required";
-    }
-    if (!data.last_name.trim()) {
-      errors.last_name = "Last name is required";
-    }
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [serverError, setServerError] = useState(null);
+
+  const validate = (data) => {
+    const errs = {};
+    if (!data.first_name.trim()) errs.first_name = "First name is required.";
+    if (!data.last_name.trim()) errs.last_name = "Last name is required.";
     if (!data.email.trim()) {
-      errors.email = "Email is required";
+      errs.email = "Email is required.";
     } else if (!/^\S+@\S+\.\S+$/.test(data.email)) {
-      errors.email = "Invalid email format";
+      errs.email = "Please enter a valid email address.";
     }
     if (!data.message.trim()) {
-      errors.message = "Message cannot be empty";
+      errs.message = "Message is required.";
+    } else if (data.message.trim().length < 10) {
+      errs.message = "Message is too short.";
     }
-    return errors;
+    return errs;
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
-  const sendMessage = (e) => {
-    e.preventDefault();
-    const validationErrors = validateForm(formData);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setServerError(null);
+
+    const validationErrors = validate(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    setErrors({});
-    console.log("Form submitted successfully:", formData);
-    setSuccess(true);
-    setFormData({
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: "",
-      message: "",
-    });
+    setIsLoading(true);
+    try {
+      await axios.post(`${API_URL}/api/contact`, formData);
+      setSuccess(true);
+      setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (err) {
+      setServerError(
+        err.response?.data?.error ||
+          "Something went wrong. Please try again or email us directly."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
     <div className="contact">
       <div className="contact-banner">
         <h1 className="contact-heading--main">Get in Touch with CityGo</h1>
       </div>
-      <h2 className="contact__heading">We’d love to hear from you!</h2>
+
+      <h2 className="contact__heading">We'd love to hear from you!</h2>
+
       <div className="contact-main">
         <div className="contact-main__col contact-main__content">
           <p>
             Whether you have a question, need assistance with your booking, or
             just want to say hello, our team is here to help. Reach out to us
-            through any of the contact details below, and we’ll get back to you
+            through any of the contact details below, and we'll get back to you
             as soon as possible.
           </p>
           <div className="contact-main__el">
@@ -132,24 +151,6 @@ const HelpContact = () => {
               Monday–Sunday: 9:00 AM – 6:00 PM (GMT+3)
             </span>
           </div>
-          {/* <div>
-            {" "}
-            <h3 className="contact-main__title">Follow Us On Social Media</h3>
-            <div className="contact-main__el contact-main__el--socials">
-              <div className="contact__social">
-                <IconInstagram />
-                <span className="contact-main__desc">Instagram</span>
-              </div>
-              <div className="contact__social">
-                <IconTikTok />
-                <span className="contact-main__desc">TikTok</span>
-              </div>
-              <div className="contact__social">
-                <IconYoutube />
-                <span className="contact-main__desc">YouTube</span>
-              </div>
-            </div>
-          </div> */}
         </div>
         <div className="contact-main__col contact-main__map">
           <Map
@@ -161,84 +162,157 @@ const HelpContact = () => {
           />
         </div>
       </div>
-      <h2 className="form-heading">Contact form</h2>
+
       <div className="form-section">
-        <form className="contact-form" onSubmit={sendMessage}>
-          <h2>Got Questions? </h2>
-          <div className="contact-form__name">
-            <div className="contact-form__el">
-              <label className="contact-form__label">First Name</label>
-              <input
-                className="contact-form__input"
-                placeholder="Enter your first name.."
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleChange}
-              />
-              {errors.first_name && (
-                <span className="error">{errors.first_name}</span>
-              )}
-            </div>
-            <div className="contact-form__el">
-              <label className="contact-form__label">Last Name</label>
-              <input
-                className="contact-form__input"
-                placeholder="Enter your last name.."
-                name="last_name"
-                onChange={handleChange}
-                value={formData.last_name}
-              />
-              {errors.last_name && (
-                <span className="error">{errors.last_name}</span>
-              )}
-            </div>
+        <form className="contact-form" onSubmit={handleSubmit} noValidate>
+          <div className="contact-form__header">
+            <h2 className="contact-form__title">Send us a message</h2>
+            <p className="contact-form__subtitle">
+              We'll get back to you within 24 hours.
+            </p>
           </div>
-          <div className="contact-form__el">
-            <label className="contact-form__label">Your Email</label>
-            <input
-              className="contact-form__input"
-              placeholder="Enter your email.."
-              name="email"
-              type="email"
-              onChange={handleChange}
-              value={formData.email}
-            />
-            {errors.email && <span className="error">{errors.email}</span>}
-          </div>
-          <div className="contact-form__el">
-            <label className="contact-form__label">
-              Phone Number (optional)
-            </label>
-            <input
-              className="contact-form__input"
-              placeholder="Enter your phone number.."
-              name="phone"
-              type="phone"
-              onChange={handleChange}
-              value={formData.phone}
-            />
-          </div>
-          <div className="contact-form__el">
-            <label className="contact-form__label">Message</label>
-            <textarea
-              className="contact-form__input"
-              placeholder="Write your message.."
-              name="message"
-              onChange={handleChange}
-              value={formData.message}
-            ></textarea>
-            {errors.message && <span className="error">{errors.message}</span>}
-          </div>
-          <Button>Send a Message</Button>
-          {success && (
+
+          {success ? (
             <div className="contact-success">
               <Icon iconPath={iconCheck} />
-              Message sent! We'll get back to you soon!
+              <div>
+                <p className="contact-success__title">Message sent!</p>
+                <p className="contact-success__text">
+                  Thanks for reaching out. We'll get back to you soon.
+                </p>
+              </div>
             </div>
+          ) : (
+            <>
+              <div className="contact-form__name">
+                <div className="contact-form__el">
+                  <label className="contact-form__label" htmlFor="first_name">
+                    First name <span className="contact-form__required">*</span>
+                  </label>
+                  <input
+                    id="first_name"
+                    className={`contact-form__input ${
+                      errors.first_name ? "contact-form__input--error" : ""
+                    }`}
+                    placeholder="John"
+                    name="first_name"
+                    value={formData.first_name}
+                    onChange={handleChange}
+                    autoComplete="given-name"
+                  />
+                  {errors.first_name && (
+                    <span className="contact-form__error">
+                      {errors.first_name}
+                    </span>
+                  )}
+                </div>
+                <div className="contact-form__el">
+                  <label className="contact-form__label" htmlFor="last_name">
+                    Last name <span className="contact-form__required">*</span>
+                  </label>
+                  <input
+                    id="last_name"
+                    className={`contact-form__input ${
+                      errors.last_name ? "contact-form__input--error" : ""
+                    }`}
+                    placeholder="Smith"
+                    name="last_name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    autoComplete="family-name"
+                  />
+                  {errors.last_name && (
+                    <span className="contact-form__error">
+                      {errors.last_name}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="contact-form__row">
+                <div className="contact-form__el">
+                  <label className="contact-form__label" htmlFor="email">
+                    Your email address
+                    <span className="contact-form__required">*</span>
+                  </label>
+                  <input
+                    id="email"
+                    className={`contact-form__input ${
+                      errors.email ? "contact-form__input--error" : ""
+                    }`}
+                    placeholder="john@example.com"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    autoComplete="email"
+                  />
+                  {errors.email && (
+                    <span className="contact-form__error">{errors.email}</span>
+                  )}
+                </div>
+                <div className="contact-form__el">
+                  <label className="contact-form__label" htmlFor="phone">
+                    Phone{" "}
+                    <span className="contact-form__optional">(optional)</span>
+                  </label>
+                  <input
+                    id="phone"
+                    className="contact-form__input"
+                    placeholder="+1 234 567 890"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    autoComplete="tel"
+                  />
+                </div>
+              </div>
+
+              <div className="contact-form__el">
+                <label className="contact-form__label" htmlFor="message">
+                  Message <span className="contact-form__required">*</span>
+                </label>
+                <textarea
+                  id="message"
+                  className={`contact-form__input contact-form__textarea ${
+                    errors.message ? "contact-form__input--error" : ""
+                  }`}
+                  placeholder="How can we help you?"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={5}
+                />
+                <div className="contact-form__meta">
+                  {errors.message && (
+                    <span className="contact-form__error">
+                      {errors.message}
+                    </span>
+                  )}
+                  <span className="contact-form__count">
+                    {formData.message.length}/2000
+                  </span>
+                </div>
+              </div>
+
+              {serverError && (
+                <div className="contact-form__server-error">{serverError}</div>
+              )}
+
+              <button
+                type="submit"
+                className="contact-form__submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Sending..." : "Send Message"}
+              </button>
+            </>
           )}
         </form>
+
         <div className="contact-img">
-          <img src={contactImg} alt="" loading="lazy" />
+          <img src={contactImg} alt="CityGo office" loading="lazy" />
         </div>
       </div>
 
