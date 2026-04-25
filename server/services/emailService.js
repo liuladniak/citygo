@@ -576,3 +576,53 @@ export const sendPasswordChanged = async ({ to, name }) => {
     html,
   });
 };
+export const sendContactFormEmail = async ({ name, email, phone, message }) => {
+  const html = `
+    <div style="${baseStyle}">
+      <div style="background:#1e556d;padding:24px 32px;border-radius:12px 12px 0 0">
+        <h1 style="color:white;margin:0;font-size:22px">New Contact Form Message</h1>
+        <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours — Website</p>
+      </div>
+      <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+        <div style="background:#f9fafb;border-radius:8px;padding:20px;margin-bottom:24px">
+          <table style="width:100%;border-collapse:collapse;font-size:14px">
+            <tr>
+              <td style="padding:6px 0;color:#666;width:120px">Name</td>
+              <td style="padding:6px 0;font-weight:600">${name}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;color:#666">Email</td>
+              <td style="padding:6px 0;font-weight:600">
+                <a href="mailto:${email}" style="color:#1e556d">${email}</a>
+              </td>
+            </tr>
+            ${
+              phone
+                ? `
+            <tr>
+              <td style="padding:6px 0;color:#666">Phone</td>
+              <td style="padding:6px 0;font-weight:600">${phone}</td>
+            </tr>`
+                : ""
+            }
+          </table>
+        </div>
+
+        <div>
+          <p style="font-weight:600;margin-bottom:8px;font-size:14px">Message:</p>
+          <p style="font-size:15px;line-height:1.6;color:#374151;white-space:pre-wrap">${message}</p>
+        </div>
+
+        <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;font-size:12px;color:#aaa;text-align:center">
+          CityGo Tours · Contact Form Submission
+        </div>
+      </div>
+    </div>
+  `;
+
+  await send({
+    to: process.env.CONTACT_EMAIL,
+    subject: `Contact Form: ${name}`,
+    html,
+  });
+};
