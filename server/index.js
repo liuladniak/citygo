@@ -9,11 +9,8 @@ import cors from "cors";
 import cron from "node-cron";
 import express from "express";
 import morgan from "morgan";
-import session from "express-session";
-import passport from "passport";
 
 import { requireAuth } from "./middleware/auth.js";
-import "./config/passport.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
@@ -52,21 +49,6 @@ app.use(
     credentials: true,
   })
 );
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || process.env.JWT_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 10 * 60 * 1000,
-    },
-  })
-);
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
