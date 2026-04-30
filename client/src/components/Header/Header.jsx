@@ -15,11 +15,12 @@ import {
   fetchExchangeRates,
   setCurrency,
 } from "../../features/currency/currencySlice";
-import { logout } from "../../features/auth/authSlice";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Icon from "../UI/Icon";
 import { iconArrowDown, iconArrowUp, iconSignout } from "../UI/iconsPaths";
 import { selectTotalBookings } from "../../features/cart/cartSlice";
+import { supabase } from "../../lib/supabaseClient";
+import { clearUser } from "../../features/auth/authSlice";
 
 function Header() {
   const navigate = useNavigate();
@@ -53,11 +54,17 @@ function Header() {
     setIsOpen(false);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    closeDropdown();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    dispatch(clearUser());
     navigate("/");
   };
+
+  // const handleLogout = () => {
+  //   dispatch(logout());
+  //   closeDropdown();
+  //   navigate("/");
+  // };
 
   // useEffect(() => {
   //   dispatch(checkToken());

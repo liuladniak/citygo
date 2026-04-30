@@ -7,21 +7,34 @@ import Subscribe from "../Subscribe/Subscribe";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs";
 import Banner from "../Banner/Banner";
 import { useDispatch } from "react-redux";
-import { checkToken } from "../../features/auth/authSlice";
+import { clearUser } from "../../features/auth/authSlice";
+import { fetchUserProfile } from "../../features/auth/authSlice";
+import { supabase } from "../../lib/supabaseClient";
 import MiloChat from "../MiloChat/MiloChat";
 
 function AppLayout() {
   const location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, [location]);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(checkToken());
+    dispatch(fetchUserProfile());
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        dispatch(fetchUserProfile());
+      } else {
+        dispatch(clearUser());
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [dispatch]);
 
   return (

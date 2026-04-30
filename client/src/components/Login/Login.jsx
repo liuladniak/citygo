@@ -1,12 +1,9 @@
 import "./Login.scss";
-import axios from "axios";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../features/auth/authSlice";
-import { useSearchParams } from "react-router-dom";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { supabase } from "../../lib/supabaseClient";
+import { fetchUserProfile } from "../../features/auth/authSlice";
 
 const TEST_EMAIL = import.meta.env.VITE_TEST_EMAIL;
 const TEST_PASSWORD = import.meta.env.VITE_TEST_PASSWORD;
@@ -25,34 +22,28 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [searchParams] = useSearchParams();
   const googleError = searchParams.get("error");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const doLoginWithToken = async (token, expiresIn) => {
-    const expirationTime = new Date().getTime() + expiresIn * 1000;
-    const userResponse = await axios.get(`${API_URL}/auth/profile`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    dispatch(
-      login({ token, tokenExpiration: expirationTime, user: userResponse.data })
-    );
-    navigate("/tours");
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
     try {
-      const { data } = await axios.post(`${API_URL}/auth/login`, {
-        email,
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
         password,
       });
-      await doLoginWithToken(data.token, data.expiresIn);
+      if (authError) throw authError;
+      await dispatch(fetchUserProfile());
+      navigate("/tours");
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Sign in failed. Please try again."
-      );
+      if (err.message?.includes("Invalid login credentials")) {
+        setError("Incorrect email or password.");
+      } else {
+        setError(err.message || "Sign in failed. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -66,9 +57,13 @@ function Login() {
 
   const handleGoogleLogin = async () => {
     setGoogleLoading(true);
-    try {
-      window.location.href = `${API_URL}/auth/google`;
-    } catch {
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (authError) {
       setError("Google sign-in failed. Please try again.");
       setGoogleLoading(false);
     }
@@ -80,30 +75,21 @@ function Login() {
 
     if (resetEmail.trim().toLowerCase() === TEST_EMAIL?.toLowerCase()) {
       setResetError(
-        "This is a demo account — password reset is not available. Use the test credentials to sign in."
+        "This is a demo account — password reset is not available."
       );
       return;
     }
 
     setResetLoading(true);
     try {
-      await axios.post(`${API_URL}/auth/forgot-password`, {
-        email: resetEmail.trim().toLowerCase(),
-      });
+      const { error: resetErr } = await supabase.auth.resetPasswordForEmail(
+        resetEmail.trim().toLowerCase(),
+        { redirectTo: `${window.location.origin}/reset-password` }
+      );
+      if (resetErr) throw resetErr;
       setResetSent(true);
-    } catch (err) {
-      const status = err.response?.status;
-      if (status === 404) {
-        setResetError(
-          "If an account exists with this email, a reset link will be sent shortly."
-        );
-      } else if (status === 400) {
-        setResetError(
-          err.response?.data?.error || "Please enter a valid email."
-        );
-      } else {
-        setResetError("Something went wrong. Please try again.");
-      }
+    } catch {
+      setResetSent(true);
     } finally {
       setResetLoading(false);
     }
@@ -117,7 +103,6 @@ function Login() {
           <p className="login-card__subtitle">
             Enter your email and we'll send you a reset link.
           </p>
-
           {resetSent ? (
             <div className="login-card__success">
               <p>Check your inbox — a reset link is on its way.</p>
@@ -173,6 +158,7 @@ function Login() {
       <div className="login-card">
         <h1 className="login-card__title">Welcome back</h1>
         <p className="login-card__subtitle">Sign in to your CityGo account</p>
+
         {googleError === "try_again" && (
           <p className="login-card__error">
             Something interrupted the sign-in. Please try again.
@@ -183,6 +169,7 @@ function Login() {
             Google sign-in failed. Please try again or use email.
           </p>
         )}
+
         <button
           className="login-btn login-btn--google"
           onClick={handleGoogleLogin}
@@ -237,7 +224,6 @@ function Login() {
               autoComplete="email"
             />
           </div>
-
           <div className="login-field">
             <div className="login-field__header">
               <label htmlFor="password">Password</label>
@@ -304,9 +290,7 @@ function Login() {
               </button>
             </div>
           </div>
-
           {error && <p className="login-card__error">{error}</p>}
-
           <button
             type="submit"
             className="login-btn login-btn--primary"
@@ -321,7 +305,10 @@ function Login() {
           <button
             type="button"
             className="login-demo__btn"
-            onClick={handlePrefillTest}
+            onClick={() => {
+              console.log("creds:", TEST_EMAIL, TEST_PASSWORD);
+              handlePrefillTest();
+            }}
           >
             Fill test credentials
           </button>

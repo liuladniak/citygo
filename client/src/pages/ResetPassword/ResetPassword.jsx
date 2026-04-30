@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "../../lib/supabaseClient";
 import "../../components/Login/Login.scss";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 const getPasswordStrength = (password) => {
   if (!password) return null;
@@ -21,10 +19,7 @@ const getPasswordStrength = (password) => {
 };
 
 function ResetPassword() {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const token = searchParams.get("token");
-
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -32,26 +27,20 @@ function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
 
-  if (!token) {
-    return (
-      <main className="login-page">
-        <div className="login-card">
-          <h1 className="login-card__title">Invalid link</h1>
-          <p className="login-card__subtitle">
-            This reset link is invalid or has expired.
-          </p>
-          <Link
-            to="/login"
-            className="login-btn login-btn--primary"
-            style={{ textDecoration: "none", textAlign: "center" }}
-          >
-            Back to sign in
-          </Link>
-        </div>
-      </main>
-    );
-  }
+  useEffect(() => {
+    // Supabase processes the reset token from the URL hash automatically
+    // We need to wait for the session to be ready
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setSessionReady(true);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,18 +57,30 @@ function ResetPassword() {
 
     setIsLoading(true);
     try {
-      await axios.post(`${API_URL}/auth/reset-password`, { token, password });
+      const { error: updateError } = await supabase.auth.updateUser({
+        password,
+      });
+      if (updateError) throw updateError;
       setSuccess(true);
       setTimeout(() => navigate("/login"), 3000);
     } catch (err) {
       setError(
-        err.response?.data?.error ||
-          "Something went wrong. Please request a new reset link."
+        err.message || "Something went wrong. Please request a new reset link."
       );
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (!sessionReady) {
+    return (
+      <main className="login-page">
+        <div className="login-card">
+          <p className="login-card__subtitle">Verifying your reset link...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (success) {
     return (
@@ -89,8 +90,7 @@ function ResetPassword() {
             <p style={{ fontSize: "3.2rem" }}>✓</p>
             <h1 className="login-card__title">Password updated</h1>
             <p className="login-card__subtitle">
-              Your password has been changed successfully. Redirecting you to
-              sign in...
+              Your password has been changed. Redirecting you to sign in...
             </p>
             <Link to="/login" className="login-card__link">
               Sign in now
@@ -102,6 +102,39 @@ function ResetPassword() {
   }
 
   const strength = getPasswordStrength(password);
+  const eyeOff = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  );
+  const eyeOn = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
 
   return (
     <main className="login-page">
@@ -132,43 +165,10 @@ function ResetPassword() {
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword((p) => !p)}
-                aria-label={showPassword ? "Hide" : "Show"}
               >
-                {showPassword ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-                    <line x1="1" y1="1" x2="23" y2="23" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                )}
+                {showPassword ? eyeOff : eyeOn}
               </button>
             </div>
-
             {password && strength && (
               <div className="password-strength">
                 <div className="password-strength__bar">
@@ -210,40 +210,8 @@ function ResetPassword() {
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowConfirm((p) => !p)}
-                aria-label={showConfirm ? "Hide" : "Show"}
               >
-                {showConfirm ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-                    <line x1="1" y1="1" x2="23" y2="23" />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                )}
+                {showConfirm ? eyeOff : eyeOn}
               </button>
             </div>
             {confirm && confirm !== password && (

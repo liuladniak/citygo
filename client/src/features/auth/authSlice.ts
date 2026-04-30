@@ -1,84 +1,85 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { supabase } from "../../lib/supabaseClient";
+
 interface User {
-  id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
+  preferred_name?: string | null;
+  phone_number?: string | null;
+  notification_preference?: boolean;
+  gift_credit?: string;
 }
+
 interface AuthState {
   isLoggedIn: boolean;
-  token: string | null;
   user: User | null;
+  loading: boolean;
 }
 
 const initialAuthState: AuthState = {
-  isLoggedIn: !!localStorage.getItem("token"),
-  token: localStorage.getItem("token"),
-  user: (() => {
-    const user = localStorage.getItem("user");
-    if (!user) return null;
-    try {
-      return JSON.parse(user);
-    } catch (e) {
-      console.error("Error parsing user from localStorage:", e);
-      localStorage.removeItem("user");
-      return null;
-    }
-  })(),
+  isLoggedIn: false,
+  user: null,
+  loading: true,
 };
+
+export const fetchUserProfile = createAsyncThunk(
+  "auth/fetchUserProfile",
+  async (_, { rejectWithValue }) => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) return rejectWithValue("No session");
+
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${API_URL}/auth/profile`, {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+
+      if (!response.ok) throw new Error("Profile fetch failed");
+      return await response.json();
+    } catch (err: any) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
   reducers: {
-    login(
-      state,
-      action: PayloadAction<{
-        token: string;
-        tokenExpiration: string;
-        user: User;
-      }>
-    ) {
+    setUser(state, action) {
       state.isLoggedIn = true;
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-      localStorage.setItem("token", action.payload.token);
-      localStorage.setItem("tokenExpiration", action.payload.tokenExpiration);
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-    },
-    logout(state) {
-      state.isLoggedIn = false;
-      state.token = null;
-      state.user = null;
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiration");
-      localStorage.removeItem("user");
-    },
-    checkToken(state) {
-      const token = localStorage.getItem("token");
-      const tokenExpiration = localStorage.getItem("tokenExpiration");
-      const user = localStorage.getItem("user");
-      if (
-        !token ||
-        (tokenExpiration && new Date().getTime() > +tokenExpiration)
-      ) {
-        state.isLoggedIn = false;
-        state.token = null;
-        state.user = null;
-        localStorage.removeItem("token");
-        localStorage.removeItem("tokenExpiration");
-        localStorage.removeItem("user");
-      } else {
-        state.isLoggedIn = true;
-        state.token = token;
-        state.user = user ? JSON.parse(user) : null;
-      }
-    },
-    setUser: (state, action) => {
       state.user = action.payload;
-      state.isLoggedIn = true;
+      state.loading = false;
     },
+    clearUser(state) {
+      state.isLoggedIn = false;
+      state.user = null;
+      state.loading = false;
+    },
+    setLoading(state, action) {
+      state.loading = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.isLoggedIn = true;
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchUserProfile.rejected, (state) => {
+        state.isLoggedIn = false;
+        state.user = null;
+        state.loading = false;
+      });
   },
 });
 
-export const { login, logout, checkToken, setUser } = authSlice.actions;
+export const { setUser, clearUser, setLoading } = authSlice.actions;
 export default authSlice.reducer;

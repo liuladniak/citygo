@@ -10,79 +10,51 @@ import Tab1Content from "../../components/TabContent/Tab1Content";
 import Tab2Content from "../../components/TabContent/Tab2Content";
 import Tab3Content from "../../components/TabContent/Tab3Content";
 import Tab4Content from "../../components/TabContent/Tab4Content";
-
 import Tabs from "../../components/Tabs/Tabs";
 import { useEffect, useState } from "react";
-import Button from "../../components/Button/Button";
 import axios from "axios";
+import { useRequireAuth } from "../../hooks/useRequireAuth";
 
 const Account = () => {
-  const [failedAuth, setFailedAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const API_URL = import.meta.env.VITE_API_URL;
-
-  const login = async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      return setFailedAuth(true);
-    }
-
-    try {
-      const response = await axios.get(`${API_URL}/auth/profile`, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-
-      setUser(response.data);
-      await fetchBookings(response.data.id, token);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setFailedAuth(true);
-      setIsLoading(false);
-    }
-  };
+  const { session, isChecking } = useRequireAuth();
 
   useEffect(() => {
-    login();
-  }, []);
+    if (!session) return;
+    const loadProfile = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/auth/profile`, {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        });
+        setUser(response.data);
+        await fetchBookings(response.data.id, session.access_token);
+      } catch {
+        // profile fetch failed
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadProfile();
+  }, [session]);
 
   const fetchBookings = async (userId, token) => {
     try {
       const response = await axios.get(
         `${API_URL}/api/bookings?userId=${userId}`,
         {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
+          headers: { Authorization: "Bearer " + token },
         }
       );
       setBookings(response.data);
     } catch (error) {
       console.error(error);
     }
-
-    setIsLoading(false);
   };
 
-  if (failedAuth) {
-    return (
-      <main className="dashboard dashboard--not-logged">
-        <h1 className="">You must be logged in to see this page.</h1>
-        <p>
-          <Button className="btn btn--login" to="/login">
-            Log in
-          </Button>
-        </p>
-      </main>
-    );
-  }
-
-  if (isLoading) {
+  if (isChecking || isLoading) {
     return (
       <main className="dashboard">
         <p className="loading">Loading...</p>
@@ -90,10 +62,18 @@ const Account = () => {
     );
   }
 
+  if (!user) {
+    return (
+      <main className="dashboard">
+        <p className="loading">Failed to load profile. Please refresh.</p>
+      </main>
+    );
+  }
+
   const tabsData = [
     {
       label: "Personal Info",
-      content: <Tab1Content user={user} />,
+      content: <Tab1Content user={user} session={session} />,
       icon: () => <Icon iconPath={iconPerson} />,
     },
     {
@@ -112,6 +92,7 @@ const Account = () => {
       icon: () => <Icon iconPath={iconBell} />,
     },
   ];
+
   return (
     <div className="account">
       <h3 className="account-heading">Account Information</h3>

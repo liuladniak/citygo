@@ -1,47 +1,30 @@
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../features/auth/authSlice";
-import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { supabase } from "../../lib/supabaseClient";
+import { fetchUserProfile } from "../../features/auth/authSlice";
 
 function AuthCallback() {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = searchParams.get("token");
-    const expires = searchParams.get("expires");
-    const error = searchParams.get("error");
+    const handleCallback = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
 
-    if (error || !token) {
-      navigate("/login?error=google_failed");
-      return;
-    }
-
-    const finishLogin = async () => {
-      try {
-        const userResponse = await axios.get(`${API_URL}/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        dispatch(
-          login({
-            token,
-            tokenExpiration: expires,
-            user: userResponse.data,
-          })
-        );
-
-        navigate("/tours");
-      } catch {
+      if (error || !session) {
         navigate("/login?error=google_failed");
+        return;
       }
+
+      await dispatch(fetchUserProfile());
+      navigate("/tours");
     };
 
-    finishLogin();
+    handleCallback();
   }, []);
 
   return (

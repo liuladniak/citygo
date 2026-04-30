@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 import axios from "axios";
 import { useState } from "react";
 
-const Tab1Content = ({ user }) => {
+const Tab1Content = ({ user, session }) => {
   const API_URL = import.meta.env.VITE_API_URL;
   const [isEditing, setIsEditing] = useState({
     legalName: false,
@@ -56,10 +56,9 @@ const Tab1Content = ({ user }) => {
     }
 
     try {
-      const token = localStorage.getItem("token");
-
+      const token = session?.access_token;
       if (!token) {
-        console.error("No token found. Please log in.");
+        console.error("No session found.");
         return;
       }
 

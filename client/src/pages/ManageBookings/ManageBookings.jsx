@@ -4,57 +4,34 @@ import { useState, useEffect } from "react";
 import Button from "../../components/Button/Button";
 import { useSelector } from "react-redux";
 import BookingStatus from "../../components/BookingStatus/BookingStatus";
+import { useRequireAuth } from "../../hooks/useRequireAuth";
 
 function ManageBookings() {
   const API_URL = import.meta.env.VITE_API_URL;
-  const [failedAuth, setFailedAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [bookings, setBookings] = useState([]);
   const user = useSelector((state) => state.auth.user);
-  const token = useSelector((state) => state.auth.token);
+  const { session, isChecking } = useRequireAuth();
+
+  useEffect(() => {
+    if (!session || !user) return;
+    fetchBookings(user.id, session.access_token);
+  }, [session, user]);
 
   const fetchBookings = async (userId, token) => {
     try {
       const response = await axios.get(`${API_URL}/api/client/bookings`, {
         params: { userId },
-        headers: {
-          Authorization: "Bearer " + token,
-        },
+        headers: { Authorization: "Bearer " + token },
       });
-
-      console.log("booking111", response.data);
       setBookings(response.data);
     } catch (error) {
       console.error(error);
     }
-
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (!user || !token) {
-      return setFailedAuth(true);
-    }
-
-    if (user.id && token) {
-      fetchBookings(user.id, token);
-    }
-  }, [user, token]);
-
-  if (failedAuth) {
-    return (
-      <main className="dashboard dashboard--not-logged">
-        <h1 className="">You must be logged in to see this page.</h1>
-        <p>
-          <Button className="btn btn--login" to="/login">
-            Log in
-          </Button>
-        </p>
-      </main>
-    );
-  }
-
-  if (isLoading) {
+  if (isChecking || (isLoading && session)) {
     return (
       <main className="dashboard">
         <p className="loading">Loading...</p>
@@ -65,13 +42,11 @@ function ManageBookings() {
   return (
     <main className="dashboard">
       <h1 className="dashboard__title">
-        Welcome back, {user.first_name} {user.last_name}
+        Welcome back, {user?.first_name} {user?.last_name}
       </h1>
-
       {bookings.length > 0 ? (
         <div>
           <h2 className="bookings-heading">My Bookings:</h2>
-
           <ul className="bookings-list">
             {bookings.map((booking) => (
               <li className="bookings-list-item" key={booking.id}>
@@ -85,10 +60,8 @@ function ManageBookings() {
                     alt="tour thumbnail"
                   />
                 </div>
-
                 <div className="bookings-details">
                   <h2 className="bookings-tour-title">{booking.tour_title}</h2>
-
                   <div className="booking-ref">
                     Ref: {booking.booking_reference}
                   </div>

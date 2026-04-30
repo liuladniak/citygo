@@ -9,24 +9,10 @@ import axios from "axios";
 import BookingSummary from "../../components/BookingSummary/BookingSummary";
 import CheckoutForm from "./CheckoutForm";
 import { Link } from "react-router-dom";
+import { supabase } from "../../lib/supabaseClient";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 const API_URL = import.meta.env.VITE_API_URL;
-
-const decodeJWT = (token) => {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const payload = JSON.parse(atob(base64));
-    if (payload.exp * 1000 < Date.now()) {
-      localStorage.removeItem("token");
-      return null;
-    }
-    return payload;
-  } catch {
-    return null;
-  }
-};
 
 const Cart = () => {
   const [user, setUser] = useState(null);
@@ -50,8 +36,14 @@ const Cart = () => {
   );
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) setUser(decodeJWT(token));
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUser({
+          id: session.user.id,
+          email: session.user.email,
+        });
+      }
+    });
   }, []);
 
   const fetchQuote = useCallback(async () => {
