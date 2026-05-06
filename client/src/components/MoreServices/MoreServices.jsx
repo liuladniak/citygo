@@ -5,39 +5,31 @@ const MoreServices = () => {
   return (
     <section className="more-services">
       <div className="transfers service">
+        <div className="overlay--more" />
         <h2 className="service__heading">Get inspired</h2>
         <div className="service-wrp">
           <p className="service__desc">
-            Get inspired with our top tours, the latest articles, and plenty of
-            ideas to help you plan your next adventure.
+            Discover our top tours, the latest articles, and ideas to help you
+            plan your next Istanbul adventure.
           </p>
-          <Link
-            to="/destinations"
-            className="btn btn--cta"
-            iconClassName="btn--icon"
-          >
+          <Link to="/destinations" className="btn btn--cta">
             Start Exploring
           </Link>
         </div>
-        <div className="overlay--more"></div>
       </div>
-      <div className="private">
+
+      <div className="private service">
+        <div className="overlay--more" />
         <h2 className="service__heading">Private tours</h2>
         <div className="service-wrp">
           <p className="service__desc">
-            Discover Istanbul with exclusive private tours: tailored
-            itineraries, personalized experiences, and dedicated guides.
+            Tailored itineraries, personalized experiences, and dedicated guides
+            — exclusively for your group.
           </p>
-
-          <Link
-            to="/destinations"
-            className="btn btn--cta"
-            iconClassName="btn--icon"
-          >
+          <Link to="/destinations" className="btn btn--cta">
             View how it works
           </Link>
         </div>
-        <div className="overlay--more"></div>
       </div>
     </section>
   );

@@ -2,10 +2,9 @@
 @use "../../styles/partials/mixins" as *;
 
 .map {
-  height: 26rem;
+  height: 30rem;
   width: 100%;
   @include border-radius;
-  @include layout-constrain;
   overflow: hidden;
   transition: height 0.3s ease;
 
@@ -13,17 +12,26 @@
     height: 44rem;
   }
 
+  @include desktop {
+    height: 56rem;
+  }
+
   &-tour {
     height: 30rem;
   }
+
   &-wrp {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     width: 100%;
     background-color: $warm-gray;
-    padding: 3.2rem 0;
+    padding: 0 1.6rem 2.4rem;
+
+    @include tablet {
+      padding: 0 2.4rem 4rem;
+    }
+
+    @include desktop {
+      padding: 0 0 4rem;
+    }
   }
 }
 
@@ -34,7 +42,13 @@
 }
 
 .leaflet-popup-content {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 1.4rem;
+  font-weight: 600;
   color: #333;
+  line-height: 1.5;
+
+  p {
+    font-weight: 400;
+    margin-top: 0.4rem;
+  }
 }

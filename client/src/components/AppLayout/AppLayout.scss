@@ -10,7 +10,11 @@
 }
 
 .main {
-  padding: 0 2.4rem;
+  padding: 0 1.6rem;
+
+  @include tablet {
+    padding: 0 2.4rem;
+  }
 
   @include desktop-xl {
     padding: 0;

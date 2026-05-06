@@ -5,44 +5,42 @@ import sendIcon from "../../assets/icons/send.svg";
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "" });
 
-  const [isValid, setIsValid] = useState(true);
-
-  const handleSubmit = () => {
-    // e.preventDefault();
-    if (email.trim() === "") {
-      setMessage("Email address cannot be empty.");
-      setIsValid(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      setMessage({ text: "Please enter your email address.", type: "error" });
     } else if (!validateEmail(email)) {
-      setMessage("Please enter a valid email address.");
-      setIsValid(false);
+      setMessage({
+        text: "That doesn't look like a valid email address.",
+        type: "error",
+      });
     } else {
-      setMessage("We've sent a verification link to your email address.");
-      setIsValid(true);
+      setMessage({
+        text: "✓ You're in! Check your inbox for a confirmation.",
+        type: "success",
+      });
       setEmail("");
     }
   };
 
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
     <section className="subscribe">
       <h2 className="subscribe-heading">Subscribe to our newsletter</h2>
 
-      <form action={handleSubmit} className="subscribe-form">
+      <form onSubmit={handleSubmit} className="subscribe-form">
         <input
           name="email"
+          type="email"
           className="subscribe-input"
-          placeholder="Enter your email..."
+          placeholder="Your email address"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
-            setMessage("");
-            setIsValid(true);
+            setMessage({ text: "", type: "" });
           }}
         />
         <Button
@@ -54,15 +52,13 @@ const Subscribe = () => {
           iconClassName="btn__icon--subscribe"
         />
       </form>
-      {message && (
-        <p
-          className={`message ${isValid ? "success-message" : "error-message"}`}
-        >
-          {message}
-        </p>
-      )}
+
+      <p
+        className={`subscribe-message subscribe-message--${message.type || "hidden"}`}
+      >
+        {message.text || "\u00A0"}{" "}
+      </p>
     </section>
   );
 };
-
 export default Subscribe;

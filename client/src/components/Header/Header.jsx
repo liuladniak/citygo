@@ -60,19 +60,6 @@ function Header() {
     navigate("/");
   };
 
-  // const handleLogout = () => {
-  //   dispatch(logout());
-  //   closeDropdown();
-  //   navigate("/");
-  // };
-
-  // useEffect(() => {
-  //   dispatch(checkToken());
-  //   const interval = setInterval(() => dispatch(checkToken()), 10000);
-
-  //   return () => clearInterval(interval);
-  // }, [checkToken]);
-
   useEffect(() => {
     dispatch(fetchExchangeRates());
   }, [dispatch]);
@@ -84,8 +71,6 @@ function Header() {
     if (!firstName || !lastName) return "";
     return firstName[0].toUpperCase() + lastName[0].toUpperCase();
   };
-
-  console.log("header user", user);
 
   return (
     <header className="header">
@@ -110,7 +95,11 @@ function Header() {
         <div className="burger-wrp" onClick={toggleMenu}>
           <span className="burger-title">{isOpen ? "Close" : "Menu"}</span>
 
-          <button className={`burger-menu ${isOpen ? "open" : ""}`}>
+          <button
+            className={`burger-menu ${isOpen ? "open" : ""}`}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+          >
             <span className="burger-bar"></span>
             <span className="burger-bar"></span>
             <span className="burger-bar"></span>

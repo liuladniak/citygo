@@ -2,62 +2,102 @@
 @use "../../styles/partials/variables" as *;
 
 .header {
+  @include layout-constrain;
   display: flex;
   justify-content: space-between;
-  align-self: center;
-  padding: 1.6rem;
-  @include layout-constrain;
-  position: relative;
   align-items: center;
+  padding: 1.2rem 1.6rem;
+  position: relative;
+  z-index: 100;
+
   @include desktop-s {
-    align-items: unset;
-    padding: 2.4rem 1.6rem 2.4rem;
+    align-items: flex-start;
+    padding: 2.4rem 1.6rem;
   }
+
   @include desktop {
     padding: 1.6rem 0;
   }
 }
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 9rem;
+  z-index: 3;
+
+  &-link {
+    z-index: 3;
+  }
+
+  &-icon {
+    width: 3.5rem;
+
+    @include tablet {
+      width: 5rem;
+    }
+
+    @include desktop-s {
+      width: 7rem;
+    }
+  }
+
+  &-img {
+    height: 100%;
+    margin-top: 1.2rem;
+  }
+
+  @include tablet {
+    width: 14rem;
+  }
+
+  @include desktop-s {
+    width: 18rem;
+    gap: 1.6rem;
+  }
+}
+
 .burger-wrp {
   display: flex;
   align-items: center;
   gap: $space-x-small;
+  cursor: pointer;
+  z-index: 3;
+
+  @include desktop-s {
+    display: none;
+  }
 
   &:hover {
     color: $main-teal;
   }
 }
-.burger-title {
-  font-size: 1.8rem;
-  transition: 0.2s ease-out;
 
-  @include desktop-s {
-    display: none;
-  }
+.burger-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  transition: 0.2s ease-out;
 }
+
 .burger-menu {
   display: flex;
   flex-direction: column;
-  width: 2rem;
-  height: 1.5rem;
+  width: 2.2rem;
+  height: 1.6rem;
   background: transparent;
   border: none;
   cursor: pointer;
-  z-index: 3;
   gap: 4px;
   position: relative;
-  @include desktop-s {
-    display: none;
-  }
 
   &.open {
     .burger-bar:nth-child(1) {
       transform: rotate(45deg);
     }
-
     .burger-bar:nth-child(2) {
       opacity: 0;
     }
-
     .burger-bar:nth-child(3) {
       transform: rotate(-45deg);
     }
@@ -65,15 +105,14 @@
 }
 
 .burger-bar {
-  width: 2rem;
+  width: 100%;
   height: 0.25rem;
-  background-color: black;
-  transform-origin: center;
-  position: relative;
+  background-color: $charcoal;
   border-radius: 10px;
   transform-origin: 1px center;
   transition: all 0.3s linear;
 }
+
 .nav {
   position: absolute;
   width: 100%;
@@ -83,33 +122,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 1;
-
-  &-phone--mobile {
-    display: none;
-
-    &::marker {
-      content: none;
-      display: none;
-    }
-
-    @include desktop-s {
-      display: block;
-    }
-  }
+  z-index: 99;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   &--open {
     opacity: 1;
-    padding: 3rem 0;
-    transition: all 0.3s ease;
+    padding: 1.6rem 0 2.4rem;
+    transition: opacity 0.25s ease;
+    pointer-events: all;
   }
 
   &--closing {
     height: 0;
     opacity: 0;
     padding: 0;
-    transition: none;
+    overflow: hidden;
     pointer-events: none;
+    transition: none;
 
     @include desktop-s {
       pointer-events: all;
@@ -117,35 +146,81 @@
   }
 
   @include desktop-s {
-    height: 0;
-    padding: 0;
     position: static;
-    opacity: 1;
+    height: auto !important;
+    opacity: 1 !important;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: unset;
-    gap: 1.6rem;
+    align-items: flex-end;
+    gap: 1.2rem;
     width: fit-content;
+    box-shadow: none;
+    overflow: visible;
   }
 
-  &__item {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     width: 100%;
-    text-align: left;
-    border-bottom: 1px solid #ccc;
-    padding: 1.6rem 2.4rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    list-style: none;
 
     @include desktop-s {
-      padding: 0;
-      width: unset;
-      border: none;
+      flex-direction: row;
+      align-items: center;
+      width: auto;
+      font-weight: 400;
+      gap: $space-x-small;
+    }
+
+    &--menu {
+      order: 2;
+
+      @include desktop-s {
+        order: 1;
+        gap: $space-x-small;
+      }
+    }
+
+    &--categories {
+      order: 1;
+
+      @include desktop-s {
+        order: 2;
+        gap: $space-x-small;
+      }
+
+      li {
+        @include desktop-s {
+          background-color: $main-teal;
+          color: white;
+          font-weight: 600;
+          padding: 0.5rem 1.2rem;
+          border-radius: 1rem;
+        }
+      }
     }
   }
 
-  &__item--mobile {
-    border-bottom: 1px solid #ccc;
+  &__item,
+  &__list-item {
+    padding: 1.4rem 2.4rem;
+    width: 100%;
+    border-bottom: 1px solid #f0f0f0;
 
     @include desktop-s {
-      border-bottom: none;
+      padding: 0;
+      width: auto;
+      border: none;
+    }
+
+    &--mobile {
+      @include desktop-s {
+        display: none;
+      }
     }
   }
 
@@ -157,88 +232,23 @@
     }
   }
 
-  &__list {
-    font-weight: 600;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    list-style: none;
-    font-size: 1.6rem;
-    letter-spacing: 0.5px;
+  &-phone--mobile {
+    display: none !important;
 
-    width: 100%;
     @include desktop-s {
-      font-weight: 400;
-      gap: $space-medium;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
-
-    &-item {
-      padding: 1.6rem 2.4rem;
-      width: 100%;
-      text-align: left;
-      border-bottom: 1px solid #ccc;
-
-      @include desktop-s {
-        padding: 0;
-        width: unset;
-        border: none;
-      }
-    }
-
-    &--menu {
-      font-size: 1.6rem;
-      letter-spacing: normal;
-
-      order: 2;
-
-      @include desktop-s {
-        gap: $space-x-small;
-
-        order: 1;
-      }
-    }
-    &--categories {
-      order: 1;
-
-      @include desktop-s {
-        gap: $space-x-small;
-
-        order: 2;
-      }
-      & li {
-        border-radius: 0;
-
-        @include desktop-s {
-          background-color: $main-teal;
-          // color: $supportive-1;
-          color: white;
-          font-weight: 600;
-          padding: 0.5rem 1rem;
-          border-radius: 1rem;
-        }
-      }
+      display: block !important;
     }
   }
-  &__icon {
-    width: 2.4rem;
-    height: 2.4rem;
-  }
+
   &__item-link {
-    font-family: "Montserrat";
-    width: 100%;
-    // display: inline-block;
-
     display: flex;
     align-items: center;
     gap: 0.8rem;
+    font-family: "Montserrat";
+    width: 100%;
 
     @include desktop-s {
-      width: unset;
-    }
-    &--profile {
+      width: auto;
     }
 
     &--phone {
@@ -248,10 +258,7 @@
       color: $main-maroon;
       font-weight: 600;
     }
-    &-curr {
-      display: flex;
-      align-items: center;
-    }
+
     &--cart {
       position: relative;
     }
@@ -265,12 +272,12 @@
 
     @include desktop-s {
       width: 1.6rem;
-
       display: none;
     }
 
     &__icon {
       display: none;
+
       @include desktop-s {
         display: block;
       }
@@ -280,11 +287,18 @@
       font-size: 1.6rem;
       display: flex;
       justify-content: space-between;
-      @include desktop-s {
-        display: none;
-        display: block;
-      }
     }
+  }
+
+  &__currency {
+    @include desktop-s {
+      position: relative;
+    }
+  }
+
+  &__icon {
+    width: 2.4rem;
+    height: 2.4rem;
   }
 }
 
@@ -297,40 +311,38 @@
   }
 }
 
-.logo {
-  width: 9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-
-  &-link {
-    z-index: 3;
+.wishlist-text,
+.cart-text {
+  @include desktop-s {
+    display: none;
   }
+}
 
-  &-img {
-    height: 100%;
-    margin-top: 1.2rem;
-  }
-  &-icon {
-    width: 3.5rem;
-
-    @include tablet {
-      width: 5.5rem;
-    }
-
-    @include desktop-s {
-      width: 7rem;
-    }
-  }
-
-  @include tablet {
-    width: 14rem;
-  }
+.wishlist-icon,
+.cart-icon {
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
 
   @include desktop-s {
-    width: 18rem;
-    gap: 1.6rem;
+    width: 2.4rem;
+    height: 2.4rem;
   }
+}
+
+.cart-notification {
+  background-color: darkred;
+  color: white;
+  font-size: 1rem;
+  line-height: 1.6rem;
+  padding: 0 0.5rem;
+  height: 1.6rem;
+  min-width: 1.6rem;
+  position: absolute;
+  top: -0.8rem;
+  right: -0.8rem;
+  text-align: center;
+  border-radius: 50%;
 }
 
 .user {
@@ -344,26 +356,118 @@
 
     &__menu {
       display: none;
+
       @include desktop-s {
         font-size: 1.6rem;
         font-weight: 400;
         display: flex;
         align-items: center;
+        gap: 0.4rem;
       }
     }
   }
 }
-.bookings-notification {
-  background-color: darkred;
-  color: white;
-  border-radius: 50%;
-  height: 0.8rem;
-  width: 0.8rem;
 
-  &-wrp {
+.user-avatar.btn--manage-bookings {
+  display: none;
+  border-radius: 100%;
+  min-width: 3.6rem;
+  min-height: 3.6rem;
+  aspect-ratio: 1 / 1;
+  background-color: $main-teal;
+  color: white;
+  font-weight: 700;
+  font-size: 1.4rem;
+
+  @include desktop-s {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.manage-bookings {
+  padding: 1.4rem 0;
+  border-bottom: none;
+
+  @include desktop-s {
+    padding: 0;
+  }
+}
+
+.btn.nav__item-link {
+  gap: 0.8rem;
+  width: 100%;
+  padding: 1.4rem 2.4rem;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 0;
+
+  @include desktop-s {
+    border-bottom: none;
+    padding: 0;
+  }
+}
+
+.dropdown {
+  &-wrapper {
+    position: relative;
     display: flex;
-    gap: 0.8rem;
+    flex-direction: column;
+    justify-content: center;
     align-items: flex-start;
+
+    @include desktop-s {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  &-menu {
+    @include border-radius;
+    padding: 0.8rem 0;
+    background-color: white;
+    z-index: 1000;
+    width: 100%;
+    overflow: hidden;
+    transform: scaleY(0);
+    opacity: 0;
+    max-height: 0;
+
+    @include desktop-s {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      position: absolute;
+      top: 110%;
+      left: -50%;
+      width: 20rem;
+    }
+  }
+
+  &--visible {
+    max-height: 50rem;
+    transform: scale(1);
+    opacity: 1;
+    transform-origin: top;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      max-height 0.3s ease;
+  }
+
+  &-item {
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+
+    &:hover {
+      background-color: #f7f7f7;
+    }
+
+    a,
+    .btn--logout {
+      display: block;
+      padding: 1.2rem 2.4rem;
+      width: 100%;
+    }
   }
 }
 
@@ -374,136 +478,10 @@
     display: block;
   }
 }
-.dropdown {
-  &-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    @include desktop-s {
-      flex-direction: row;
-    }
-  }
-
-  &-menu {
-    @include border-radius;
-    padding: 1.6rem 2.4rem;
-
-    top: 110%;
-    background-color: white;
-    z-index: 1000;
-
-    width: 100%;
-
-    overflow: hidden;
-    transform: scaleY(0);
-    opacity: 0;
-    max-height: 0;
-
-    @include desktop-s {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-      left: -60%;
-      position: absolute;
-      width: 20rem;
-    }
-  }
-  &--visible {
-    max-height: 50rem;
-    transform: scale(1);
-    opacity: 1;
-    transform-origin: top;
-    transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
-  }
-  &--hidden {
-  }
-
-  &-item {
-    cursor: pointer;
-    display: flex;
-    justify-content: flex-start;
-
-    @include desktop-s {
-      display: block;
-      border: none;
-    }
-
-    &:hover {
-      background-color: #f7f7f7;
-    }
-
-    & a {
-      display: block;
-      padding: 1.6rem 2.4rem;
-    }
-
-    & .btn--logout {
-      padding: 1.6rem 2.4rem;
-    }
-  }
-}
-.cart-notification {
-  background-color: darkred;
-  color: white;
-  font-size: 1.1rem;
-  line-height: 1.6rem;
-  padding: 0 0.5rem;
-  height: 1.6rem;
-  position: absolute;
-  top: -1rem;
-  right: -1rem;
-  text-align: left;
-  border-radius: 50%;
-}
-
-.wishlist-text,
-.cart-text {
-  @include desktop-s {
-    display: none;
-  }
-}
-.wishlist-icon,
-.cart-icon {
-  width: 1.8rem;
-  height: 1.8rem;
-  display: inline-block;
-
-  @include desktop-s {
-    width: 100%;
-    height: 100%;
-  }
-}
 
 .form-input.select--selected.select-currency {
   padding: 0;
   justify-content: space-between;
-}
-
-.manage-bookings {
-  padding: 1.6rem 0;
-  border-bottom: none;
-
-  @include desktop-s {
-    padding: 0;
-  }
-}
-
-.user-avatar.btn--manage-bookings {
-  border-radius: 100%;
-  padding: 0;
-  min-width: 2.6rem;
-  min-height: 2.6rem;
-  aspect-ratio: 1/1;
-  display: none;
-
-  height: 4rem;
-
-  @include desktop-s {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
 }
 
 .select__options.options-currency {
@@ -514,17 +492,5 @@
   @include desktop-s {
     position: absolute;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.btn.nav__item-link {
-  gap: 0.8rem;
-  width: 100%;
-  padding: 0 2.4rem;
-  border-bottom: 1px solid #ccc;
-  border-radius: 0;
-  @include desktop-s {
-    border-bottom: none;
-    padding: 0;
   }
 }

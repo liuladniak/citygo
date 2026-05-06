@@ -2,19 +2,24 @@
 @use "../../styles/partials/mixins" as *;
 
 .stats-container {
+  @include layout-constrain;
   display: flex;
-
+  flex-direction: column;
   margin: $space-medium 0 $space-large;
   gap: $space-small;
 
-  .stat-wrapper {
-    flex: 1 1 100%;
-    display: flex;
-    justify-content: space-between;
-    gap: $space-small;
+  @include tablet {
+    flex-direction: row;
+  }
 
-    @media (max-width: 800px) {
-      flex: 1 1 100%;
+  .stat-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: $space-small;
+    flex: 1;
+
+    @include mobile-m {
+      flex-direction: row;
     }
   }
 }
@@ -22,14 +27,22 @@
 .stat {
   &__number {
     font-weight: 700;
-    font-size: 3.2rem;
+    font-size: 2.8rem;
     padding: $space-x-small;
+
+    @include tablet {
+      font-size: 3.2rem;
+    }
   }
 
   &__heading {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 700;
     padding: 0 $space-x-small;
+
+    @include tablet {
+      font-size: 2rem;
+    }
   }
 
   &__img {

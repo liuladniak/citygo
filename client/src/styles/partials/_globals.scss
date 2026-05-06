@@ -43,7 +43,6 @@ html {
 body {
   font-family: "Montserrat", sans-serif;
   overflow-x: hidden;
-  // background-color: $off-white;
   background-color: #fff;
   color: $charcoal;
   &::-webkit-scrollbar {
@@ -106,4 +105,25 @@ body {
 
 .loader {
   font-size: 1.6rem;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+button,
+a,
+[role="button"] {
+  min-height: 44px;
+
+  @include desktop-s {
+    min-height: unset;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }

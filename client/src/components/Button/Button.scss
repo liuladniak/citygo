@@ -22,10 +22,12 @@
     height: 4.2rem;
     transform: rotate(-30deg) translate(10%, -5%);
     display: inline;
+
     @include tablet {
       display: none;
     }
   }
+
   &__icon--explore {
     position: unset !important;
   }
@@ -36,6 +38,111 @@
     @include tablet {
       display: block;
     }
+  }
+
+  &--icon {
+    width: 2.4rem !important;
+    height: 2.4rem !important;
+    position: relative;
+    top: unset;
+    right: unset;
+    flex-shrink: 0;
+
+    @include tablet {
+      width: 3.2rem !important;
+      height: 3.2rem !important;
+    }
+  }
+
+  &--cta {
+    background-color: $accent-4;
+    color: $charcoal;
+    font-weight: 700;
+    font-size: 1.6rem;
+    height: fit-content;
+    padding: 1.2rem 2.4rem;
+    width: 100%;
+    white-space: nowrap;
+    justify-content: center;
+
+    &:hover {
+      background-color: $accent-4--hover;
+    }
+
+    @include tablet {
+      width: fit-content;
+      font-size: 1.8rem;
+      padding: 1.4rem 4rem;
+    }
+
+    @include desktop {
+      font-size: 2rem;
+      padding: 1.4rem 4.6rem;
+    }
+  }
+
+  &--category {
+    background-color: transparent;
+    color: white;
+    z-index: 9;
+    font-size: 2.6rem;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    gap: 0.4rem;
+    white-space: nowrap;
+
+    @include tablet {
+      font-size: 2rem;
+    }
+    @include desktop-s {
+      font-size: 2.6rem;
+      letter-spacing: 0.5px;
+    }
+    @include desktop {
+      font-size: 3.2rem;
+      letter-spacing: 1px;
+    }
+  }
+
+  &--login,
+  &--signup {
+    background-color: $main-teal;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+    color: white;
+    width: 100%;
+  }
+
+  &--book {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+    width: 100%;
+    background-color: $main-maroon;
+    color: #fff;
+  }
+
+  &--view-details {
+    background-color: $accent-4;
+    color: black;
+    font-weight: 600;
+    font-size: 1.6rem;
+
+    img {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    &:hover {
+      background-color: $accent-4--hover;
+    }
+  }
+
+  &--remove-booking {
+    align-self: flex-end;
+    background-color: transparent;
+    padding: 0;
+    gap: 0.8rem;
+  }
+
+  &--get-prepared {
   }
 
   &--manage-bookings {
@@ -52,127 +159,34 @@
 
     @include desktop-s {
       padding: 0 1rem;
-
       border: 1px solid #dddddd;
       width: fit-content;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
       border-radius: $border-radius;
+
       &:hover {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
       }
     }
   }
 
-  &--dropdown {
-  }
-
-  &--category {
-    background-color: transparent;
-    color: white;
-    z-index: 9;
-    font-size: 2.2rem;
-
-    @include tablet {
-      font-size: 3.2rem;
-      letter-spacing: 1px;
-    }
-  }
-  &--login,
-  &--signup {
-    background-color: $main-teal;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-    color: white;
-    width: 100%;
-  }
-  &--view-details {
-    & img {
-      width: 1.6rem;
-      height: 1.6rem;
-    }
-
-    background-color: $accent-4;
-    color: black;
-    font-weight: 600;
-    font-size: 1.6rem;
-
-    &:hover {
-      background-color: $accent-4--hover;
-    }
-  }
-  &--icon {
-    width: 3.2rem !important;
-    height: 3.2rem !important;
-    position: absolute;
-    top: 0.4rem;
-    right: -1rem;
-  }
-  &--cta {
-    @include tablet {
-      min-width: 15.5rem;
-
-      flex-shrink: 0;
-      padding: 1.2rem 4.6rem;
-      background-color: $accent-4;
-      color: black;
-      font-weight: 600;
-      font-size: 2rem;
-      height: fit-content;
-
-      &:hover {
-        background-color: $accent-4--hover;
-      }
-    }
-  }
-
-  &--contact {
-    background-color: white;
-    border: 1px solid #dddddd;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-  }
-
-  &--subscribe {
-    color: $main-white;
-    background-color: $accent-1;
-    border: 1px solid #dddddd;
-    font-size: 1.6rem;
-    border-radius: 50%;
-    padding: 0.8rem;
-    width: 6rem;
-    height: 6rem;
-
-    @include tablet {
-      width: fit-content;
-      padding: 0 3.2rem;
-      @include border-radius;
-    }
-  }
-
-  &--book {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-    width: 100%;
-    background-color: $main-maroon;
-    color: #fff;
-  }
-
   &--logout {
-    background-color: #fff;
+    background-color: transparent;
     color: black;
     height: unset;
-    display: flex;
     gap: 0.8rem;
     padding: 0;
     font-weight: 600;
     font-size: 1.6rem;
-    align-items: center;
 
-    & span {
+    span {
       display: flex;
       align-items: center;
       gap: 0.8rem;
     }
 
     &-icon {
-      height: 1.6rem;
+      width: 1.6rem;
       height: 1.6rem;
     }
 
@@ -186,23 +200,43 @@
     color: #fff;
   }
 
-  &--remove-booking {
-    align-self: flex-end;
-    background-color: transparent;
-    cursor: pointer;
-    padding: 0;
-    gap: 0.8rem;
+  &--tours-filters {
+    margin-bottom: 1.6rem;
+
+    @include tablet {
+      display: none;
+    }
   }
 
-  &--disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  &--error {
-    border: 2px solid $main-teal;
+  &--contact {
+    background-color: white;
+    border: 1px solid #dddddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
-    color: $main-teal;
+  }
+
+  &--subscribe {
+    background-color: $accent-1;
+    color: $main-white;
+    flex-shrink: 0;
+    white-space: nowrap;
+    border-radius: 1.2rem;
+    padding: 1rem 1.8rem;
+    font-size: 1.3rem;
+    height: auto;
+
+    @include tablet {
+      padding: 1.2rem 2.8rem;
+      font-size: 1.5rem;
+      border-radius: $border-radius;
+    }
+
+    .btn__text--subscribe {
+      display: block !important;
+    }
+
+    .btn__icon--subscribe {
+      display: none !important;
+    }
   }
 
   &--spotlight {
@@ -211,6 +245,7 @@
     border-radius: 1.6rem;
     font-weight: 600;
   }
+
   &--destination-card {
     background-color: transparent;
     border: 2px solid white;
@@ -226,10 +261,14 @@
     padding: 0;
   }
 
-  &--tours-filters {
-    margin-bottom: 1.6rem;
-    @include tablet {
-      display: none;
-    }
+  &--error {
+    border: 2px solid $main-teal;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+    color: $main-teal;
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }

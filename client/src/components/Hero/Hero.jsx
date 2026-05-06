@@ -12,20 +12,18 @@ import arrowUpRightIcon from "../../assets/icons/arrow-up-right.svg";
 const Hero = () => {
   return (
     <section className="hero">
-      <h1 className="hero-heading">
-        Hey! 🐈 Discover Majestic İstanbul <br />{" "}
-        <span className="highlighted"> with Guided tours</span>
-      </h1>
+      <h1 className="hero-heading">Discover Majestic İstanbul</h1>
       <div className="hero-wrp">
         <div className="hero-intro">
           <div className="hero-video">
             <VideoComponent src={videoHero} speed="0.8" />
           </div>
           <div className="hero-content">
-            <h2 className="hero-subheading">
-              Where history, vibrant markets, and the Bosphorus 🌊 create a
-              traveler's dream.
-            </h2>
+            <p className="hero-subheading">
+              Where history, vibrant markets, and the Bosphorus create a
+              traveler's dream{" "}
+              <span className="hero-subheading__accent">✦</span>
+            </p>
             <Link to="/tours">
               <div className="hero-slogan">
                 <div className="hero-slogan-wrp">
@@ -34,7 +32,7 @@ const Hero = () => {
                 <Button
                   className="btn btn--cta"
                   iconClassName="btn--icon"
-                  text="View all tours"
+                  text="Explore tours"
                 />
               </div>
             </Link>
@@ -51,7 +49,7 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-guided"
-                  text="Guided tours"
+                  text="City Tours"
                 />
               </div>
             </div>
@@ -67,7 +65,7 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-culinary"
-                  text="Culinary visits"
+                  text="Food Tours"
                 />
               </div>
             </div>
@@ -87,7 +85,7 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-experiences"
-                  text="Experiences"
+                  text="Activities"
                 />
               </div>
             </div>

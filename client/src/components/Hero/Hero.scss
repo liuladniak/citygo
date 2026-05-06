@@ -9,199 +9,246 @@
   @include tablet {
     margin-top: 5rem;
   }
+}
 
-  &-heading {
-    font-size: 3rem;
-    line-height: 1.4;
-    font-weight: 700;
-    color: $main-maroon;
+.hero-heading {
+  font-size: 2.8rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: $main-maroon;
+  text-align: center;
+
+  @include tablet {
     text-align: left;
-
-    @include mobile-s {
-      text-align: center;
-      font-size: 3.6rem;
-    }
-
-    @include tablet {
-      text-align: left;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-    @include desktop {
-      font-size: 5.4rem;
-    }
+    font-size: 4rem;
+    line-height: 1.2;
   }
-  &-subheading {
-    font-size: 1.6rem;
-    padding: 0;
-    font-weight: 600;
-    text-align: center;
-    color: $charcoal;
 
-    @include tablet {
-      font-size: 2rem;
-      padding: 2rem 2rem 0 0;
-      text-align: center;
-      text-transform: uppercase;
-      line-height: 1.5;
-    }
+  @include desktop {
+    font-size: 5.4rem;
   }
-  &-wrp {
-    margin-top: 2.4rem;
+}
 
-    display: flex;
-    flex-direction: column;
+.hero-wrp {
+  margin-top: 2.4rem;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: $space-x-small;
+
+  @include tablet {
+    gap: $space-medium;
+  }
+
+  @include desktop {
     gap: $space-large;
   }
-  &-intro {
-    display: flex;
-    justify-content: space-between;
-    gap: $space-x-small;
-    flex-direction: column;
-    @include tablet {
-      flex-direction: row;
-      gap: $space-medium;
-    }
+}
 
-    @include desktop {
-      gap: $space-large;
-    }
+.hero-intro {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-x-small;
+
+  @include tablet {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 48rem;
+    gap: $space-small;
   }
-  &-video {
-    overflow: hidden;
+
+  @include desktop-s {
+    grid-template-rows: 54rem;
+    gap: $space-medium;
+  }
+
+  @include desktop {
+    grid-template-rows: 60rem;
+    gap: $space-large;
+  }
+}
+
+.hero-video {
+  @include border-radius;
+  overflow: hidden;
+  height: 28rem;
+
+  @include tablet {
+    height: 100%;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.hero-content {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: $space-x-small;
+
+  @include tablet {
+    height: 100%;
+    gap: $space-small;
+  }
+}
+
+.hero-subheading {
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+  color: $charcoal;
+  line-height: 1.7;
+  margin: $space-x-small 0;
+
+  @include tablet {
+    font-size: 1.4rem;
+    text-align: left;
+    text-transform: none;
+    margin: 0 0 $space-x-small;
+  }
+
+  @include desktop {
+    font-size: 1.6rem;
+  }
+
+  &__accent {
+    color: $accent-2;
+    font-size: 1.2em;
+  }
+}
+
+.hero-slogan {
+  background-color: $main-teal;
+  @include border-radius;
+  padding: $space-x-small;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: $space-x-small;
+  transition: box-shadow 0.3s ease;
+  height: 28rem;
+
+  @include tablet {
+    height: 100%;
+    padding: $space-medium;
+    gap: $space-small;
+  }
+
+  @include desktop {
+    padding: $space-large;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+  }
+
+  &-wrp {
     flex: 1;
-    height: 55rem;
-    @include border-radius;
+    width: 100%;
+    min-height: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
+    overflow: hidden;
 
-    @include desktop-xl {
-      flex-basis: calc($max-width / 3 * 2 + $space-large);
-    }
-
-    & video {
-      height: 127%;
-      width: 127%;
-      transform: scale(1.25);
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-height: 16rem;
 
       @include tablet {
-        transform: scale(1);
+        max-height: unset;
       }
     }
   }
-  &-content {
-    flex-basis: calc(100% / 3);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: $space-x-small;
 
-    @include tablet {
-      gap: 0;
-    }
-
-    @include desktop-xl {
-      flex-basis: calc($max-width / 3);
-    }
-  }
-  &-slogan {
-    background-color: $main-teal;
-    height: 26rem;
-    @include border-radius;
-    padding: $space-x-small;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-
-    @include tablet {
-      height: 39rem;
-      padding: $space-large;
-    }
-
-    &:hover {
-      box-shadow: 0px 2px 10px rgb(0, 0, 0, 0.28);
-    }
-
-    &-wrp {
-      height: 70%;
-    }
-    & img {
-      object-fit: cover;
-    }
-  }
-  &-categories {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: $space-large;
-
-    @include tablet {
-      flex-direction: row;
-    }
-  }
-  &-category {
+  .btn--cta {
     width: 100%;
-    height: 20rem;
-    @include border-radius;
-    overflow: hidden;
-    object-fit: cover;
-    position: relative;
 
     @include tablet {
-      flex: 1;
-      height: 32rem;
+      width: fit-content;
     }
+  }
+}
 
-    &:hover {
-      cursor: pointer;
-      box-shadow: 0px 2px 10px rgb(0, 0, 0, 0.28);
-      transition: all 0.3s ease;
-    }
+.hero-categories {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-x-small;
 
-    &-img {
-      cursor: pointer;
-      overflow: hidden;
-      flex: 2;
-      & img {
-        filter: opacity(90%);
-      }
-    }
+  @include tablet {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $space-small;
+  }
 
-    &-cta {
+  @include desktop {
+    gap: $space-medium;
+  }
+}
+
+.hero-category {
+  display: block;
+  width: 100%;
+  height: 20rem;
+  @include border-radius;
+  overflow: hidden;
+  position: relative;
+
+  @include mobile-m {
+    height: 18rem;
+  }
+
+  @include tablet {
+    height: 28rem;
+  }
+
+  @include desktop {
+    height: 34rem;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+  }
+
+  &-cta {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  &-img {
+    position: absolute;
+    inset: 0;
+
+    img {
+      width: 100%;
       height: 100%;
-      display: flex;
-      flex-direction: column;
+      object-fit: cover;
+      display: block;
     }
   }
 }
 
 .overlay--category {
-  height: 100%;
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding-bottom: 3rem;
-
-  // &-guided {
-  //   background-color: rgba(59, 34, 108, 0.9);
-  // }
-  // &-culinary {
-  //   background-color: rgba(154, 69, 2, 0.9);
-  // }
-  // &-experiences {
-  //   background-color: rgba(162, 37, 50, 0.9);
-  // }
-
   position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: $space-x-small;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0) 70%
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0) 100%
   );
+
+  @include tablet {
+    padding: $space-small;
+  }
 }

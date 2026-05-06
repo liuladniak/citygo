@@ -3,61 +3,118 @@
 
 .featured-wrp {
   width: 100%;
-  display: flex;
-  justify-content: center;
   background-color: $supportive-2;
   @include border-radius;
-  margin: $space-large $space-x-small 0;
-
-  @include tablet {
-    margin-top: $space-large;
-
-    width: 100vw;
-  }
+  margin-top: $space-large;
+  overflow: hidden;
 }
+
 .featured {
   @include layout-constrain;
-  width: 100%;
-  padding: $space-x-small;
   display: flex;
   flex-direction: column;
-  gap: $space-large;
-
-  @include tablet {
+  padding: $space-medium $space-small;
+  gap: $space-medium;
+  @include mobile-m {
     flex-direction: row;
+    align-items: center;
+    padding: $space-medium;
+    gap: $space-medium;
+  }
+  @include tablet {
+    padding: 3.2rem;
+    gap: $space-large;
+  }
+  @include desktop {
     padding: 4rem;
   }
-  &-btns {
-    display: flex;
-    align-items: center;
-    gap: 2.4rem;
-  }
+
   &-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: $space-large;
+    gap: $space-medium;
   }
-  &-title {
-    font-size: 3.2rem;
-  }
-  &-description {
-    margin: 2.4rem 0;
-  }
+
   &-text {
-    width: 100%;
-    font-size: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+  }
+
+  &-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.2;
 
     @include tablet {
+      font-size: 2.8rem;
+    }
+
+    @include desktop {
+      font-size: 3.2rem;
+    }
+  }
+
+  &-description {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: #4b5563;
+
+    @include desktop {
+      font-size: 1.6rem;
+    }
+  }
+
+  &-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+
+    .btn--contact {
+      white-space: nowrap;
+      height: auto;
+      padding: 1rem 2rem;
+      font-size: 1.4rem;
+
+      @include tablet {
+        padding: 1.2rem 2.4rem;
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  &-img-wrp {
+    flex: 0 0 auto;
+    width: 100%;
+    height: 18rem;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    @include mobile-m {
+      width: 16rem;
+      height: 16rem;
+      overflow: visible;
+    }
+
+    @include tablet {
+      width: 24rem;
+      height: 24rem;
+    }
+
+    @include desktop {
+      width: 36rem;
+      height: 36rem;
     }
   }
 
   &-img {
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    height: 100%;
-    &-wrp {
-      flex: 1;
-      height: 32rem;
-    }
+    object-position: bottom center;
   }
 }
