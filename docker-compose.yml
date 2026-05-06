@@ -39,6 +39,8 @@ services:
         - VITE_STRIPE_PUBLIC_KEY=${VITE_STRIPE_PUBLIC_KEY}
         - VITE_TEST_EMAIL=${VITE_TEST_EMAIL}
         - VITE_TEST_PASSWORD=${VITE_TEST_PASSWORD}
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
     container_name: citygo-client
     restart: always
     expose:
