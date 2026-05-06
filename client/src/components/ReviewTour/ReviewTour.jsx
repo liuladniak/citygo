@@ -15,7 +15,7 @@ const ReviewTour = ({ bookings }) => {
   const dispatch = useDispatch();
   const [editingBooking, setEditingBooking] = useState(null);
   const [editingDetail, setEditingDetail] = useState(null);
-
+  console.log("CART BOOKINGS 123", bookings);
   const handleRemoveBooking = (id) => {
     dispatch(removeBooking(id));
   };

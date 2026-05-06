@@ -1,39 +1,31 @@
 import { useState, useEffect } from "react";
 import "./FiltersComponent.scss";
-import Button from "../Button/Button";
 
 function FiltersComponent({ children }) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleFilters = () => {
-    setFiltersOpen(!filtersOpen);
-  };
+  if (!isMobile) {
+    return <div className="filters filters--desktop">{children}</div>;
+  }
 
   return (
-    <div className="filters">
-      {isMobile ? (
-        <div>
-          <Button className="btn btn--tours-filters" onClick={toggleFilters}>
-            Filters
-          </Button>
-          {filtersOpen && <div className="filters-mobile">{children}</div>}
-        </div>
-      ) : (
-        <div className="filters-desktop">{children}</div>
-      )}
+    <div className="filters filters--mobile">
+      <button
+        className="filters__toggle"
+        onClick={() => setFiltersOpen(!filtersOpen)}
+        aria-expanded={filtersOpen}
+      >
+        <span>🔍 Filters & Search</span>
+        <span className="filters__toggle-arrow">{filtersOpen ? "▲" : "▼"}</span>
+      </button>
+      {filtersOpen && <div className="filters__panel">{children}</div>}
     </div>
   );
 }

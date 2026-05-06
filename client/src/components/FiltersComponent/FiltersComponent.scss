@@ -1,3 +1,46 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
 .filters {
   width: 100%;
+
+  &--mobile {
+    border: 1px solid #e5e7eb;
+    @include border-radius;
+    overflow: hidden;
+  }
+
+  &__toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 1.6rem;
+    background: white;
+    border: none;
+    font-family: Montserrat;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $charcoal;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #f9fafb;
+    }
+  }
+
+  &__toggle-arrow {
+    font-size: 1rem;
+    color: #9ca3af;
+  }
+
+  &__panel {
+    border-top: 1px solid #e5e7eb;
+    background: white;
+  }
+
+  &--desktop {
+    width: 100%;
+  }
 }

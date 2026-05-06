@@ -15,63 +15,91 @@
     width: 100%;
     gap: 0.8rem;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     text-transform: capitalize;
-    padding: 1.2rem 0;
+    padding: 1.2rem 1.6rem;
+    font-size: 1.4rem;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #f9fafb;
+    }
+
+    @include tablet {
+      justify-content: center;
+      padding: 1.2rem 0.8rem;
+      font-size: 1.5rem;
+    }
   }
+
   &__icon {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    flex-shrink: 0;
   }
 }
 
 .select__options {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: absolute;
-  top: 115%;
-  left: 0;
-  right: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 2rem;
-  background-color: #fff;
-  padding: 0;
   list-style: none;
+  padding: 0.4rem 0;
+  background-color: white;
   z-index: 1000;
-
+  border-radius: 1.2rem;
   max-height: 0;
-
   overflow: hidden;
   opacity: 0;
   transform: scaleY(0);
   transform-origin: top;
-  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    max-height 0.3s ease;
+
+  position: static;
+  width: 100%;
+  box-shadow: none;
+  border-radius: 0;
+  background: #f9fafb;
+
   &.open {
     opacity: 1;
     transform: scaleY(1);
-    max-height: 20rem;
+    max-height: 24rem;
+    overflow-y: auto;
+  }
+
+  @include tablet {
+    position: absolute;
+    top: 115%;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 1.2rem;
+    background: white;
   }
 }
 
 .select__option {
   cursor: pointer;
   font-size: 1.3rem;
-  line-height: 2rem;
-  padding: 0.8rem 1.6rem;
+  line-height: 1;
+  padding: 1rem 1.6rem;
   text-transform: capitalize;
+  transition: background 0.15s;
+
+  &:hover {
+    background-color: #f3f4f6;
+  }
 
   @include tablet {
     font-size: 1.4rem;
-    line-height: 2.2rem;
   }
 }
 
-.select__option:hover {
-  background-color: #bdc5d534;
-  border-radius: 2rem;
+.placeholder {
+  color: #9ca3af;
 }
 
-.placeholder {
-  color: #000;
+.input-active {
+  background: #f9fafb;
 }

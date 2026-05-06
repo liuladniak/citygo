@@ -29,10 +29,10 @@ function Header() {
   const user = useSelector((state) => state.auth.user);
   const [isOpen, setIsOpen] = useState(false);
   const selectedCurrency = useSelector(
-    (state) => state.currency.selectedCurrency
+    (state) => state.currency.selectedCurrency,
   );
   const currencyOptions = ["USD", "EUR", "TRY"];
-
+  console.log("user for initials:", user?.first_name, user?.last_name);
   const totalBookings = useSelector(selectTotalBookings);
 
   const toggleMenu = () => {

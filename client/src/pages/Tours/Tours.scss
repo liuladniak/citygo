@@ -2,14 +2,65 @@
 @use "../../styles/partials/mixins" as *;
 
 .tours {
-  margin-top: 6rem;
   @include layout-constrain;
+  margin-top: $space-medium;
+
+  @include tablet {
+    margin-top: 6rem;
+  }
+
+  &-heading-wrp {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+  }
+
+  &-type {
+    font-size: 1.2rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+
+    @include tablet {
+      font-size: 1.4rem;
+    }
+  }
+
+  &-heading {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+
+    @include tablet {
+      font-size: 3.2rem;
+    }
+
+    @include desktop {
+      font-size: 4rem;
+    }
+  }
+
+  &-description {
+    font-size: 1.4rem;
+    color: #6b7280;
+    line-height: 1.6;
+    max-width: 72rem;
+
+    @include tablet {
+      font-size: 1.6rem;
+    }
+  }
 
   &-wrp {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
-    margin-top: 4.5rem;
+    gap: $space-medium;
+    margin-top: $space-medium;
+
+    @include tablet {
+      gap: 3rem;
+      margin-top: 4.5rem;
+    }
   }
 
   &-filter {
@@ -22,15 +73,11 @@
       @include border-radius;
 
       @include tablet {
-        flex-direction: row;
+        flex-direction: column;
       }
 
-      .tours-filter__search-input {
-        border-radius: $border-radius;
-
-        @include tablet {
-          border-radius: 0;
-        }
+      @include desktop-s {
+        flex-direction: row;
       }
     }
 
@@ -48,15 +95,31 @@
     &-r {
       flex: 1;
       width: 100%;
+      border-top: 1px solid #ecedeb;
+    }
+
+    @include desktop-s {
+      border-top: none;
+      border-left: 1px solid #ecedeb;
     }
 
     &__select-wrp {
       flex: 1;
-      border-right: 1px solid #ecedeb;
+      border-bottom: 1px solid #ecedeb;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%;
+      min-height: 5rem;
+
+      @include tablet {
+        border-bottom: none;
+        border-right: 1px solid #ecedeb;
+        min-height: 5.6rem;
+
+        &:last-child {
+          border-right: none;
+        }
+      }
     }
 
     &__options {
@@ -70,19 +133,23 @@
     }
 
     &__search-input {
-      padding: 0.8rem 3.8rem;
+      padding: 1.2rem 1.2rem 1.2rem 4rem;
       width: 100%;
-      border: 1px solid lightgray;
+      border: none;
       height: 100%;
       font-family: Montserrat;
-      font-size: 1.6rem;
-      color: black;
-      margin: 0.8rem;
+      font-size: 1.4rem;
+      color: $charcoal;
+      background: transparent;
+      outline: none;
+
+      &::placeholder {
+        color: #9ca3af;
+      }
 
       @include tablet {
-        border: none;
+        font-size: 1.6rem;
         padding: 0 0 0 3.8rem;
-        margin: 0;
       }
     }
 
@@ -148,11 +215,13 @@
   &-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: $space-large;
+    gap: $space-medium;
 
-    @include tablet {
+    @include mobile-m {
       grid-template-columns: repeat(2, 1fr);
+      gap: $space-medium;
     }
+
     @include desktop {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -163,10 +232,25 @@
     flex-direction: column;
     align-items: center;
     gap: 1.6rem;
-    padding: $space-large;
+    padding: $space-medium 0;
     color: #6b7280;
     font-size: 1.6rem;
     text-align: center;
+    border-bottom: 1px solid #eee;
+    margin-bottom: $space-medium;
+  }
+
+  &-suggestions {
+    &__heading {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: $space-medium;
+      color: $charcoal;
+
+      @include tablet {
+        font-size: 2rem;
+      }
+    }
   }
 
   &-pagination {
@@ -176,9 +260,12 @@
     flex-wrap: wrap;
     gap: $space-x-small;
     margin-top: $space-medium;
+    margin-bottom: $space-large;
 
     button {
-      padding: 1rem 1.6rem;
+      min-width: 3.6rem;
+      height: 3.6rem;
+      padding: 0 1.2rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
@@ -195,6 +282,7 @@
       &:hover:not(:disabled) {
         background-color: #bcccd3;
       }
+
       &:disabled {
         cursor: not-allowed;
         opacity: 0.5;
@@ -205,6 +293,7 @@
     .tours-next {
       padding: 0;
       background: none;
+      min-width: unset;
     }
 
     .pagination-controls {
@@ -212,51 +301,25 @@
       height: 3.2rem;
     }
   }
-
-  &-suggestions {
-    &__heading {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: $space-medium;
-      color: $charcoal;
-    }
-  }
-
-  &-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.6rem;
-    padding: $space-medium 0;
-    color: #6b7280;
-    font-size: 1.6rem;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    margin-bottom: $space-medium;
-  }
 }
 
 .search-wrp {
   position: relative;
+  width: 100%;
   border: none;
-  width: fit-content;
-  margin: 0 auto;
 
   @include tablet {
-    margin: auto;
+    border-top: none;
     width: unset;
   }
 }
 
 .search-icon {
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2rem;
+  height: 2rem;
   position: absolute;
-  left: 1.6rem;
+  left: 1.2rem;
   top: 50%;
-  transform: translateY(-45%);
-
-  @include tablet {
-    left: 0.8rem;
-  }
+  transform: translateY(-50%);
+  opacity: 0.5;
 }
