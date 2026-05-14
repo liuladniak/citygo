@@ -156,15 +156,18 @@
 
 .destination {
   &-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $space-large;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-medium;
     margin-top: $space-medium;
-    flex-direction: column;
 
-    @include tablet {
-      flex-direction: row;
+    @include mobile-m {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include desktop-s {
+      grid-template-columns: repeat(3, 1fr);
+      gap: $space-large;
     }
   }
   &-card {
@@ -206,12 +209,118 @@
   }
 }
 
+.destination-cta-card {
+  @include border-radius;
+  background: $main-teal;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 42rem;
+  padding: 1.6rem;
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  @include mobile-m {
+    display: flex;
+  }
+  @include tablet {
+    padding: $space-medium;
+  }
+  @include desktop-s {
+    display: none;
+  }
+
+  &:hover {
+    background: darken($main-teal, 6%);
+    transform: translateY(-2px);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 28rem;
+    height: 28rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    bottom: -8rem;
+    right: -8rem;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+    z-index: 1;
+    width: 100%;
+  }
+
+  &__label {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  &__heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+
+    @include tablet {
+      font-size: 2.4rem;
+    }
+  }
+
+  &__sub {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &__btn {
+    margin-top: $space-x-small;
+    display: inline-flex;
+    align-items: center;
+    background: white;
+    color: $main-teal;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 1.2rem;
+    border-radius: $border-radius-main;
+    width: 100%;
+    justify-content: center;
+    white-space: nowrap;
+    transition: background 0.2s;
+
+    @include tablet {
+      width: fit-content;
+      font-size: 1.4rem;
+      padding: 1rem 2rem;
+    }
+
+    &:hover {
+      background: #f0f9ff;
+    }
+  }
+}
 .romantic {
   display: none;
 }
 
 .destinations-styles {
-  flex: 1;
+  width: 100%;
 
   &--skeleton {
     display: flex;
@@ -219,14 +328,16 @@
 }
 
 .destination-styles--skeleton {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $space-large;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-medium;
   margin-top: $space-medium;
-  flex-direction: column;
 
-  @include tablet {
-    flex-direction: row;
+  @include mobile-m {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include desktop-s {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

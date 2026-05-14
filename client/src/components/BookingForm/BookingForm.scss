@@ -1,40 +1,320 @@
+// @use "../../styles/partials/mixins" as *;
+// @use "../../styles/partials/variables" as *;
+
+// .booking-form-wrp {
+//   flex: 1;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+//   border: 1px solid rgb(221, 221, 221);
+//   height: fit-content;
+//   padding: $space-medium;
+//   @include border-radius;
+// }
+
+// .booking-form {
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   gap: $space-large;
+//   align-items: center;
+
+//   @include tablet {
+//     width: 30rem;
+//   }
+
+//   &__heading {
+//     font-size: 2.4rem;
+//     font-weight: 600;
+
+//     &-wrp {
+//       display: flex;
+//       gap: 2.4rem;
+//       align-items: center;
+//       margin-bottom: 1.6rem;
+
+//       & img {
+//         width: 2.4rem;
+//         height: 2.4rem;
+//       }
+//     }
+//   }
+// }
+
+// .guest-section {
+//   width: 100%;
+//   margin-top: 20px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+
+//   @include tablet {
+//     width: unset;
+//   }
+// }
+
+// .guests {
+//   width: 100%;
+//   margin-top: 0.8rem;
+//   border: 1px solid #ddd;
+//   padding: 1rem 2rem;
+//   @include border-radius;
+//   cursor: pointer;
+//   font-size: 1.2rem;
+//   position: relative;
+//   transition: border-color 0.3s;
+
+//   @include tablet {
+//     width: 30rem;
+//   }
+//   &:hover {
+//     border-color: #555;
+//   }
+
+//   p {
+//     margin: 0;
+//   }
+// }
+
+// .guest-details {
+//   position: absolute;
+//   top: 3.5rem;
+//   left: 0;
+//   width: 100%;
+//   background-color: #fff;
+//   border: 1px solid #ddd;
+//   @include border-radius;
+//   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+//   z-index: 10;
+//   padding: 1.6rem;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1rem;
+// }
+
+// .guest-detail {
+//   display: flex;
+//   align-items: center;
+
+//   label {
+//     font-size: 1.2rem;
+//     font-weight: 500;
+//   }
+
+//   span {
+//     width: 30px;
+//     text-align: center;
+//     font-size: 1.2rem;
+//   }
+//   &-l {
+//     flex: 1;
+//   }
+//   &-r {
+//     display: flex;
+//     justify-content: space-between;
+//     flex: 1;
+//     align-items: center;
+//   }
+//   button {
+//     width: 30px;
+//     height: 30px;
+//     background-color: #f0f0f0;
+//     border: 1px solid #ccc;
+//     border-radius: 50%;
+//     cursor: pointer;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     font-size: 1.2rem;
+//     font-weight: bold;
+
+//     &:hover {
+//       background-color: #ddd;
+//     }
+
+//     &:disabled {
+//       cursor: not-allowed;
+//       opacity: 0.5;
+//     }
+//   }
+// }
+// .btn--guests {
+//   &-increment {
+//     background-color: $main-maroon !important;
+//   }
+//   &-close {
+//     background-color: #fff !important;
+//     text-decoration: underline;
+//     color: black !important;
+//     border-radius: 3rem !important;
+//     font-size: 1.4rem;
+//   }
+// }
+// .guest-details button {
+//   align-self: flex-end;
+//   padding: 0.5rem 1rem;
+//   color: #fff;
+//   border: none;
+//   border-radius: 5px;
+//   cursor: pointer;
+//   transition: background-color 0.3s;
+
+//   &:hover {
+//     opacity: 0.85;
+//   }
+// }
+// .booking-unavailable {
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   gap: $space-small;
+//   padding: $space-medium;
+//   text-align: center;
+
+//   &__icon {
+//     font-size: 3.2rem;
+//   }
+
+//   &__title {
+//     font-size: 2.4rem;
+//     font-weight: 600;
+//     color: $charcoal;
+//   }
+
+//   &__message {
+//     font-size: 1.4rem;
+//     color: #6b7280;
+//     line-height: 1.6;
+//     max-width: 28rem;
+//   }
+
+//   &__actions {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 1rem;
+//     margin-top: 0.8rem;
+//     width: 100%;
+
+//     @include tablet {
+//       width: 30rem;
+//     }
+//   }
+
+//   &__link {
+//     font-size: 1.4rem;
+//     color: $main-teal;
+//     text-decoration: underline;
+//     cursor: pointer;
+//     background: none;
+//     border: none;
+
+//     &:hover {
+//       color: $main-maroon;
+//     }
+//   }
+// }
+
+// .contact-section {
+//   width: 100%;
+//   margin-top: 2rem;
+// }
+
+// .contact-fields {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 1.2rem;
+//   margin-top: 0.8rem;
+//   width: 100%;
+
+//   @include tablet {
+//     width: 30rem;
+//   }
+// }
+
+// .contact-field {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0.4rem;
+
+//   label {
+//     font-size: 1.2rem;
+//     font-weight: 500;
+//     color: $charcoal;
+//   }
+// }
+
+// .contact-input {
+//   border: 1px solid #ddd;
+//   border-radius: $border-radius;
+//   padding: 1rem 1.6rem;
+//   font-size: 1.2rem;
+//   font-family: inherit;
+//   transition: border-color 0.3s;
+//   width: 100%;
+
+//   &:hover {
+//     border-color: #555;
+//   }
+
+//   &:focus {
+//     outline: none;
+//     border-color: $main-teal;
+//   }
+
+//   &--textarea {
+//     resize: vertical;
+//     min-height: 8rem;
+//   }
+// }
+
 @use "../../styles/partials/mixins" as *;
 @use "../../styles/partials/variables" as *;
 
+// ─── booking form wrapper ─────────────────────────────────────────────────────
 .booking-form-wrp {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgb(221, 221, 221);
+  border: 1px solid #ddd;
   height: fit-content;
-  padding: $space-medium;
+  padding: $space-medium $space-x-small;
   @include border-radius;
+  width: 100%;
+
+  @include tablet {
+    padding: $space-medium;
+    position: sticky;
+    top: 8rem;
+  }
 }
 
+// ─── heading ─────────────────────────────────────────────────────────────────
 .booking-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: $space-large;
+  gap: $space-medium;
   align-items: center;
 
-  @include tablet {
-    width: 30rem;
-  }
-
   &__heading {
-    font-size: 2.4rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 700;
+
+    @include tablet {
+      font-size: 2.4rem;
+    }
 
     &-wrp {
       display: flex;
-      gap: 2.4rem;
+      gap: 1.2rem;
       align-items: center;
       margin-bottom: 1.6rem;
+      width: 100%;
 
-      & img {
+      img {
         width: 2.4rem;
         height: 2.4rem;
       }
@@ -42,32 +322,29 @@
   }
 }
 
+// ─── guest section ────────────────────────────────────────────────────────────
 .guest-section {
   width: 100%;
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 0.8rem;
+}
 
-  @include tablet {
-    width: unset;
-  }
+.guest__heading {
+  font-size: 1.6rem;
+  font-weight: 600;
 }
 
 .guests {
   width: 100%;
-  margin-top: 0.8rem;
   border: 1px solid #ddd;
-  padding: 1rem 2rem;
+  padding: 1.2rem 1.6rem;
   @include border-radius;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   position: relative;
   transition: border-color 0.3s;
 
-  @include tablet {
-    width: 30rem;
-  }
   &:hover {
     border-color: #555;
   }
@@ -77,48 +354,53 @@
   }
 }
 
+// ─── guest dropdown ───────────────────────────────────────────────────────────
 .guest-details {
   position: absolute;
-  top: 3.5rem;
+  top: calc(100% + 0.8rem);
   left: 0;
-  width: 100%;
-  background-color: #fff;
+  right: 0;
+  background-color: white;
   border: 1px solid #ddd;
   @include border-radius;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  z-index: 20;
   padding: 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .guest-detail {
   display: flex;
   align-items: center;
+  gap: $space-x-small;
 
   label {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 500;
   }
 
   span {
-    width: 30px;
+    width: 3rem;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 600;
   }
+
   &-l {
     flex: 1;
   }
+
   &-r {
     display: flex;
-    justify-content: space-between;
-    flex: 1;
     align-items: center;
+    gap: 0.8rem;
   }
+
   button {
-    width: 30px;
-    height: 30px;
+    width: 3rem;
+    height: 3rem;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 50%;
@@ -126,44 +408,44 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.4rem;
+    font-weight: 700;
+    transition: background 0.2s;
 
     &:hover {
-      background-color: #ddd;
+      background-color: #e0e0e0;
     }
-
     &:disabled {
       cursor: not-allowed;
       opacity: 0.5;
     }
   }
 }
+
 .btn--guests {
   &-increment {
     background-color: $main-maroon !important;
+    color: white !important;
+    border-color: $main-maroon !important;
+
+    &:hover {
+      background-color: darken($main-maroon, 8%) !important;
+    }
   }
+
   &-close {
-    background-color: #fff !important;
+    background-color: transparent !important;
     text-decoration: underline;
-    color: black !important;
+    color: $charcoal !important;
+    border: none !important;
     border-radius: 3rem !important;
     font-size: 1.4rem;
+    align-self: center;
+    padding: 0.4rem 1.2rem !important;
   }
 }
-.guest-details button {
-  align-self: flex-end;
-  padding: 0.5rem 1rem;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 
-  &:hover {
-    opacity: 0.85;
-  }
-}
+// ─── unavailable state ────────────────────────────────────────────────────────
 .booking-unavailable {
   width: 100%;
   display: flex;
@@ -178,8 +460,8 @@
   }
 
   &__title {
-    font-size: 2.4rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 700;
     color: $charcoal;
   }
 
@@ -196,10 +478,6 @@
     gap: 1rem;
     margin-top: 0.8rem;
     width: 100%;
-
-    @include tablet {
-      width: 30rem;
-    }
   }
 
   &__link {
@@ -213,58 +491,5 @@
     &:hover {
       color: $main-maroon;
     }
-  }
-}
-
-.contact-section {
-  width: 100%;
-  margin-top: 2rem;
-}
-
-.contact-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  margin-top: 0.8rem;
-  width: 100%;
-
-  @include tablet {
-    width: 30rem;
-  }
-}
-
-.contact-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-
-  label {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: $charcoal;
-  }
-}
-
-.contact-input {
-  border: 1px solid #ddd;
-  border-radius: $border-radius;
-  padding: 1rem 1.6rem;
-  font-size: 1.2rem;
-  font-family: inherit;
-  transition: border-color 0.3s;
-  width: 100%;
-
-  &:hover {
-    border-color: #555;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: $main-teal;
-  }
-
-  &--textarea {
-    resize: vertical;
-    min-height: 8rem;
   }
 }

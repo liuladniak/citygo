@@ -1,49 +1,111 @@
+// .image-slider {
+//   position: relative;
+//   width: 100%;
+//   max-width: 1200px;
+//   min-height: 40rem;
+//   max-height: 67.5rem;
+//   object-fit: cover;
+//   margin: 0 auto;
+//   overflow: hidden;
+//   border-radius: 8px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+// }
+
+// .slider-image {
+//   width: 100%;
+//   height: auto;
+//   display: block;
+//   transition: transform 0.3s ease;
+// }
+
+// .slider-button {
+//   position: absolute;
+//   top: 50%;
+//   transform: translateY(-50%);
+//   background: darkred;
+//   color: white;
+//   border: none;
+//   cursor: pointer;
+//   padding: 10px;
+//   z-index: 1;
+//   transition: background 0.3s ease;
+// }
+
+// .slider-button img {
+//   width: 24px;
+//   height: auto;
+// }
+
+// .slider-button:hover {
+//   background: rgba(0, 0, 0, 0.7);
+// }
+
+// .prev {
+//   left: 10px;
+// }
+
+// .next {
+//   right: 10px;
+// }
+
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
 .image-slider {
   position: relative;
   width: 100%;
-  max-width: 1200px;
-  min-height: 40rem;
-  max-height: 67.5rem;
-  object-fit: cover;
+  max-width: 100%;
+  min-height: 30rem;
+  max-height: 60rem;
   margin: 0 auto;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  @include border-radius;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #000;
+
+  @include tablet {
+    min-height: 40rem;
+  }
 }
 
 .slider-image {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain; // contain so full image is visible in gallery modal
   display: block;
-  transition: transform 0.3s ease;
 }
 
+// ─── nav buttons ─────────────────────────────────────────────────────────────
 .slider-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: darkred;
+  background: rgba(156, 17, 13, 0.85);
   color: white;
   border: none;
   cursor: pointer;
-  padding: 10px;
+  padding: 1rem;
   z-index: 1;
-  transition: background 0.3s ease;
-}
+  transition: background 0.2s ease;
+  border-radius: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.slider-button img {
-  width: 24px;
-  height: auto;
-}
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
 
-.slider-button:hover {
-  background: rgba(0, 0, 0, 0.7);
+  img {
+    width: 2rem;
+    height: 2rem;
+    display: block;
+  }
 }
 
 .prev {
-  left: 10px;
+  left: 1rem;
 }
-
 .next {
-  right: 10px;
+  right: 1rem;
 }

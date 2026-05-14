@@ -15,7 +15,6 @@ import hamamImg from "../../assets/images/hamam1.jpg";
 import imgExp6 from "../../assets/videos/story8.jpg";
 import breakfastImg from "../../assets/images/breakfast.jpg";
 import imgShopping2 from "../../assets/images/egyptian-bazaar.webp";
-import imgShopping3 from "../../assets/images/cukurcuma.webp";
 import chooseImg from "../../assets/images/choose-4.jpg";
 import VideoComponent from "../../components/VideoComponent/VideoComponent";
 import Accordion from "../../components/Accordion/Accordion";
@@ -72,11 +71,11 @@ const Destinations = () => {
   const [isLoading, setIsLoading] = useState(true);
   const selectedToursIds = [2, 5, 9];
   const selectedTours = tours.filter((tour) =>
-    selectedToursIds.includes(tour.id)
+    selectedToursIds.includes(tour.id),
   );
   const romanticToursIds = [2, 6, 8];
   const romanticTours = tours.filter((tour) =>
-    romanticToursIds.includes(tour.id)
+    romanticToursIds.includes(tour.id),
   );
 
   useEffect(() => {
@@ -99,13 +98,13 @@ const Destinations = () => {
       try {
         console.log("Fetching articles");
         const response = await axios.get(
-          `${API_URL}/api/articles?limit=9&page=1`
+          `${API_URL}/api/articles?limit=9&page=1`,
         );
         setArticles(response.data.data.slice(0, 1));
         setArticlesSmall(response.data.data.slice(1, 4));
         console.log(
           "articles response data ARticles SMALL:",
-          response.data.data.slice(1, 4)
+          response.data.data.slice(1, 4),
         );
         setIsLoading(false);
       } catch (error) {
@@ -154,7 +153,7 @@ const Destinations = () => {
               ))}
           </div>
         ) : (
-          <div className="destination-cards flex">
+          <div className="destination-cards">
             {selectedTours.map((tour) => (
               <TourCard
                 key={tour.id}
@@ -165,10 +164,25 @@ const Destinations = () => {
                 duration={tour.duration}
                 price={tour.price}
                 category={tour.category}
-                className="tour-intro-card destinations-styles"
                 images={tour.images}
               />
             ))}
+            <Link to="/tours" className="destination-cta-card">
+              <div className="destination-cta-card__inner">
+                <span className="destination-cta-card__label">
+                  Popular in Istanbul
+                </span>
+                <h3 className="destination-cta-card__heading">
+                  Browse all our tours
+                </h3>
+                <p className="destination-cta-card__sub">
+                  9 curated experiences — from city walks to culinary adventures
+                </p>
+                <div className="destination-cta-card__btn">
+                  Explore all tours →
+                </div>
+              </div>
+            </Link>
           </div>
         )}
         <Link to="/travel-guide" className="destinations-stories">

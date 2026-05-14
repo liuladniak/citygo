@@ -1,0 +1,239 @@
+// @use "../../styles/partials/variables" as *;
+// @use "../../styles/partials/mixins" as *;
+
+// // ─── sticky bottom bar — mobile only ─────────────────────────────────────────
+// .mobile-booking-bar {
+//   position: fixed;
+//   bottom: 0;
+//   left: 0;
+//   right: 0;
+//   z-index: 200;
+//   background: white;
+//   border-top: 1px solid #e5e7eb;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   padding: 1.2rem $space-x-small;
+//   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+
+//   // hide on tablet+ — desktop shows inline booking form
+//   @include tablet {
+//     display: none;
+//   }
+
+//   &__price {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.2rem;
+//   }
+
+//   &__price-main {
+//     font-size: 1.6rem;
+//     font-weight: 700;
+//     color: $charcoal;
+//   }
+
+//   &__price-old {
+//     font-size: 1.2rem;
+//     text-decoration: line-through;
+//     color: #9ca3af;
+//   }
+
+//   &__price-new {
+//     font-size: 1.6rem;
+//     font-weight: 700;
+//     color: $success;
+//   }
+
+//   &__btn {
+//     background: $main-maroon;
+//     color: white;
+//     border: none;
+//     border-radius: $border-radius-main;
+//     padding: 1.2rem 3.2rem;
+//     font-size: 1.5rem;
+//     font-weight: 700;
+//     font-family: inherit;
+//     cursor: pointer;
+//     transition: opacity 0.2s;
+
+//     &:hover {
+//       opacity: 0.88;
+//     }
+//   }
+// }
+
+// // ─── slide-up overlay panel ───────────────────────────────────────────────────
+// .mobile-booking-overlay {
+//   position: fixed;
+//   inset: 0;
+//   background: rgba(0, 0, 0, 0.5);
+//   z-index: 300;
+//   display: flex;
+//   align-items: flex-end;
+
+//   @include tablet {
+//     display: none;
+//   }
+// }
+
+// .mobile-booking-panel {
+//   background: white;
+//   width: 100%;
+//   max-height: 92vh;
+//   overflow-y: auto;
+//   border-radius: $border-radius $border-radius 0 0;
+//   padding: $space-x-small;
+//   position: relative;
+//   animation: slideUp 0.3s ease;
+
+//   &__close {
+//     position: absolute;
+//     top: 1.2rem;
+//     right: 1.2rem;
+//     background: #f3f4f6;
+//     border: none;
+//     border-radius: 50%;
+//     width: 3.2rem;
+//     height: 3.2rem;
+//     font-size: 1.4rem;
+//     cursor: pointer;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     transition: background 0.2s;
+
+//     &:hover {
+//       background: #e5e7eb;
+//     }
+//   }
+// }
+
+// @keyframes slideUp {
+//   from {
+//     transform: translateY(100%);
+//   }
+//   to {
+//     transform: translateY(0);
+//   }
+// }
+
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+// ─── sticky bottom bar — mobile only ─────────────────────────────────────────
+.mobile-booking-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem $space-x-small;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+
+  // hide on desktop-s+ — inline booking form appears at 1025px
+  @include desktop-s {
+    display: none;
+  }
+
+  &__price {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__price-main {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: $charcoal;
+  }
+
+  &__price-old {
+    font-size: 1.2rem;
+    text-decoration: line-through;
+    color: #9ca3af;
+  }
+
+  &__price-new {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: $success;
+  }
+
+  &__btn {
+    background: $main-maroon;
+    color: white;
+    border: none;
+    border-radius: $border-radius-main;
+    padding: 1.2rem 3.2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.88;
+    }
+  }
+}
+
+// ─── slide-up overlay panel ───────────────────────────────────────────────────
+.mobile-booking-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+
+  @include desktop-s {
+    display: none;
+  }
+}
+
+.mobile-booking-panel {
+  background: white;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: $border-radius $border-radius 0 0;
+  padding: $space-x-small;
+  position: relative;
+  animation: slideUp 0.3s ease;
+
+  &__close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 50%;
+    width: 3.2rem;
+    height: 3.2rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #e5e7eb;
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

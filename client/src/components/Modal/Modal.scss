@@ -1,43 +1,94 @@
+// @use "../../styles/partials/mixins" as *;
+// @use "../../styles/partials/variables" as *;
+
+// .modal-overlay {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+
+//   background-color: rgba(0, 0, 0, 0.5);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   z-index: 1000;
+// }
+
+// .modal {
+//   position: unset;
+//   overflow-x: hidden;
+
+//   background-color: #fff;
+//   max-width: 80rem;
+//   max-height: 100%;
+//   overflow-y: auto;
+//   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+//   @include border-radius;
+// }
+
+// .modal-close {
+//   position: absolute;
+//   top: 10px;
+//   right: 10px;
+//   background: none;
+//   border: none;
+//   cursor: pointer;
+//   background-color: #fff;
+//   padding: 0.4rem;
+//   border-radius: 50%;
+// }
+
+// .modal-content {
+// }
+
 @use "../../styles/partials/mixins" as *;
 @use "../../styles/partials/variables" as *;
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: $space-x-small;
 }
 
-.modal {
-  position: unset;
-  overflow-x: hidden;
-
-  background-color: #fff;
-  max-width: 80rem;
-  max-height: 100%;
+.modal-content {
+  width: 100%;
+  max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   @include border-radius;
+
+  @include tablet {
+    width: auto;
+  }
 }
 
 .modal-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: white;
   border: none;
   cursor: pointer;
-  background-color: #fff;
-  padding: 0.4rem;
+  padding: 0.6rem;
   border-radius: 50%;
-}
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  transition: background 0.2s;
 
-.modal-content {
+  &:hover {
+    background: #f3f4f6;
+  }
+
+  img {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
 }
