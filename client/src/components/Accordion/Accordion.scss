@@ -22,33 +22,52 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 2.4rem;
+    padding: 1.6rem;
     cursor: pointer;
     background: white;
     width: 100%;
     border: none;
     text-align: left;
-    gap: 2rem;
+    gap: 1.6rem;
     transition: background 0.2s;
+    min-height: 5.6rem;
+
+    @include tablet {
+      padding: 2rem 2.4rem;
+      min-height: unset;
+    }
 
     &:hover {
       background: $warm-gray;
     }
 
     &__question {
-      font-size: 1.6rem;
-      font-weight: 500;
+      font-size: 1.4rem;
+      font-weight: 600;
       color: $charcoal;
       line-height: 1.4;
+
+      @include tablet {
+        font-size: 1.6rem;
+      }
     }
 
     &__icon {
       flex-shrink: 0;
       color: $main-teal;
+      width: 2rem;
+      height: 2rem;
+
+      @include tablet {
+        width: 2.4rem;
+        height: 2.4rem;
+      }
     }
   }
 
   &-chevron {
+    width: 100%;
+    height: 100%;
     transition: transform 0.3s ease;
 
     &--open {
@@ -59,7 +78,9 @@
   &-body {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.35s ease, opacity 0.3s ease;
+    transition:
+      max-height 0.35s ease,
+      opacity 0.3s ease;
     opacity: 0;
 
     &--active {
@@ -68,10 +89,15 @@
     }
 
     &__text {
-      padding: 0 2.4rem 2rem;
-      font-size: 1.4rem;
+      padding: 0 1.6rem 1.6rem;
+      font-size: 1.3rem;
       color: #6b7280;
       line-height: 1.7;
+
+      @include tablet {
+        padding: 0 2.4rem 2rem;
+        font-size: 1.4rem;
+      }
     }
   }
 }

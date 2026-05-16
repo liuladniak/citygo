@@ -7,10 +7,10 @@
     gap: $space-x-small;
   }
   &-img {
+    flex-shrink: 0;
     width: 13rem;
     height: 13rem;
     overflow: hidden;
-    object-fit: cover;
     border-radius: $border-radius;
   }
 

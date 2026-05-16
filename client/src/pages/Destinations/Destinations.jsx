@@ -22,6 +22,7 @@ import arrowUpRightIcon from "../../assets/icons/arrow-up-right.svg";
 import Testimonials from "../../components/Testimonials/Testimonials";
 import ToursSkeletonCard from "../../components/LoadingSceleton/ToursSkeletonCard";
 import { Link } from "react-router-dom";
+
 const faqs = [
   {
     id: 1,
@@ -72,10 +73,6 @@ const Destinations = () => {
   const selectedToursIds = [2, 5, 9];
   const selectedTours = tours.filter((tour) =>
     selectedToursIds.includes(tour.id),
-  );
-  const romanticToursIds = [2, 6, 8];
-  const romanticTours = tours.filter((tour) =>
-    romanticToursIds.includes(tour.id),
   );
 
   useEffect(() => {
@@ -185,25 +182,6 @@ const Destinations = () => {
             </Link>
           </div>
         )}
-        <Link to="/travel-guide" className="destinations-stories">
-          <h3 className="destinations-heading">
-            Get ideas from latest articles
-          </h3>
-          <div className="destinations-stories__cols">
-            <div className="destinations-stories__col--1">
-              <StoryCard article={articles} />
-            </div>
-            <div className="destinations-stories__col--2">
-              {articlesSmall.map((article, index) => (
-                <StoryCardSmall
-                  key={index}
-                  articles={articlesSmall}
-                  articleIndex={index}
-                />
-              ))}
-            </div>
-          </div>
-        </Link>
       </div>
 
       <div className="destinations-list">
@@ -215,7 +193,7 @@ const Destinations = () => {
           through authentic local encounters.
         </p>
 
-        <div className="destination-cards">
+        <div className="destination-cards destination-cards--immersive">
           {immersive.map((destination) => (
             <div key={destination.id} className="destination-card">
               <div className="destination-card__img">
@@ -243,91 +221,41 @@ const Destinations = () => {
           ))}
         </div>
       </div>
-      <div className="destinations-contact">
-        <h2 className="destinations-heading">
-          Here to Help, Whenever You Need
-        </h2>
-        <p className="destinations-desc">
-          We’re here to make your travel planning effortless and enjoyable.
-          Whether you’re looking for advice, want to chat about tours, or need
-          help tailoring your itinerary, our experienced team is ready to
-          assist. Simply here to help you to help you navigate your travel
-          choices and find what feels right.
-        </p>
-        <div className="destinations-contact__options">
-          <div className="destinations-contact__option">
-            <div className="destinations-contact__icon"></div>
-            <h4 className="destinations-contact__title">Call us</h4>
-          </div>
-          <div className="destinations-contact__option">
-            <div className="destinations-contact__icon"></div>
-            <h4 className="destinations-contact__title">Send a message</h4>
-          </div>
-          <div className="destinations-contact__option">
-            <div className="destinations-contact__icon"></div>
-            <h4 className="destinations-contact__title">On tour support</h4>
-          </div>
-          <div className="destinations-contact__option">
-            <div className="destinations-contact__icon"></div>
-            <h4 className="destinations-contact__title">Visit our office</h4>
-          </div>
-        </div>
-      </div>
 
-      <div className="destinations-list romantic">
-        <h2 className="destinations-heading">Romantic gateaway & Boat Trips</h2>
-        <p className="destinations-desc">
-          "Set sail on the Bosphorus and discover Istanbul’s most romantic spots
-          from the water. Perfect for couples seeking a serene and unforgettable
-          escape.
-        </p>
-
-        {isLoading ? (
-          <div className="tour-cards--skeleton">
-            {Array(3)
-              .fill()
-              .map((_, index) => (
-                <ToursSkeletonCard
-                  key={index}
-                  className="tour-intro-card--skeleton"
-                />
-              ))}
+      <Link to="/travel-guide" className="destinations-stories">
+        <h3 className="destinations-heading">Get ideas from latest articles</h3>
+        <div className="destinations-stories__cols">
+          <div className="destinations-stories__col--1">
+            <StoryCard article={articles} />
           </div>
-        ) : (
-          <div className="destination-cards">
-            {romanticTours.map((tour) => (
-              <TourCard
-                key={tour.id}
-                id={tour.id}
-                tour_name={tour.tour_name}
-                tour_thumbnail={tour.images[0]}
-                highlights={tour.highlights}
-                duration={tour.duration}
-                price={tour.price}
-                category={tour.category}
-                className="tour-intro-card"
-                images={tour.images}
+          <div className="destinations-stories__col--2">
+            {articlesSmall.map((article, index) => (
+              <StoryCardSmall
+                key={index}
+                articles={articlesSmall}
+                articleIndex={index}
               />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      </Link>
 
       <div className="destinations-own">
-        <div className="destinations-own__col destinations-own__col--1">
-          <h2 className="destinations-heading">
-            You don't have to choose - Create your own itinerary
-          </h2>
-          <p className="destinations-own__desc">
-            Just let us know - we will take care of the rest
-          </p>
-          <Button className="btn--cta">Learn More</Button>
-        </div>
-        <div className="destinations-own__col">
+        <h2 className="destinations-heading">Create your own itinerary</h2>
+        <div className="destinations-own__card">
           <img src={chooseImg} alt="" loading="lazy" />
+          <div className="destinations-own__overlay">
+            <h3 className="destinations-own__heading">
+              Your vision, expertly arranged.
+            </h3>
+            <p className="destinations-own__subtitle">
+              Share what excites you - we'll handle every detail, from first
+              stop to last.
+            </p>
+            <Button className="btn--cta">Learn More</Button>
+          </div>
         </div>
       </div>
-
       <Testimonials />
       <div className="destinations-glimpse">
         <h3 className="destinations-heading">
@@ -336,9 +264,6 @@ const Destinations = () => {
         <h2>Connect with us on our Instagram page #CityGo</h2>
         <div>
           <div className="destinations-img">
-            <div className="glimpse-el">
-              <img className="glimpse-el" src={imgExp6} alt="" />
-            </div>
             <div className="glimpse-el">
               <VideoComponent src={videoExp} speed="1" />
             </div>
@@ -356,6 +281,9 @@ const Destinations = () => {
             </div>
             <div className="glimpse-el">
               <VideoComponent src={videoExp5} speed="2" />
+            </div>
+            <div className="glimpse-el">
+              <img className="glimpse-el" src={imgExp6} alt="" />
             </div>
           </div>
         </div>

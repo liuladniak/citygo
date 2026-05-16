@@ -2,155 +2,312 @@
 @use "../../styles/partials/mixins" as *;
 
 .destinations {
-  margin-top: 6rem;
+  margin-top: $space-medium;
   @include layout-constrain;
-  &-testimonials {
-    background-color: $supportive-2;
-    margin-top: $space-large;
-    padding: $space-medium;
 
-    .testimonials-list {
-      display: flex;
-      gap: $space-large;
-      margin-top: $space-medium;
-      flex-direction: column;
-
-      @include tablet {
-        flex-direction: row;
-      }
-    }
-    .testimonials-item {
-      border-radius: $border-radius;
-      padding: $space-x-small;
-      background-color: #fff;
-      font-size: 1.4rem;
-      flex: 1;
-    }
+  @include tablet {
+    margin-top: 6rem;
   }
-  &-glimpse {
-    margin-top: $space-large;
-    .glimpse-el {
-      flex: 1;
 
-      &--2 {
-        flex: 1.8;
-      }
-    }
-  }
   &-list {
     margin-top: $space-medium;
-  }
-  &-categories {
-    display: flex;
-    gap: 1.6rem;
-    flex-wrap: wrap;
-  }
-  &-img {
-    height: 30rem;
-    border-radius: $border-radius;
-    display: flex;
-    overflow: scroll;
-  }
-
-  &-stories__cols {
-    display: flex;
-    gap: $space-medium;
-    flex-direction: column;
 
     @include tablet {
-      flex-direction: row;
+      margin-top: $space-large;
     }
   }
-  &-stories {
-    margin-top: $space-large;
-    display: block;
-  }
-  &-stories__col--1,
-  &-stories__col--2 {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  &-stories__col--2 {
-    gap: $space-x-small;
-  }
+
   &-heading {
-    font-size: 2.4rem;
-    font-weight: 500;
-    margin-bottom: $space-medium;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: $space-x-small;
+    line-height: 1.2;
 
     @include tablet {
-      font-size: 3.2rem;
+      font-size: 2.8rem;
+      margin-bottom: $space-medium;
     }
 
     @include desktop-s {
-      font-size: 3.6rem;
+      font-size: 3.2rem;
     }
   }
+
   &-desc {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: #4b5563;
     margin-bottom: $space-medium;
+
+    @include tablet {
+      font-size: 1.6rem;
+    }
 
     @include desktop-s {
       width: 70%;
     }
   }
-  &-own {
-    background-color: $supportive-1;
-    display: flex;
-    gap: $space-large;
-    padding: $space-large;
-    margin-top: $space-large;
-    flex-direction: column;
 
-    @include tablet {
-      flex-direction: row;
-      height: 40rem;
+  // ─── categories ────────────────────────────────────────────────────────────
+  &-categories {
+    display: flex;
+    gap: $space-x-small;
+    flex-wrap: wrap;
+  }
+
+  &-stories {
+    margin-top: $space-large;
+    display: block;
+
+    &__cols {
+      display: flex;
+      gap: $space-medium;
+      flex-direction: column;
+
+      @include tablet {
+        flex-direction: row;
+        gap: $space-large;
+      }
     }
 
-    &__col {
+    &__col--1,
+    &__col--2 {
       flex: 1;
-      overflow: hidden;
-      border-radius: $border-radius;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
 
-      &--1 {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+    &__col--2 {
+      gap: $space-x-small;
+    }
+  }
+
+  &-own {
+    margin-top: $space-large;
+    @include border-radius;
+    overflow: hidden;
+    position: relative;
+
+    & > .destinations-heading {
+      margin-bottom: $space-x-small;
+    }
+
+    &__card {
+      position: relative;
+      width: 100%;
+      height: 32rem;
+
+      @include tablet {
+        height: 44rem;
+      }
+
+      @include desktop-s {
+        height: 52rem;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+      }
+    }
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.78) 0%,
+        rgba(0, 0, 0, 0.35) 55%,
+        rgba(0, 0, 0, 0.08) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: $space-medium $space-x-small;
+      gap: $space-x-small;
+
+      @include tablet {
+        padding: $space-large;
+      }
+    }
+
+    &__heading {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: white;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+
+      @include tablet {
+        font-size: 3.2rem;
+      }
+
+      @include desktop-s {
+        font-size: 4rem;
+      }
+    }
+
+    &__subtitle {
+      font-size: 1.4rem;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.6;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      max-width: 52rem;
+      font-weight: 500;
+
+      @include tablet {
+        font-size: 1.8rem;
+      }
+    }
+
+    .btn--cta {
+      background: white;
+      color: $main-teal;
+      width: fit-content;
+      margin-top: $space-x-small;
+
+      &:hover {
+        background: #f0f9ff;
       }
     }
   }
-  &-contact {
-    display: none;
-    background-color: $supportive-1;
+
+  &-testimonials {
+    background-color: $supportive-2;
     margin-top: $space-large;
-    height: 40rem;
+    padding: $space-medium $space-x-small;
+    @include border-radius;
 
-    &__desc {
-      font-size: 1.6rem;
-    }
-    &__options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: $space-small;
+    @include tablet {
+      padding: $space-medium;
     }
 
-    &__option {
-      display: flex;
-      gap: $space-small;
-      align-items: center;
-      width: 48%;
+    @include desktop-s {
+      padding: $space-large;
     }
-    &__icon {
-      width: 6rem;
-      height: 6rem;
-      background-color: $supportive-3;
-      border-radius: $border-radius;
+
+    .testimonials-list {
+      display: flex;
+      gap: $space-medium;
+      margin-top: $space-medium;
+      flex-direction: column;
+
+      @include tablet {
+        flex-direction: row;
+        gap: $space-large;
+      }
+    }
+
+    .testimonials-item {
+      @include border-radius;
+      padding: $space-x-small;
+      background-color: white;
+      flex: 1;
     }
   }
+
+  &-glimpse {
+    margin-top: $space-large;
+
+    h2 {
+      font-size: 1.3rem;
+      color: #9ca3af;
+      font-weight: 400;
+      margin-top: 0.4rem;
+      margin-bottom: $space-x-small;
+
+      @include tablet {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  &-img {
+    display: flex;
+    gap: $space-x-small;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    border-radius: $border-radius;
+    height: 26rem;
+    padding-bottom: 1.6rem;
+    &::-webkit-scrollbar {
+      height: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 10rem;
+      margin: 0 4rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 10rem;
+      cursor: pointer;
+
+      &:hover {
+        background: #9ca3af;
+      }
+    }
+
+    scrollbar-color: #d1d5db #f3f4f6;
+    scrollbar-width: thin;
+
+    @include tablet {
+      height: 34rem;
+      gap: $space-small;
+    }
+
+    @include desktop-s {
+      height: 44rem;
+    }
+
+    .glimpse-el {
+      flex: 0 0 20rem;
+      scroll-snap-align: start;
+      border-radius: $border-radius;
+      overflow: hidden;
+      flex-shrink: 0;
+
+      @include tablet {
+        flex: 0 0 26rem;
+      }
+
+      @include desktop-s {
+        flex: 0 0 32rem;
+      }
+
+      img,
+      video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      &--2 {
+        flex: 0 0 30rem;
+
+        @include tablet {
+          flex: 0 0 38rem;
+        }
+
+        @include desktop-s {
+          flex: 0 0 48rem;
+        }
+      }
+    }
+  }
+
   &-faq {
     margin-top: $space-large;
+    margin-bottom: $space-large;
   }
 }
 
@@ -169,42 +326,72 @@
       grid-template-columns: repeat(3, 1fr);
       gap: $space-large;
     }
+
+    &--immersive {
+      grid-template-columns: 1fr;
+
+      @include mobile-m {
+        grid-template-columns: 1fr;
+      }
+
+      @include tablet {
+        grid-template-columns: repeat(3, 1fr);
+        gap: $space-medium;
+      }
+
+      @include desktop-s {
+        gap: $space-large;
+      }
+    }
   }
+
   &-card {
-    background-color: $supportive-2;
-    border-radius: $border-radius;
+    @include border-radius;
     overflow: hidden;
-    flex: 1;
     position: relative;
-    color: #fff;
+    color: white;
 
     &__img {
-      height: 40rem;
-      object-fit: cover;
+      height: 36rem;
 
-      & img {
+      @include tablet {
+        height: 42rem;
+      }
+
+      img {
         width: 100%;
         height: 100%;
+        object-fit: cover;
+        display: block;
       }
     }
 
     &__title {
       font-size: 1.8rem;
-      line-height: 2.4rem;
+      font-weight: 700;
+      line-height: 1.4;
       text-align: center;
-      margin-bottom: $space-small;
+      margin-bottom: $space-x-small;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 
       @include tablet {
         font-size: 2rem;
+        text-align: left;
+        line-height: 1.3;
       }
     }
+
     &__desc {
-      font-size: 1.4rem;
-    }
-    &__text {
-      width: 100%;
-      font-size: 1.4rem;
-      margin-top: 1.6rem;
+      font-size: 1.3rem;
+      line-height: 1.5;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+      margin-bottom: $space-x-small;
+      text-align: center;
+
+      @include tablet {
+        text-align: left;
+        font-size: 1.4rem;
+      }
     }
   }
 }
@@ -218,18 +405,20 @@
   min-height: 42rem;
   padding: 1.6rem;
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
   transition:
     background 0.2s ease,
     transform 0.2s ease;
-  position: relative;
-  overflow: hidden;
 
   @include mobile-m {
     display: flex;
   }
+
   @include tablet {
     padding: $space-medium;
   }
+
   @include desktop-s {
     display: none;
   }
@@ -281,7 +470,6 @@
     font-size: 1.3rem;
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.5;
-
     display: none;
 
     @include tablet {
@@ -302,6 +490,7 @@
     width: 100%;
     justify-content: center;
     white-space: nowrap;
+    box-sizing: border-box;
     transition: background 0.2s;
 
     @include tablet {
@@ -314,9 +503,6 @@
       background: #f0f9ff;
     }
   }
-}
-.romantic {
-  display: none;
 }
 
 .destinations-styles {

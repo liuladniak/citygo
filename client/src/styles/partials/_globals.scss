@@ -24,6 +24,7 @@ video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  max-width: 100%;
 }
 p,
 h1,
@@ -49,7 +50,10 @@ body {
     display: none;
   }
 }
-
+.logo-img {
+  height: auto;
+  object-fit: contain;
+}
 .tours {
   &-heading {
     font-size: 3rem;
@@ -96,10 +100,17 @@ body {
   width: 100%;
   top: 0;
   left: 0;
+  // background: linear-gradient(
+  //   to top,
+  //   rgba(0, 0, 0, 0.9) 0%,
+  //   rgba(0, 0, 0, 0) 70%
+  // );
+
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0) 70%
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.05) 100%
   );
 }
 
@@ -121,9 +132,4 @@ a,
   @include desktop-s {
     min-height: unset;
   }
-}
-
-img {
-  max-width: 100%;
-  height: auto;
 }
