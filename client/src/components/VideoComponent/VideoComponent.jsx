@@ -1,5 +1,6 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import "./VideoComponent.scss";
+
 const VideoComponent = ({ className, src, speed = 1.0 }) => {
   const videoRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -19,7 +20,8 @@ const VideoComponent = ({ className, src, speed = 1.0 }) => {
         autoPlay
         loop
         muted
-        className={`video ${isLoaded ? "visible" : "hidden"} `}
+        playsInline
+        className={`video ${isLoaded ? "visible" : "hidden"}`}
         onLoadedData={handleLoadedData}
       >
         <source src={src} />
