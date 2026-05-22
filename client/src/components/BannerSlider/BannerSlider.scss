@@ -5,12 +5,16 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  margin-top: $space-large;
+  margin-top: $space-medium;
+  @include border-radius;
+
+  @include tablet {
+    margin-top: $space-large;
+  }
 }
 
 .slider-container {
   width: 100%;
-  height: 100%;
   overflow: hidden;
   position: relative;
 }
@@ -18,17 +22,26 @@
 .slider-track {
   display: flex;
   transition: transform 0.5s ease-in-out;
+  will-change: transform;
 }
 
 .slider-card {
   position: relative;
-  width: 100%;
-  height: 100%;
+  flex: 0 0 100%;
+  min-width: 0;
 
   &__wrp {
-    object-fit: cover;
-    width: 123.4rem;
-    height: 30rem;
+    width: 100%;
+    height: 22rem;
+    overflow: hidden;
+
+    @include tablet {
+      height: 36rem;
+    }
+
+    @include desktop-s {
+      height: 48rem;
+    }
   }
 }
 
@@ -36,37 +49,95 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .text-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  text-align: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: $space-x-small;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+
+  @include tablet {
+    padding: $space-medium;
+  }
+
+  @include desktop-s {
+    padding: $space-large;
+  }
+
+  h2 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    max-width: 70%;
+
+    @include tablet {
+      font-size: 2.8rem;
+      max-width: 60%;
+    }
+
+    @include desktop-s {
+      font-size: 3.6rem;
+      max-width: 50%;
+    }
+  }
 }
 
 .slider-dots {
   position: absolute;
-  bottom: 10px;
+  bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 10px;
+  gap: 0.4rem;
+
+  @include tablet {
+    bottom: 1.6rem;
+    gap: 0.6rem;
+  }
 }
 
 .dot {
-  background: rgba(255, 255, 255, 0.5);
-  width: 100px;
-  height: 8px;
-  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.45);
+  width: 2.4rem;
+  min-height: unset;
+  height: 0.3rem;
+  border-radius: 10rem;
   border: none;
   cursor: pointer;
-}
+  transition:
+    background 0.3s ease,
+    width 0.3s ease;
 
-.dot.active {
-  background: white;
+  @include tablet {
+    width: 5rem;
+    height: 0.4rem;
+  }
+
+  @include desktop-s {
+    width: 8rem;
+  }
+
+  &.active {
+    background: white;
+    width: 4rem;
+
+    @include tablet {
+      width: 7rem;
+    }
+
+    @include desktop-s {
+      width: 10rem;
+    }
+  }
 }

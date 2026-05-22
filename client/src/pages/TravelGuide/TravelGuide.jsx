@@ -1,5 +1,3 @@
-
-
 import "./TravelGuide.scss";
 import BannerSlider from "../../components/BannerSlider/BannerSlider";
 import { useEffect, useState } from "react";
@@ -41,13 +39,10 @@ const TravelGuide = () => {
 
         setArticles(data);
 
-        // --- UX LOGIC: Handling "All" vs Specific Categories ---
         if (category === "all") {
-          // Home page gets the magazine layout (Deduplicated)
           setBannerArticles(data.slice(0, 3));
           setCardArticles(data.slice(3));
         } else {
-          // Category pages: Hide banner and show all items in the grid
           setBannerArticles([]);
           setCardArticles(data);
         }
@@ -71,13 +66,11 @@ const TravelGuide = () => {
         <h1 className="tours-heading">Travel Guide</h1>
         <p className="tours-description">
           Stories, tips and inspiration for your Istanbul adventure. From hidden
-          gems to iconic landmarks — everything you need to explore like a
+          gems to iconic landmarks - everything you need to explore like a
           local.
         </p>
       </div>
 
-      {/* --- BANNER LOGIC --- */}
-      {/* We only show this on the "All" tab when content exists */}
       {category === "all" &&
         (isLoading ? (
           <BannerSkeleton />
@@ -87,7 +80,6 @@ const TravelGuide = () => {
           )
         ))}
 
-      {/* Category Filters */}
       <div className="guide-filters">
         {Object.keys(CATEGORY_MAP).map((catLabel) => {
           const catValue = CATEGORY_MAP[catLabel];

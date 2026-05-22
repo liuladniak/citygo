@@ -4,133 +4,88 @@
 .guide {
   width: 100%;
   @include layout-constrain;
-  margin-top: $space-large;
+  margin-top: $space-medium;
 
-  &__cols {
-    margin: $space-large auto;
-    display: flex;
-    gap: $space-large;
-  }
-  &__col {
-    flex: 1;
-    height: 20rem;
-    background-color: lightgreen;
-    border-radius: $border-radius;
-  }
-  &-banner {
-    height: 35rem;
-    width: 100%;
-    object-fit: cover;
-    overflow: hidden;
-    border-radius: $border-radius;
+  @include tablet {
     margin-top: $space-large;
-    position: relative;
-    &__cta {
-      background-color: white;
-      width: 50%;
-      z-index: 1;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 1.6rem;
-      border-radius: $border-radius;
-      margin: $space-small;
-      display: flex;
-      flex-direction: column;
-      gap: $space-small;
-    }
-
-    &__label {
-      text-transform: uppercase;
-    }
-    &__title {
-      font-size: 2.4rem;
-    }
-  }
-
-  &-rules {
-    display: flex;
-    gap: $space-large;
-  }
-
-  &-rule {
-    height: 20rem;
-    background-color: lightcoral;
-    flex: 1;
-    border-radius: $border-radius;
-    display: flex;
-    flex-direction: column;
-    gap: $space-x-small;
-    padding: 1.6rem;
-    &__title {
-      font-size: 1.6rem;
-      font-weight: 600;
-    }
-
-    &__desc,
-    &__link {
-      font-size: 1.4rem;
-    }
-
-    &__link {
-      font-weight: 600;
-      text-decoration: underline;
-    }
   }
 
   &-pagination {
-    width: 100%;
     display: flex;
+    align-items: center;
     justify-content: center;
-  }
-}
+    gap: $space-medium;
+    padding: $space-medium 0 $space-large;
 
-.guide-filters {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin: $space-medium 0 $space-small;
-}
-
-.guide-filter {
-  padding: 0.6rem 1.6rem;
-  border-radius: $border-radius-main;
-  border: 1px solid #ddd;
-  background: white;
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-
-  &:hover {
-    border-color: $main-teal;
-    color: $main-teal;
+    &__info {
+      font-size: 1.4rem;
+      color: #6b7280;
+    }
   }
 
-  &--active {
-    background: $main-teal;
-    color: white;
-    border-color: $main-teal;
+  &-filters {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin: $space-medium 0 $space-small;
+  }
+
+  &-filter {
+    padding: 0.6rem 1.4rem;
+    border-radius: $border-radius-main;
+    border: 1px solid #ddd;
+    background: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+
+    @include tablet {
+      font-size: 1.3rem;
+      padding: 0.6rem 1.6rem;
+    }
+
+    &:hover {
+      border-color: $main-teal;
+      color: $main-teal;
+    }
+
+    &--active {
+      background: $main-teal;
+      color: white;
+      border-color: $main-teal;
+    }
   }
 }
 
 .article {
   &-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+    grid-template-columns: 1fr;
     gap: $space-small;
     margin: $space-medium 0;
+
+    @include mobile-m {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include desktop-s {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   &-card {
-    border-radius: $border-radius;
+    @include border-radius;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     text-decoration: none;
     color: $charcoal;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
 
     &:hover {
       transform: translateY(-3px);
@@ -138,8 +93,12 @@
     }
 
     &__img {
-      height: 20rem;
+      height: 18rem;
       overflow: hidden;
+
+      @include tablet {
+        height: 20rem;
+      }
 
       img {
         width: 100%;
@@ -154,11 +113,15 @@
     }
 
     &__desc {
-      padding: 1.6rem;
+      padding: $space-x-small;
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
       flex: 1;
+
+      @include tablet {
+        padding: 1.6rem;
+      }
     }
 
     &__category {
@@ -170,9 +133,13 @@
     }
 
     &__title {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 600;
       line-height: 1.4;
+
+      @include tablet {
+        font-size: 1.6rem;
+      }
     }
 
     &__excerpt {
@@ -180,6 +147,10 @@
       color: #6b7280;
       line-height: 1.5;
       flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     &__meta {
@@ -187,18 +158,5 @@
       color: #9ca3af;
       margin-top: 0.4rem;
     }
-  }
-}
-
-.guide-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  padding: $space-medium 0;
-
-  &__info {
-    font-size: 1.4rem;
-    color: #6b7280;
   }
 }
