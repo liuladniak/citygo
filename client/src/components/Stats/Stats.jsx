@@ -1,15 +1,22 @@
 import "./Stats.scss";
 
-import statImg5 from "../../assets/images/stat-5.webp";
+import statImg4 from "../../assets/images/stat-3.webp";
+import statImg3 from "../../assets/images/stat-10.webp";
 import statImg2 from "../../assets/images/stat-11.webp";
-import statImg9 from "../../assets/images/stat-14.webp";
+import statImg1 from "../../assets/images/stat-2.webp";
 import { Fragment } from "react";
 
 const stats = [
-  { title: "Happy Travelers", value: "85K+", img: statImg9 },
+  { title: "Travelers", value: "85K+", img: statImg1 },
   { title: "Tour Guides", value: "45+", img: statImg2 },
-  { title: "Total Tours", value: "50+", img: statImg5 },
+  { title: "Total Tours", value: "50+", img: statImg3 },
 ];
+
+const tabletStat = {
+  title: "Years of Experience",
+  value: "12+",
+  img: statImg4,
+};
 
 const Stats = () => {
   return (
@@ -19,15 +26,18 @@ const Stats = () => {
           <Stat stat={stat} index={index} />
         </Fragment>
       ))}
+      <Stat stat={tabletStat} index={3} isTabletOnly />
     </div>
   );
 };
 
 export default Stats;
 
-const Stat = ({ stat, index }) => {
+const Stat = ({ stat, index, isTabletOnly }) => {
   return (
-    <div className={`stat-card stat-card--${index}`}>
+    <div
+      className={`stat-card stat-card--${index}${isTabletOnly ? " stat-card--tablet-only" : ""}${!stat.img ? " stat-card--no-img" : ""}`}
+    >
       <div className="stat-card__img">
         {stat.img && (
           <img

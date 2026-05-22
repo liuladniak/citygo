@@ -1,5 +1,5 @@
 import "./About.scss";
-import teamImg from "../../assets/images/team.webp";
+import teamImg from "../../assets/images/about-team1.webp";
 import WhyUs from "../../components/WhyUs/WhyUs";
 import ToursIntroList from "../../components/ToursIntroList/ToursIntroList";
 import Button from "../../components/Button/Button";
@@ -16,18 +16,12 @@ const About = () => {
           Your Trusted Partner in Exploring the city
         </h2>
         <p className="about-hero__desc">
-          Since 2012, CityGo has been making travel unforgettable by connecting
-          over 85000 explorers with local guides in Istanbul and its surrounding
-          areas. Our mission is to offer tours that go beyond the usual tourist
-          spots. Whether it's tasting authentic street food in Istanbul's
-          vibrant markets, exploring hidden alleyways in the Old City, or
-          discovering secret viewpoints along the Bosphorus, we bring travelers
-          closer to the heart of this unique region. We’re proud that many of
-          our tours receiving 5-star reviews. Our guides aren’t just experts;
-          they’re passionate locals who share their unique stories and favorite
-          spots that most tourists miss. From historical walking tours to food
-          and cultural experiences, we offer diverse options for every kind of
-          traveler.
+          Since 2012, CityGo has connected over 85,000 travelers with local
+          guides across Istanbul and its surrounding areas. We go beyond the
+          usual tourist spots — street food in the markets, hidden alleyways in
+          the Old City, secret viewpoints along the Bosphorus. Our guides are
+          passionate locals who share the stories and places most visitors never
+          find. Whatever kind of traveler you are, there's a tour built for you.
         </p>
       </div>
 
@@ -38,21 +32,14 @@ const About = () => {
         <div className="about-team__story">
           <h2 className="about-team__heading">Where it all began</h2>
           <p className="about-team__desc">
-            CityGo began with a desire to offer travelers more than just
-            sightseeing - it’s about connecting with the soul of Istanbul.
-            Founded by a team of local explorers, we set out to share the city’s
-            stories, culture, and spirit with those who seek a deeper journey,
-            beyond the usual tourist paths. We craft experiences that celebrate
-            Istanbul in all its dimensions - from the majestic landmarks to the
-            quiet corners where history whispers. Our tours are for those who
-            want to immerse themselves in the real Istanbul, whether it's
-            navigating the bustling streets, savoring authentic flavors, or
-            discovering hidden gems along the Bosphorus. Quality and
-            authenticity drive us. Our passionate guides are more than experts -
-            they’re locals with stories, eager to share their love for the city.
-            Every tour with CityGo is a step closer to understanding Istanbul
-            through the eyes of those who call it home. At CityGo, we believe
-            travel should be personal, meaningful, and unforgettable.
+            CityGo began with a simple idea: Istanbul deserves more than a
+            highlights reel. Founded by a team of local explorers, we set out to
+            share the city's stories, culture, and hidden corners with travelers
+            who want something real. Our guides aren't just experts; they're
+            locals with their own relationship to this city, eager to show you
+            the parts that don't make it onto the map. Every tour with CityGo is
+            a step closer to understanding Istanbul through the eyes of those
+            who call it home.
           </p>
         </div>
       </div>
@@ -80,13 +67,14 @@ const About = () => {
           Istanbul and inspiring travelers together!
         </p>
       </div>
-      <div className="container-centered about-careers">
-        <div className="overlay--category"></div>
-        <h2 className="about-section__heading about-section__heading--careers">
-          Want to become a part of our team?
-        </h2>
 
-        <Button>View positions</Button>
+      <div className="about-careers-wrp">
+        <div className="about-careers">
+          <h2 className="about-section__heading about-section__heading--careers">
+            Want to become a part of our team?
+          </h2>
+          <Button className="btn--careers">View positions</Button>
+        </div>
       </div>
 
       <div className="container-centered">
