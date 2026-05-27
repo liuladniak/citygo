@@ -14,6 +14,7 @@ import Tabs from "../../components/Tabs/Tabs";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRequireAuth } from "../../hooks/useRequireAuth";
+import PageLoader from "../../components/UI/PageLoader";
 
 const Account = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +47,7 @@ const Account = () => {
         `${API_URL}/api/bookings?userId=${userId}`,
         {
           headers: { Authorization: "Bearer " + token },
-        }
+        },
       );
       setBookings(response.data);
     } catch (error) {
@@ -57,7 +58,7 @@ const Account = () => {
   if (isChecking || isLoading) {
     return (
       <main className="dashboard">
-        <p className="loading">Loading...</p>
+        <PageLoader />
       </main>
     );
   }

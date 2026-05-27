@@ -5,6 +5,7 @@ import Button from "../../components/Button/Button";
 import { useSelector } from "react-redux";
 import BookingStatus from "../../components/BookingStatus/BookingStatus";
 import { useRequireAuth } from "../../hooks/useRequireAuth";
+import PageLoader from "../../components/UI/PageLoader";
 
 function ManageBookings() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -34,7 +35,7 @@ function ManageBookings() {
   if (isChecking || (isLoading && session)) {
     return (
       <main className="dashboard">
-        <p className="loading">Loading...</p>
+        <PageLoader />
       </main>
     );
   }
