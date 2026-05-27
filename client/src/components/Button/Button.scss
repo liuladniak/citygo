@@ -274,4 +274,28 @@
   &--careers {
     background-color: white;
   }
+
+  &--save {
+    background-color: $main-teal;
+    color: $main-white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+
+    &:hover {
+      background-color: darken($main-teal, 8%);
+    }
+  }
+
+  &--cancel {
+    background-color: transparent;
+    color: $charcoal;
+    border: 1.5px solid #d1d5db;
+    height: 3.6rem;
+    padding: 0 2rem;
+    font-weight: 500;
+
+    &:hover {
+      background-color: #f3f4f6;
+      border-color: #9ca3af;
+    }
+  }
 }

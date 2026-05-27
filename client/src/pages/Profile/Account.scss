@@ -3,21 +3,29 @@
 
 .account {
   width: 100%;
-  margin: $space-large auto;
-  max-width: $max-width;
+  @include layout-constrain;
+  margin-top: $space-medium;
+  margin-bottom: $space-large;
+
+  @include tablet {
+    margin-top: $space-large;
+  }
 
   &-heading {
-    font-size: 2.4rem;
-    font-weight: 500;
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: $space-medium;
-    width: 100%;
 
     @include tablet {
-      font-size: 3.2rem;
+      font-size: 2.8rem;
     }
 
     @include desktop-s {
-      font-size: 3.6rem;
+      font-size: 3.2rem;
     }
+  }
+
+  &-cols {
+    width: 100%;
   }
 }

@@ -1,9 +1,11 @@
-import "./Tab4Content.scss";
 import "./TabContent.scss";
+import { useState } from "react";
 
-const Tab4Content = () => {
+const Tab4Content = ({ user }) => {
+  const [emailPromo, setEmailPromo] = useState(user?.email_promotions ?? false);
+
   return (
-    <div>
+    <div className="tab-content tabs-col--2">
       <div className="account-header">
         <h2 className="account-heading">Promotions</h2>
         <span className="account-subheading">
@@ -12,10 +14,26 @@ const Tab4Content = () => {
         </span>
       </div>
 
-      <div className="account-details">
+      <div className="account-details account-details--static">
         <div className="account-detail">
-          <h3 className="account-detail__title">Email</h3>
-          <span className="account-subheading">On/Off</span>
+          <h3 className="account-detail__title">Email notifications</h3>
+          <div className="account-detail__action">
+            <button
+              className={`promo-toggle${emailPromo ? " promo-toggle--on" : ""}`}
+              type="button"
+              onClick={() => setEmailPromo(!emailPromo)}
+              aria-label="Toggle email promotions"
+            >
+              <span className="promo-toggle__knob" />
+            </button>
+          </div>
+          <div className="account-detail__always-row">
+            <span
+              className={`field__input field__input--readonly${!emailPromo ? " field__input--empty" : ""}`}
+            >
+              {emailPromo ? "Subscribed to email updates" : "Not subscribed"}
+            </span>
+          </div>
         </div>
       </div>
     </div>
