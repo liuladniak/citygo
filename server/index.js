@@ -25,6 +25,7 @@ import taskRoutes from "./routes/taskRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import webhook from "./routes/webhook.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 
 import generateAutoTasks from "./jobs/autoTaskGenerator.js";
 import { sendReminders } from "./jobs/reminderJob.js";
@@ -35,7 +36,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticFilesPath = path.resolve("public");
 const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map((origin) =>
-  origin.trim().replace(/\/$/, "")
+  origin.trim().replace(/\/$/, ""),
 );
 
 app.use(
@@ -47,7 +48,7 @@ app.use(
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
-  })
+  }),
 );
 
 if (process.env.NODE_ENV === "development") {
@@ -60,7 +61,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(
   "/api/payment/webhook",
   express.raw({ type: "application/json" }),
-  webhook
+  webhook,
 );
 
 app.use(express.json());
@@ -80,7 +81,7 @@ app.use("/api/company", requireAuth, companyRoutes);
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 app.use("/api/articles", articleRoutes);
 app.use("/api/ai", aiRoutes);
-
+app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
 cron.schedule("0 * * * *", generateAutoTasks);
 cron.schedule(
@@ -89,7 +90,7 @@ cron.schedule(
     console.log("[ReminderJob] Running daily reminder job");
     sendReminders();
   },
-  { timezone: "Europe/Istanbul" }
+  { timezone: "Europe/Istanbul" },
 );
 
 generateAutoTasks();

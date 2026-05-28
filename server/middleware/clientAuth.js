@@ -20,10 +20,12 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
+  process.env.SUPABASE_SERVICE_KEY,
 );
 
 export const requireClientAuth = async (req, res, next) => {
+  console.log("requireClientAuth hit:", req.method, req.path);
+  console.log("auth header:", req.headers.authorization);
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     return res.status(401).json({ error: "Unauthorized" });
