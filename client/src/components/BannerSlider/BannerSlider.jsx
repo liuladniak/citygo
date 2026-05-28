@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./BannerSlider.scss";
 
 const BannerSlider = ({ articles }) => {
@@ -6,10 +7,8 @@ const BannerSlider = ({ articles }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const sliderRef = useRef(null);
   const intervalRef = useRef(null);
-  console.log("banner images", articles);
-  const slides = [articles[articles.length - 1], ...articles, articles[0]];
 
-  console.log("BannerSlider component mounted");
+  const slides = [articles[articles.length - 1], ...articles, articles[0]];
 
   const startAutoplay = () => {
     stopAutoplay();
@@ -30,10 +29,11 @@ const BannerSlider = ({ articles }) => {
   const handleNext = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setCurrentIndex((prevIndex) => prevIndex + 1);
+    setCurrentIndex((prev) => prev + 1);
   };
 
-  const handleDotClick = (index) => {
+  const handleDotClick = (index, e) => {
+    e.stopPropagation();
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrentIndex(index + 1);
@@ -45,7 +45,6 @@ const BannerSlider = ({ articles }) => {
 
     const handleTransitionEnd = () => {
       setIsTransitioning(false);
-
       if (currentIndex === 0) {
         sliderElement.style.transition = "none";
         setCurrentIndex(articles.length);
@@ -56,15 +55,12 @@ const BannerSlider = ({ articles }) => {
     };
 
     sliderElement.addEventListener("transitionend", handleTransitionEnd);
-
-    return () => {
+    return () =>
       sliderElement.removeEventListener("transitionend", handleTransitionEnd);
-    };
   }, [currentIndex, articles.length, slides.length]);
 
   useEffect(() => {
     const sliderElement = sliderRef.current;
-
     if (sliderElement) {
       sliderElement.style.transition = isTransitioning
         ? "transform 0.5s ease-in-out"
@@ -83,7 +79,6 @@ const BannerSlider = ({ articles }) => {
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
     startAutoplay();
 
     return () => {
@@ -97,21 +92,26 @@ const BannerSlider = ({ articles }) => {
       <div className="slider-container">
         <div className="slider-track" ref={sliderRef}>
           {slides.map((article, index) => (
-            <article key={index} className="slider-card">
+            <Link
+              key={index}
+              to={`/article/${article.slug}`}
+              className="slider-card"
+            >
               <div className="slider-card__wrp">
                 <img
                   src={article.images[0]?.url}
-                  alt={`Slide ${index}`}
+                  alt={article.title}
                   className="slider-image"
                 />
               </div>
               <div className="text-overlay">
                 <h2>{article.title}</h2>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
+
       <div className="slider-dots">
         {articles.map((_, index) => (
           <button
@@ -123,8 +123,8 @@ const BannerSlider = ({ articles }) => {
                 ? "active"
                 : ""
             }`}
-            onClick={() => handleDotClick(index)}
-          ></button>
+            onClick={(e) => handleDotClick(index, e)}
+          />
         ))}
       </div>
     </div>
