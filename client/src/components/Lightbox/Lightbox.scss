@@ -1,0 +1,181 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.94);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &__close {
+    position: fixed;
+    top: 1.6rem;
+    right: 1.6rem;
+    z-index: 10;
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+    &:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+  }
+
+  &__counter {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+  }
+
+  &__stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 5rem 7rem 1rem;
+    cursor: default;
+    box-sizing: border-box;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: $border-radius;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+    animation: lb-fade-in 0.2s ease;
+    display: block;
+  }
+
+  &__nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background 0.2s,
+      transform 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    &:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
+    &--prev {
+      left: 1.6rem;
+      &:hover {
+        transform: translateY(-50%) translateX(-2px);
+      }
+    }
+
+    &--next {
+      right: 1.6rem;
+      &:hover {
+        transform: translateY(-50%) translateX(2px);
+      }
+    }
+  }
+
+  &__strip {
+    flex-shrink: 0;
+    display: flex;
+    gap: 0.8rem;
+    padding: 1.2rem 1.6rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    cursor: default;
+    max-width: 100vw;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__thumb {
+    width: 6rem;
+    height: 6rem;
+    border-radius: $border-radius;
+    overflow: hidden;
+    border: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition:
+      opacity 0.2s,
+      border-color 0.2s;
+
+    &:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &--active {
+      border-color: white;
+      opacity: 1;
+    }
+
+    &:hover:not(&--active) {
+      opacity: 0.8;
+    }
+  }
+}
+
+@keyframes lb-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

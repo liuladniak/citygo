@@ -4,8 +4,6 @@ import "./Tab2Content.scss";
 import "./TabContent.scss";
 
 const Tab2Content = ({ bookings }) => {
-  const API_URL = import.meta.env.VITE_API_URL;
-  console.log("Account bookings: " + bookings);
   return (
     <div>
       {bookings.length > 0 ? (
@@ -16,10 +14,7 @@ const Tab2Content = ({ bookings }) => {
             {bookings.map((booking) => (
               <li className="bookings-list-item" key={booking.id}>
                 <div className="booking-card-img">
-                  <img
-                    src={`${API_URL}/${booking.tour_images[0]}`}
-                    alt="tour thumbnail"
-                  />
+                  <img src={booking.tour_images[0]} alt="tour thumbnail" />
                 </div>
 
                 <div className="bookings-details">
@@ -33,7 +28,7 @@ const Tab2Content = ({ bookings }) => {
                   </div>
                   <div className="booking-date">
                     Tour Date:{" "}
-                    {new Date(booking.booking_date).toLocaleDateString()}
+                    {new Date(booking.tour_date).toLocaleDateString()}
                   </div>
                   <div className="booking-people">
                     Number of Guests:

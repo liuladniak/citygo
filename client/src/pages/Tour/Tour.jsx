@@ -411,6 +411,7 @@ import {
 } from "../../features/wishlist/wishlistSlice";
 import ImageGallery from "../../components/ImageGallery/ImageGallery";
 import SkeletonTour from "../../components/LoadingSceleton/SkeletonTour";
+import ReviewsList from "../../components/ReviewsList/ReviewsList";
 
 const Tour = () => {
   const dispatch = useDispatch();
@@ -543,7 +544,6 @@ const Tour = () => {
     <>
       <section className="tour">
         <div className="tour-wrp">
-          {/* ─── hero grid ─────────────────────────────────────────────────── */}
           <div className="tour-hero">
             <div className="tour__img-main">
               <img
@@ -640,16 +640,17 @@ const Tour = () => {
             ))}
           </div>
 
-          {/* ─── sticky nav ────────────────────────────────────────────────── */}
           <div ref={navRef} className={`tour-nav ${isSticky ? "sticky" : ""}`}>
             <ul className="tour-nav__list">
-              {["overview", "highlights", "details", "map"].map((id) => (
-                <li key={id} className="tour-nav__item">
-                  <a href={`#${id}`} onClick={(e) => handleNavClick(e, id)}>
-                    {id.charAt(0).toUpperCase() + id.slice(1)}
-                  </a>
-                </li>
-              ))}
+              {["overview", "highlights", "details", "map", "reviews"].map(
+                (id) => (
+                  <li key={id} className="tour-nav__item">
+                    <a href={`#${id}`} onClick={(e) => handleNavClick(e, id)}>
+                      {id.charAt(0).toUpperCase() + id.slice(1)}
+                    </a>
+                  </li>
+                ),
+              )}
             </ul>
           </div>
 
@@ -710,6 +711,7 @@ const Tour = () => {
                 <div id="map">
                   <Map itinerary={tour_itinerary_coordinates} />
                 </div>
+                <ReviewsList tourId={id} />
               </div>
             </div>
 
