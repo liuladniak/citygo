@@ -66,9 +66,16 @@ router.get("/", async (req, res) => {
     }
 
     const detailed = await knex("tours")
-      .select("tours.*", "images.image_path", "highlights.highlight")
+      .select(
+        "tours.*",
+        "images.image_path",
+        "highlights.highlight",
+        knex.raw("trs.avg_rating"),
+        knex.raw("COALESCE(trs.review_count, 0) as review_count"),
+      )
       .leftJoin("images", "tours.id", "images.tour_id")
       .leftJoin("highlights", "tours.id", "highlights.tour_id")
+      .leftJoin("tour_rating_summary as trs", "tours.id", "trs.tour_id")
       .whereIn("tours.id", tourIds)
       .orderBy("tours.id")
       .orderBy("images.id", "asc");
@@ -167,12 +174,12 @@ router.get("/:slug", async (req, res) => {
         "tour_time_slots.end_time as time_slot_end_time",
         "images.image_path",
         "highlights.highlight",
-        "tour_unavailable_dates.unavailable_date"
+        "tour_unavailable_dates.unavailable_date",
       )
       .leftJoin(
         "tour_itinerary_coordinates",
         "tours.id",
-        "tour_itinerary_coordinates.tour_id"
+        "tour_itinerary_coordinates.tour_id",
       )
       .leftJoin("tour_time_slots", "tours.id", "tour_time_slots.tour_id")
       .leftJoin("images", "tours.id", "images.tour_id")
@@ -180,7 +187,7 @@ router.get("/:slug", async (req, res) => {
       .leftJoin(
         "tour_unavailable_dates",
         "tours.id",
-        "tour_unavailable_dates.tour_id"
+        "tour_unavailable_dates.tour_id",
       )
       .where("tours.id", tour.id);
 
@@ -222,7 +229,7 @@ router.get("/:slug", async (req, res) => {
 
         return acc;
       },
-      { ...tour }
+      { ...tour },
     );
 
     const settings = await knex("company_settings").first();
@@ -234,11 +241,11 @@ router.get("/:slug", async (req, res) => {
         dates.map((d) => {
           const date = new Date(d);
           return date.toISOString().split("T")[0];
-        })
+        }),
       );
 
     const agencyRecurringDays = await knex(
-      "agency_recurring_unavailabilities"
+      "agency_recurring_unavailabilities",
     ).pluck("day_of_week");
 
     const tourRecurringDays = await knex("tour_recurring_unavailabilities")
@@ -272,8 +279,8 @@ router.get("/:slug/activity", async (req, res) => {
       .select(
         "tour_activity_log.*",
         knex.raw(
-          "employees.first_name || ' ' || employees.last_name as actor_name"
-        )
+          "employees.first_name || ' ' || employees.last_name as actor_name",
+        ),
       )
       .orderBy("tour_activity_log.created_at", "desc")
       .limit(50);
@@ -351,7 +358,7 @@ router.post("/", requireRole("admin", "manager"), async (req, res) => {
         featured,
         accessibility: Array.isArray(accessibility)
           ? accessibility.join(", ")
-          : accessibility ?? "",
+          : (accessibility ?? ""),
         status: req.body.status ?? "draft",
         created_at: knex.fn.now(),
         updated_at: knex.fn.now(),
@@ -360,14 +367,14 @@ router.post("/", requireRole("admin", "manager"), async (req, res) => {
 
     if (images?.length) {
       await knex("images").insert(
-        images.map((url) => ({ tour_id: tour.id, image_path: url }))
+        images.map((url) => ({ tour_id: tour.id, image_path: url })),
       );
     }
     if (highlights?.length) {
       await knex("highlights").insert(
         highlights
           .filter(Boolean)
-          .map((h) => ({ tour_id: tour.id, highlight: h }))
+          .map((h) => ({ tour_id: tour.id, highlight: h })),
       );
     }
     if (time_slots?.length) {
@@ -376,7 +383,7 @@ router.post("/", requireRole("admin", "manager"), async (req, res) => {
           tour_id: tour.id,
           start_time: s.start_time,
           end_time: s.end_time,
-        }))
+        })),
       );
     }
     if (itinerary?.length) {
@@ -387,7 +394,7 @@ router.post("/", requireRole("admin", "manager"), async (req, res) => {
           name: p.name,
           latitude: p.latitude,
           longitude: p.longitude,
-        }))
+        })),
       );
     }
 
@@ -395,7 +402,7 @@ router.post("/", requireRole("admin", "manager"), async (req, res) => {
       tour.id,
       "created",
       `Tour "${tour_name}" created`,
-      actor_id ?? null
+      actor_id ?? null,
     );
     res.status(201).json({ message: "Tour created successfully", tour });
   } catch (err) {
@@ -464,7 +471,7 @@ router.patch("/:slug", requireRole("admin", "manager"), async (req, res) => {
       tour.id,
       "edit",
       `Tour updated — ${summary}`,
-      req.body.actor_id ?? null
+      req.body.actor_id ?? null,
     );
 
     const updated = await knex("tours").where({ slug }).first();
@@ -488,20 +495,20 @@ router.put(
       await knex("images").where({ tour_id: tour.id }).del();
       if (images?.length) {
         await knex("images").insert(
-          images.map((url) => ({ tour_id: tour.id, image_path: url }))
+          images.map((url) => ({ tour_id: tour.id, image_path: url })),
         );
       }
       await logTourActivity(
         tour.id,
         "images",
-        `Images updated (${images?.length ?? 0} images)`
+        `Images updated (${images?.length ?? 0} images)`,
       );
       res.json({ message: "Images updated" });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Failed to update images" });
     }
-  }
+  },
 );
 
 router.put(
@@ -519,20 +526,20 @@ router.put(
         await knex("highlights").insert(
           highlights
             .filter(Boolean)
-            .map((h) => ({ tour_id: tour.id, highlight: h }))
+            .map((h) => ({ tour_id: tour.id, highlight: h })),
         );
       }
       await logTourActivity(
         tour.id,
         "highlights",
-        `Highlights updated (${highlights?.length ?? 0} highlights)`
+        `Highlights updated (${highlights?.length ?? 0} highlights)`,
       );
       res.json({ message: "Highlights updated" });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Failed to update highlights" });
     }
-  }
+  },
 );
 
 router.put(
@@ -552,14 +559,14 @@ router.put(
 
       const existingSlots = await knex("tour_time_slots").where(
         "tour_id",
-        tour.id
+        tour.id,
       );
 
       for (const slot of time_slots) {
         const exists = existingSlots.some(
           (s) =>
             s.start_time.slice(0, 5) === slot.start_time.slice(0, 5) &&
-            s.end_time.slice(0, 5) === slot.end_time.slice(0, 5)
+            s.end_time.slice(0, 5) === slot.end_time.slice(0, 5),
         );
         if (!exists) {
           await knex("tour_time_slots").insert({
@@ -574,7 +581,7 @@ router.put(
         const stillWanted = time_slots.some(
           (s) =>
             s.start_time.slice(0, 5) === existing.start_time.slice(0, 5) &&
-            s.end_time.slice(0, 5) === existing.end_time.slice(0, 5)
+            s.end_time.slice(0, 5) === existing.end_time.slice(0, 5),
         );
         if (!stillWanted && !referencedIds.includes(existing.id)) {
           await knex("tour_time_slots").where("id", existing.id).del();
@@ -588,7 +595,7 @@ router.put(
       console.error(err);
       res.status(500).json({ message: "Failed to update time slots" });
     }
-  }
+  },
 );
 
 router.put(
@@ -612,20 +619,20 @@ router.put(
             name: p.name,
             latitude: p.latitude,
             longitude: p.longitude,
-          }))
+          })),
         );
       }
       await logTourActivity(
         tour.id,
         "itinerary",
-        `Itinerary updated (${itinerary?.length ?? 0} stops)`
+        `Itinerary updated (${itinerary?.length ?? 0} stops)`,
       );
       res.json({ message: "Itinerary updated" });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Failed to update itinerary" });
     }
-  }
+  },
 );
 
 router.get("/:slug/unavailable-dates", async (req, res) => {
@@ -672,7 +679,7 @@ router.post(
       console.error(err);
       res.status(500).json({ message: "Failed to add unavailable date" });
     }
-  }
+  },
 );
 
 router.delete(
@@ -686,7 +693,7 @@ router.delete(
       console.error(err);
       res.status(500).json({ message: "Failed to delete" });
     }
-  }
+  },
 );
 
 router.post(
@@ -717,7 +724,7 @@ router.post(
         .status(500)
         .json({ message: "Failed to add recurring unavailability" });
     }
-  }
+  },
 );
 
 router.delete(
@@ -733,7 +740,7 @@ router.delete(
       console.error(err);
       res.status(500).json({ message: "Failed to delete" });
     }
-  }
+  },
 );
 
 export default router;
