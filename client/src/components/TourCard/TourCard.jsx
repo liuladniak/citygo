@@ -7,8 +7,8 @@ import chevronRightIcon from "../../assets/icons/chevron-right.svg";
 import { generateSlug } from "../../utils/generateSlug";
 import AddToFavorites from "../AddToFavorites/AddToFavorites";
 import ImageSlider from "../ImageSlider/ImageSlider";
+import StarRating from "../StarRating/StarRating";
 
-// const DISCOUNTED_TOUR_IDS = [1, 2, 4];
 const BEST_SELLERS = [2, 5, 9];
 
 const TourCard = ({
@@ -23,9 +23,11 @@ const TourCard = ({
   category,
   images = [],
   tourCardImg = "",
+  avg_rating,
+  review_count,
 }) => {
   const selectedCurrency = useSelector(
-    (state) => state.currency.selectedCurrency
+    (state) => state.currency.selectedCurrency,
   );
   const exchangeRates = useSelector((state) => state.currency.exchangeRates);
 
@@ -81,6 +83,17 @@ const TourCard = ({
 
         <div className="tour-card__content ">
           <h3 className="tour-card__heading">{tour_name}</h3>
+          {avg_rating && (
+            <div className="tour-card__rating">
+              <StarRating
+                rating={parseFloat(avg_rating)}
+                mode="display"
+                size="sm"
+              />
+              <span className="tour-card__rating-avg">{avg_rating}</span>
+              <span className="tour-card__rating-count">({review_count})</span>
+            </div>
+          )}
           <div className="tour-card__tags">
             <div className="tour-card__duration">
               <div className="tour-card__duration-icon">

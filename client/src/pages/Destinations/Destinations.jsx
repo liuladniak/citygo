@@ -162,6 +162,8 @@ const Destinations = () => {
                 price={tour.price}
                 category={tour.category}
                 images={tour.images}
+                avg_rating={tour.avg_rating}
+                review_count={tour.review_count}
               />
             ))}
             <Link to="/tours" className="destination-cta-card">

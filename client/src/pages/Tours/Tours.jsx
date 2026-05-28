@@ -27,7 +27,7 @@ const Tours = () => {
   const query = useQuery();
   const [selectedLandmark, setSelectedLandmark] = useState("");
   const [selectedTourType, setSelectedTourType] = useState(
-    query.get("category") || ""
+    query.get("category") || "",
   );
   const [selectedActivityLevel, setSelectedActivityLevel] = useState("");
   const [selectedSort, setSelectedSort] = useState("");
@@ -291,6 +291,8 @@ const Tours = () => {
                 category={tour.category}
                 images={tour.images}
                 featured={tour.featured}
+                avg_rating={tour.avg_rating}
+                review_count={tour.review_count}
               />
             ))}
           </div>

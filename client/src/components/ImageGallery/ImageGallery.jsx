@@ -13,7 +13,7 @@ const ImageGallery = ({ images, startIndex }) => {
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1,
     );
   };
 
@@ -39,7 +39,7 @@ const ImageGallery = ({ images, startIndex }) => {
       </div>
       <img
         className="slider-image"
-        src={`${API_URL}/${images[currentIndex]}`}
+        src={images[currentIndex]}
         alt={`Slide ${currentIndex}`}
       />
       <div className="slider-button next" onClick={nextSlide}>

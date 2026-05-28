@@ -173,6 +173,24 @@
       opacity: 1;
     }
   }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+
+    &-avg {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: $charcoal;
+    }
+
+    &-count {
+      font-size: 1.2rem;
+      color: #9ca3af;
+    }
+  }
 }
 
 .image-slider.image-slider--card {
