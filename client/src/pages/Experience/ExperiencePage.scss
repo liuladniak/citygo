@@ -1,0 +1,322 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.exp-page {
+  width: 100%;
+
+  &__hero {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    min-height: 28rem;
+    max-height: 56rem;
+    overflow: hidden;
+
+    @include tablet {
+      height: 60vh;
+    }
+  }
+
+  &__hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  &__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.3) 60%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    padding: $space-medium $space-x-small;
+
+    @include tablet {
+      padding: $space-large;
+    }
+  }
+
+  &__hero-text {
+    max-width: 72rem;
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+  }
+
+  &__tag {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  &__title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+    @include tablet {
+      font-size: 3.6rem;
+    }
+
+    @include desktop-s {
+      font-size: 4.4rem;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    max-width: 56rem;
+
+    @include tablet {
+      font-size: 1.8rem;
+    }
+  }
+
+  &__body {
+    @include layout-constrain;
+    padding: $space-large 0;
+  }
+
+  &__section {
+    padding: $space-large 0;
+    border-bottom: 1px solid #f3f4f6;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &--tinted {
+      background: $supportive-2;
+      @include border-radius;
+      padding: $space-medium;
+      border-bottom: none;
+      margin: $space-medium 0;
+
+      @include tablet {
+        padding: $space-large;
+      }
+    }
+  }
+
+  &__heading {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: $space-medium;
+    line-height: 1.2;
+
+    @include tablet {
+      font-size: 2.8rem;
+    }
+  }
+
+  &__lead {
+    font-size: 1.6rem;
+    line-height: 1.8;
+    color: $charcoal;
+    font-weight: 500;
+    margin-bottom: $space-medium;
+
+    @include tablet {
+      font-size: 1.8rem;
+    }
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    color: #4b5563;
+    margin-bottom: $space-x-small;
+
+    @include tablet {
+      font-size: 1.6rem;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-medium;
+
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__grid-item {
+    padding: $space-medium;
+    border: 1px solid #e5e7eb;
+    @include border-radius;
+    background: white;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: $charcoal;
+    }
+
+    p {
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: #4b5563;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+    padding-left: 0;
+    list-style: none;
+
+    li {
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: #4b5563;
+      padding-left: 1.6rem;
+      position: relative;
+
+      &::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        color: $main-teal;
+        font-weight: 700;
+      }
+
+      @include tablet {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  &__affiliates {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-medium;
+    margin-top: $space-medium;
+
+    @include tablet {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__affiliate-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: $space-medium;
+    border: 1px solid #e5e7eb;
+    @include border-radius;
+    text-decoration: none;
+    color: $charcoal;
+    transition:
+      box-shadow 0.2s,
+      transform 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__affiliate-tag {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $main-teal;
+  }
+
+  &__affiliate-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  &__affiliate-desc {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #6b7280;
+    flex: 1;
+  }
+
+  &__affiliate-link {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $main-teal;
+    margin-top: auto;
+  }
+
+  &__tours {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+    margin-top: $space-medium;
+
+    @include tablet {
+      flex-direction: row;
+      gap: $space-medium;
+    }
+  }
+
+  &__tour-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: $space-medium;
+    border: 1px solid #e5e7eb;
+    @include border-radius;
+    text-decoration: none;
+    color: $charcoal;
+    background: white;
+    transition:
+      box-shadow 0.2s,
+      transform 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__tour-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  &__tour-meta {
+    display: flex;
+    gap: $space-medium;
+    font-size: 1.3rem;
+    color: #6b7280;
+  }
+
+  &__tour-cta {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $main-teal;
+    margin-top: auto;
+  }
+
+  &__grid-icon {
+    color: $main-teal;
+    margin-bottom: $space-x-small;
+    display: block;
+  }
+}

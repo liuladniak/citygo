@@ -21,6 +21,10 @@ import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import Success from "./pages/Success/Success";
 import Article from "./pages/Article/Article";
 import CheckoutForm from "./pages/Cart/CheckoutForm";
+import SpiceExperience from "./pages/Experience/SpiceExperience";
+import HamamExperience from "./pages/Experience/HamamExperience";
+import CustomItinerary from "./pages/CustomItinerary/CustomItinerary";
+import FoodExperience from "./pages/Experience/FoodExperience";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +81,10 @@ const router = createBrowserRouter([
 
       { path: "/success", element: <Success /> },
       { path: "/checkout", element: <CheckoutForm /> },
+      { path: "/experiences/spices", element: <SpiceExperience /> },
+      { path: "/experiences/hammam", element: <HamamExperience /> },
+      { path: "/experiences/food", element: <FoodExperience /> },
+      { path: "/custom-itinerary", element: <CustomItinerary /> },
     ],
   },
 ]);

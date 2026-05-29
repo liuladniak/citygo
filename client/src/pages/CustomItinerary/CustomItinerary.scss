@@ -1,0 +1,339 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.custom-page {
+  width: 100%;
+
+  // ─── hero ──────────────────────────────────────────────────────────────────
+  &__hero {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    min-height: 28rem;
+    max-height: 52rem;
+    overflow: hidden;
+
+    @include tablet {
+      height: 60vh;
+    }
+  }
+
+  &__hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+  }
+
+  &__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.3) 60%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    padding: $space-medium $space-x-small;
+
+    @include tablet {
+      padding: $space-large;
+    }
+  }
+
+  &__hero-text {
+    max-width: 64rem;
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+  }
+
+  &__title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+    @include tablet {
+      font-size: 4rem;
+    }
+
+    @include desktop-s {
+      font-size: 5rem;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+
+    @include tablet {
+      font-size: 1.8rem;
+    }
+  }
+
+  // ─── body ──────────────────────────────────────────────────────────────────
+  &__body {
+    @include layout-constrain;
+    padding: $space-large 0;
+  }
+
+  &__section {
+    padding: $space-large 0;
+    border-bottom: 1px solid #f3f4f6;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &--narrow {
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+
+    &--tinted {
+      background: $supportive-2;
+      @include border-radius;
+      padding: $space-medium;
+      border-bottom: none;
+      margin: $space-medium 0;
+
+      @include tablet {
+        padding: $space-large;
+      }
+    }
+  }
+
+  &__heading {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: $space-medium;
+
+    @include tablet {
+      font-size: 2.8rem;
+    }
+  }
+
+  &__lead {
+    font-size: 1.6rem;
+    line-height: 1.8;
+    color: $charcoal;
+    font-weight: 500;
+    margin-bottom: $space-medium;
+
+    @include tablet {
+      font-size: 1.8rem;
+    }
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    color: #4b5563;
+    margin-bottom: $space-x-small;
+
+    @include tablet {
+      font-size: 1.6rem;
+    }
+  }
+
+  // ─── steps ─────────────────────────────────────────────────────────────────
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: $space-medium;
+  }
+
+  &__step {
+    display: flex;
+    gap: $space-medium;
+    align-items: flex-start;
+
+    @include tablet {
+      gap: $space-large;
+    }
+  }
+
+  &__step-number {
+    font-size: 3.6rem;
+    font-weight: 800;
+    color: $main-teal;
+    opacity: 0.25;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 5rem;
+
+    @include tablet {
+      font-size: 4.8rem;
+      width: 6rem;
+    }
+  }
+
+  &__step-content {
+    padding-top: 0.4rem;
+    flex: 1;
+  }
+
+  &__step-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: $charcoal;
+
+    @include tablet {
+      font-size: 1.8rem;
+    }
+  }
+
+  &__step-desc {
+    font-size: 1.4rem;
+    line-height: 1.7;
+    color: #4b5563;
+
+    @include tablet {
+      font-size: 1.5rem;
+    }
+  }
+
+  // ─── examples ──────────────────────────────────────────────────────────────
+  &__examples {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-medium;
+    margin-top: $space-medium;
+
+    @include tablet {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__example {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: $space-medium;
+    border: 1px solid #e5e7eb;
+    @include border-radius;
+    background: white;
+  }
+
+  &__example-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $charcoal;
+  }
+
+  &__example-desc {
+    font-size: 1.4rem;
+    line-height: 1.7;
+    color: #4b5563;
+    flex: 1;
+  }
+
+  &__example-duration {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $main-teal;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  // ─── list ──────────────────────────────────────────────────────────────────
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+    list-style: none;
+    padding: 0;
+    margin-bottom: $space-medium;
+
+    li {
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: #4b5563;
+      padding-left: 1.6rem;
+      position: relative;
+
+      &::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        color: $main-teal;
+        font-weight: 700;
+      }
+
+      @include tablet {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  // ─── CTA section ───────────────────────────────────────────────────────────
+  &__cta-section {
+    padding: $space-large 0;
+  }
+
+  &__cta-box {
+    background: $main-teal;
+    @include border-radius;
+    padding: $space-large $space-medium;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: $space-medium;
+
+    @include tablet {
+      padding: $space-large;
+    }
+  }
+
+  &__cta-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: white;
+
+    @include tablet {
+      font-size: 3.2rem;
+    }
+  }
+
+  &__cta-desc {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.88);
+    max-width: 52rem;
+    line-height: 1.6;
+
+    @include tablet {
+      font-size: 1.7rem;
+    }
+  }
+
+  &__cta-btn {
+    display: inline-block;
+    background: white;
+    color: $main-teal;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 1.2rem 3.2rem;
+    border-radius: $border-radius-main;
+    text-decoration: none;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &__link {
+    color: $main-teal;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+}

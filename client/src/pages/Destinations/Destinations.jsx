@@ -47,12 +47,14 @@ const immersive = [
     title: "A Sensory Journey: Discover the spices of two continents",
     description: "Discover vibrant spices, teas, and treats to bring home.",
     img: imgShopping2,
+    to: "/experiences/spices",
   },
   {
     id: 2,
     title: "Full reboot in Hammam, Turkish & Thermal spas",
     description: "Molestias ferendis totam tenetur necessitatibus sunt.",
     img: hamamImg,
+    to: "/experiences/hammam",
   },
   {
     id: 2,
@@ -60,6 +62,7 @@ const immersive = [
       "Try iconic breakfast, street food and dinners with the stunning view",
     description: "Molestias ferendis totam tenetur necessitatibus sunt.",
     img: breakfastImg,
+    to: "/experiences/food",
   },
 ];
 
@@ -197,29 +200,33 @@ const Destinations = () => {
 
         <div className="destination-cards destination-cards--immersive">
           {immersive.map((destination) => (
-            <div key={destination.id} className="destination-card">
-              <div className="destination-card__img">
-                <img
-                  src={destination.img}
-                  alt={destination.title}
-                  loading="lazy"
-                />
+            <Link key={destination.id} to={destination.to}>
+              <div className="destination-card">
+                <div className="destination-card__img">
+                  <img
+                    src={destination.img}
+                    alt={destination.title}
+                    loading="lazy"
+                  />
+                </div>
+                <div className="overlay--category">
+                  <h3 className="destination-card__title">
+                    {destination.title}
+                  </h3>
+                  <p className="destination-card__desc">
+                    {destination.description}
+                  </p>
+                  <Button
+                    iconUrl={arrowUpRightIcon}
+                    iconClassName="btn--icon btn__icon--explore"
+                    className="btn--destination-card"
+                    disabled={false}
+                  >
+                    Explore
+                  </Button>
+                </div>
               </div>
-              <div className="overlay--category">
-                <h3 className="destination-card__title">{destination.title}</h3>
-                <p className="destination-card__desc">
-                  {destination.description}
-                </p>
-                <Button
-                  iconUrl={arrowUpRightIcon}
-                  iconClassName="btn--icon btn__icon--explore"
-                  className="btn--destination-card"
-                  disabled={true}
-                >
-                  Explore
-                </Button>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -254,7 +261,9 @@ const Destinations = () => {
               Share what excites you - we'll handle every detail, from first
               stop to last.
             </p>
-            <Button className="btn--cta">Learn More</Button>
+            <Button to="/custom-itinerary" className="btn--cta">
+              Start planning
+            </Button>
           </div>
         </div>
       </div>
