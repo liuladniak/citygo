@@ -26,6 +26,7 @@ import tourRoutes from "./routes/tourRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import webhook from "./routes/webhook.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import rateLimit from "express-rate-limit";
 
 import generateAutoTasks from "./jobs/autoTaskGenerator.js";
 import { sendReminders } from "./jobs/reminderJob.js";
@@ -64,6 +65,15 @@ app.use(
   webhook,
 );
 
+const miloLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: { error: "Too many requests. Please wait before chatting again." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use("/api/ai/chat", miloLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
