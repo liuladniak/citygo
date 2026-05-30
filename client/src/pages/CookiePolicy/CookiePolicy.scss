@@ -1,0 +1,208 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.cookie-policy {
+  @include layout-constrain;
+  margin: $space-large auto;
+  max-width: 84rem;
+
+  &__header {
+    margin-bottom: $space-large;
+    padding-bottom: $space-medium;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  &__title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+
+    @include tablet {
+      font-size: 3.6rem;
+    }
+  }
+
+  &__updated {
+    font-size: 1.3rem;
+    color: #9ca3af;
+  }
+
+  &__section {
+    margin-bottom: $space-large;
+
+    p {
+      font-size: 1.5rem;
+      line-height: 1.8;
+      color: #4b5563;
+      margin-top: $space-x-small;
+    }
+  }
+
+  &__heading {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: $charcoal;
+    margin-bottom: $space-x-small;
+
+    @include tablet {
+      font-size: 2rem;
+    }
+  }
+
+  &__badge {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba($main-teal, 0.1);
+    color: $main-teal;
+    padding: 0.3rem 0.8rem;
+    border-radius: 10rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  // ─── desktop table — hidden on mobile ─────────────────────────────────────
+  &__table-wrap {
+    display: none;
+    overflow-x: auto;
+    margin-top: $space-medium;
+    border: 1px solid #e5e7eb;
+    border-radius: $border-radius;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.4rem;
+    min-width: 60rem;
+
+    th {
+      background: #f9fafb;
+      padding: 1.2rem 1.6rem;
+      text-align: left;
+      font-weight: 700;
+      color: $charcoal;
+      white-space: nowrap;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+      padding: 1.2rem 1.6rem;
+      border-bottom: 1px solid #f3f4f6;
+      color: #4b5563;
+      line-height: 1.6;
+      vertical-align: top;
+
+      &:first-child {
+        white-space: nowrap;
+      }
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 1.2rem;
+      background: #f3f4f6;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.4rem;
+      color: $charcoal;
+    }
+  }
+
+  // ─── mobile cards — hidden on tablet+ ─────────────────────────────────────
+  &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+    margin-top: $space-medium;
+
+    @include tablet {
+      display: none;
+    }
+  }
+
+  &__card {
+    border: 1px solid #e5e7eb;
+    border-radius: $border-radius;
+    padding: $space-x-small;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+
+    p {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 1.2rem;
+      background: #f3f4f6;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.4rem;
+      color: $charcoal;
+    }
+  }
+
+  &__card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-x-small;
+    flex-wrap: wrap;
+  }
+
+  &__card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 1.2rem;
+    color: #6b7280;
+    padding-top: 0.4rem;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  // ─── browser links ─────────────────────────────────────────────────────────
+  &__links {
+    list-style: none;
+    padding: 0;
+    margin-top: $space-x-small;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    @include tablet {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: $space-x-small;
+    }
+
+    li a {
+      font-size: 1.4rem;
+      color: $main-teal;
+      text-decoration: underline;
+      text-underline-offset: 0.2rem;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &__link {
+    color: $main-teal;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+    font-weight: 500;
+  }
+}

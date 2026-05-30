@@ -25,6 +25,7 @@ import SpiceExperience from "./pages/Experience/SpiceExperience";
 import HamamExperience from "./pages/Experience/HamamExperience";
 import CustomItinerary from "./pages/CustomItinerary/CustomItinerary";
 import FoodExperience from "./pages/Experience/FoodExperience";
+import CookiePolicy from "./pages/CookiePolicy/CookiePolicy";
 
 const router = createBrowserRouter([
   {
@@ -85,6 +86,7 @@ const router = createBrowserRouter([
       { path: "/experiences/hammam", element: <HamamExperience /> },
       { path: "/experiences/food", element: <FoodExperience /> },
       { path: "/custom-itinerary", element: <CustomItinerary /> },
+      { path: "/cookie-policy", element: <CookiePolicy /> },
     ],
   },
 ]);

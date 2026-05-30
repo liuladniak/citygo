@@ -6,8 +6,9 @@ import IconInstagram from "../UI/IconInstagram";
 import IconTikTok from "../UI/IconTikTok";
 import IconYoutube from "../UI/IconYouTube";
 
-const Footer = () => {
+const Footer = ({ resetConsent }) => {
   const currentYear = new Date().getFullYear();
+
   return (
     <div className="wrp">
       <footer className="footer-wrp">
@@ -32,15 +33,22 @@ const Footer = () => {
               <Link className="footer-col-link" to="/about">
                 Careers
               </Link>
-              <Link className="footer-col-link" to="/about">
-                Media
-              </Link>
               <Link className="footer-col-link" to="/contact">
                 Corporate
               </Link>
               <Link className="footer-col-link" to="/contact">
                 Partnerships
               </Link>
+              <Link className="footer-col-link" to="/cookie-policy">
+                Cookie Policy
+              </Link>
+              <button
+                className="footer-col-link footer-cookie-btn"
+                onClick={resetConsent}
+                type="button"
+              >
+                Cookie settings
+              </button>
             </div>
           </div>
           <div className="footer-col">

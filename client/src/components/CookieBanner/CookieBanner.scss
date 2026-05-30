@@ -1,0 +1,109 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
+  padding: $space-x-small $space-x-small;
+
+  @include tablet {
+    padding: $space-x-small $space-medium;
+  }
+
+  // on mobile — sits above the MobileBookingBar if visible
+  // MobileBookingBar is z-index 100, banner is 9000 so banner wins
+  // but we add bottom padding compensation on tour pages via body class if needed
+
+  &__inner {
+    @include layout-constrain;
+    display: flex;
+    flex-direction: column;
+    gap: $space-x-small;
+    align-items: flex-start;
+
+    @include tablet {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: $space-medium;
+    }
+  }
+
+  &__text {
+    flex: 1;
+  }
+
+  &__message {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #4b5563;
+
+    @include tablet {
+      font-size: 1.4rem;
+    }
+  }
+
+  &__link {
+    color: $main-teal;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-x-small;
+    flex-shrink: 0;
+    width: 100%;
+
+    @include tablet {
+      width: auto;
+    }
+  }
+
+  &__btn {
+    flex: 1;
+    padding: 1rem 1.6rem;
+    border-radius: $border-radius-main;
+    font-size: 1.3rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+      opacity 0.2s,
+      background 0.2s;
+    white-space: nowrap;
+
+    @include tablet {
+      flex: unset;
+      padding: 1rem 2rem;
+    }
+
+    &--reject {
+      background: white;
+      border: 1px solid #d1d5db;
+      color: #4b5563;
+
+      &:hover {
+        background: #f9fafb;
+      }
+    }
+
+    &--accept {
+      background: $main-teal;
+      border: 1px solid $main-teal;
+      color: white;
+
+      &:hover {
+        opacity: 0.88;
+      }
+    }
+  }
+}
