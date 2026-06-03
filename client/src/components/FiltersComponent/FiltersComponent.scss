@@ -4,10 +4,35 @@
 .filters {
   width: 100%;
 
+  &__sentinel {
+    height: 1px;
+    width: 100%;
+  }
+
   &--mobile {
     border: 1px solid #e5e7eb;
     @include border-radius;
     overflow: hidden;
+    background: white;
+    transition: box-shadow 0.2s;
+  }
+
+  &--sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .filters__panel {
+      max-height: 70vh;
+      overflow-y: auto;
+    }
   }
 
   &__toggle {
