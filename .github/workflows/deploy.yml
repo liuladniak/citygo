@@ -11,16 +11,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.0
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy via Docker Compose
-        run: |
-          ssh -o StrictHostKeyChecking=no -t ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} \
-            "cd /var/www/citygo && \
-             git fetch origin main && \
-             git reset --hard origin/main && \
-             /usr/bin/docker compose up -d --build && \
-             /usr/bin/docker image prune -f"
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            set -e
+            cd /var/www/citygo
+            git fetch origin main
+            git reset --hard origin/main
+            /usr/bin/docker compose up -d --build
+            /usr/bin/docker image prune -f
