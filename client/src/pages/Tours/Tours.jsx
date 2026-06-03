@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import TourCard from "../../components/TourCard/TourCard";
 import "./Tours.scss";
@@ -23,6 +23,7 @@ const Tours = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 9;
+  const toursListRef = useRef(null);
 
   const query = useQuery();
   const [selectedLandmark, setSelectedLandmark] = useState("");
@@ -36,6 +37,7 @@ const Tours = () => {
   useEffect(() => {
     const fetchTours = async () => {
       setIsLoading(true);
+
       try {
         const params = {
           page: currentPage,
@@ -72,8 +74,15 @@ const Tours = () => {
     selectedActivityLevel,
     selectedLandmark,
     selectedSort,
+    API_URL,
   ]);
-
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    toursListRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
   const handleFilterChange = (setter) => (value) => {
     setter(value ?? "");
     setCurrentPage(1);
@@ -124,7 +133,7 @@ const Tours = () => {
         </p>
       </div>
 
-      <div className="tours-wrp">
+      <div className="tours-wrp" ref={toursListRef}>
         <div className="tours-filter">
           <FiltersComponent>
             <div className="tours-filter-wrp">
@@ -303,7 +312,7 @@ const Tours = () => {
         <div className="tours-pagination">
           <button
             className="tours-prev"
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
             disabled={currentPage === 1}
           >
             <Icon iconPath={iconChevronLeft} className="pagination-controls" />
@@ -312,14 +321,16 @@ const Tours = () => {
             <button
               key={i}
               className={`tours-page ${currentPage === i + 1 ? "active" : ""}`}
-              onClick={() => setCurrentPage(i + 1)}
+              onClick={() => handlePageChange(i + 1)}
             >
               {i + 1}
             </button>
           ))}
           <button
             className="tours-next"
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            onClick={() =>
+              handlePageChange(Math.min(currentPage + 1, totalPages))
+            }
             disabled={currentPage === totalPages}
           >
             <Icon iconPath={iconChevronRight} className="pagination-controls" />
