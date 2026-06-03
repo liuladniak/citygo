@@ -217,6 +217,9 @@ function Header() {
                     <Link to="/account">Account</Link>
                   </li>
                   <li className="dropdown-item" onClick={closeDropdown}>
+                    <Link to="/contact">Help & Contact</Link>
+                  </li>
+                  <li className="dropdown-item" onClick={closeDropdown}>
                     <Button className="btn btn--logout" onClick={handleLogout}>
                       Sign out <Icon iconPath={iconSignout} />
                     </Button>

@@ -68,6 +68,12 @@
       gap: $space-small;
       align-items: flex-start;
 
+      svg {
+        flex-shrink: 0;
+        margin-top: 0.2rem;
+        color: $main-teal;
+      }
+
       &--socials {
         display: flex;
         flex-direction: column;
@@ -106,6 +112,11 @@
   @media (max-width: 900px) {
     flex-direction: column;
   }
+
+  @media (max-width: 600px) {
+    margin: 0 0 $space-large;
+    border-radius: 0;
+  }
 }
 
 .form-heading {
@@ -121,8 +132,21 @@
   flex: 1;
   padding: $space-large;
 
+  @media (max-width: 900px) {
+    padding: $space-medium;
+  }
+
+  @media (max-width: 600px) {
+    padding: 2rem 1.6rem;
+    gap: 1.2rem;
+  }
+
   &__header {
     margin-bottom: 0.8rem;
+
+    @media (max-width: 600px) {
+      margin-bottom: 0.4rem;
+    }
   }
 
   &__title {
@@ -130,6 +154,10 @@
     font-weight: 700;
     color: $charcoal;
     margin: 0 0 0.4rem;
+
+    @media (max-width: 600px) {
+      font-size: 2rem;
+    }
   }
 
   &__subtitle {
@@ -146,6 +174,7 @@
 
     @media (max-width: 600px) {
       grid-template-columns: 1fr;
+      gap: 1.2rem;
     }
   }
 
@@ -183,7 +212,9 @@
     width: 100%;
     box-sizing: border-box;
     background: white;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
 
     &::placeholder {
       color: #9ca3af;
@@ -208,6 +239,10 @@
     resize: vertical;
     min-height: 12rem;
     line-height: 1.6;
+
+    @media (max-width: 600px) {
+      min-height: 10rem;
+    }
   }
 
   &__meta {
@@ -250,6 +285,11 @@
     transition: opacity 0.2s;
     align-self: flex-start;
 
+    @media (max-width: 600px) {
+      align-self: stretch;
+      text-align: center;
+    }
+
     &:hover:not(:disabled) {
       opacity: 0.88;
     }
@@ -269,7 +309,7 @@
   border: 1px solid #bbf7d0;
   border-radius: 0.8rem;
   padding: 2rem;
-  fill: #166534;
+  color: #166534;
 
   &__title {
     font-size: 1.5rem;
@@ -299,6 +339,10 @@
 
   @media (max-width: 900px) {
     min-height: 25rem;
+  }
+
+  @media (max-width: 600px) {
+    min-height: 20rem;
   }
 }
 

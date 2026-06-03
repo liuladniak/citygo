@@ -1,15 +1,15 @@
 import "./HelpContact.scss";
 import Map from "../../components/Map/Map";
 import Accordion from "../../components/Accordion/Accordion";
-import Icon from "../../components/UI/Icon";
+
 import {
-  iconCall,
-  iconCheck,
-  iconLocation,
-  iconMail,
-  iconPhone,
-  iconSchedule,
-} from "../../components/UI/iconsPaths";
+  Mail,
+  Phone,
+  MessageCircle,
+  MapPin,
+  Clock,
+  CheckCircle,
+} from "lucide-react";
 import contactImg from "../../assets/images/office.jpg";
 import { useState } from "react";
 import axios from "axios";
@@ -96,7 +96,7 @@ const HelpContact = () => {
     } catch (err) {
       setServerError(
         err.response?.data?.error ||
-          "Something went wrong. Please try again or email us directly."
+          "Something went wrong. Please try again or email us directly.",
       );
     } finally {
       setIsLoading(false);
@@ -120,24 +120,24 @@ const HelpContact = () => {
             as soon as possible.
           </p>
           <div className="contact-main__el">
-            <Icon iconPath={iconMail} />
+            <Mail size={20} strokeWidth={1.5} />
             <span className="contact-main__title">Email:</span>
             <span className="contact-main__desc">
               support@citygoistanbul.com
             </span>
           </div>
           <div className="contact-main__el">
-            <Icon iconPath={iconCall} />
+            <Phone size={20} strokeWidth={1.5} />
             <span className="contact-main__title">Phone:</span>
             <span className="contact-main__desc">+90 212 555 1234</span>
           </div>
           <div className="contact-main__el">
-            <Icon iconPath={iconPhone} />
+            <MessageCircle size={20} strokeWidth={1.5} />
             <span className="contact-main__title">WhatsApp:</span>
             <span className="contact-main__desc">+90 555 678 9101</span>
           </div>
           <div className="contact-main__el">
-            <Icon iconPath={iconLocation} />
+            <MapPin size={20} strokeWidth={1.5} />
             <span className="contact-main__title">Address:</span>
             <span className="contact-main__desc">
               CityGo Istanbul, Bereketzade Mahallesi, Galata Kulesi Sokak No:10,
@@ -145,7 +145,7 @@ const HelpContact = () => {
             </span>
           </div>
           <div className="contact-main__el">
-            <Icon iconPath={iconSchedule} />
+            <Clock size={20} strokeWidth={1.5} />
             <span className="contact-main__title">Office Hours:</span>
             <span className="contact-main__desc">
               Monday–Sunday: 9:00 AM – 6:00 PM (GMT+3)
@@ -174,7 +174,7 @@ const HelpContact = () => {
 
           {success ? (
             <div className="contact-success">
-              <Icon iconPath={iconCheck} />
+              <CheckCircle size={24} strokeWidth={1.5} />
               <div>
                 <p className="contact-success__title">Message sent!</p>
                 <p className="contact-success__text">
