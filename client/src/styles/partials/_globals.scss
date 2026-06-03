@@ -39,13 +39,16 @@ h6 {
 html {
   font-size: 10px;
   scroll-behavior: smooth;
+  background-color: $main-teal;
+  overscroll-behavior-y: none;
 }
 
 body {
   font-family: "Montserrat", sans-serif;
   overflow-x: hidden;
-  background-color: #fff;
+  // background-color: #fff;
   color: $charcoal;
+  background-color: $main-teal;
   &::-webkit-scrollbar {
     display: none;
   }

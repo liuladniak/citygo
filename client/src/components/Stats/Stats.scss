@@ -46,6 +46,7 @@
   }
 
   &-card {
+    isolation: isolate;
     flex: 1;
     min-width: 0;
     display: grid;
