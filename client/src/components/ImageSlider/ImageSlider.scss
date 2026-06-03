@@ -2,7 +2,6 @@
   position: relative;
   width: 100%;
   max-width: 1200px;
-  min-height: 40rem;
   max-height: 67.5rem;
   object-fit: cover;
   height: 100%;
@@ -35,9 +34,6 @@
   width: 24px;
 }
 
-.slider-button:hover {
-}
-
 .prev {
   left: 10px;
 }
@@ -52,4 +48,9 @@
   min-width: 3rem;
   display: block;
   text-align: center;
+}
+
+.image-slider--modal .slider-image {
+  object-fit: cover;
+  object-position: center;
 }

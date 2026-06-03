@@ -3,7 +3,7 @@ import "./ImageGallery.scss";
 import iconLeft from "../../assets/icons/chevron-left-white.svg";
 import iconRight from "../../assets/icons/chevron-right-white.svg";
 
-const ImageGallery = ({ images, startIndex }) => {
+const ImageGallery = ({ images, startIndex, className = "" }) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -33,7 +33,7 @@ const ImageGallery = ({ images, startIndex }) => {
   }, [images.length]);
 
   return (
-    <div className="image-slider">
+    <div className={`image-slider ${className}`}>
       <div className="slider-button prev" onClick={prevSlide}>
         <img src={iconLeft} alt="icon left" />
       </div>

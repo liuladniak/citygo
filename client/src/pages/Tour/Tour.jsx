@@ -21,6 +21,7 @@ import ImageGallery from "../../components/ImageGallery/ImageGallery";
 import SkeletonTour from "../../components/LoadingSceleton/SkeletonTour";
 import ReviewsList from "../../components/ReviewsList/ReviewsList";
 import StarRating from "../../components/StarRating/StarRating";
+import MobileImageViewer from "../../components/MobileImageViewer/MobileImageViewer";
 
 const Tour = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const Tour = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const { slug } = useParams();
+  const [mobileViewerOpen, setMobileViewerOpen] = useState(false);
 
   const [reviewSummary, setReviewSummary] = useState(null);
   const {
@@ -109,11 +111,19 @@ const Tour = () => {
     getOneTour();
   }, [slug]);
 
+  // const openModal = (index) => {
+  //   setSelectedImageIndex(index);
+  //   setModalOpen(true);
+  // };
+
   const openModal = (index) => {
     setSelectedImageIndex(index);
-    setModalOpen(true);
+    if (window.innerWidth < 768) {
+      setMobileViewerOpen(true);
+    } else {
+      setModalOpen(true);
+    }
   };
-
   const closeModal = () => setModalOpen(false);
 
   const navRef = useRef(null);
@@ -292,8 +302,20 @@ const Tour = () => {
           </div>
 
           <Modal isOpen={modalOpen} onClose={closeModal} className="tour-modal">
-            <ImageGallery images={images} startIndex={selectedImageIndex} />
+            <ImageGallery
+              images={images}
+              startIndex={selectedImageIndex}
+              className="image-slider--modal"
+            />
           </Modal>
+
+          {mobileViewerOpen && (
+            <MobileImageViewer
+              images={images}
+              startIndex={selectedImageIndex}
+              onClose={() => setMobileViewerOpen(false)}
+            />
+          )}
 
           <div className="tour-details-wrp">
             <div className="tour-details" id="overview">
