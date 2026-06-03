@@ -18,16 +18,9 @@ jobs:
 
       - name: Deploy via Docker Compose
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
-            set -e
-            cd /var/www/citygo
-            
-            git fetch origin main
-            git reset --hard origin/main
-            
-            # Use 'docker compose' (modern) instead of 'docker-compose'
-            # If your server is very old, keep the hyphen, but 99% of 2026 setups use no hyphen
-            docker compose up -d --build
-            
-            docker image prune -f
-          EOF
+          ssh -o StrictHostKeyChecking=no -t ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} \
+            "cd /var/www/citygo && \
+             git fetch origin main && \
+             git reset --hard origin/main && \
+             /usr/bin/docker compose up -d --build && \
+             /usr/bin/docker image prune -f"
