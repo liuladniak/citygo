@@ -3,27 +3,20 @@ name: Deploy CityGo to VPS
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          timeout: 120s
-          command_timeout: 15m
-          script: |
-            set -e
-            cd /var/www/citygo
-            git fetch origin main
-            git reset --hard origin/main
-            /usr/bin/docker compose up -d --build
-            /usr/bin/docker image prune -f
+      - name: Deploy
+        run: |
+          set -e
+          cd /var/www/citygo
+          git fetch origin main
+          git reset --hard origin/main
+          /usr/bin/docker compose up -d --build
+          /usr/bin/docker image prune -f
