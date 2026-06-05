@@ -99,6 +99,7 @@
     border: 1px solid #ddd;
     border-radius: $border-radius-main;
     background: white;
+    color: $charcoal;
     font-size: 1.2rem;
     font-family: inherit;
     cursor: pointer;
@@ -113,6 +114,11 @@
       background: $main-teal;
       color: white;
       border-color: $main-teal;
+
+      &:hover {
+        color: white;
+        opacity: 0.88;
+      }
     }
   }
 
