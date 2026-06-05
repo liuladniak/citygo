@@ -26,6 +26,8 @@ import HamamExperience from "./pages/Experience/HamamExperience";
 import CustomItinerary from "./pages/CustomItinerary/CustomItinerary";
 import FoodExperience from "./pages/Experience/FoodExperience";
 import CookiePolicy from "./pages/CookiePolicy/CookiePolicy";
+import Careers from "./pages/Careers/Careers";
+import CareerDetail from "./pages/Careers/CareerDetail";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +89,8 @@ const router = createBrowserRouter([
       { path: "/experiences/food", element: <FoodExperience /> },
       { path: "/custom-itinerary", element: <CustomItinerary /> },
       { path: "/cookie-policy", element: <CookiePolicy /> },
+      { path: "/careers", element: <Careers /> },
+      { path: "/careers/:slug", element: <CareerDetail /> },
     ],
   },
 ]);

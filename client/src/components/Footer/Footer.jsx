@@ -30,7 +30,7 @@ const Footer = ({ resetConsent }) => {
               <Link className="footer-col-link" to="/about">
                 About us
               </Link>
-              <Link className="footer-col-link" to="/about">
+              <Link className="footer-col-link" to="/careers">
                 Careers
               </Link>
               <Link className="footer-col-link" to="/contact">

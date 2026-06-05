@@ -73,7 +73,9 @@ const About = () => {
           <h2 className="about-section__heading about-section__heading--careers">
             Want to become a part of our team?
           </h2>
-          <Button className="btn--careers">View positions</Button>
+          <Button className="btn btn--careers" to={"/careers"}>
+            View positions
+          </Button>
         </div>
       </div>
 
