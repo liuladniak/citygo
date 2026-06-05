@@ -44,7 +44,6 @@
     font-size: 1.4rem;
     color: #6b7280;
     line-height: 1.6;
-    // max-width: 72rem;
 
     @include tablet {
       font-size: 1.6rem;
@@ -249,6 +248,38 @@
 
       @include tablet {
         font-size: 2rem;
+      }
+    }
+  }
+
+  &-more {
+    margin-top: $space-large;
+
+    &__divider {
+      display: flex;
+      align-items: center;
+      gap: $space-medium;
+      margin-bottom: $space-large;
+
+      &::before,
+      &::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e5e7eb;
+      }
+
+      span {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #9ca3af;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+
+        @include tablet {
+          font-size: 1.3rem;
+        }
       }
     }
   }

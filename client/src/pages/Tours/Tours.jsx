@@ -18,6 +18,7 @@ const useQuery = () => new URLSearchParams(useLocation().search);
 const Tours = () => {
   const API_URL = import.meta.env.VITE_API_URL;
   const [tours, setTours] = useState([]);
+  const [otherTours, setOtherTours] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -37,12 +38,8 @@ const Tours = () => {
   useEffect(() => {
     const fetchTours = async () => {
       setIsLoading(true);
-
       try {
-        const params = {
-          page: currentPage,
-          limit: itemsPerPage,
-        };
+        const params = { page: currentPage, limit: itemsPerPage };
         if (searchQuery) params.search = searchQuery;
         if (selectedTourType) params.category = selectedTourType;
         if (selectedActivityLevel)
@@ -76,6 +73,21 @@ const Tours = () => {
     selectedSort,
     API_URL,
   ]);
+
+  useEffect(() => {
+    if (!selectedTourType) {
+      setOtherTours([]);
+      return;
+    }
+    axios
+      .get(`${API_URL}/api/tours?page=1&limit=9`)
+      .then((res) => {
+        const all = res.data.data ?? [];
+        setOtherTours(all.filter((t) => t.category !== selectedTourType));
+      })
+      .catch(() => {});
+  }, [selectedTourType, API_URL]);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     toursListRef.current?.scrollIntoView({
@@ -83,6 +95,7 @@ const Tours = () => {
       block: "start",
     });
   };
+
   const handleFilterChange = (setter) => (value) => {
     setter(value ?? "");
     setCurrentPage(1);
@@ -306,6 +319,36 @@ const Tours = () => {
             ))}
           </div>
         )}
+
+        {/* ─── other tours suggestion ────────────────────────────────────── */}
+        {!isLoading &&
+          tours.length > 0 &&
+          selectedTourType &&
+          otherTours.length > 0 && (
+            <div className="tours-more">
+              <div className="tours-more__divider">
+                <span>Explore more Istanbul experiences</span>
+              </div>
+              <div className="tours-grid">
+                {otherTours.map((tour) => (
+                  <TourCard
+                    key={tour.id}
+                    tour_name={tour.tour_name}
+                    id={tour.id}
+                    tour_thumbnail={tour.images[0]}
+                    highlights={tour.highlights}
+                    duration={tour.duration}
+                    price={tour.price}
+                    category={tour.category}
+                    images={tour.images}
+                    featured={tour.featured}
+                    avg_rating={tour.avg_rating}
+                    review_count={tour.review_count}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
       </div>
 
       {totalPages > 1 && (

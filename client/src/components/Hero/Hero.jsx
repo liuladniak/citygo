@@ -49,7 +49,7 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-guided"
-                  text="City Tours"
+                  text="City"
                 />
               </div>
             </div>
@@ -65,7 +65,7 @@ const Hero = () => {
                   className="btn btn--category"
                   iconUrl={arrowUpRightIcon}
                   iconClassName="btn--icon btn--icon-culinary"
-                  text="Food Tours"
+                  text="Food"
                 />
               </div>
             </div>

@@ -66,10 +66,8 @@ const Footer = ({ resetConsent }) => {
               <Link className="footer-col-link" to="/tours?category=Experience">
                 Experiences
               </Link>
-              <Link className="footer-col-link" to="/contact">
-                Transfers
-              </Link>
-              <Link className="footer-col-link" to="/travel-guide">
+
+              <Link className="footer-col-link" to="/custom-itinerary">
                 Private tours
               </Link>
             </div>

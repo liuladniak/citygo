@@ -26,7 +26,7 @@ const MoreServices = () => {
             Tailored itineraries, personalized experiences, and dedicated guides
             — exclusively for your group.
           </p>
-          <Link to="/destinations" className="btn btn--cta">
+          <Link to="/custom-itinerary" className="btn btn--cta">
             View how it works
           </Link>
         </div>
