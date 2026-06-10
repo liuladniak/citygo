@@ -211,6 +211,7 @@ export default function Tours() {
         if (debouncedSearch) params.search = debouncedSearch;
         if (category !== "all") params.category = category;
         if (statusFilter !== "all") params.status = statusFilter;
+        else params.status = "all";
         const { data } = await axios.get(`/api/tours`, { params });
         setTours(data.data);
         setTotal(data.total);
