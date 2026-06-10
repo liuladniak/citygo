@@ -32,12 +32,18 @@ router.get("/", async (req, res) => {
   } = req.query;
   const offset = (page - 1) * limit;
   try {
-    let baseQuery = knex("tours").where("status", "!=", "draft");
+    let baseQuery = knex("tours");
+
+    if (status && status !== "all") {
+      baseQuery = baseQuery.where("status", status);
+    } else if (!status) {
+      baseQuery = baseQuery.where("status", "!=", "draft");
+    }
+
     if (search)
       baseQuery = baseQuery.where("tour_name", "ilike", `%${search}%`);
     if (category && category !== "all")
       baseQuery = baseQuery.where("category", category);
-    if (status) baseQuery = baseQuery.where("status", status);
     if (activity_level)
       baseQuery = baseQuery.where("activity_level", activity_level);
     if (landmarks) baseQuery = baseQuery.where("landmarks", landmarks);
@@ -54,6 +60,7 @@ router.get("/", async (req, res) => {
       .offset(offset)
       .limit(limit)
       .orderBy("tours.id");
+
     const tourIds = tours.map((t) => t.id);
 
     if (tourIds.length === 0) {
