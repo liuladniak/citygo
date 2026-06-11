@@ -1,7 +1,7 @@
 import express from "express";
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
-import { requireRole } from "../middleware/auth.js";
+import { requireAuth, requireRole } from "../middleware/auth.js";
 import "dotenv/config";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
@@ -299,198 +299,213 @@ router.get("/:slug/activity", async (req, res) => {
   }
 });
 
-router.post("/", requireRole("admin", "manager"), async (req, res) => {
-  const {
-    tour_name,
-    price,
-    duration,
-    slug,
-    activity_level,
-    category,
-    overview_title,
-    overview,
-    landmarks,
-    groups,
-    minimum_of_attendees,
-    additional_costs,
-    essentials,
-    includes,
-    accessibility,
-    highlights,
-    images,
-    time_slots,
-    itinerary,
-    best_seller = false,
-    featured = false,
-    actor_id,
-  } = req.body;
+router.post(
+  "/",
+  requireAuth,
+  requireRole("admin", "manager"),
+  async (req, res) => {
+    const {
+      tour_name,
+      price,
+      duration,
+      slug,
+      activity_level,
+      category,
+      overview_title,
+      overview,
+      landmarks,
+      groups,
+      minimum_of_attendees,
+      additional_costs,
+      essentials,
+      includes,
+      accessibility,
+      highlights,
+      images,
+      time_slots,
+      itinerary,
+      best_seller = false,
+      featured = false,
+      actor_id,
+    } = req.body;
 
-  if (!tour_name || !price || !duration || !category) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
+    if (!tour_name || !price || !duration || !category) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
-  const generatedSlug =
-    slug ||
-    tour_name
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
+    const generatedSlug =
+      slug ||
+      tour_name
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
 
-  try {
-    const existing = await knex("tours").where({ slug: generatedSlug }).first();
-    if (existing)
-      return res
-        .status(409)
-        .json({ message: "A tour with this name already exists" });
+    try {
+      const existing = await knex("tours")
+        .where({ slug: generatedSlug })
+        .first();
+      if (existing)
+        return res
+          .status(409)
+          .json({ message: "A tour with this name already exists" });
 
-    const [tour] = await knex("tours")
-      .insert({
-        tour_name,
-        price,
-        duration,
-        slug: generatedSlug,
-        activity_level,
-        category,
-        overview_title,
-        overview,
-        landmarks,
-        groups,
-        minimum_of_attendees,
-        additional_costs,
-        essentials,
-        includes,
-        best_seller,
-        featured,
-        accessibility: Array.isArray(accessibility)
-          ? accessibility.join(", ")
-          : (accessibility ?? ""),
-        status: req.body.status ?? "draft",
-        created_at: knex.fn.now(),
-        updated_at: knex.fn.now(),
-      })
-      .returning("*");
+      const [tour] = await knex("tours")
+        .insert({
+          tour_name,
+          price,
+          duration,
+          slug: generatedSlug,
+          activity_level,
+          category,
+          overview_title,
+          overview,
+          landmarks,
+          groups,
+          minimum_of_attendees,
+          additional_costs,
+          essentials,
+          includes,
+          best_seller,
+          featured,
+          accessibility: Array.isArray(accessibility)
+            ? accessibility.join(", ")
+            : (accessibility ?? ""),
+          status: req.body.status ?? "draft",
+          created_at: knex.fn.now(),
+          updated_at: knex.fn.now(),
+        })
+        .returning("*");
 
-    if (images?.length) {
-      await knex("images").insert(
-        images.map((url) => ({ tour_id: tour.id, image_path: url })),
+      if (images?.length) {
+        await knex("images").insert(
+          images.map((url) => ({ tour_id: tour.id, image_path: url })),
+        );
+      }
+      if (highlights?.length) {
+        await knex("highlights").insert(
+          highlights
+            .filter(Boolean)
+            .map((h) => ({ tour_id: tour.id, highlight: h })),
+        );
+      }
+      if (time_slots?.length) {
+        await knex("tour_time_slots").insert(
+          time_slots.map((s) => ({
+            tour_id: tour.id,
+            start_time: s.start_time,
+            end_time: s.end_time,
+          })),
+        );
+      }
+      if (itinerary?.length) {
+        await knex("tour_itinerary_coordinates").insert(
+          itinerary.map((p, i) => ({
+            tour_id: tour.id,
+            order: i + 1,
+            name: p.name,
+            latitude: p.latitude,
+            longitude: p.longitude,
+          })),
+        );
+      }
+
+      await logTourActivity(
+        tour.id,
+        "created",
+        `Tour "${tour_name}" created`,
+        actor_id ?? null,
       );
+      res.status(201).json({ message: "Tour created successfully", tour });
+    } catch (err) {
+      console.error(err);
+      res
+        .status(500)
+        .json({ message: "Failed to add tour", error: err.message });
     }
-    if (highlights?.length) {
-      await knex("highlights").insert(
-        highlights
-          .filter(Boolean)
-          .map((h) => ({ tour_id: tour.id, highlight: h })),
+  },
+);
+
+router.patch(
+  "/:slug",
+  requireAuth,
+  requireRole("admin", "manager"),
+  async (req, res) => {
+    const { slug } = req.params;
+    try {
+      const tour = await knex("tours").where({ slug }).first();
+      if (!tour) return res.status(404).json({ message: "Tour not found" });
+
+      const fields = [
+        "tour_name",
+        "price",
+        "duration",
+        "activity_level",
+        "category",
+        "overview_title",
+        "overview",
+        "landmarks",
+        "groups",
+        "minimum_of_attendees",
+        "additional_costs",
+        "essentials",
+        "includes",
+        "best_seller",
+        "featured",
+        "status",
+      ];
+
+      const updates = {};
+      for (const f of fields) {
+        if (req.body[f] !== undefined) updates[f] = req.body[f];
+      }
+      if (req.body.accessibility !== undefined) {
+        updates.accessibility = Array.isArray(req.body.accessibility)
+          ? req.body.accessibility.join(", ")
+          : req.body.accessibility;
+      }
+
+      if (Object.keys(updates).length === 0) {
+        return res.status(400).json({ message: "No fields to update" });
+      }
+
+      updates.updated_at = knex.fn.now();
+      await knex("tours").where({ slug }).update(updates);
+
+      const changed = Object.keys(updates).filter((k) => k !== "updated_at");
+      const summary = changed
+        .map((k) => {
+          if (k === "price") return `price changed to €${updates[k]}`;
+          if (k === "best_seller")
+            return `bestseller ${updates[k] ? "enabled" : "disabled"}`;
+          if (k === "featured")
+            return `featured ${updates[k] ? "enabled" : "disabled"}`;
+          if (k === "status") return `status changed to ${updates[k]}`;
+          if (k === "tour_name") return `name changed to "${updates[k]}"`;
+          return `${k} updated`;
+        })
+        .join(", ");
+
+      await logTourActivity(
+        tour.id,
+        "edit",
+        `Tour updated — ${summary}`,
+        req.body.actor_id ?? null,
       );
+
+      const updated = await knex("tours").where({ slug }).first();
+      res.json({ message: "Tour updated successfully!", tour: updated });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Failed to update tour" });
     }
-    if (time_slots?.length) {
-      await knex("tour_time_slots").insert(
-        time_slots.map((s) => ({
-          tour_id: tour.id,
-          start_time: s.start_time,
-          end_time: s.end_time,
-        })),
-      );
-    }
-    if (itinerary?.length) {
-      await knex("tour_itinerary_coordinates").insert(
-        itinerary.map((p, i) => ({
-          tour_id: tour.id,
-          order: i + 1,
-          name: p.name,
-          latitude: p.latitude,
-          longitude: p.longitude,
-        })),
-      );
-    }
-
-    await logTourActivity(
-      tour.id,
-      "created",
-      `Tour "${tour_name}" created`,
-      actor_id ?? null,
-    );
-    res.status(201).json({ message: "Tour created successfully", tour });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to add tour", error: err.message });
-  }
-});
-
-router.patch("/:slug", requireRole("admin", "manager"), async (req, res) => {
-  const { slug } = req.params;
-  try {
-    const tour = await knex("tours").where({ slug }).first();
-    if (!tour) return res.status(404).json({ message: "Tour not found" });
-
-    const fields = [
-      "tour_name",
-      "price",
-      "duration",
-      "activity_level",
-      "category",
-      "overview_title",
-      "overview",
-      "landmarks",
-      "groups",
-      "minimum_of_attendees",
-      "additional_costs",
-      "essentials",
-      "includes",
-      "best_seller",
-      "featured",
-      "status",
-    ];
-
-    const updates = {};
-    for (const f of fields) {
-      if (req.body[f] !== undefined) updates[f] = req.body[f];
-    }
-    if (req.body.accessibility !== undefined) {
-      updates.accessibility = Array.isArray(req.body.accessibility)
-        ? req.body.accessibility.join(", ")
-        : req.body.accessibility;
-    }
-
-    if (Object.keys(updates).length === 0) {
-      return res.status(400).json({ message: "No fields to update" });
-    }
-
-    updates.updated_at = knex.fn.now();
-    await knex("tours").where({ slug }).update(updates);
-
-    const changed = Object.keys(updates).filter((k) => k !== "updated_at");
-    const summary = changed
-      .map((k) => {
-        if (k === "price") return `price changed to €${updates[k]}`;
-        if (k === "best_seller")
-          return `bestseller ${updates[k] ? "enabled" : "disabled"}`;
-        if (k === "featured")
-          return `featured ${updates[k] ? "enabled" : "disabled"}`;
-        if (k === "status") return `status changed to ${updates[k]}`;
-        if (k === "tour_name") return `name changed to "${updates[k]}"`;
-        return `${k} updated`;
-      })
-      .join(", ");
-
-    await logTourActivity(
-      tour.id,
-      "edit",
-      `Tour updated — ${summary}`,
-      req.body.actor_id ?? null,
-    );
-
-    const updated = await knex("tours").where({ slug }).first();
-    res.json({ message: "Tour updated successfully!", tour: updated });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to update tour" });
-  }
-});
+  },
+);
 
 router.put(
   "/:slug/images",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
@@ -520,6 +535,7 @@ router.put(
 
 router.put(
   "/:slug/highlights",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
@@ -551,6 +567,7 @@ router.put(
 
 router.put(
   "/:slug/time-slots",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
@@ -607,6 +624,7 @@ router.put(
 
 router.put(
   "/:slug/itinerary",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
@@ -664,6 +682,7 @@ router.get("/:slug/unavailable-dates", async (req, res) => {
 
 router.post(
   "/:slug/unavailable-dates",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
@@ -691,6 +710,7 @@ router.post(
 
 router.delete(
   "/:slug/unavailable-dates/:id",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
@@ -705,6 +725,7 @@ router.delete(
 
 router.post(
   "/:slug/recurring-unavailabilities",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
@@ -736,6 +757,7 @@ router.post(
 
 router.delete(
   "/:slug/recurring-unavailabilities/:id",
+  requireAuth,
   requireRole("admin", "manager"),
   async (req, res) => {
     try {
