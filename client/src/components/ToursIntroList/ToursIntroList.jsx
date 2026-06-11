@@ -7,7 +7,6 @@ import ToursSkeletonCard from "../LoadingSceleton/ToursSkeletonCard";
 import AddToFavorites from "../AddToFavorites/AddToFavorites";
 import ImageSlider from "../ImageSlider/ImageSlider";
 import timeIcon from "../../assets/icons/time-icon-red.png";
-import { generateSlug } from "../../utils/generateSlug";
 import StarRating from "../StarRating/StarRating";
 
 const ToursIntroList = () => {
@@ -114,7 +113,7 @@ const ToursIntroList = () => {
               return (
                 <Link
                   key={tour.id}
-                  to={`/tours/${generateSlug(tour.tour_name)}`}
+                  to={`/tours/${tour.slug}`}
                   className="spl-tour-card"
                 >
                   {tour.featured && (

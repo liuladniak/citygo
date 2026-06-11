@@ -4,7 +4,6 @@ import "./TourCard.scss";
 import Button from "../Button/Button";
 import timeIcon from "../../assets/icons/time-icon-red.png";
 import chevronRightIcon from "../../assets/icons/chevron-right.svg";
-import { generateSlug } from "../../utils/generateSlug";
 import AddToFavorites from "../AddToFavorites/AddToFavorites";
 import ImageSlider from "../ImageSlider/ImageSlider";
 import StarRating from "../StarRating/StarRating";
@@ -25,6 +24,7 @@ const TourCard = ({
   tourCardImg = "",
   avg_rating,
   review_count,
+  slug,
 }) => {
   const selectedCurrency = useSelector(
     (state) => state.currency.selectedCurrency,
@@ -57,17 +57,13 @@ const TourCard = ({
     }
   };
 
-  // const isDiscounted = DISCOUNTED_TOUR_IDS.includes(id);
   const discountedPrice = featured
     ? Math.round(convertPrice(price) * 0.9)
     : null;
   const isBestSeller = BEST_SELLERS.includes(id);
 
   return (
-    <Link
-      className={`tour-card ${className}`}
-      to={`/tours/${generateSlug(tour_name)}`}
-    >
+    <Link className={`tour-card ${className}`} to={`/tours/${slug}`}>
       {isBestSeller && (
         <div className="tour-card__best-seller">Best Seller</div>
       )}

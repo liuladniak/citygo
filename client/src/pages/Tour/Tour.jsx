@@ -164,7 +164,7 @@ const Tour = () => {
   const discountedPrice = featured
     ? Math.round(convertPrice(price) * 0.9)
     : null;
-  const mainImage = images[0];
+  const mainImage = images?.[0];
   const additionalImages = images.slice(1, 4);
 
   return (

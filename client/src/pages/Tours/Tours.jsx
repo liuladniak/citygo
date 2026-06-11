@@ -306,6 +306,7 @@ const Tours = () => {
                 key={tour.id}
                 tour_name={tour.tour_name}
                 id={tour.id}
+                slug={tour.slug}
                 tour_thumbnail={tour.images[0]}
                 highlights={tour.highlights}
                 duration={tour.duration}
@@ -335,6 +336,7 @@ const Tours = () => {
                     key={tour.id}
                     tour_name={tour.tour_name}
                     id={tour.id}
+                    slug={tour.slug}
                     tour_thumbnail={tour.images[0]}
                     highlights={tour.highlights}
                     duration={tour.duration}
@@ -409,6 +411,7 @@ const TourSuggestions = ({ API_URL }) => {
             key={tour.id}
             tour_name={tour.tour_name}
             id={tour.id}
+            slug={tour.slug}
             tour_thumbnail={tour.images[0]}
             highlights={tour.highlights}
             duration={tour.duration}
