@@ -69,6 +69,9 @@ function generateSlug(name: string) {
   return name
     .toLowerCase()
     .trim()
+    .replace(/ı/g, "i")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
@@ -136,7 +139,7 @@ export default function AddTour() {
       }
       set("images", [...form.images, ...newUrls]);
       toast.success(
-        `${newUrls.length} image${newUrls.length > 1 ? "s" : ""} uploaded`
+        `${newUrls.length} image${newUrls.length > 1 ? "s" : ""} uploaded`,
       );
     } catch {
       toast.error("Image upload failed");
@@ -443,7 +446,7 @@ export default function AddTour() {
                       onClick={() =>
                         set(
                           "images",
-                          form.images.filter((_, j) => j !== i)
+                          form.images.filter((_, j) => j !== i),
                         )
                       }
                       className="bg-red-500/80 hover:bg-red-500 text-white rounded p-1"
@@ -486,7 +489,7 @@ export default function AddTour() {
                     onClick={() =>
                       set(
                         "highlights",
-                        form.highlights.filter((_, j) => j !== i)
+                        form.highlights.filter((_, j) => j !== i),
                       )
                     }
                   >
@@ -548,7 +551,7 @@ export default function AddTour() {
                         "accessibility",
                         selected
                           ? form.accessibility.filter((a) => a !== option)
-                          : [...form.accessibility, option]
+                          : [...form.accessibility, option],
                       )
                     }
                     className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
@@ -609,7 +612,7 @@ export default function AddTour() {
                   onClick={() =>
                     set(
                       "time_slots",
-                      form.time_slots.filter((_, j) => j !== i)
+                      form.time_slots.filter((_, j) => j !== i),
                     )
                   }
                 >
