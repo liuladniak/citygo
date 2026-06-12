@@ -22,13 +22,13 @@ citygo/
 ├── server/       # Node.js + Express shared backend
 └── ai-service/   # Python/FastAPI + Gemini
 ```
-Three separate deployments on a single VPS, managed with Dokploy and Docker. Each service has its own GitHub Actions workflow triggered on push to `main`.
+Four separate deployments on a single VPS, managed with Dokploy and Docker. Each service has its own GitHub Actions workflow triggered on push to `main`.
 
 ---
 
 ## ✨ Client App Features
 
-- **JWT Authentication** — login, signup, token refresh, booking history per account
+- **Supabase Authentication** — login, signup, password reset, booking history per account
 - **Tour Browsing** — server-side filtering by category, activity level, keyword search with pagination
 - **Availability System** — rolling booking window, tour-level and agency-level blocked dates and recurring days
 - **Stripe Payments** — Payment Intents, webhook-driven booking creation, multi-currency support
@@ -44,7 +44,6 @@ Three separate deployments on a single VPS, managed with Dokploy and Docker. Eac
 ## 📈 Admin Dashboard Features
 
 - **Role-Based Access Control** — admin / manager / associate tiers via Supabase Auth, route guards and field-level permissions
-- **Google OAuth** — staff login via Supabase Google OAuth
 - **Booking Management** — full lifecycle (draft → pending → confirmed → completed → cancelled), payment recording, guest manifest
 - **Multi-Step Booking Creation** — 5-step guided form: type, tour & date, guests, payment, guide assignment
 - **Availability Management** — interactive availability calendar with visual blocked dates and agent override capability
