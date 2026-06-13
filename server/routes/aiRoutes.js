@@ -7,7 +7,7 @@ import axios from "axios";
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 
-const getTourContext = async () => {
+const getTourContext = async (message) => {
   try {
     const tours = await knex("tours")
       .leftJoin("tour_rating_summary as trs", "tours.id", "trs.tour_id")
@@ -24,8 +24,75 @@ const getTourContext = async () => {
       .where("tours.status", "!=", "draft")
       .orderBy("tours.id");
 
-    return tours
-      .map((t) => {
+    const msg = message.toLowerCase();
+
+    // keyword matching — score each tour by relevance
+    const scored = tours.map((t) => {
+      let score = 0;
+      const text = `${t.tour_name} ${t.overview} ${t.category}`.toLowerCase();
+
+      // category keywords
+      if (
+        msg.includes("food") ||
+        msg.includes("culinary") ||
+        msg.includes("eat")
+      ) {
+        if (t.category === "Culinary tour") score += 3;
+      }
+      if (
+        msg.includes("history") ||
+        msg.includes("historical") ||
+        msg.includes("ottoman") ||
+        msg.includes("byzantine")
+      ) {
+        if (t.category === "Guided tour") score += 3;
+      }
+      if (
+        msg.includes("experience") ||
+        msg.includes("activity") ||
+        msg.includes("adventure")
+      ) {
+        if (t.category === "Experience") score += 3;
+      }
+
+      // location/landmark keywords
+      const landmarks = [
+        "galata",
+        "bosphorus",
+        "hagia",
+        "sophia",
+        "topkapi",
+        "bazaar",
+        "spice",
+        "balat",
+        "kadikoy",
+        "sultanahmet",
+        "beyoglu",
+      ];
+      landmarks.forEach((l) => {
+        if (msg.includes(l) && text.includes(l)) score += 2;
+      });
+
+      // general travel intent
+      if (
+        msg.includes("romantic") ||
+        msg.includes("water") ||
+        msg.includes("cruise")
+      ) {
+        if (text.includes("bosphorus") || text.includes("cruise")) score += 2;
+      }
+
+      // always include featured/bestseller tours as baseline
+      if (t.featured) score += 1;
+
+      return { tour: t, score };
+    });
+
+    // sort by score, take top 5
+    const relevant = scored
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5)
+      .map(({ tour: t }) => {
         const rating = t.avg_rating
           ? ` | ★${t.avg_rating} (${t.review_count} reviews)`
           : "";
@@ -34,19 +101,20 @@ const getTourContext = async () => {
           `Duration: ${t.duration}`,
           `Price: From $${t.price} per person`,
           `Category: ${t.category}`,
-          `Overview: ${t.overview || ""}`,
+          `Overview: ${t.overview?.slice(0, 150) || ""}`,
           `Rating${rating}`,
           `URL: /tours/${t.slug}`,
         ].join(" | ");
       })
       .join("\n");
+
+    return relevant;
   } catch (err) {
     console.error("Failed to fetch tour context:", err.message);
     return "";
   }
 };
-const tourContext = await getTourContext();
-
+const tourContext = await getTourContext(message);
 router.post("/chat", async (req, res) => {
   const { message, history } = req.body;
 
