@@ -114,7 +114,7 @@ const getTourContext = async (message) => {
     return "";
   }
 };
-const tourContext = await getTourContext(message);
+// const tourContext = await getTourContext(message.trim());
 router.post("/chat", async (req, res) => {
   const { message, history } = req.body;
 
@@ -148,7 +148,7 @@ router.post("/chat", async (req, res) => {
     : [];
 
   try {
-    const tourContext = await getTourContext();
+    const tourContext = await getTourContext(message.trim());
     console.log("Tour context being sent:\n", tourContext.slice(0, 500));
     const response = await axios.post(`${process.env.AI_SERVICE_URL}/ai/chat`, {
       message: message.trim(),
