@@ -79,6 +79,7 @@ Four separate deployments on a single VPS, managed with Dokploy and Docker. Each
 ## 🤖 In Progress
 
 **Milo** — an AI-powered chat assistant built with FastAPI and Python, integrated into the client app to help users find tours and navigate the booking process.
+Migrating from Knex.js to Drizzle 
 
 ---
 
