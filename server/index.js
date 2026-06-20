@@ -9,6 +9,7 @@ import cors from "cors";
 import cron from "node-cron";
 import express from "express";
 import morgan from "morgan";
+import { promClient, metricsMiddleware } from "./metrics.js";
 
 import { requireAuth } from "./middleware/auth.js";
 import contactRoutes from "./routes/contactRoutes.js";
@@ -59,12 +60,6 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("combined"));
 }
 
-app.use(
-  "/api/payment/webhook",
-  express.raw({ type: "application/json" }),
-  webhook,
-);
-
 const miloLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
@@ -73,10 +68,11 @@ const miloLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-app.use("/api/ai/chat", miloLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(metricsMiddleware);
+app.use("/api/ai/chat", miloLimiter);
 
 app.use("/auth", authRoutes);
 app.use("/api/users", userRoutes);
@@ -93,6 +89,15 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
+app.use(
+  "/api/payment/webhook",
+  express.raw({ type: "application/json" }),
+  webhook,
+);
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", promClient.register.contentType);
+  res.end(await promClient.register.metrics());
+});
 cron.schedule("0 * * * *", generateAutoTasks);
 cron.schedule(
   "0 7 * * *",
