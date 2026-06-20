@@ -81,6 +81,26 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=changeme
     restart: unless-stopped
 
+  loki:
+    image: grafana/loki:latest
+    container_name: citygo-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: citygo-promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./promtail.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    restart: unless-stopped
+
 volumes:
   prometheus-data:
   grafana-data:
