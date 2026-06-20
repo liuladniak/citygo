@@ -4,4 +4,4 @@ global:
 scrape_configs:
   - job_name: "citygo-api"
     static_configs:
-      - targets: ["main-api:8080"]
+      - targets: ["main-api:3000"]
