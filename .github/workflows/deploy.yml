@@ -2,17 +2,34 @@ name: Deploy CityGo to VPS
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy-staging:
     runs-on: self-hosted
+    if: github.ref == 'refs/heads/develop'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy
+      - name: Deploy to staging
+        run: |
+          set -e
+          cd /var/www/citygo-staging
+          git fetch origin develop
+          git reset --hard origin/develop
+          /usr/bin/docker compose -f docker-compose.staging.yml up -d --build
+          /usr/bin/docker image prune -f
+
+  deploy-production:
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to production
         run: |
           set -e
           cd /var/www/citygo
