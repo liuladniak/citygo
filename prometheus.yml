@@ -4,7 +4,7 @@ global:
 scrape_configs:
   - job_name: "citygo-api"
     static_configs:
-      - targets: ["citygo-api:3000"]
+      - targets: ["main-api:3000"]
 
   - job_name: "citygo-api-staging"
     static_configs:
