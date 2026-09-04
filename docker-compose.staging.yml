@@ -1,0 +1,50 @@
+services:
+  main-api:
+    build: ./server
+    container_name: citygo-api-staging
+    restart: always
+    expose:
+      - "8080"
+    env_file:
+      - .env.staging
+
+  ai-service:
+    build: ./ai-service
+    container_name: citygo-ai-staging
+    restart: always
+    expose:
+      - "80"
+    env_file:
+      - .env.staging
+
+  client-app:
+    build:
+      context: ./client
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+        - VITE_STRIPE_PUBLIC_KEY=${VITE_STRIPE_PUBLIC_KEY}
+        - VITE_TEST_EMAIL=${VITE_TEST_EMAIL}
+        - VITE_TEST_PASSWORD=${VITE_TEST_PASSWORD}
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+    container_name: citygo-client-staging
+    restart: always
+    expose:
+      - "80"
+
+  admin-dashboard:
+    build:
+      context: ./dashboard
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+        - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+        - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+    container_name: citygo-dashboard-staging
+    restart: always
+    expose:
+      - "80"
+
+networks:
+  default:
+    external: true
+    name: citygo-shared-network
