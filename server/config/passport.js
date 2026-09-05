@@ -4,6 +4,7 @@ import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import "dotenv/config";
 import { sendWelcome } from "../services/emailService.js";
+import { notificationQueue } from "../queues/notificationQueue.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 console.log("Passport config loading...");
@@ -50,15 +51,22 @@ passport.use(
           .update({ user_id: newUser.id });
 
         sendWelcome({ to: email, name: firstName }).catch((err) =>
-          console.error("Welcome email (Google) failed:", err)
+          console.error("Welcome email (Google) failed:", err),
         );
+        notificationQueue
+          .add("welcome", {
+            to: email,
+            name: firstName,
+            toursUrl: `${process.env.VITE_API_URL?.replace("/api", "") || "https://citygo.liuladniak.com"}/tours`,
+          })
+          .catch((err) => console.error("Welcome queue job failed:", err));
 
         return done(null, newUser);
       } catch (err) {
         return done(err, null);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => done(null, user.id));

@@ -9,6 +9,7 @@ import {
   sendGuideAssignment,
   sendGuideUnassignment,
 } from "../services/emailService.js";
+import { notificationQueue } from "../queues/notificationQueue.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
@@ -25,7 +26,7 @@ const logActivity = async (
   action,
   message,
   actorId = null,
-  actorType = "system"
+  actorType = "system",
 ) => {
   try {
     await knex("booking_activity_log").insert({
@@ -50,10 +51,10 @@ const getFullBooking = async (id) =>
       "tours.includes",
       "tours.essentials",
       knex.raw(
-        "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time"
+        "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time",
       ),
       knex.raw(
-        "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time"
+        "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time",
       ),
       knex.raw(`(SELECT COALESCE(adults,0)+COALESCE(children,0)+COALESCE(infants,0) 
                  FROM booking_guests WHERE booking_id = bookings.id) as total_guests`),
@@ -96,7 +97,7 @@ router.get("/all", async (req, res) => {
       .leftJoin(
         "tour_time_slots",
         "bookings.time_slot_id",
-        "tour_time_slots.id"
+        "tour_time_slots.id",
       )
       .select([
         "bookings.*",
@@ -107,15 +108,15 @@ router.get("/all", async (req, res) => {
           FROM booking_assignments ba JOIN employees e ON ba.guide_id = e.id
           WHERE ba.booking_id = bookings.id AND ba.status = 'active') as staff`),
         knex.raw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`,
         ),
         knex.raw(`(SELECT COALESCE(adults, 0) + COALESCE(children, 0) + COALESCE(infants, 0) 
                    FROM booking_guests WHERE booking_id = bookings.id) as total_guests`),
         knex.raw(
-          "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time"
+          "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time",
         ),
         knex.raw(
-          "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time"
+          "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time",
         ),
       ]);
 
@@ -192,7 +193,7 @@ router.get("/stats/dashboard", async (req, res) => {
           `SELECT COALESCE(SUM(bg.adults + bg.children + bg.infants), 0) as total
         FROM bookings b JOIN booking_guests bg ON bg.booking_id = b.id
         WHERE DATE(b.tour_date) = ? AND b.status IN ('confirmed', 'pending')`,
-          [today]
+          [today],
         )
         .then((r) => r.rows[0]),
       knex("bookings")
@@ -224,7 +225,7 @@ router.get("/stats/dashboard", async (req, res) => {
         .whereRaw("tour_date >= ?", [today])
         .whereIn("status", ["confirmed", "pending"])
         .whereRaw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) < total_price`
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) < total_price`,
         )
         .count("* as count")
         .first(),
@@ -308,7 +309,7 @@ router.get(
             `SELECT AVG(bg.adults + bg.children + bg.infants) as avg
         FROM bookings b JOIN booking_guests bg ON bg.booking_id = b.id
         WHERE DATE(b.tour_date) BETWEEN ? AND ? AND b.status NOT IN ('cancelled')`,
-            [from, to]
+            [from, to],
           )
           .then((r) => r.rows[0]),
         knex("booking_payments")
@@ -319,11 +320,11 @@ router.get(
           .where("booking_payments.amount", ">", 0)
           .select(
             knex.raw(
-              "TO_CHAR(DATE_TRUNC('month', bookings.tour_date), 'Mon YYYY') as month"
+              "TO_CHAR(DATE_TRUNC('month', bookings.tour_date), 'Mon YYYY') as month",
             ),
             knex.raw("DATE_TRUNC('month', bookings.tour_date) as month_date"),
             knex.raw("SUM(booking_payments.amount) as revenue"),
-            knex.raw("COUNT(DISTINCT bookings.id) as bookings")
+            knex.raw("COUNT(DISTINCT bookings.id) as bookings"),
           )
           .groupByRaw("DATE_TRUNC('month', bookings.tour_date)")
           .orderByRaw("DATE_TRUNC('month', bookings.tour_date)"),
@@ -334,7 +335,7 @@ router.get(
           .select(
             knex.raw("COALESCE(tours.tour_name, 'Custom Tour') as tour_name"),
             knex.raw("COUNT(*) as bookings"),
-            knex.raw("SUM(bookings.total_price) as revenue")
+            knex.raw("SUM(bookings.total_price) as revenue"),
           )
           .groupBy("tours.tour_name")
           .orderBy("bookings", "desc")
@@ -350,15 +351,15 @@ router.get(
           .join(
             "tour_time_slots",
             "bookings.time_slot_id",
-            "tour_time_slots.id"
+            "tour_time_slots.id",
           )
           .whereRaw("DATE(bookings.tour_date) BETWEEN ? AND ?", [from, to])
           .whereNotIn("bookings.status", ["cancelled"])
           .select(
             knex.raw(
-              "tour_time_slots.start_time || ' – ' || tour_time_slots.end_time as slot"
+              "tour_time_slots.start_time || ' – ' || tour_time_slots.end_time as slot",
             ),
-            knex.raw("COUNT(*) as bookings")
+            knex.raw("COUNT(*) as bookings"),
           )
           .groupByRaw("tour_time_slots.start_time, tour_time_slots.end_time")
           .orderBy("bookings", "desc")
@@ -369,7 +370,7 @@ router.get(
           .join(
             "booking_payments",
             "booking_payments.booking_id",
-            "bookings.id"
+            "bookings.id",
           )
           .whereRaw("DATE(bookings.tour_date) BETWEEN ? AND ?", [from, to])
           .whereNotIn("bookings.status", ["cancelled"])
@@ -379,23 +380,23 @@ router.get(
           .where("booking_payments.amount", ">", 0)
           .select(
             knex.raw(
-              "employees.first_name || ' ' || employees.last_name as guide_name"
+              "employees.first_name || ' ' || employees.last_name as guide_name",
             ),
             "employees.position",
             knex.raw("COUNT(DISTINCT bookings.id) as tours_led"),
-            knex.raw("SUM(booking_payments.amount) as revenue")
+            knex.raw("SUM(booking_payments.amount) as revenue"),
           )
           .groupBy(
             "employees.id",
             "employees.first_name",
             "employees.last_name",
-            "employees.position"
+            "employees.position",
           )
           .orderBy("revenue", "desc")
           .limit(10),
         knex("bookings")
           .whereRaw(
-            "DATE_TRUNC('month', tour_date) = DATE_TRUNC('month', CURRENT_DATE)"
+            "DATE_TRUNC('month', tour_date) = DATE_TRUNC('month', CURRENT_DATE)",
           )
           .whereNotIn("status", ["cancelled"])
           .count("* as count")
@@ -403,7 +404,7 @@ router.get(
           .first(),
         knex("bookings")
           .whereRaw(
-            "DATE_TRUNC('month', tour_date) = DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')"
+            "DATE_TRUNC('month', tour_date) = DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')",
           )
           .whereNotIn("status", ["cancelled"])
           .count("* as count")
@@ -452,7 +453,7 @@ router.get(
       console.error(err);
       res.status(500).json({ error: "Failed to fetch analytics" });
     }
-  }
+  },
 );
 
 router.get("/guests", requireRole("admin", "manager"), async (req, res) => {
@@ -469,20 +470,20 @@ router.get("/guests", requireRole("admin", "manager"), async (req, res) => {
         "primary_contact_phone",
         knex.raw("COUNT(*) as total_bookings"),
         knex.raw(
-          "COUNT(*) FILTER (WHERE status = 'cancelled') as cancelled_bookings"
+          "COUNT(*) FILTER (WHERE status = 'cancelled') as cancelled_bookings",
         ),
         knex.raw(
-          "SUM(total_price) FILTER (WHERE status != 'cancelled') as total_spend"
+          "SUM(total_price) FILTER (WHERE status != 'cancelled') as total_spend",
         ),
         knex.raw("MAX(tour_date) as last_booking_date"),
         knex.raw("MIN(tour_date) as first_booking_date"),
         knex.raw("array_agg(DISTINCT source) as sources"),
-        knex.raw("array_agg(DISTINCT language) as languages")
+        knex.raw("array_agg(DISTINCT language) as languages"),
       )
       .groupBy(
         "primary_contact_name",
         "primary_contact_email",
-        "primary_contact_phone"
+        "primary_contact_phone",
       )
       .orderByRaw("MAX(tour_date) DESC");
 
@@ -525,7 +526,7 @@ router.get("/:id/assignments", async (req, res) => {
         "ba.assigned_at",
         knex.raw("e.first_name || ' ' || e.last_name as guide_name"),
         "e.position",
-        "e.profile_image"
+        "e.profile_image",
       );
     res.json({ data: assignments });
   } catch (err) {
@@ -588,7 +589,7 @@ router.post(
           booking.booking_reference ?? `#${id}`
         }`,
         null,
-        "agent"
+        "agent",
       );
 
       if (guide?.email) {
@@ -606,7 +607,7 @@ router.post(
       console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
 );
 
 router.delete(
@@ -623,7 +624,7 @@ router.delete(
           knex.raw("e.first_name || ' ' || e.last_name as guide_name"),
           "e.email as guide_email",
           "ba.role",
-          "ba.guide_id"
+          "ba.guide_id",
         )
         .first();
 
@@ -643,7 +644,7 @@ router.delete(
           "unassignment",
           `${assignment.guide_name} removed as ${roleLabel}`,
           null,
-          "agent"
+          "agent",
         );
 
         if (assignment.guide_email) {
@@ -661,7 +662,7 @@ router.delete(
       console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
 );
 
 router.get("/:id", async (req, res) => {
@@ -672,7 +673,7 @@ router.get("/:id", async (req, res) => {
       .leftJoin(
         "tour_time_slots",
         "bookings.time_slot_id",
-        "tour_time_slots.id"
+        "tour_time_slots.id",
       )
       .select([
         "bookings.*",
@@ -680,7 +681,7 @@ router.get("/:id", async (req, res) => {
         "tours.duration as tour_duration",
         "bookings.total_price",
         knex.raw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`,
         ),
         knex.raw(`(SELECT json_agg(json_build_object('id', ba.id, 'guide_id', ba.guide_id, 'guide_name', e.first_name || ' ' || e.last_name, 'role', ba.role, 'profile_image', e.profile_image, 'phone', e.phone))
           FROM booking_assignments ba JOIN employees e ON ba.guide_id = e.id
@@ -688,10 +689,10 @@ router.get("/:id", async (req, res) => {
         knex.raw(`(SELECT json_build_object('adults', COALESCE(adults, 0), 'children', COALESCE(children, 0), 'infants', COALESCE(infants, 0))
           FROM booking_guests WHERE booking_id = bookings.id) as guest_distribution`),
         knex.raw(
-          "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time"
+          "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time",
         ),
         knex.raw(
-          "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time"
+          "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time",
         ),
       ])
       .where("bookings.id", id)
@@ -723,7 +724,7 @@ router.get("/", async (req, res) => {
       .select(
         "bookings.*",
         "tours.tour_name as tour_title",
-        "tours.price as tour_price"
+        "tours.price as tour_price",
       )
       .leftJoin("tours", "bookings.tour_id", "tours.id")
       .where("bookings.user_id", userId);
@@ -741,7 +742,7 @@ router.get("/", async (req, res) => {
       bookings.map((b) => ({
         ...b,
         tour_images: imagesByTourId[b.tour_id] || [],
-      }))
+      })),
     );
   } catch (error) {
     console.error("Error fetching bookings:", error);
@@ -869,7 +870,7 @@ router.post("/admin", async (req, res) => {
       "booking",
       `New booking ${booking_reference} created for ${primary_contact_name}`,
       null,
-      "agent"
+      "agent",
     );
     res.status(201).json(booking);
   } catch (err) {
@@ -908,7 +909,7 @@ router.post(
       console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
 );
 
 router.post(
@@ -920,14 +921,14 @@ router.post(
       if (!Array.isArray(names) || names.length === 0)
         return res.status(400).json({ error: "names array is required" });
       await knex("booking_guest_names").insert(
-        names.map((full_name) => ({ booking_id: req.params.id, full_name }))
+        names.map((full_name) => ({ booking_id: req.params.id, full_name })),
       );
       res.status(201).json({ success: true });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
 );
 
 router.patch("/:id", async (req, res) => {
@@ -961,7 +962,7 @@ router.patch("/:id", async (req, res) => {
         "language",
       ];
       const forbidden = Object.keys(req.body).filter(
-        (k) => !allowedFields.includes(k)
+        (k) => !allowedFields.includes(k),
       );
       if (forbidden.length > 0)
         return res
@@ -1006,12 +1007,23 @@ router.patch("/:id", async (req, res) => {
         "booking",
         `Booking ${ref} status changed from ${booking.status} to ${status}`,
         null,
-        "agent"
+        "agent",
       );
 
       if (status === "confirmed" && updated?.primary_contact_email) {
         const fullBooking = await getFullBooking(id);
         sendBookingConfirmation(fullBooking);
+        await notificationQueue.add("booking-confirmation", {
+          to: updated.primary_contact_email,
+          userName: updated.primary_contact_name,
+          tourName: fullBooking.tour_name,
+          bookingReference: fullBooking.booking_reference,
+          bookingDate: fullBooking.tour_date,
+          bookingTime: fullBooking.display_start_time || "",
+          guests: fullBooking.total_guests || 1,
+          totalPrice: fullBooking.total_price,
+          currency: "USD",
+        });
       }
     }
     if (
@@ -1023,10 +1035,10 @@ router.patch("/:id", async (req, res) => {
         "booking",
         `Booking date changed to ${new Date(tour_date).toLocaleDateString(
           "en-US",
-          { month: "short", day: "numeric", year: "numeric" }
+          { month: "short", day: "numeric", year: "numeric" },
         )}`,
         null,
-        "agent"
+        "agent",
       );
     if (time_slot_id && time_slot_id !== booking.time_slot_id)
       await logActivity(
@@ -1034,7 +1046,7 @@ router.patch("/:id", async (req, res) => {
         "booking",
         `Time slot updated for booking ${ref}`,
         null,
-        "agent"
+        "agent",
       );
     if (
       primary_contact_name &&
@@ -1045,7 +1057,7 @@ router.patch("/:id", async (req, res) => {
         "booking",
         `Primary contact updated to ${primary_contact_name}`,
         null,
-        "agent"
+        "agent",
       );
     if (meeting_point && meeting_point !== booking.meeting_point)
       await logActivity(
@@ -1053,7 +1065,7 @@ router.patch("/:id", async (req, res) => {
         "booking",
         `Meeting point set to "${meeting_point}"`,
         null,
-        "agent"
+        "agent",
       );
     if (
       (start_time && start_time !== booking.start_time) ||
@@ -1064,7 +1076,7 @@ router.patch("/:id", async (req, res) => {
         "booking",
         `Tour time updated to ${start_time} – ${end_time}`,
         null,
-        "agent"
+        "agent",
       );
 
     res.json(updated);
@@ -1124,7 +1136,7 @@ router.patch(
           booking.booking_reference ?? `#${id}`
         }`,
         null,
-        "agent"
+        "agent",
       );
 
       res.json({ success: true });
@@ -1132,7 +1144,7 @@ router.patch(
       console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
 );
 
 router.post(
@@ -1165,13 +1177,13 @@ router.post(
         "payment",
         isRefund
           ? `Refund of €${Math.abs(amount).toFixed(
-              2
+              2,
             )} recorded for booking ${ref}`
           : `Payment of €${Number(amount).toFixed(
-              2
+              2,
             )} recorded for booking ${ref}`,
         null,
-        "agent"
+        "agent",
       );
 
       if (
@@ -1192,11 +1204,23 @@ router.post(
             "booking",
             `Booking ${ref} automatically confirmed after full payment`,
             null,
-            "agent"
+            "agent",
           );
           const fullBooking = await getFullBooking(id);
-          if (fullBooking?.primary_contact_email)
+          if (fullBooking?.primary_contact_email) {
             sendBookingConfirmation(fullBooking);
+            await notificationQueue.add("booking-confirmation", {
+              to: fullBooking.primary_contact_email,
+              userName: fullBooking.primary_contact_name,
+              tourName: fullBooking.tour_name,
+              bookingReference: fullBooking.booking_reference,
+              bookingDate: fullBooking.tour_date,
+              bookingTime: fullBooking.display_start_time || "",
+              guests: fullBooking.total_guests || 1,
+              totalPrice: fullBooking.total_price,
+              currency: "USD",
+            });
+          }
         }
       }
 
@@ -1205,7 +1229,7 @@ router.post(
       console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  }
+  },
 );
 
 router.post(
@@ -1247,7 +1271,7 @@ router.post(
           }`,
           null,
           "agent",
-          trx
+          trx,
         );
       });
 
@@ -1262,8 +1286,16 @@ router.post(
           : null;
         sendCancellationConfirmation(
           { ...booking, tour_name: tourName },
-          refund_amount ?? 0
+          refund_amount ?? 0,
         );
+        await notificationQueue.add("booking-cancellation", {
+          to: booking.primary_contact_email,
+          userName: booking.primary_contact_name,
+          tourName: tourName || "Custom Tour",
+          bookingReference: booking.booking_reference,
+          bookingDate: booking.tour_date,
+          refundAmount: refund_amount ?? 0,
+        });
       }
 
       const updated = await knex("bookings").where("id", id).first();
@@ -1272,7 +1304,7 @@ router.post(
       console.error(err);
       res.status(500).json({ error: "Failed to cancel booking" });
     }
-  }
+  },
 );
 
 router.get("/:id/voucher", async (req, res) => {
@@ -1283,7 +1315,7 @@ router.get("/:id/voucher", async (req, res) => {
       .leftJoin(
         "tour_time_slots",
         "bookings.time_slot_id",
-        "tour_time_slots.id"
+        "tour_time_slots.id",
       )
       .select([
         "bookings.*",
@@ -1303,10 +1335,10 @@ router.get("/:id/voucher", async (req, res) => {
         knex.raw(`(SELECT json_build_object('adults', COALESCE(adults, 0), 'children', COALESCE(children, 0), 'infants', COALESCE(infants, 0))
           FROM booking_guests WHERE booking_id = bookings.id) as guest_distribution`),
         knex.raw(
-          "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time"
+          "COALESCE(bookings.start_time, tour_time_slots.start_time) as display_start_time",
         ),
         knex.raw(
-          "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time"
+          "COALESCE(bookings.end_time, tour_time_slots.end_time) as display_end_time",
         ),
       ])
       .where("bookings.id", id)

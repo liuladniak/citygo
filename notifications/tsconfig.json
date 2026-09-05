@@ -4,16 +4,14 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
-    "allowJs": true,
-    "checkJs": false,
+    "rootDir": "./",
     "strict": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "declaration": true
+    "sourceMap": true
   },
-  "include": ["**/*.ts", "**/*.js"],
-  "exclude": ["node_modules", "dist", "public"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

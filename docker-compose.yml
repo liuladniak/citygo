@@ -101,10 +101,27 @@ services:
     command: -config.file=/etc/promtail/config.yml
     restart: unless-stopped
 
+  redis:
+    image: redis:7-alpine
+    container_name: citygo-redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  notifications:
+    build: ./notifications
+    container_name: citygo-notifications
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
 volumes:
   prometheus-data:
   grafana-data:
   loki-data:
+  redis-data:
 
 networks:
   default:
