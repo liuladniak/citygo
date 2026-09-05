@@ -19,7 +19,7 @@ jobs:
           cd /var/www/citygo-staging
           git fetch origin develop
           git reset --hard origin/develop
-          usr/bin/docker compose -f docker-compose.staging.yml --env-file .env.staging up -d --build
+          /usr/bin/docker compose -f docker-compose.staging.yml --env-file .env.staging up -d --build
           /usr/bin/docker image prune -f
 
   deploy-production:
