@@ -5,6 +5,7 @@
   width: 100%;
   background-color: $supportive-2;
   @include border-radius;
+  @include layout-constrain;
   margin-top: $space-large;
   overflow: hidden;
 }

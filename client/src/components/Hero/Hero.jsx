@@ -1,5 +1,6 @@
 import "./Hero.scss";
-import videoHero from "../../assets/videos/newcool381sec230516webyk2.mp4";
+// import videoHero from "../../assets/videos/newcool381sec230516webyk2.mp4";
+import videoHero from "../../assets/videos/hero-video.mp4";
 import VideoComponent from "../VideoComponent/VideoComponent";
 import { Link } from "react-router-dom";
 import culinaryImg from "../../assets/images/culinarytours.webp";

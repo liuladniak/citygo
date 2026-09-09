@@ -1,18 +1,32 @@
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import "dotenv/config";
-
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
-
 import { sendBookingReminder } from "../services/emailService.js";
 import { notificationQueue } from "../queues/notificationQueue.js";
 import { format, addDays } from "date-fns";
 
-export const sendReminders = async () => {
+const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
+
+interface Booking {
+  id: number;
+  primary_contact_email: string;
+  primary_contact_name: string;
+  tour_name: string;
+  booking_reference: string;
+  tour_date: string;
+  display_start_time: string;
+  display_end_time: string;
+  meeting_point: string;
+  includes: string;
+  essentials: string;
+  status: string;
+}
+
+export const sendReminders = async (): Promise<void> => {
   try {
     const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
 
-    const bookings = await knex("bookings")
+    const bookings = (await knex("bookings")
       .leftJoin("tours", "bookings.tour_id", "tours.id")
       .leftJoin(
         "tour_time_slots",
@@ -33,14 +47,13 @@ export const sendReminders = async () => {
       ])
       .whereRaw("DATE(bookings.tour_date) = ?", [tomorrow])
       .whereIn("bookings.status", ["confirmed"])
-      .whereNotNull("bookings.primary_contact_email");
+      .whereNotNull("bookings.primary_contact_email")) as unknown as Booking[];
 
     console.log(
       `[ReminderJob] Queuing ${bookings.length} reminders for ${tomorrow}`,
     );
 
     for (const booking of bookings) {
-      // keep direct send as fallback, add queue job alongside
       await sendBookingReminder(booking);
       await notificationQueue.add("booking-reminder", {
         to: booking.primary_contact_email,

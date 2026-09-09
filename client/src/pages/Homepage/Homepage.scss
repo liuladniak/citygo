@@ -2,10 +2,13 @@
 @use "../../styles/partials/mixins" as *;
 
 .map {
-  &-heading {
+  &-section {
     @include layout-constrain;
+  }
+
+  &-heading {
     text-align: left;
-    margin: $space-medium 0;
+    margin: $space-medium auto;
 
     @include tablet {
       margin: $space-large 0;

@@ -212,13 +212,15 @@ const Homepage = () => {
   return (
     <>
       <Hero />
-      <div className="map-heading">
-        <h2 className="map-heading__title">Tours Mapped for Your Journey</h2>
-        <p className="map-heading__subtitle">
-          Explore the map and find must-see spots for your next adventure.
-        </p>
+      <div className="map-section">
+        <div className="map-heading">
+          <h2 className="map-heading__title">Tours Mapped for Your Journey</h2>
+          <p className="map-heading__subtitle">
+            Explore the map and find must-see spots for your next adventure.
+          </p>
+        </div>
+        <Map tours={tours} landmarks={landmarks} />
       </div>
-      <Map tours={tours} landmarks={landmarks} />
 
       <MoreServices />
       <Featured />

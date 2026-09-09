@@ -1,4 +1,5 @@
 import promClient from "prom-client";
+import { Request, Response, NextFunction } from "express";
 
 // collects default Node.js metrics — memory, CPU, event loop lag
 promClient.collectDefaultMetrics();
@@ -19,7 +20,11 @@ const httpRequestDuration = new promClient.Histogram({
 });
 
 // middleware to track every request
-export const metricsMiddleware = (req, res, next) => {
+export const metricsMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
   const start = Date.now();
 
   res.on("finish", () => {
