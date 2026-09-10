@@ -80,9 +80,23 @@ function AppLayout() {
     document.body.scrollTop = 0;
   }, [location]);
 
-  useEffect(() => {
-    dispatch(fetchUserProfile());
+  // useEffect(() => {
+  //   dispatch(fetchUserProfile());
 
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     if (session) {
+  //       dispatch(fetchUserProfile());
+  //     } else {
+  //       dispatch(clearUser());
+  //     }
+  //   });
+
+  //   return () => subscription.unsubscribe();
+  // }, [dispatch]);
+
+  useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
