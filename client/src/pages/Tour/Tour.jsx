@@ -97,12 +97,32 @@ const Tour = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // useEffect(() => {
+  //   const getOneTour = async () => {
+  //     try {
+  //       const response = await axios.get(`${API_URL}/api/tours/${slug}`);
+  //       setTour(response.data);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.error("There was an error fetching the tour data", error);
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   getOneTour();
+  // }, [slug]);
+
   useEffect(() => {
     const getOneTour = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/tours/${slug}`);
         setTour(response.data);
         setIsLoading(false);
+
+        const tourId = response.data.id;
+        const reviewRes = await axios.get(
+          `${API_URL}/api/reviews/tour/${tourId}?limit=1`,
+        );
+        setReviewSummary(reviewRes.data.summary);
       } catch (error) {
         console.error("There was an error fetching the tour data", error);
         setIsLoading(false);
@@ -110,11 +130,6 @@ const Tour = () => {
     };
     getOneTour();
   }, [slug]);
-
-  // const openModal = (index) => {
-  //   setSelectedImageIndex(index);
-  //   setModalOpen(true);
-  // };
 
   const openModal = (index) => {
     setSelectedImageIndex(index);
@@ -138,13 +153,13 @@ const Tour = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (!id) return;
-    axios
-      .get(`${API_URL}/api/reviews/tour/${id}?limit=1`)
-      .then(({ data }) => setReviewSummary(data.summary))
-      .catch(() => {});
-  }, [id]);
+  // useEffect(() => {
+  //   if (!id) return;
+  //   axios
+  //     .get(`${API_URL}/api/reviews/tour/${id}?limit=1`)
+  //     .then(({ data }) => setReviewSummary(data.summary))
+  //     .catch(() => {});
+  // }, [id]);
 
   const handleNavClick = (e, targetId) => {
     e.preventDefault();
