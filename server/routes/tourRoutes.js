@@ -162,41 +162,176 @@ router.get("/specific-tours", async (req, res) => {
   }
 });
 
+// router.get("/:slug", async (req, res) => {
+//   const { slug } = req.params;
+//   try {
+//     const tour = await knex("tours").where({ slug }).first();
+//     if (!tour) return res.status(404).json({ message: "Tour not found" });
+
+//     const rows = await knex("tours")
+//       .select(
+//         "tours.*",
+//         "tour_itinerary_coordinates.id as itinerary_id",
+//         "tour_itinerary_coordinates.order as itinerary_order",
+//         "tour_itinerary_coordinates.latitude as itinerary_latitude",
+//         "tour_itinerary_coordinates.longitude as itinerary_longitude",
+//         "tour_itinerary_coordinates.name as itinerary_name",
+//         "tour_time_slots.id as time_slot_id",
+//         "tour_time_slots.start_time as time_slot_start_time",
+//         "tour_time_slots.end_time as time_slot_end_time",
+//         "images.image_path",
+//         "highlights.highlight",
+//         "tour_unavailable_dates.unavailable_date",
+//       )
+//       .leftJoin(
+//         "tour_itinerary_coordinates",
+//         "tours.id",
+//         "tour_itinerary_coordinates.tour_id",
+//       )
+//       .leftJoin("tour_time_slots", "tours.id", "tour_time_slots.tour_id")
+//       .leftJoin("images", "tours.id", "images.tour_id")
+//       .leftJoin("highlights", "tours.id", "highlights.tour_id")
+//       .leftJoin(
+//         "tour_unavailable_dates",
+//         "tours.id",
+//         "tour_unavailable_dates.tour_id",
+//       )
+//       .where("tours.id", tour.id);
+
+//     const result = rows.reduce(
+//       (acc, row) => {
+//         if (!acc.tour_itinerary_coordinates)
+//           acc.tour_itinerary_coordinates = [];
+//         if (!acc.tour_time_slots) acc.tour_time_slots = [];
+//         if (!acc.images) acc.images = new Set();
+//         if (!acc.highlights) acc.highlights = new Set();
+//         if (!acc.unavailable_dates) acc.unavailable_dates = new Set();
+
+//         if (
+//           row.itinerary_id &&
+//           !acc.tour_itinerary_coordinates.some((i) => i.id === row.itinerary_id)
+//         ) {
+//           acc.tour_itinerary_coordinates.push({
+//             id: row.itinerary_id,
+//             order: row.itinerary_order,
+//             latitude: row.itinerary_latitude,
+//             longitude: row.itinerary_longitude,
+//             name: row.itinerary_name,
+//           });
+//         }
+//         if (
+//           row.time_slot_id &&
+//           !acc.tour_time_slots.some((s) => s.id === row.time_slot_id)
+//         ) {
+//           acc.tour_time_slots.push({
+//             id: row.time_slot_id,
+//             start_time: row.time_slot_start_time,
+//             end_time: row.time_slot_end_time,
+//           });
+//         }
+//         if (row.image_path) acc.images.add(row.image_path);
+//         if (row.highlight) acc.highlights.add(row.highlight);
+//         if (row.unavailable_date)
+//           acc.unavailable_dates.add(row.unavailable_date);
+
+//         return acc;
+//       },
+//       { ...tour },
+//     );
+
+//     const settings = await knex("company_settings").first();
+//     const bookingWindowMonths = settings?.booking_window_months ?? 6;
+
+//     const agencyUnavailableDates = await knex("agency_unavailable_dates")
+//       .pluck("unavailable_date")
+//       .then((dates) =>
+//         dates.map((d) => {
+//           const date = new Date(d);
+//           return date.toISOString().split("T")[0];
+//         }),
+//       );
+
+//     const agencyRecurringDays = await knex(
+//       "agency_recurring_unavailabilities",
+//     ).pluck("day_of_week");
+
+//     const tourRecurringDays = await knex("tour_recurring_unavailabilities")
+//       .where("tour_id", tour.id)
+//       .pluck("day_of_week");
+
+//     res.json({
+//       ...result,
+//       images: [...result.images],
+//       highlights: [...result.highlights],
+//       unavailable_dates: [...result.unavailable_dates],
+//       unavailable_recurring_day_of_week: tourRecurringDays,
+//       booking_window_months: bookingWindowMonths,
+//       agency_unavailable_dates: agencyUnavailableDates,
+//       agency_recurring_days: agencyRecurringDays,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
+
 router.get("/:slug", async (req, res) => {
   const { slug } = req.params;
   try {
     const tour = await knex("tours").where({ slug }).first();
     if (!tour) return res.status(404).json({ message: "Tour not found" });
 
-    const rows = await knex("tours")
-      .select(
-        "tours.*",
-        "tour_itinerary_coordinates.id as itinerary_id",
-        "tour_itinerary_coordinates.order as itinerary_order",
-        "tour_itinerary_coordinates.latitude as itinerary_latitude",
-        "tour_itinerary_coordinates.longitude as itinerary_longitude",
-        "tour_itinerary_coordinates.name as itinerary_name",
-        "tour_time_slots.id as time_slot_id",
-        "tour_time_slots.start_time as time_slot_start_time",
-        "tour_time_slots.end_time as time_slot_end_time",
-        "images.image_path",
-        "highlights.highlight",
-        "tour_unavailable_dates.unavailable_date",
-      )
-      .leftJoin(
-        "tour_itinerary_coordinates",
-        "tours.id",
-        "tour_itinerary_coordinates.tour_id",
-      )
-      .leftJoin("tour_time_slots", "tours.id", "tour_time_slots.tour_id")
-      .leftJoin("images", "tours.id", "images.tour_id")
-      .leftJoin("highlights", "tours.id", "highlights.tour_id")
-      .leftJoin(
-        "tour_unavailable_dates",
-        "tours.id",
-        "tour_unavailable_dates.tour_id",
-      )
-      .where("tours.id", tour.id);
+    const [
+      rows,
+      settings,
+      agencyUnavailableDates,
+      agencyRecurringDays,
+      tourRecurringDays,
+    ] = await Promise.all([
+      knex("tours")
+        .select(
+          "tours.*",
+          "tour_itinerary_coordinates.id as itinerary_id",
+          "tour_itinerary_coordinates.order as itinerary_order",
+          "tour_itinerary_coordinates.latitude as itinerary_latitude",
+          "tour_itinerary_coordinates.longitude as itinerary_longitude",
+          "tour_itinerary_coordinates.name as itinerary_name",
+          "tour_time_slots.id as time_slot_id",
+          "tour_time_slots.start_time as time_slot_start_time",
+          "tour_time_slots.end_time as time_slot_end_time",
+          "images.image_path",
+          "highlights.highlight",
+          "tour_unavailable_dates.unavailable_date",
+        )
+        .leftJoin(
+          "tour_itinerary_coordinates",
+          "tours.id",
+          "tour_itinerary_coordinates.tour_id",
+        )
+        .leftJoin("tour_time_slots", "tours.id", "tour_time_slots.tour_id")
+        .leftJoin("images", "tours.id", "images.tour_id")
+        .leftJoin("highlights", "tours.id", "highlights.tour_id")
+        .leftJoin(
+          "tour_unavailable_dates",
+          "tours.id",
+          "tour_unavailable_dates.tour_id",
+        )
+        .where("tours.id", tour.id),
+
+      knex("company_settings").first(),
+
+      knex("agency_unavailable_dates")
+        .pluck("unavailable_date")
+        .then((dates) =>
+          dates.map((d) => new Date(d).toISOString().split("T")[0]),
+        ),
+
+      knex("agency_recurring_unavailabilities").pluck("day_of_week"),
+
+      knex("tour_recurring_unavailabilities")
+        .where("tour_id", tour.id)
+        .pluck("day_of_week"),
+    ]);
 
     const result = rows.reduce(
       (acc, row) => {
@@ -239,33 +374,13 @@ router.get("/:slug", async (req, res) => {
       { ...tour },
     );
 
-    const settings = await knex("company_settings").first();
-    const bookingWindowMonths = settings?.booking_window_months ?? 6;
-
-    const agencyUnavailableDates = await knex("agency_unavailable_dates")
-      .pluck("unavailable_date")
-      .then((dates) =>
-        dates.map((d) => {
-          const date = new Date(d);
-          return date.toISOString().split("T")[0];
-        }),
-      );
-
-    const agencyRecurringDays = await knex(
-      "agency_recurring_unavailabilities",
-    ).pluck("day_of_week");
-
-    const tourRecurringDays = await knex("tour_recurring_unavailabilities")
-      .where("tour_id", tour.id)
-      .pluck("day_of_week");
-
     res.json({
       ...result,
       images: [...result.images],
       highlights: [...result.highlights],
       unavailable_dates: [...result.unavailable_dates],
       unavailable_recurring_day_of_week: tourRecurringDays,
-      booking_window_months: bookingWindowMonths,
+      booking_window_months: settings?.booking_window_months ?? 6,
       agency_unavailable_dates: agencyUnavailableDates,
       agency_recurring_days: agencyRecurringDays,
     });
