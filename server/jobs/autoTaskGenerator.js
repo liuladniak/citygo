@@ -1,4 +1,8 @@
-import knex from "../db/knex.js";
+// import knex from "../db/knex.js";
+import initKnex from "knex";
+import knexConfig from "../knexfile.js";
+
+const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 
 const AUTO_TASK_TYPES = {
   ASSIGN_GUIDE: "auto_assign_guide",
@@ -31,10 +35,10 @@ const generateAutoTasks = async () => {
         "bookings.*",
         "tours.tour_name",
         knex.raw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`,
         ),
         knex.raw(
-          `(SELECT COUNT(*) FROM booking_assignments WHERE booking_id = bookings.id AND status = 'active') as guide_count`
+          `(SELECT COUNT(*) FROM booking_assignments WHERE booking_id = bookings.id AND status = 'active') as guide_count`,
         ),
       ])
       .where("bookings.status", "confirmed")
@@ -54,7 +58,7 @@ const generateAutoTasks = async () => {
             description: `${ref} (${
               booking.tour_name ?? "Custom Tour"
             }) has no guide assigned and is in ${Math.round(
-              hoursUntil
+              hoursUntil,
             )} hours.`,
             type: "tour",
             booking_id: booking.id,
@@ -74,7 +78,7 @@ const generateAutoTasks = async () => {
               AUTO_TASK_TYPES.COLLECT_PAYMENT
             }] Collect €${balance.toFixed(2)} from ${ref}`,
             description: `${ref} has an outstanding balance of €${balance.toFixed(
-              2
+              2,
             )} and the tour is in ${Math.round(hoursUntil)} hours.`,
             type: "tour",
             booking_id: booking.id,
@@ -93,7 +97,7 @@ const generateAutoTasks = async () => {
           await knex("tasks").insert({
             title: `[${AUTO_TASK_TYPES.SET_MEETING_POINT}] Set meeting point for ${ref}`,
             description: `${ref} has no meeting point set and the tour is in ${Math.round(
-              hoursUntil
+              hoursUntil,
             )} hours.`,
             type: "tour",
             booking_id: booking.id,
