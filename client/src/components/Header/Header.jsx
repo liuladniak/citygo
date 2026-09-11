@@ -34,6 +34,7 @@ function Header() {
   const currencyOptions = ["USD", "EUR", "TRY"];
   console.log("user for initials:", user?.first_name, user?.last_name);
   const totalBookings = useSelector(selectTotalBookings);
+  // const exchangeRates = useSelector((state) => state.currency.exchangeRates);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -63,6 +64,12 @@ function Header() {
   useEffect(() => {
     dispatch(fetchExchangeRates());
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (Object.keys(exchangeRates).length === 0) {
+  //     dispatch(fetchExchangeRates());
+  //   }
+  // }, [dispatch, exchangeRates]);
 
   const handleCurrencyChange = (currency) => {
     dispatch(setCurrency(currency));

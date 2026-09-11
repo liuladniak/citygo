@@ -113,6 +113,7 @@ const Tour = () => {
 
   useEffect(() => {
     const getOneTour = async () => {
+      console.trace("Tour fetch triggered");
       try {
         const response = await axios.get(`${API_URL}/api/tours/${slug}`);
         setTour(response.data);

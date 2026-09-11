@@ -13,21 +13,46 @@ const initialState = {
   status: "idle",
 };
 
+// export const fetchExchangeRates = createAsyncThunk(
+//   "currency/fetchExchangeRates",
+//   async () => {
+//     try {
+//       console.log("Fetching exchange rates...");
+//       const response = await axios.get(
+//         "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json"
+//       );
+//       console.log("API Response in Thunk:", response.data);
+//       return response.data.usd;
+//     } catch (error) {
+//       console.error("Error fetching exchange rates:", error);
+//       throw error;
+//     }
+//   }
+// );
+
 export const fetchExchangeRates = createAsyncThunk(
   "currency/fetchExchangeRates",
-  async () => {
+  async (_, { getState }) => {
     try {
       console.log("Fetching exchange rates...");
       const response = await axios.get(
-        "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json"
+        "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json",
       );
-      console.log("API Response in Thunk:", response.data);
       return response.data.usd;
     } catch (error) {
       console.error("Error fetching exchange rates:", error);
       throw error;
     }
-  }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { currency } = getState();
+      if (currency.status === "loading" || currency.status === "succeeded") {
+        return false;
+      }
+      return true;
+    },
+  },
 );
 
 const currencySlice = createSlice({
