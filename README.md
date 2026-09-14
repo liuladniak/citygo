@@ -6,10 +6,11 @@ A production-ready full-stack travel booking platform for city tours. CityGo con
 
 ## 🌐 Live
 
-| App | URL |
-|-----|-----|
-| Client App | [citygo.liuladniak.com](https://citygo.liuladniak.com) |
+| App             | URL                                                                        |
+| --------------- | -------------------------------------------------------------------------- |
+| Client App      | [citygo.liuladniak.com](https://citygo.liuladniak.com)                     |
 | Admin Dashboard | [citygo-dashboard.liuladniak.com](https://citygo-dashboard.liuladniak.com) |
+| Staging         | [staging.citygo.liuladniak.com](https://staging.citygo.liuladniak.com)     |
 
 ---
 
@@ -17,12 +18,15 @@ A production-ready full-stack travel booking platform for city tours. CityGo con
 
 ```text
 citygo/
-├── client/       # React customer-facing app
-├── dashboard/    # React + TypeScript admin panel
-├── server/       # Node.js + Express shared backend
-└── ai-service/   # Python/FastAPI + Gemini
+├── client/          # React customer-facing app
+├── dashboard/       # React + TypeScript admin panel
+├── server/          # Node.js + Express shared backend
+├── ai-service/      # Python/FastAPI + Gemini
+├── notifications/   # TypeScript notifications microservice
+└── qa/              # Test documentation and QA assets
 ```
-Four separate deployments on a single VPS, managed with Dokploy and Docker. Each service has its own GitHub Actions workflow triggered on push to `main`.
+
+Four separate deployments on a single VPS, managed with Docker Compose. GitHub Actions CI/CD runs on a self-hosted runner — pushes to `develop` deploy to staging, pushes to `main` deploy to production.
 
 ---
 
@@ -60,28 +64,81 @@ Four separate deployments on a single VPS, managed with Dokploy and Docker. Each
 ## 🛠️ Tech Stack
 
 ### Client
+
 `React` `Redux Toolkit` `React Router v6` `SCSS` `Stripe.js` `Leaflet` `Axios`
 
 ### Dashboard
+
 `React` `TypeScript` `TanStack Query` `shadcn/ui` `Tailwind CSS`
 
 ### Server
+
 `Node.js` `Express` `Knex.js` `PostgreSQL` `Supabase` `Stripe` `Brevo` `node-cron` `JWT`
 
 ### AI Service
+
 `Python` `FastAPI` `Gemini-2.5-flash`
 
+### Notifications Service
+
+`TypeScript` `BullMQ` `Redis` `Nodemailer`
+
 ### Infrastructure
-`Docker` `Dokploy` `GitHub Actions` `Hostinger VPS` `Supabase Storage`
+
+`Docker` `Docker Compose` `GitHub Actions` `Hostinger VPS` `Supabase Storage`
+
+### Observability
+
+`Prometheus` `Grafana` `Loki` `Promtail`
+
+### Testing
+
+`Playwright` `Postman`
+
+---
+
+## 🧪 Quality & Testing
+
+CityGo follows a structured QA approach documented in the [`/qa`](./qa) folder.
+
+**Test documentation:**
+
+- [Test Plan](./qa/test-plan.md) — testing strategy, scope, and environment overview
+- [Smoke Test Checklist](./qa/checklists/smoke-test.md) — run after every deployment
+- [Test Cases](./qa/test-cases/) — structured step-by-step scenarios for critical flows
+- [Bug Reports](./qa/bug-reports/) — defect reports following standard severity/lifecycle format
+
+**Testing approach:**
+
+- Manual exploratory testing on staging before every production release
+- Smoke test checklist executed after each deployment
+- API endpoint validation via Postman collection
+- E2E automation with Playwright covering critical user journeys (booking flow, auth, tour browsing)
+- Automated tests run in GitHub Actions CI/CD pipeline on every push
+
+**Defects are tracked via [GitHub Issues](https://github.com/liuladniak/citygo/issues)** following the standard defect lifecycle: New → Assigned → Open → Fixed → Retesting → Closed.
+
+---
+
+## 🚀 CI/CD & Deployment
+
+- `develop` branch → auto-deploys to **staging**
+- `main` branch → auto-deploys to **production**
+- Self-hosted GitHub Actions runner on VPS — no SSH timeout issues from rotating IPs
+- Docker Compose manages all services including Prometheus, Grafana, Loki observability stack
+- Smoke test checklist run manually after each production deployment
 
 ---
 
 ## 🤖 In Progress
 
-**Milo** — an AI-powered chat assistant built with FastAPI and Python, integrated into the client app to help users find tours and navigate the booking process.
-Migrating from Knex.js to Drizzle 
+- **Milo** — AI-powered chat assistant built with FastAPI and Python, integrated into the client app to help users find tours and navigate the booking process
+- **Drizzle ORM migration** — migrating from Knex.js to Drizzle for full TypeScript type safety on database queries
+- **TypeScript migration** — incrementally migrating server from JavaScript to TypeScript
+- **Playwright E2E tests** — automated test suite in progress
 
 ---
 
-## Project Setup 
-Instructions are comming soon
+## Project Setup
+
+Instructions coming soon
