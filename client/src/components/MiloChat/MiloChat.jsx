@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { MessageCircle, X, Send, Bot, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./MiloChat.scss";
+import { useAnalytics } from "../../hooks/useAnalytics.js";
 
 const MAX_LENGTH = 500;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -52,6 +53,7 @@ const renderContent = (text, navigate) => {
 };
 
 const MiloChat = () => {
+  const { trackMiloOpen, trackMiloMessage } = useAnalytics();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -81,7 +83,7 @@ const MiloChat = () => {
 
   const sendMessage = async (text) => {
     if (!text.trim() || isLoading) return;
-
+    trackMiloMessage();
     if (text.length > MAX_LENGTH) {
       setMessages((prev) => [
         ...prev,
@@ -144,7 +146,10 @@ const MiloChat = () => {
       {!isOpen && (
         <button
           className="milo-launcher"
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            setIsOpen(true);
+            trackMiloOpen();
+          }}
           aria-label="Open Milo chat"
         >
           <MessageCircle size={26} />

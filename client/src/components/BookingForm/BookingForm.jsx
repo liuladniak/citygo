@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addBooking } from "../../features/cart/cartSlice";
 import { v4 as uuidv4 } from "uuid";
 import CustomSelect from "../CustomSelect/CustomSelect";
+import { useAnalytics } from "../../hooks/useAnalytics.js";
 
 const BookingForm = ({
   price,
@@ -23,12 +24,13 @@ const BookingForm = ({
   unavailableDates,
   tour_time_slots = [],
 }) => {
+  const { trackBookingStarted } = useAnalytics();
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(
-    tour_time_slots.length > 0 ? tour_time_slots[0] : null
+    tour_time_slots.length > 0 ? tour_time_slots[0] : null,
   );
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -53,7 +55,7 @@ const BookingForm = ({
 
   const handleTimeSlotChange = (selectedLabel) => {
     const selectedSlot = tour_time_slots.find(
-      (slot) => `${slot.start_time} - ${slot.end_time}` === selectedLabel
+      (slot) => `${slot.start_time} - ${slot.end_time}` === selectedLabel,
     );
     if (selectedSlot) {
       setSelectedTimeSlot(selectedSlot);
@@ -72,6 +74,14 @@ const BookingForm = ({
       alert("Please select a date");
       return;
     }
+
+    trackBookingStarted({
+      id: tour_id,
+      tour_name: title,
+      price,
+      guests: { adults, children, infants },
+      date: formatDate(selectedDate),
+    });
 
     const booking = {
       id: uuidv4(),
@@ -103,7 +113,7 @@ const BookingForm = ({
     "TIME slot options",
     timeSlotOptions,
     "Selected time slot",
-    selectedTimeSlot
+    selectedTimeSlot,
   );
 
   return (

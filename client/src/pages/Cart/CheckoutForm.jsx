@@ -8,8 +8,10 @@ import { useDispatch } from "react-redux";
 import { clearCart } from "../../features/cart/cartSlice";
 import Button from "../../components/Button/Button";
 import "./CheckoutForm.scss";
+import { useAnalytics } from "../../hooks/useAnalytics.js";
 
 const CheckoutForm = ({ bookings, user, clientSecret }) => {
+  const { trackBookingCompleted } = useAnalytics();
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,17 @@ const CheckoutForm = ({ bookings, user, clientSecret }) => {
 
       if (paymentIntent.status === "succeeded") {
         dispatch(clearCart());
+
+        bookings.forEach((booking) => {
+          trackBookingCompleted({
+            booking_reference: paymentIntent.id,
+            total_price:
+              booking.price * (booking.guests.adults + booking.guests.children),
+            tour_id: booking.tour_id,
+            tour_name: booking.title,
+          });
+        });
+
         alert("Payment successful! Your booking is confirmed.");
         setSuccess(true);
         window.location.href = "/success";

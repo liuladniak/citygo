@@ -4,6 +4,9 @@ import { Provider } from "react-redux";
 import { store } from "./store.js";
 import App from "./App.jsx";
 import "./styles/main.css";
+import { initGTM } from "./lib/gtm.js";
+
+initGTM();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

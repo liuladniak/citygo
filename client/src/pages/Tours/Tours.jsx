@@ -12,6 +12,7 @@ import {
   iconChevronRight,
 } from "../../components/UI/iconsPaths";
 import FiltersComponent from "../../components/FiltersComponent/FiltersComponent";
+import { useAnalytics } from "../../hooks/useAnalytics.js";
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
@@ -34,6 +35,7 @@ const Tours = () => {
   const [selectedActivityLevel, setSelectedActivityLevel] = useState("");
   const [selectedSort, setSelectedSort] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const { trackTourView, trackFilterUsed, trackSearchUsed } = useAnalytics();
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -55,6 +57,7 @@ const Tours = () => {
           data = [...data].sort((a, b) => b.price - a.price);
 
         setTours(data);
+        trackTourView(response.data);
         setTotalPages(response.data.totalPages);
         setTotalCount(response.data.total);
       } catch (err) {
@@ -96,9 +99,10 @@ const Tours = () => {
     });
   };
 
-  const handleFilterChange = (setter) => (value) => {
+  const handleFilterChange = (setter, filterType) => (value) => {
     setter(value ?? "");
     setCurrentPage(1);
+    if (value) trackFilterUsed(filterType, value);
   };
 
   const handleRemoveFilter = (type) => () => {
@@ -156,7 +160,10 @@ const Tours = () => {
                     optionsClassName="tours-filter__options"
                     options={landmarkOptions}
                     value={selectedLandmark}
-                    onChange={handleFilterChange(setSelectedLandmark)}
+                    onChange={handleFilterChange(
+                      setSelectedLandmark,
+                      "landmark",
+                    )}
                     placeholder="Select Landmark"
                   />
                 </div>
@@ -165,7 +172,10 @@ const Tours = () => {
                     optionsClassName="tours-filter__options"
                     options={tourTypeOptions}
                     value={selectedTourType}
-                    onChange={handleFilterChange(setSelectedTourType)}
+                    onChange={handleFilterChange(
+                      setSelectedTourType,
+                      "tour_type",
+                    )}
                     placeholder="Select Tour Type"
                   />
                 </div>
@@ -174,7 +184,10 @@ const Tours = () => {
                     optionsClassName="tours-filter__options"
                     options={activityLevelOptions}
                     value={selectedActivityLevel}
-                    onChange={handleFilterChange(setSelectedActivityLevel)}
+                    onChange={handleFilterChange(
+                      setSelectedActivityLevel,
+                      "activity_level",
+                    )}
                     placeholder="Select Activity Level"
                   />
                 </div>
@@ -183,7 +196,7 @@ const Tours = () => {
                     optionsClassName="tours-filter__options"
                     options={sortOptions}
                     value={selectedSort}
-                    onChange={handleFilterChange(setSelectedSort)}
+                    onChange={handleFilterChange(setSelectedSort, "sort")}
                     placeholder="Sort by"
                   />
                 </div>
@@ -196,6 +209,8 @@ const Tours = () => {
                     onChange={(e) => {
                       setSearchQuery(e.target.value);
                       setCurrentPage(1);
+                      if (e.target.value.length > 2)
+                        trackSearchUsed(e.target.value);
                     }}
                     placeholder="Search tours"
                     className="tours-filter__search-input"
