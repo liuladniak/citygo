@@ -28,7 +28,17 @@ const formatDate = (dateStr) =>
 
 const baseStyle = `font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; color: #111;`;
 
+const SEED_EMAIL_DOMAIN = "@seed.example.com";
+
+const isSeedAddress = (address) =>
+  typeof address === "string" &&
+  address.trim().toLowerCase().endsWith(SEED_EMAIL_DOMAIN);
+
 const send = async ({ to, subject, html }) => {
+  if (isSeedAddress(to)) {
+    console.log(`Skipped email to seeded address ${to}: ${subject}`);
+    return;
+  }
   try {
     await brevo.transactionalEmails.sendTransacEmail({
       sender: FROM,

@@ -47,7 +47,12 @@ export const sendReminders = async (): Promise<void> => {
       ])
       .whereRaw("DATE(bookings.tour_date) = ?", [tomorrow])
       .whereIn("bookings.status", ["confirmed"])
-      .whereNotNull("bookings.primary_contact_email")) as unknown as Booking[];
+      .whereNotNull("bookings.primary_contact_email")
+      .whereNot(
+        "bookings.primary_contact_email",
+        "like",
+        "%@seed.example.com",
+      )) as unknown as Booking[];
 
     console.log(
       `[ReminderJob] Queuing ${bookings.length} reminders for ${tomorrow}`,

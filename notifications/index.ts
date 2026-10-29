@@ -31,7 +31,19 @@ const formatDate = (dateStr: string) =>
     year: "numeric",
   });
 
+const SEED_EMAIL_DOMAIN = "@seed.example.com";
+
+const isSeedAddress = (address: unknown): boolean =>
+  typeof address === "string" &&
+  address.trim().toLowerCase().endsWith(SEED_EMAIL_DOMAIN);
+
 const sendEmail = async (to: string, subject: string, html: string) => {
+  if (isSeedAddress(to)) {
+    console.log(
+      `[Notifications] Skipped email to seeded address ${to}: ${subject}`,
+    );
+    return;
+  }
   await transporter.sendMail({ from: FROM, to, subject, html });
   console.log(`[Notifications] Email sent to ${to}: ${subject}`);
 };
