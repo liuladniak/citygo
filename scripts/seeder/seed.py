@@ -53,7 +53,19 @@ CUSTOM_REQUESTS = [
     "Business group, half-day tour with hotel pickup and a Turkish tea break.",
     "Honeymoon couple, private sunset cruise and Asian-side lunch.",
 ]
-CUSTOM_MEETING_POINTS = [None, None, "Hotel lobby pickup", "Sultanahmet Square", "Karaköy ferry pier"]
+MEETING_POINTS = [
+    "Sultanahmet Square, by the German Fountain",
+    "Hagia Sophia main entrance",
+    "Basilica Cistern entrance",
+    "Galata Tower entrance",
+    "Karaköy ferry pier",
+    "Eminönü ferry terminal",
+    "Kabataş pier",
+    "Taksim Square, Republic Monument",
+    "Spice Bazaar main gate",
+    "Hotel lobby pickup",
+]
+MEETING_POINT_SHARE = 0.95
 
 ARABIC_FIRST_NAMES = [
     "Mohammed", "Abdullah", "Fahad", "Khalid", "Salman", "Omar", "Faisal",
@@ -81,6 +93,110 @@ ROLE_POSITION = {
 FAKERS = {locale: Faker(locale) for locale in TOURIST_LOCALES}
 CURRENCY_SYMBOL = "€" 
 
+ASSIGN_DEADLINE_DAYS = 2
+UNASSIGNED_SHARE = 0.8
+
+
+def needs_crew_now(booking, today):
+    """Completed and imminent tours always have a crew; far-off ones may wait."""
+    if booking["status"] == "completed":
+        return True
+    if booking["status"] != "confirmed":
+        return False
+    if booking["tour_date"] <= today + timedelta(days=ASSIGN_DEADLINE_DAYS):
+        return True
+    return random.random() >= UNASSIGNED_SHARE
+
+
+def assign_due_crews(conn, ref, dry_run):
+    """Give a crew to seeded confirmed bookings that are within 2 days and have none."""
+    now = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
+    deadline = now.date() + timedelta(days=ASSIGN_DEADLINE_DAYS)
+
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(
+            """
+            SELECT b.id, b.booking_reference AS reference, b.tour_date,
+                   g.adults, g.children, g.infants
+            FROM bookings b
+            JOIN booking_guests g ON g.booking_id = b.id
+            WHERE b.primary_contact_email LIKE %s
+              AND b.status = 'confirmed'
+              AND b.tour_date <= %s
+              AND NOT EXISTS (
+                  SELECT 1 FROM booking_assignments a
+                  WHERE a.booking_id = b.id AND a.status = 'active'
+              )
+            ORDER BY b.tour_date
+            """,
+            (f"%@{SEED_EMAIL_DOMAIN}", deadline),
+        )
+        due = cur.fetchall()
+
+    print(f"{len(due)} seeded bookings need a crew (tour within {ASSIGN_DEADLINE_DAYS} days).")
+    for row in due:
+        b = {
+            "id": row["id"],
+            "guests": {"adults": row["adults"], "children": row["children"],
+                       "infants": row["infants"]},
+        }
+        try:
+            with conn.cursor() as cur:
+                assigned = create_assignments(cur, b, pick_crew(ref, b), now)
+                for role, emp, when in assigned:
+                    log_event(cur, b["id"], "assignment",
+                              f"{emp['first_name']} {emp['last_name']} assigned as "
+                              f"{ROLE_POSITION[role]} to booking {row['reference']}",
+                              when)
+            conn.rollback() if dry_run else conn.commit()
+        except Exception as exc:
+            conn.rollback()
+            print(f"  {row['reference']} FAILED: {type(exc).__name__}: {exc}")
+            continue
+        crew = ", ".join(f"{ROLE_POSITION[r]}: {e['first_name']} {e['last_name']}"
+                         for r, e, _ in assigned)
+        print(f"  {row['reference']}  {row['tour_date']}  {crew}")
+    if dry_run:
+        print("DRY RUN: nothing saved.")
+
+
+def complete_past_bookings(conn, dry_run):
+    """Seeded confirmed bookings whose tour date has passed become completed."""
+    now = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
+
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(
+            """
+            SELECT id, booking_reference AS reference, tour_date
+            FROM bookings
+            WHERE primary_contact_email LIKE %s
+              AND status = 'confirmed'
+              AND tour_date < %s
+            ORDER BY tour_date
+            """,
+            (f"%@{SEED_EMAIL_DOMAIN}", now.date()),
+        )
+        past = cur.fetchall()
+
+    print(f"{len(past)} seeded bookings are past their tour date.")
+    for row in past:
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE bookings SET status = 'completed', updated_at = %s WHERE id = %s",
+                    (now, row["id"]),
+                )
+                log_event(cur, row["id"], "booking",
+                          f"Booking {row['reference']} marked as completed", now)
+            conn.rollback() if dry_run else conn.commit()
+        except Exception as exc:
+            conn.rollback()
+            print(f"  {row['reference']} FAILED: {type(exc).__name__}: {exc}")
+            continue
+        print(f"  {row['reference']}  {row['tour_date']}  -> completed")
+    if dry_run:
+        print("DRY RUN: nothing saved.")
+
 def parse_args():
     parser = argparse.ArgumentParser(description="CityGo dummy data seeder")
     parser.add_argument(
@@ -93,6 +209,12 @@ def parse_args():
         type=int,
         default=DEFAULT_COUNT,
         help=f"How many bookings to create (default {DEFAULT_COUNT})",
+    )
+    parser.add_argument("--assign-due", action="store_true", help="Only assign crews to seeded bookings that are within 2 days")
+    parser.add_argument(
+        "--maintain",
+        action="store_true",
+        help="Daily upkeep: assign due crews, then complete past bookings",
     )
     args = parser.parse_args()
     if args.count < 1:
@@ -188,6 +310,7 @@ def generate_person():
         "country": TOURIST_LOCALES[locale][0],
         "language": LOCALE_LANGUAGE[locale],
         "user_id": None,
+        "locale": locale,
     }
 
 
@@ -221,6 +344,11 @@ def random_guests():
         "infants": random.choices([0, 1, 2], weights=[85, 10, 5])[0],
     }
 
+def pick_meeting_point():
+    """Most bookings have one; a few are left empty on purpose."""
+    if random.random() < MEETING_POINT_SHARE:
+        return random.choice(MEETING_POINTS)
+    return None
 
 def pick_tour_date(status, today):
     if status == "completed":
@@ -334,12 +462,13 @@ def create_booking(cur, ref, person, status):
         start_hour = random.choice([9, 10, 11, 13, 14])
         start_time = time(start_hour)
         end_time = time(start_hour + random.choice([4, 5, 6]))
-        meeting_point = random.choice(CUSTOM_MEETING_POINTS)
+        meeting_point = pick_meeting_point()
         notes = random.choice(CUSTOM_REQUESTS)
         price = Decimal(random.choice(CUSTOM_PRICES)).quantize(Decimal("0.01"))
     else:
         tour_name = tour["tour_name"]
         time_slot_id = slot["id"]
+        meeting_point = pick_meeting_point()
         price = calculate_total(
             tour["price"], guests["adults"], guests["children"], tour["featured"]
         )
@@ -428,6 +557,7 @@ def create_payment(cur, booking):
     now = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
     method = pick_payment_method(booking["source"], status)
 
+
     paid_at = None
     if status == "paid":
         paid_at = min(
@@ -451,11 +581,23 @@ def create_payment(cur, booking):
     }
 
 
-def create_guest_name(cur, booking):
-    """booking_guest_names has one row per booking: the lead guest."""
-    cur.execute(
+def random_first_name(locale):
+    if locale == "ar_SA":
+        return random.choice(ARABIC_FIRST_NAMES)
+    return latin_only(FAKERS[locale].first_name())
+
+
+def create_guest_names(cur, booking, person):
+    """Lead guest plus one name per other adult and child. Infants stay unnamed.
+    Companions mostly share the contact's surname, like families do."""
+    g = booking["guests"]
+    names = [booking["contact_name"]]
+    for _ in range(g["adults"] + g["children"] - 1):
+        first = random_first_name(person["locale"])
+        names.append(f"{first} {person['last_name']}")
+    cur.executemany(
         "INSERT INTO booking_guest_names (booking_id, full_name) VALUES (%s, %s)",
-        (booking["id"], booking["contact_name"]),
+        [(booking["id"], n) for n in names],
     )
 
 
@@ -546,10 +688,10 @@ def seed_one_booking(cur, ref, status):
     create_guests(cur, b)
     pay = create_payment(cur, b)
     if status != "draft":
-        create_guest_name(cur, b)
+        create_guest_names(cur, b, person)
 
     assigned = []
-    if status in ("confirmed", "completed"):
+    if needs_crew_now(b, datetime.now(timezone.utc).date()):
         crew = pick_crew(ref, b)
         assigned = create_assignments(
             cur, b, crew, pay["paid_at"] + timedelta(seconds=2)
@@ -587,6 +729,14 @@ def main():
         ref = fetch_reference_data(conn)
         n_staff = sum(len(people) for people in ref["employees_by_position"].values())
         print(f"Reference data: {len(ref['tours'])} active tours, {n_staff} active employees")
+
+        if args.maintain or args.assign_due:
+            assign_due_crews(conn, ref, args.dry_run)
+            if args.maintain:
+                complete_past_bookings(conn, args.dry_run)
+            return
+
+        statuses = plan_statuses(args.count)
 
         statuses = plan_statuses(args.count)
         mix = Counter(statuses)
