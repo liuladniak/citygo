@@ -35,7 +35,7 @@ const generateAutoTasks = async () => {
         "bookings.*",
         "tours.tour_name",
         knex.raw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`,
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id AND booking_payments.status = 'paid') as amount_paid`,
         ),
         knex.raw(
           `(SELECT COUNT(*) FROM booking_assignments WHERE booking_id = bookings.id AND status = 'active') as guide_count`,
