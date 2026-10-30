@@ -108,7 +108,7 @@ router.get("/all", async (req, res) => {
           FROM booking_assignments ba JOIN employees e ON ba.guide_id = e.id
           WHERE ba.booking_id = bookings.id AND ba.status = 'active') as staff`),
         knex.raw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`,
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id AND booking_payments.status = 'paid') as amount_paid`,
         ),
         knex.raw(`(SELECT COALESCE(adults, 0) + COALESCE(children, 0) + COALESCE(infants, 0) 
                    FROM booking_guests WHERE booking_id = bookings.id) as total_guests`),
@@ -225,7 +225,7 @@ router.get("/stats/dashboard", async (req, res) => {
         .whereRaw("tour_date >= ?", [today])
         .whereIn("status", ["confirmed", "pending"])
         .whereRaw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) < total_price`,
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id AND booking_payments.status = 'paid') < total_price`,
         )
         .count("* as count")
         .first(),
@@ -681,7 +681,7 @@ router.get("/:id", async (req, res) => {
         "tours.duration as tour_duration",
         "bookings.total_price",
         knex.raw(
-          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`,
+          `(SELECT COALESCE(SUM(amount), 0) FROM booking_payments WHERE booking_id = bookings.id AND booking_payments.status = 'paid') as amount_paid`,
         ),
         knex.raw(`(SELECT json_agg(json_build_object('id', ba.id, 'guide_id', ba.guide_id, 'guide_name', e.first_name || ' ' || e.last_name, 'role', ba.role, 'profile_image', e.profile_image, 'phone', e.phone))
           FROM booking_assignments ba JOIN employees e ON ba.guide_id = e.id

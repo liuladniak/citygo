@@ -40,7 +40,7 @@ router.get("/bookings", requireClientAuth, async (req, res) => {
         knex.raw(`(SELECT COALESCE(adults,0)+COALESCE(children,0)+COALESCE(infants,0) 
                    FROM booking_guests WHERE booking_id = bookings.id) as total_guests`),
         knex.raw(
-          `(SELECT COALESCE(SUM(amount),0) FROM booking_payments WHERE booking_id = bookings.id) as amount_paid`,
+          `(SELECT COALESCE(SUM(amount),0) FROM booking_payments WHERE booking_id = bookings.id AND booking_payments.status = 'paid') as amount_paid`,
         ),
       )
       .where(function () {
