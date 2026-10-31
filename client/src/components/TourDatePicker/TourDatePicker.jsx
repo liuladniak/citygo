@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toDateString } from "../../utils/toDateString";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./TourDatePicker.scss";
@@ -25,7 +26,7 @@ const TourDatePicker = ({
 
   const isDateAvailable = (date) => {
     const dayOfWeek = date.getDay();
-    const formattedDate = date.toISOString().split("T")[0];
+    const formattedDate = toDateString(date);
 
     return (
       date >= today &&
@@ -76,8 +77,8 @@ const TourDatePicker = ({
           isPastDate(date)
             ? "react-datepicker__day--past"
             : isDateAvailable(date)
-            ? "react-datepicker__day--available"
-            : ""
+              ? "react-datepicker__day--available"
+              : ""
         }
         inline
       />

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "@/lib/apiClient";
+import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import {
   Check,
@@ -192,7 +193,7 @@ function Step2({
 }) {
   const selectedTour = tours.find((t) => String(t.id) === form.tour_id);
   const availableSlots = timeSlots.filter(
-    (s) => String(s.tour_id) === form.tour_id
+    (s) => String(s.tour_id) === form.tour_id,
   );
 
   const formatTime = (t: string) => {
@@ -258,7 +259,7 @@ function Step2({
         <Label>Tour Date</Label>
         <div className="w-fit">
           <AvailabilityCalendar
-            slug={!form.is_custom_tour ? selectedTour?.slug ?? null : null}
+            slug={!form.is_custom_tour ? (selectedTour?.slug ?? null) : null}
             selected={
               form.tour_date
                 ? new Date(form.tour_date + "T12:00:00")
@@ -268,7 +269,7 @@ function Step2({
               if (!date) return;
               setForm((p) => ({
                 ...p,
-                tour_date: date.toISOString().split("T")[0],
+                tour_date: format(date, "yyyy-MM-dd"),
               }));
             }}
           />
@@ -283,7 +284,7 @@ function Step2({
                 month: "long",
                 day: "numeric",
                 year: "numeric",
-              }
+              },
             )}
           </p>
         )}
@@ -708,7 +709,7 @@ function Step5({
   };
 
   const availableGuides = guides.filter(
-    (g) => !assignments.some((a) => a.guide_id === g.id)
+    (g) => !assignments.some((a) => a.guide_id === g.id),
   );
 
   return (
@@ -813,7 +814,7 @@ function Step5({
                   setSelectedRole(role);
                   if (!selectedGuide) return;
                   const guide = guides.find(
-                    (g) => String(g.id) === selectedGuide
+                    (g) => String(g.id) === selectedGuide,
                   );
                   if (!guide) return;
                   setAssignments((p) => [
@@ -1022,8 +1023,8 @@ function Stepper({
                   isCompleted
                     ? "bg-primary text-primary-foreground"
                     : isCurrent
-                    ? "border-2 border-primary text-primary"
-                    : "border-2 border-border text-muted-foreground"
+                      ? "border-2 border-primary text-primary"
+                      : "border-2 border-border text-muted-foreground"
                 }`}
               >
                 {isCompleted ? <Check className="h-4 w-4" /> : step.id}
@@ -1123,7 +1124,7 @@ const AddBooking = () => {
     }
     setStepError(null);
     setCompletedSteps((p) =>
-      p.includes(currentStep) ? p : [...p, currentStep]
+      p.includes(currentStep) ? p : [...p, currentStep],
     );
     setCurrentStep((p) => p + 1);
   };
@@ -1199,7 +1200,7 @@ const AddBooking = () => {
     } catch (err: any) {
       setSubmitError(
         err.response?.data?.error ??
-          "Failed to create booking. Please try again."
+          "Failed to create booking. Please try again.",
       );
     } finally {
       setIsSubmitting(false);

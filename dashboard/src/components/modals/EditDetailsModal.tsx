@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "@/lib/apiClient";
+import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +49,7 @@ export default function EditDetailsModal({
     apiClient.get(`/api/tours/simple`).then((res) => {
       const tours = res.data.data ?? res.data;
       const tour = tours.find(
-        (t: any) => String(t.id) === String(booking.tour_id)
+        (t: any) => String(t.id) === String(booking.tour_id),
       );
       if (tour) setTourSlug(tour.slug);
     });
@@ -58,7 +59,7 @@ export default function EditDetailsModal({
       .then((res) => {
         const all = res.data.data ?? res.data;
         setTimeSlots(
-          all.filter((s: any) => String(s.tour_id) === String(booking.tour_id))
+          all.filter((s: any) => String(s.tour_id) === String(booking.tour_id)),
         );
       })
       .catch(() => {});
@@ -129,7 +130,7 @@ export default function EditDetailsModal({
                 if (!date) return;
                 setForm((p) => ({
                   ...p,
-                  tour_date: date.toISOString().split("T")[0],
+                  tour_date: format(date, "yyyy-MM-dd"),
                 }));
               }}
             />
@@ -143,7 +144,7 @@ export default function EditDetailsModal({
                     month: "long",
                     day: "numeric",
                     year: "numeric",
-                  }
+                  },
                 )}
               </p>
             )}
