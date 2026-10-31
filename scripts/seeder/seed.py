@@ -84,6 +84,48 @@ PENDING_METHODS = {
     "office": (["invoice", "cash"], [5, 2]),
 }
 
+TASK_OWNERS = {
+    "ops": ["Operations Manager", "Tour Manager"],
+    "sales": ["Sales Representative"],
+    "finance": ["Finance"],
+}
+TASK_CREATORS = ["Operations Manager", "Tour Manager", "Sales Representative", "Admin"]
+TASKS_PER_BOOKING = ([0, 1, 2], [25, 55, 20])
+URGENT_WINDOW_DAYS = 2
+URGENT_SHARE = 0.7
+EARLY_DONE_SHARE = 0.3
+
+# "when" lists the booking statuses a task makes sense for.
+TASK_TEMPLATES = [
+    {"title": "Confirm hotel pickup for {ref}",
+     "description": "Ask {name} for the hotel name and room, and confirm the pickup time.",
+     "type": "tour", "owner": "ops", "when": ("confirmed",)},
+    {"title": "Ask {name} about dietary needs",
+     "description": "Check for allergies or dietary needs before the tour on {date}.",
+     "type": "tour", "owner": "sales", "when": ("confirmed", "pending")},
+    {"title": "Check group preferences for {ref}",
+     "description": "Find out the pace, language and accessibility needs for the group of {guests}.",
+     "type": "tour", "owner": "ops", "when": ("confirmed",)},
+    {"title": "Send route and meeting details to {name}",
+     "description": "Email the route, the meeting point and what to bring for {ref}.",
+     "type": "tour", "owner": "ops", "when": ("confirmed",)},
+    {"title": "Confirm custom itinerary for {ref}",
+     "description": "Agree the route and timing with {name} and the guide.",
+     "type": "tour", "owner": "ops", "when": ("confirmed", "pending"), "custom": True},
+    {"title": "Follow up with {name} on pending payment",
+     "description": "Booking {ref} is still pending. Ask {name} to complete the payment.",
+     "type": "general", "owner": "sales", "when": ("pending",)},
+    {"title": "Send invoice for {ref}",
+     "description": "Issue the invoice for {ref} ({total}).",
+     "type": "general", "owner": "finance", "when": ("confirmed", "pending"), "invoice": True},
+    {"title": "Ask {name} for a review",
+     "description": "Thank {name} for joining and ask for a review of the tour.",
+     "type": "general", "owner": "sales", "when": ("completed",)},
+    {"title": "Follow up on unfinished booking {ref}",
+     "description": "{name} did not finish this booking. Send a friendly reminder.",
+     "type": "general", "owner": "sales", "when": ("draft",)},
+]
+
 ROLE_POSITION = {
     "lead_guide": "Lead Guide",
     "assistant_guide": "Assistant Guide",
@@ -95,7 +137,7 @@ CURRENCY_SYMBOL = "€"
 
 ASSIGN_DEADLINE_DAYS = 2
 UNASSIGNED_SHARE = 0.8
-
+TODAY_SHARE = 0.2
 
 def needs_crew_now(booking, today):
     """Completed and imminent tours always have a crew; far-off ones may wait."""
@@ -185,6 +227,15 @@ def complete_past_bookings(conn, dry_run):
                 cur.execute(
                     "UPDATE bookings SET status = 'completed', updated_at = %s WHERE id = %s",
                     (now, row["id"]),
+                )
+                cur.execute(
+                    """
+                    UPDATE tasks
+                    SET status = 'done', completed_at = %s, updated_at = %s,
+                        completed_by = assigned_to
+                    WHERE booking_id = %s AND status = 'open'
+                    """,
+                    (now, now, row["id"]),
                 )
                 log_event(cur, row["id"], "booking",
                           f"Booking {row['reference']} marked as completed", now)
@@ -353,6 +404,8 @@ def pick_meeting_point():
 def pick_tour_date(status, today):
     if status == "completed":
         return today - timedelta(days=random.randint(1, 14))
+    if status in ("confirmed", "pending") and random.random() < TODAY_SHARE:
+        return today
     return today + timedelta(days=random.randint(7, 90))
 
 
@@ -670,6 +723,82 @@ def create_activity_log(cur, booking, payment, assigned):
                   f"{ROLE_POSITION[role]} to booking {ref}",
                   when)
 
+def pick_employee(ref, positions):
+    people = [e for p in positions for e in ref["employees_by_position"].get(p, [])]
+    return random.choice(people) if people else None
+
+
+def task_fits(template, booking, payment):
+    if booking["status"] not in template["when"]:
+        return False
+    if template.get("custom") and not booking["is_custom"]:
+        return False
+    if template.get("invoice") and not (payment and payment["method"] == "invoice"):
+        return False
+    return True
+
+
+def create_tasks(cur, ref, booking, payment):
+    """Office work an agency would do around a booking. Returns (priority, status) pairs."""
+    now = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
+    candidates = [t for t in TASK_TEMPLATES if task_fits(t, booking, payment)]
+    how_many = random.choices(*TASKS_PER_BOOKING)[0]
+    chosen = random.sample(candidates, min(how_many, len(candidates)))
+
+    g = booking["guests"]
+    total = booking["total_price"]
+    text = {
+        "ref": booking["reference"],
+        "name": booking["contact_name"],
+        "date": booking["tour_date"].isoformat(),
+        "guests": g["adults"] + g["children"] + g["infants"],
+        "total": f"{CURRENCY_SYMBOL}{total}" if total is not None else "no total yet",
+    }
+    days_left = (booking["tour_date"] - now.date()).days
+    tour_day = datetime.combine(booking["tour_date"], datetime.min.time())
+
+    made = []
+    for t in chosen:
+        created_at = min(
+            booking["created_at"] + timedelta(minutes=random.randint(10, 2880)), now
+        )
+        due = max(tour_day - timedelta(days=1), created_at)
+        due = datetime.combine(due.date(), datetime.min.time())
+
+        owner = pick_employee(ref, TASK_OWNERS[t["owner"]])
+        creator = pick_employee(ref, TASK_CREATORS)
+
+        if booking["status"] == "completed":
+            status = "done"
+        elif days_left > URGENT_WINDOW_DAYS and random.random() < EARLY_DONE_SHARE:
+            status = "done"
+        else:
+            status = "open"
+        urgent = (status == "open" and days_left <= URGENT_WINDOW_DAYS
+                  and random.random() < URGENT_SHARE)
+        priority = "urgent" if urgent else "normal"
+
+        completed_at = completed_by = None
+        if status == "done":
+            completed_at = min(created_at + timedelta(hours=random.randint(1, 72)), now)
+            completed_by = owner["id"] if owner else None
+
+        cur.execute(
+            """
+            INSERT INTO tasks (title, description, type, booking_id, assigned_to,
+                               created_by, priority, status, due_date,
+                               is_auto_generated, completed_at, completed_by,
+                               created_at, updated_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, false, %s, %s, %s, %s)
+            """,
+            (t["title"].format(**text), t["description"].format(**text), t["type"],
+             booking["id"], owner["id"] if owner else None,
+             creator["id"] if creator else None, priority, status, due,
+             completed_at, completed_by, created_at, completed_at or created_at),
+        )
+        made.append((priority, status))
+    return made
+
 def plan_statuses(count):
     """Decide the mix for this run and return one status per booking."""
     statuses = random.choices(
@@ -696,6 +825,7 @@ def seed_one_booking(cur, ref, status):
         assigned = create_assignments(
             cur, b, crew, pay["paid_at"] + timedelta(seconds=2)
         )
+    b["tasks"] = create_tasks(cur, ref, b, pay)
     create_activity_log(cur, b, pay, assigned)
 
     return b, pay, assigned
@@ -710,12 +840,14 @@ def describe(b, pay, assigned):
         for r, e, _ in assigned
     ) or "no crew"
     tour_text = "CUSTOM" if b["is_custom"] else f"tour {b['tour_id']}"
+    task_text = ", ".join(f"{p}/{s}" for p, s in b.get("tasks", [])) or "none"
     return (
         f"  {b['reference']:<24} {b['status']:<10} {b['source']:<16}"
         f"{b['tour_date']}  {tour_text:<9} "
         f"{g['adults']}A/{g['children']}C/{g['infants']}I  "
         f"total={b['total_price']}  user={b['user_id']}  pay={pay_text}\n"
         f"      crew: {crew_text}"
+        f"\n      tasks: {task_text}"
     )
 
 
@@ -738,7 +870,6 @@ def main():
 
         statuses = plan_statuses(args.count)
 
-        statuses = plan_statuses(args.count)
         mix = Counter(statuses)
         plan = ", ".join(f"{mix[s]} {s}" for s in STATUS_MIX if mix[s])
         print(f"Plan: {args.count} bookings ({plan})\n")
