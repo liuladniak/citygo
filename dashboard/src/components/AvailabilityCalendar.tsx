@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { useTourAvailability } from "@/hooks/useTourAvailability";
 
@@ -15,11 +16,11 @@ export function AvailabilityCalendar({ slug, selected, onSelect }: Props) {
   const isBlocked = (date: Date): boolean => {
     if (!availability) return false;
     const dayOfWeek = date.getDay();
-    const formatted = date.toISOString().split("T")[0];
+    const formatted = format(date, "yyyy-MM-dd");
     return (
       availability.recurring.some((r) => r.day_of_week === dayOfWeek) ||
       availability.specific.some(
-        (s) => s.unavailable_date?.split("T")[0] === formatted
+        (s) => s.unavailable_date?.split("T")[0] === formatted,
       )
     );
   };
@@ -27,14 +28,14 @@ export function AvailabilityCalendar({ slug, selected, onSelect }: Props) {
   const getBlockReason = (date: Date): string | null => {
     if (!availability) return null;
     const dayOfWeek = date.getDay();
-    const formatted = date.toISOString().split("T")[0];
+    const formatted = format(date, "yyyy-MM-dd");
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const recurring = availability.recurring.find(
-      (r) => r.day_of_week === dayOfWeek
+      (r) => r.day_of_week === dayOfWeek,
     );
     if (recurring) return recurring.reason ?? `Closed on ${days[dayOfWeek]}s`;
     const specific = availability.specific.find(
-      (s) => s.unavailable_date?.split("T")[0] === formatted
+      (s) => s.unavailable_date?.split("T")[0] === formatted,
     );
     if (specific) return specific.reason ?? "Marked unavailable";
     return null;
