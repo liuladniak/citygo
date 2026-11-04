@@ -1,9 +1,9 @@
 import "./Cart.scss";
 import ReviewTour from "../../components/ReviewTour/ReviewTour";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { clearCart } from "../../features/cart/cartSlice";
+import { clearCart, removeBooking } from "../../features/cart/cartSlice";
 import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 import BookingSummary from "../../components/BookingSummary/BookingSummary";
@@ -21,6 +21,7 @@ const Cart = () => {
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [quoteError, setQuoteError] = useState(null);
   const [contactReady, setContactReady] = useState(false);
+  const [paymentError, setPaymentError] = useState(null);
   const [contactDetails, setContactDetails] = useState({
     contact_name: "",
     contact_email: "",
@@ -29,11 +30,14 @@ const Cart = () => {
     special_requirements: "",
   });
   const contactDetailsRef = useRef(contactDetails);
-
+  const dispatch = useDispatch();
   const bookings = useSelector((state) => state.cart.bookings);
   const selectedCurrency = useSelector(
-    (state) => state.currency.selectedCurrency
+    (state) => state.currency.selectedCurrency,
   );
+
+  const today = new Date().toISOString().split("T")[0];
+  const expired = bookings.filter((b) => b.date < today);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -75,6 +79,8 @@ const Cart = () => {
 
   useEffect(() => {
     if (!bookings.length || !user || !contactReady || clientSecret) return;
+    if (expired.length) return;
+    setPaymentError(null);
     const details = contactDetailsRef.current;
     axios
       .post(`${API_URL}/api/payment/create-payment-intent`, {
@@ -94,9 +100,28 @@ const Cart = () => {
           special_requirements: details.special_requirements,
         })),
       })
-      .then((res) => setClientSecret(res.data.clientSecret))
-      .catch((err) => console.error("Error creating payment intent:", err));
-  }, [bookings, user, contactReady, clientSecret, selectedCurrency]);
+      .then((res) => {
+        setPaymentError(null);
+        setClientSecret(res.data.clientSecret);
+      })
+      .catch((err) => {
+        console.error("Error creating payment intent:", err);
+        const serverMsg = err.response?.data?.error;
+        setPaymentError(
+          serverMsg === "Tour date must be in the future."
+            ? "A tour in your cart has a date that has already passed. Please remove it and choose a new date."
+            : serverMsg ||
+                "We couldn't prepare your payment. Please try again.",
+        );
+      });
+  }, [
+    bookings,
+    user,
+    contactReady,
+    clientSecret,
+    selectedCurrency,
+    expired.length,
+  ]);
 
   const handleContactChange = (e) => {
     setContactDetails((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -131,6 +156,24 @@ const Cart = () => {
   return (
     <div className="cart">
       <h1 className="cart-heading">Review & Book</h1>
+      {expired.length > 0 && (
+        <div className="cart__error" role="alert">
+          <p>These tours have dates that have already passed:</p>
+          <ul>
+            {expired.map((b) => (
+              <li key={b.id}>
+                {b.title} ({b.date}){" "}
+                <button
+                  type="button"
+                  onClick={() => dispatch(removeBooking(b.id))}
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="cart__layout">
         <div className="cart__left">
           <div className="cart__section">
@@ -269,6 +312,10 @@ const Cart = () => {
                       clientSecret={clientSecret}
                     />
                   </Elements>
+                </div>
+              ) : paymentError ? (
+                <div className="cart__error" role="alert">
+                  <p>{paymentError}</p>
                 </div>
               ) : (
                 <p className="cart__loading">Loading payment options...</p>

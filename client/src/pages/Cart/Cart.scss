@@ -199,7 +199,9 @@
   min-width: 0;
   box-sizing: border-box;
   background: white;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 
   &:focus {
     outline: none;
@@ -287,4 +289,12 @@
   &:hover {
     opacity: 0.85;
   }
+}
+.cart__error {
+  background: #fdecea;
+  border: 1px solid #f5c2c0;
+  color: #8a1c1c;
+  border-radius: $border-radius;
+  padding: 1.6rem;
+  font-size: 1.4rem;
 }
