@@ -139,6 +139,10 @@ ASSIGN_DEADLINE_DAYS = 2
 UNASSIGNED_SHARE = 0.8
 TODAY_SHARE = 0.2
 
+DAILY_TOUR_TARGET = (4, 6)
+FILL_DAYS = 3
+FILL_STATUS = (["confirmed", "pending"], [90, 10])
+
 def needs_crew_now(booking, today):
     """Completed and imminent tours always have a crew; far-off ones may wait."""
     if booking["status"] == "completed":
@@ -201,6 +205,88 @@ def assign_due_crews(conn, ref, dry_run):
     if dry_run:
         print("DRY RUN: nothing saved.")
 
+def fill_days(conn, ref, dry_run):
+    """Keep several tours on today and the next days so the dashboard is never empty."""
+    today = datetime.now(timezone.utc).date()
+    for offset in range(FILL_DAYS):
+        day = today + timedelta(days=offset)
+        if is_blocked(ref["blocked"], None, day):
+            print(f"{day}: agency closed, skipped")
+            continue
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT count(*) FROM bookings "
+                "WHERE tour_date = %s AND status IN ('confirmed', 'pending')",
+                (day,),
+            )
+            have = cur.fetchone()[0]
+        target = random.randint(*DAILY_TOUR_TARGET)
+        missing = max(target - have, 0)
+        print(f"{day}: {have} tours, target {target}, adding {missing}")
+
+        added = attempts = 0
+        while added < missing and attempts < missing * 4:
+            attempts += 1
+            status = random.choices(*FILL_STATUS)[0]
+            try:
+                with conn.cursor() as cur:
+                    b, pay, assigned = seed_one_booking(cur, ref, status, force_date=day)
+                conn.rollback() if dry_run else conn.commit()
+            except Exception as exc:
+                conn.rollback()
+                print(f"  attempt skipped: {exc}")
+                continue
+            added += 1
+            print(describe(b, pay, assigned))
+    if dry_run:
+        print("DRY RUN: nothing saved.")
+
+def expire_past_bookings(conn, dry_run):
+    """Pending and draft bookings whose tour date passed were never confirmed: cancel them."""
+    now = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
+
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(
+            """
+            SELECT id, booking_reference AS reference, tour_date
+            FROM bookings
+            WHERE primary_contact_email LIKE %s
+              AND status IN ('pending', 'draft')
+              AND tour_date < %s
+            ORDER BY tour_date
+            """,
+            (f"%@{SEED_EMAIL_DOMAIN}", now.date()),
+        )
+        stale = cur.fetchall()
+
+    print(f"{len(stale)} seeded pending/draft bookings are past their tour date.")
+    for row in stale:
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE bookings SET status = 'cancelled', updated_at = %s WHERE id = %s",
+                    (now, row["id"]),
+                )
+                cur.execute(
+                    """
+                    UPDATE tasks
+                    SET status = 'done', completed_at = %s, updated_at = %s,
+                        completed_by = assigned_to
+                    WHERE booking_id = %s AND status = 'open'
+                    """,
+                    (now, now, row["id"]),
+                )
+                log_event(cur, row["id"], "booking",
+                          f"Booking {row['reference']} cancelled: tour date passed without confirmation",
+                          now)
+            conn.rollback() if dry_run else conn.commit()
+        except Exception as exc:
+            conn.rollback()
+            print(f"  {row['reference']} FAILED: {type(exc).__name__}: {exc}")
+            continue
+        print(f"  {row['reference']}  {row['tour_date']}  -> cancelled")
+    if dry_run:
+        print("DRY RUN: nothing saved.")
 
 def complete_past_bookings(conn, dry_run):
     """Seeded confirmed bookings whose tour date has passed become completed."""
@@ -266,6 +352,10 @@ def parse_args():
         "--maintain",
         action="store_true",
         help="Daily upkeep: assign due crews, then complete past bookings",
+    )
+    parser.add_argument(
+        "--fill", action="store_true",
+        help="Only top up the next days to the daily tour target"
     )
     args = parser.parse_args()
     if args.count < 1:
@@ -483,7 +573,7 @@ def make_reference(source, booking_id, created_at):
     return f"BK-{1000 + booking_id}"
 
 
-def create_booking(cur, ref, person, status):
+def create_booking(cur, ref, person, status, force_date=None):
     """Insert one booking row and return its details."""
     now = datetime.now(timezone.utc).replace(tzinfo=None, microsecond=0)
 
@@ -504,7 +594,12 @@ def create_booking(cur, ref, person, status):
         slot = random.choice(ref["slots_by_tour"][tour["id"]])
 
     tour_id = tour["id"] if tour else None
-    tour_date = pick_open_date(status, now.date(), ref["blocked"], tour_id)
+    if force_date is not None:
+        if is_blocked(ref["blocked"], tour_id, force_date):
+            raise RuntimeError(f"Tour {tour_id} is closed on {force_date}")
+        tour_date = force_date
+    else:
+        tour_date = pick_open_date(status, now.date(), ref["blocked"], tour_id)
     created_at = pick_created_at(status, tour_date, now)
 
     time_slot_id = start_time = end_time = None
@@ -762,8 +857,7 @@ def create_tasks(cur, ref, booking, payment):
         created_at = min(
             booking["created_at"] + timedelta(minutes=random.randint(10, 2880)), now
         )
-        due = max(tour_day - timedelta(days=1), created_at)
-        due = datetime.combine(due.date(), datetime.min.time())
+        due = datetime.combine(booking["tour_date"], time(23, 59))
 
         owner = pick_employee(ref, TASK_OWNERS[t["owner"]])
         creator = pick_employee(ref, TASK_CREATORS)
@@ -807,13 +901,13 @@ def plan_statuses(count):
     return sorted(statuses, key=list(STATUS_MIX).index)
 
 
-def seed_one_booking(cur, ref, status):
+def seed_one_booking(cur, ref, status, force_date=None):
     """Create one complete booking with everything attached to it."""
     person = generate_person()
     if random.random() < USER_SHARE:
         person["user_id"] = create_tourist(cur, person)
 
-    b = create_booking(cur, ref, person, status)
+    b = create_booking(cur, ref, person, status, force_date)
     create_guests(cur, b)
     pay = create_payment(cur, b)
     if status != "draft":
@@ -862,10 +956,14 @@ def main():
         n_staff = sum(len(people) for people in ref["employees_by_position"].values())
         print(f"Reference data: {len(ref['tours'])} active tours, {n_staff} active employees")
 
-        if args.maintain or args.assign_due:
-            assign_due_crews(conn, ref, args.dry_run)
+        if args.maintain or args.assign_due or args.fill:
+            if args.maintain or args.assign_due:
+                assign_due_crews(conn, ref, args.dry_run)
             if args.maintain:
                 complete_past_bookings(conn, args.dry_run)
+                expire_past_bookings(conn, args.dry_run)
+            if args.maintain or args.fill:
+                fill_days(conn, ref, args.dry_run)
             return
 
         statuses = plan_statuses(args.count)
