@@ -31,6 +31,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDate } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { cleanTaskTitle } from "@/lib/tasks";
 
 const priorityConfig = {
   urgent: { label: "Urgent", class: "bg-red-100 text-red-700 border-red-200" },
@@ -131,7 +132,7 @@ export default function TaskDetailModal({
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="pr-6 leading-snug">
-            {task.title.replace(/^\[auto_\w+\]\s*/, "")}
+            {cleanTaskTitle(task.title)}
           </DialogTitle>
         </DialogHeader>
 

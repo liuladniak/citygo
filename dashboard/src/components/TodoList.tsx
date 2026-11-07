@@ -14,6 +14,7 @@ import { useRole } from "@/hooks/useRole";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TaskDetailModal from "./modals/TaskDetailModal";
+import { cleanTaskTitle } from "@/lib/tasks";
 
 export default function TodoList() {
   const { user } = useAuth();
@@ -106,7 +107,7 @@ export default function TodoList() {
                           : "text-foreground/80"
                       }`}
                     >
-                      {task.title.replace(/^\[auto_\w+\]\s*/, "")}
+                      {cleanTaskTitle(task.title)}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5">
                       {task.booking_reference && (

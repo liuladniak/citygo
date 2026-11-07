@@ -26,24 +26,7 @@ import {
 } from "@/components/ui/select";
 import CreateTaskModal from "@/components/modals/CreateTaskModal";
 import TaskDetailModal from "@/components/modals/TaskDetailModal";
-
-interface Task {
-  id: number;
-  title: string;
-  description: string | null;
-  type: string;
-  booking_id: number | null;
-  assigned_to: number | null;
-  created_by: number | null;
-  priority: "urgent" | "normal" | "low";
-  status: "open" | "in_progress" | "done" | "cancelled";
-  due_date: string | null;
-  is_auto_generated: boolean;
-  assignee_name: string | null;
-  creator_name: string | null;
-  booking_reference: string | null;
-  completed_at: string | null;
-}
+import { cleanTaskTitle, type Task } from "@/lib/tasks";
 
 function TaskRow({
   task,
@@ -72,10 +55,10 @@ function TaskRow({
           isDone
             ? "bg-emerald-500"
             : task.status === "in_progress"
-            ? "bg-blue-500"
-            : isUrgent
-            ? "bg-red-500"
-            : "bg-muted-foreground/30"
+              ? "bg-blue-500"
+              : isUrgent
+                ? "bg-red-500"
+                : "bg-muted-foreground/30"
         }`}
       />
 
@@ -86,7 +69,7 @@ function TaskRow({
               isDone ? "line-through text-muted-foreground" : "font-medium"
             }`}
           >
-            {task.title.replace(/^\[auto_\w+\]\s*/, "")}
+            {cleanTaskTitle(task.title)}
           </p>
           {task.is_auto_generated && (
             <span className="text-[10px] text-muted-foreground border border-border rounded px-1 py-0 shrink-0">
@@ -172,16 +155,20 @@ export default function TasksPage() {
     search
       ? t.title.toLowerCase().includes(search.toLowerCase()) ||
         t.booking_reference?.toLowerCase().includes(search.toLowerCase())
-      : true
+      : true,
   );
 
   const urgent = filtered.filter(
     (t) =>
-      t.priority === "urgent" && t.status !== "done" && t.status !== "cancelled"
+      t.priority === "urgent" &&
+      t.status !== "done" &&
+      t.status !== "cancelled",
   );
   const normal = filtered.filter(
     (t) =>
-      t.priority !== "urgent" && t.status !== "done" && t.status !== "cancelled"
+      t.priority !== "urgent" &&
+      t.status !== "done" &&
+      t.status !== "cancelled",
   );
   const done = filtered.filter((t) => t.status === "done");
 
