@@ -11,8 +11,7 @@ import { useSelection } from "@/hooks/useSelection";
 import { useCloseTasks } from "@/hooks/useCloseTasks";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BulkActionBar } from "@/components/selection/BulkActionBar";
-import { SelectAllCheckbox } from "@/components/selection/SelectAllCheckbox";
+import { SelectionToolbar } from "@/components/selection/SelectionToolbar";
 import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
 import { TaskCloseFlow } from "@/components/tasks/TaskCloseFlow";
 import {
@@ -37,7 +36,6 @@ export default function TodoList() {
 
   const isManager = role === "admin" || role === "manager";
 
-  // Unchanged: same request as before, just typed
   const { data: tasks = [] } = useQuery<Task[]>({
     queryKey: ["tasks-widget", employee?.id, isManager],
     queryFn: async () => {
@@ -59,7 +57,6 @@ export default function TodoList() {
     enabled: !!employee,
   });
 
-  // New: selection + close flow
   const sel = useSelection(tasks, {
     getId: (t) => t.id,
     canSelect: isTaskSelectable,
@@ -72,8 +69,6 @@ export default function TodoList() {
   const overdue = tasks.filter(isOverdue);
   const upcoming = tasks.filter((t) => !isOverdue(t));
 
-  // Overdue cards get a quick action: assign-guide tasks go to the booking,
-  // everything else opens the task
   const openAction = (task: Task) => {
     if (autoTaskKind(task.title) === "auto_assign_guide" && task.booking_id) {
       navigate(`/bookings/${task.booking_id}`);
@@ -138,19 +133,27 @@ export default function TodoList() {
 
   return (
     <div className="bg-card border border-border rounded-xl p-4 shadow-sm">
-      {/* Header: bulk bar while something is selected, normal header otherwise */}
-      <div className="mb-3">
-        {sel.count > 0 ? (
-          <BulkActionBar
-            count={sel.count}
-            onClear={sel.clear}
-            note={
-              autoSelected > 0 &&
-              `${autoSelected} automatic ${
-                autoSelected === 1 ? "check" : "checks"
-              } will be verified before closing.`
-            }
+      <SelectionToolbar
+        className="mb-3"
+        state={sel.headerState}
+        onToggleAll={sel.toggleAll}
+        disabled={!sel.canSelectAny}
+        count={sel.count}
+        onClear={sel.clear}
+        title={<h2 className="text-base font-semibold">To do</h2>}
+        trailing={
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
+            onClick={() => navigate("/tasks")}
           >
+            All tasks
+            <ArrowRight className="ml-1 h-3 w-3" />
+          </Button>
+        }
+        actions={
+          <>
             {flow.canDismiss && (
               <Button
                 size="sm"
@@ -168,31 +171,15 @@ export default function TodoList() {
             >
               Mark done
             </Button>
-          </BulkActionBar>
-        ) : (
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-base font-semibold">To do</h2>
-            <div className="flex items-center gap-3">
-              {tasks.length > 0 && (
-                <SelectAllCheckbox
-                  state={sel.headerState}
-                  onToggle={sel.toggleAll}
-                  disabled={!sel.canSelectAny}
-                />
-              )}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
-                onClick={() => navigate("/tasks")}
-              >
-                All tasks
-                <ArrowRight className="ml-1 h-3 w-3" />
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+          </>
+        }
+        note={
+          autoSelected > 0 &&
+          `${autoSelected} automatic ${
+            autoSelected === 1 ? "check" : "checks"
+          } will be verified before closing.`
+        }
+      />
 
       {tasks.length === 0 ? (
         <div className="py-8 text-center text-muted-foreground">
