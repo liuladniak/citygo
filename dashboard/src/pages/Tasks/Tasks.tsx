@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "@/lib/apiClient";
 import { useAuth } from "@/hooks/useAuth";
 import { useEmployee } from "@/hooks/useEmployee";
 import { useRole } from "@/hooks/useRole";
+import { useSelection } from "@/hooks/useSelection";
+import { useCloseTasks } from "@/hooks/useCloseTasks";
 import {
   AlertTriangle,
+  Ban,
   CheckCircle2,
   ChevronRight,
   Loader2,
@@ -13,7 +16,7 @@ import {
   RefreshCw,
   User,
 } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,48 +29,72 @@ import {
 } from "@/components/ui/select";
 import CreateTaskModal from "@/components/modals/CreateTaskModal";
 import TaskDetailModal from "@/components/modals/TaskDetailModal";
-import { cleanTaskTitle, type Task } from "@/lib/tasks";
+import { BulkActionBar } from "@/components/selection/BulkActionBar";
+import { SelectAllCheckbox } from "@/components/selection/SelectAllCheckbox";
+import { TaskCheckbox } from "@/components/tasks/TaskCheckbox";
+import { TaskCloseFlow } from "@/components/tasks/TaskCloseFlow";
+import { cleanTaskTitle, isTaskSelectable, type Task } from "@/lib/tasks";
 
 function TaskRow({
   task,
   onClick,
+  selectable,
+  checked,
+  onToggle,
 }: {
   task: Task;
   onClick: () => void;
-  onStatusChange: (id: number, status: string) => void;
+  selectable: boolean;
+  checked: boolean;
+  onToggle: () => void;
 }) {
   const isDone = task.status === "done";
+  const isDismissed = task.status === "dismissed";
+  const isClosed = isDone || isDismissed;
   const isOverdue =
-    task.due_date &&
-    new Date(task.due_date) < new Date() &&
-    task.status !== "done";
+    task.due_date && new Date(task.due_date) < new Date() && !isClosed;
   const isUrgent = task.priority === "urgent";
+  const closedBySystem =
+    isClosed && task.is_auto_generated && task.completed_by === null;
 
   return (
     <div
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 border-b last:border-0 hover:bg-muted/40 transition-colors group cursor-pointer ${
-        isDone ? "opacity-50" : ""
-      }`}
+      className={cn(
+        "flex items-center gap-3 px-4 py-2 border-b last:border-0 hover:bg-muted/40 transition-colors group cursor-pointer",
+        isClosed && "opacity-60",
+        checked && "bg-muted/60",
+      )}
     >
+      {/* Checkbox for open tasks; same-width spacer for closed ones so titles line up */}
+      {selectable ? (
+        <TaskCheckbox task={task} checked={checked} onToggle={onToggle} />
+      ) : (
+        <span className="-ml-2 w-11 shrink-0" aria-hidden="true" />
+      )}
+
       <div
-        className={`h-2 w-2 rounded-full shrink-0 ${
+        className={cn(
+          "h-2 w-2 rounded-full shrink-0",
           isDone
             ? "bg-emerald-500"
-            : task.status === "in_progress"
-              ? "bg-blue-500"
-              : isUrgent
-                ? "bg-red-500"
-                : "bg-muted-foreground/30"
-        }`}
+            : isDismissed
+              ? "bg-muted-foreground/40"
+              : task.status === "in_progress"
+                ? "bg-blue-500"
+                : isUrgent
+                  ? "bg-red-500"
+                  : "bg-muted-foreground/30",
+        )}
       />
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p
-            className={`text-sm truncate ${
-              isDone ? "line-through text-muted-foreground" : "font-medium"
-            }`}
+            className={cn(
+              "text-sm truncate",
+              isClosed ? "line-through text-muted-foreground" : "font-medium",
+            )}
           >
             {cleanTaskTitle(task.title)}
           </p>
@@ -76,10 +103,15 @@ function TaskRow({
               auto
             </span>
           )}
+          {isDismissed && (
+            <span className="text-[10px] text-muted-foreground border border-border rounded px-1 py-0 shrink-0">
+              dismissed
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
           {task.booking_reference && (
-            <span className="text-xs text-muted-foreground">
+            <span className="font-mono text-xs text-muted-foreground">
               {task.booking_reference}
             </span>
           )}
@@ -89,14 +121,22 @@ function TaskRow({
               {task.assignee_name}
             </span>
           )}
-          {task.due_date && (
+          {task.due_date && !isClosed && (
             <span
-              className={`text-xs flex items-center gap-1 ${
-                isOverdue ? "text-red-500 font-medium" : "text-muted-foreground"
-              }`}
+              className={cn(
+                "text-xs flex items-center gap-1",
+                isOverdue
+                  ? "text-red-500 font-medium"
+                  : "text-muted-foreground",
+              )}
             >
               {isOverdue ? "Overdue · " : ""}
               {formatDate(task.due_date)}
+            </span>
+          )}
+          {closedBySystem && (
+            <span className="text-xs text-muted-foreground">
+              Closed by System
             </span>
           )}
         </div>
@@ -139,16 +179,10 @@ export default function TasksPage() {
         params.assigned_to = String(employee.id);
         params.include_unassigned = "true";
       }
-      const { data } = await axios.get(`/api/tasks`, { params });
+      const { data } = await axios.get<Task[]>(`/api/tasks`, { params });
       return data;
     },
     enabled: !!employee,
-  });
-
-  const { mutate: updateStatus } = useMutation({
-    mutationFn: ({ id, status }: { id: number; status: string }) =>
-      axios.patch(`/api/tasks/${id}`, { status }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 
   const filtered = tasks.filter((t) =>
@@ -158,27 +192,43 @@ export default function TasksPage() {
       : true,
   );
 
+  const sel = useSelection(filtered, {
+    getId: (t) => t.id,
+    canSelect: isTaskSelectable,
+  });
+  const flow = useCloseTasks();
+  const selectableCount = filtered.filter(isTaskSelectable).length;
+  const autoSelected = filtered.filter(
+    (t) => sel.isSelected(t.id) && t.is_auto_generated,
+  ).length;
+
   const urgent = filtered.filter(
-    (t) =>
-      t.priority === "urgent" &&
-      t.status !== "done" &&
-      t.status !== "cancelled",
+    (t) => isTaskSelectable(t) && t.priority === "urgent",
   );
   const normal = filtered.filter(
-    (t) =>
-      t.priority !== "urgent" &&
-      t.status !== "done" &&
-      t.status !== "cancelled",
+    (t) => isTaskSelectable(t) && t.priority !== "urgent",
   );
   const done = filtered.filter((t) => t.status === "done");
+  const dismissed = filtered.filter((t) => t.status === "dismissed");
 
   const counts = {
     open: tasks.filter((t) => t.status === "open").length,
     in_progress: tasks.filter((t) => t.status === "in_progress").length,
     done: tasks.filter((t) => t.status === "done").length,
-    urgent: tasks.filter((t) => t.priority === "urgent" && t.status !== "done")
+    urgent: tasks.filter((t) => t.priority === "urgent" && isTaskSelectable(t))
       .length,
   };
+
+  const renderRow = (task: Task) => (
+    <TaskRow
+      key={task.id}
+      task={task}
+      onClick={() => setSelectedTask(task)}
+      selectable={isTaskSelectable(task)}
+      checked={sel.isSelected(task.id)}
+      onToggle={() => sel.toggle(task.id)}
+    />
+  );
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
@@ -190,7 +240,12 @@ export default function TasksPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => refetch()}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            aria-label="Refresh tasks"
+          >
             <RefreshCw className="h-4 w-4" />
           </Button>
           {isManager && (
@@ -245,6 +300,7 @@ export default function TasksPage() {
             <SelectItem value="open">Open</SelectItem>
             <SelectItem value="in_progress">In Progress</SelectItem>
             <SelectItem value="done">Done</SelectItem>
+            <SelectItem value="dismissed">Dismissed</SelectItem>
           </SelectContent>
         </Select>
         <Select value={priorityFilter} onValueChange={setPriorityFilter}>
@@ -269,6 +325,18 @@ export default function TasksPage() {
               <SelectItem value="unassigned">Unassigned</SelectItem>
             </SelectContent>
           </Select>
+        )}
+
+        {/* Select all: only shown when something on screen can be ticked */}
+        {selectableCount > 0 && (
+          <div className="ml-auto">
+            <SelectAllCheckbox
+              label={`Select all (${selectableCount})`}
+              state={sel.headerState}
+              onToggle={sel.toggleAll}
+              disabled={!sel.canSelectAny}
+            />
+          </div>
         )}
       </div>
 
@@ -295,16 +363,7 @@ export default function TasksPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 mt-2">
-                {urgent.map((task) => (
-                  <TaskRow
-                    key={task.id}
-                    task={task}
-                    onClick={() => setSelectedTask(task)}
-                    onStatusChange={(id, status) =>
-                      updateStatus({ id, status })
-                    }
-                  />
-                ))}
+                {urgent.map(renderRow)}
               </CardContent>
             </Card>
           )}
@@ -317,16 +376,7 @@ export default function TasksPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 mt-2">
-                {normal.map((task) => (
-                  <TaskRow
-                    key={task.id}
-                    task={task}
-                    onClick={() => setSelectedTask(task)}
-                    onStatusChange={(id, status) =>
-                      updateStatus({ id, status })
-                    }
-                  />
-                ))}
+                {normal.map(renderRow)}
               </CardContent>
             </Card>
           )}
@@ -336,25 +386,61 @@ export default function TasksPage() {
               <CardHeader className="pb-0 pt-3 px-4">
                 <CardTitle className="text-sm font-semibold text-emerald-600 flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4" />
-                  Completed Today ({done.length})
+                  Done · {done.length}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 mt-2">
-                {done.map((task) => (
-                  <TaskRow
-                    key={task.id}
-                    task={task}
-                    onClick={() => setSelectedTask(task)}
-                    onStatusChange={(id, status) =>
-                      updateStatus({ id, status })
-                    }
-                  />
-                ))}
+                {done.map(renderRow)}
+              </CardContent>
+            </Card>
+          )}
+
+          {dismissed.length > 0 && (
+            <Card className="opacity-70">
+              <CardHeader className="pb-0 pt-3 px-4">
+                <CardTitle className="text-sm font-semibold text-muted-foreground flex items-center gap-1.5">
+                  <Ban className="h-4 w-4" />
+                  Dismissed · {dismissed.length}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0 mt-2">
+                {dismissed.map(renderRow)}
               </CardContent>
             </Card>
           )}
         </div>
       )}
+
+      {/* Bulk bar: sticks to the bottom of the screen while anything is selected */}
+      <BulkActionBar
+        className="sticky bottom-4 z-10 mx-auto max-w-xl"
+        count={sel.count}
+        onClear={sel.clear}
+        note={
+          autoSelected > 0 &&
+          `${autoSelected} automatic ${
+            autoSelected === 1 ? "check" : "checks"
+          } will be verified before closing.`
+        }
+      >
+        {flow.canDismiss && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => flow.dismiss(sel.selectedIds)}
+            disabled={flow.busy}
+          >
+            Dismiss
+          </Button>
+        )}
+        <Button
+          size="sm"
+          onClick={() => flow.markDone(sel.selectedIds)}
+          disabled={flow.busy}
+        >
+          Mark done
+        </Button>
+      </BulkActionBar>
 
       <CreateTaskModal
         open={createOpen}
@@ -371,6 +457,8 @@ export default function TasksPage() {
         isManager={isManager}
         onSuccess={() => queryClient.invalidateQueries({ queryKey: ["tasks"] })}
       />
+
+      <TaskCloseFlow flow={flow} />
     </div>
   );
 }
