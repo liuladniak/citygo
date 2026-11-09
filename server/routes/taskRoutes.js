@@ -2,9 +2,71 @@ import express from "express";
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import "dotenv/config";
+import { getCurrentEmployee } from "../lib/currentEmployee.js";
+import { findUnresolved } from "../lib/autoTaskConditions.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
+
+const OPEN_STATUSES = ["open", "in_progress"];
+const DISMISS_ROLES = ["admin", "manager"];
+const MAX_BULK = 200;
+const cleanTitle = (t) => t.replace(/^\[auto_\w+\]\s*/, "");
+
+function parseIds(ids) {
+  if (!Array.isArray(ids) || ids.length === 0 || ids.length > MAX_BULK)
+    return null;
+  if (!ids.every(Number.isInteger)) return null;
+  return [...new Set(ids)];
+}
+
+// Sorts ids into ready / unresolved / skipped. Changes nothing.
+async function planClose(db, ids) {
+  const rows = await db("tasks")
+    .leftJoin("employees as closer", "tasks.completed_by", "closer.id")
+    .whereIn("tasks.id", ids)
+    .select(
+      "tasks.*",
+      db.raw("closer.first_name || ' ' || closer.last_name AS closer_name"),
+    );
+  const byId = new Map(rows.map((t) => [t.id, t]));
+
+  const open = [];
+  const skipped = [];
+  for (const id of ids) {
+    const t = byId.get(id);
+    if (!t || t.archived_at) {
+      skipped.push({
+        id,
+        title: t ? cleanTitle(t.title) : `Task #${id}`,
+        reason: "no longer active",
+      });
+    } else if (!OPEN_STATUSES.includes(t.status)) {
+      skipped.push({
+        id,
+        title: cleanTitle(t.title),
+        reason: t.closer_name
+          ? `already closed by ${t.closer_name}`
+          : "already closed",
+      });
+    } else {
+      open.push(t);
+    }
+  }
+
+  const unresolved = await findUnresolved(db, open);
+  return {
+    ready: open.filter((t) => !unresolved.has(t.id)).map((t) => t.id),
+    unresolved: open
+      .filter((t) => unresolved.has(t.id))
+      .map((t) => ({
+        id: t.id,
+        title: cleanTitle(t.title),
+        reason: unresolved.get(t.id),
+      })),
+    skipped,
+  };
+}
 
 const taskWithDetails = () =>
   knex("tasks")
@@ -14,11 +76,11 @@ const taskWithDetails = () =>
     .select([
       "tasks.*",
       knex.raw(
-        "assignee.first_name || ' ' || assignee.last_name as assignee_name"
+        "assignee.first_name || ' ' || assignee.last_name as assignee_name",
       ),
       "assignee.profile_image as assignee_image",
       knex.raw(
-        "creator.first_name || ' ' || creator.last_name as creator_name"
+        "creator.first_name || ' ' || creator.last_name as creator_name",
       ),
       "bookings.booking_reference",
     ]);
@@ -40,7 +102,7 @@ router.get("/", async (req, res) => {
       if (req.query.include_unassigned === "true") {
         query.where(function () {
           this.where("tasks.assigned_to", assigned_to).orWhereNull(
-            "tasks.assigned_to"
+            "tasks.assigned_to",
           );
         });
       } else {
@@ -80,12 +142,13 @@ router.get("/my/:employeeId", async (req, res) => {
 
     const tasks = await taskWithDetails()
       .where("tasks.assigned_to", employeeId)
+      .whereNotIn("tasks.status", ["cancelled", "dismissed"])
       .whereNull("tasks.archived_at")
       .where(function () {
         this.whereNot("tasks.status", "done").orWhere(
           "tasks.completed_at",
           ">=",
-          today
+          today,
         );
       }).orderByRaw(`
         CASE tasks.priority
@@ -115,12 +178,12 @@ router.get("/dashboard/:employeeId", async (req, res) => {
 
     let query = taskWithDetails()
       .whereNull("tasks.archived_at")
-      .whereNot("tasks.status", "cancelled")
+      .whereNotIn("tasks.status", ["cancelled", "dismissed"])
       .where(function () {
         this.whereNot("tasks.status", "done").orWhere(
           "tasks.completed_at",
           ">=",
-          todayStart
+          todayStart,
         );
       });
 
@@ -141,7 +204,7 @@ router.get("/dashboard/:employeeId", async (req, res) => {
           WHEN 'low' THEN 3
         END,
         tasks.due_date ASC NULLS LAST
-      `
+      `,
       )
       .limit(5);
 
@@ -150,6 +213,110 @@ router.get("/dashboard/:employeeId", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch dashboard tasks" });
+  }
+});
+
+router.post("/bulk-close/preview", async (req, res) => {
+  const ids = parseIds(req.body?.ids);
+  if (!ids)
+    return res
+      .status(400)
+      .json({ error: `ids must be 1-${MAX_BULK} integers` });
+  try {
+    res.json(await planClose(knex, ids));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to check tasks" });
+  }
+});
+
+router.post("/bulk-close", async (req, res) => {
+  const ids = parseIds(req.body?.ids);
+  const { action } = req.body ?? {};
+  const reason =
+    typeof req.body?.reason === "string" ? req.body.reason.trim() : "";
+
+  if (!ids)
+    return res
+      .status(400)
+      .json({ error: `ids must be 1-${MAX_BULK} integers` });
+  if (!["done", "dismiss", "reopen"].includes(action)) {
+    return res
+      .status(400)
+      .json({ error: "action must be done, dismiss or reopen" });
+  }
+  if (action === "dismiss" && !DISMISS_ROLES.includes(req.role)) {
+    return res.status(403).json({ error: "Only managers can dismiss tasks" });
+  }
+  if (action === "dismiss" && (reason.length < 3 || reason.length > 500)) {
+    return res
+      .status(400)
+      .json({ error: "A reason of 3-500 characters is required" });
+  }
+
+  try {
+    const employee = await getCurrentEmployee(knex, req);
+    const now = new Date();
+
+    const result = await knex.transaction(async (trx) => {
+      if (action === "reopen") {
+        const rows = await trx("tasks")
+          .whereIn("id", ids)
+          .whereIn("status", ["done", "dismissed"])
+          .whereNull("archived_at")
+          .update({
+            status: "open",
+            completed_at: null,
+            completed_by: null,
+            updated_at: now,
+          })
+          .returning("id");
+        return { updated: rows.map((r) => r.id), unresolved: [], skipped: [] };
+      }
+
+      // N6: re-check inside the transaction, never trust the earlier preview
+      const plan = await planClose(trx, ids);
+      const targetIds =
+        action === "done"
+          ? plan.ready // D3: unresolved auto tasks are never marked done
+          : [...plan.ready, ...plan.unresolved.map((u) => u.id)];
+
+      let updated = [];
+      if (targetIds.length > 0) {
+        const rows = await trx("tasks")
+          .whereIn("id", targetIds)
+          .whereIn("status", OPEN_STATUSES)
+          .update({
+            status: action === "done" ? "done" : "dismissed",
+            completed_at: now,
+            completed_by: employee?.id ?? null,
+            updated_at: now,
+          })
+          .returning("id");
+        updated = rows.map((r) => r.id);
+      }
+
+      if (action === "dismiss" && updated.length > 0) {
+        await trx("task_comments").insert(
+          updated.map((id) => ({
+            task_id: id,
+            author_id: employee?.id ?? null,
+            content: `Dismissed: ${reason}`,
+          })),
+        );
+      }
+
+      return {
+        updated,
+        unresolved: action === "done" ? plan.unresolved : [],
+        skipped: plan.skipped,
+      };
+    });
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update tasks" });
   }
 });
 
@@ -165,7 +332,7 @@ router.get("/:id", async (req, res) => {
       .select([
         "task_comments.*",
         knex.raw(
-          "employees.first_name || ' ' || employees.last_name as author_name"
+          "employees.first_name || ' ' || employees.last_name as author_name",
         ),
         "employees.profile_image as author_image",
       ])
@@ -278,7 +445,7 @@ router.post("/:id/comments", async (req, res) => {
       .select([
         "task_comments.*",
         knex.raw(
-          "employees.first_name || ' ' || employees.last_name as author_name"
+          "employees.first_name || ' ' || employees.last_name as author_name",
         ),
         "employees.profile_image as author_image",
       ])

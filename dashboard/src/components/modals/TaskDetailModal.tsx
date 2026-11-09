@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "@/lib/apiClient";
 import {
+  Ban,
   BookOpen,
   Calendar,
   CheckCircle2,
@@ -9,7 +10,6 @@ import {
   Loader2,
   Send,
   Tag,
-  Trash2,
   User,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +31,9 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDate } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { useCloseTasks } from "@/hooks/useCloseTasks";
+import { TaskCloseFlow } from "@/components/tasks/TaskCloseFlow";
+import { cleanTaskTitle, isTaskSelectable, type Task } from "@/lib/tasks";
 
 const priorityConfig = {
   urgent: { label: "Urgent", class: "bg-red-100 text-red-700 border-red-200" },
@@ -44,11 +47,13 @@ const priorityConfig = {
 interface Props {
   open: boolean;
   onClose: () => void;
-  task: any;
+  task: Task | null;
   currentEmployeeId: number | null;
   isManager: boolean;
   onSuccess: () => void;
 }
+
+type SimpleStatus = "in_progress" | "open";
 
 export default function TaskDetailModal({
   open,
@@ -63,8 +68,16 @@ export default function TaskDetailModal({
   const [isPostingComment, setIsPostingComment] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [employees, setEmployees] = useState<any[]>([]);
-  const [pendingAction, setPendingAction] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<SimpleStatus | null>(null);
   const navigate = useNavigate();
+
+  const flow = useCloseTasks({
+    onClosed: () => {
+      onSuccess();
+      onClose();
+    },
+  });
+
   useEffect(() => {
     if (!open || !task) return;
     setNewComment("");
@@ -80,13 +93,12 @@ export default function TaskDetailModal({
     }
   }, [open, task?.id]);
 
-  const handleStatusChange = async (status: string) => {
+  const handleStatusChange = async (status: SimpleStatus) => {
+    if (!task) return;
     setIsUpdatingStatus(true);
     try {
-      await axios.patch(`/api/tasks/${task.id}`, {
-        status,
-        completed_by: status === "done" ? currentEmployeeId : null,
-      });
+      // completed_by is no longer sent: the server works it out
+      await axios.patch(`/api/tasks/${task.id}`, { status });
       onSuccess();
       onClose();
     } finally {
@@ -95,13 +107,15 @@ export default function TaskDetailModal({
   };
 
   const handleReassign = async (assignedTo: string) => {
+    if (!task) return;
     await axios.patch(`/api/tasks/${task.id}`, {
       assigned_to: assignedTo === "unassigned" ? null : assignedTo,
     });
     onSuccess();
   };
+
   const handleComment = async () => {
-    if (!newComment.trim()) return;
+    if (!task || !newComment.trim()) return;
     setIsPostingComment(true);
     try {
       const { data } = await axios.post(`/api/tasks/${task.id}/comments`, {
@@ -117,261 +131,294 @@ export default function TaskDetailModal({
 
   if (!task) return null;
 
+  const isOpenTask = isTaskSelectable(task); // open or in progress
   const isDone = task.status === "done";
+  const isDismissed = task.status === "dismissed";
+  const isClosed = isDone || isDismissed;
   const isOverdue =
-    task.due_date && new Date(task.due_date) < new Date() && !isDone;
+    task.due_date && new Date(task.due_date) < new Date() && !isClosed;
+  const closedBySystem =
+    isClosed && task.is_auto_generated && task.completed_by === null;
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(o) => {
-        if (!o) onClose();
-      }}
-    >
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="pr-6 leading-snug">
-            {task.title.replace(/^\[auto_\w+\]\s*/, "")}
-          </DialogTitle>
-        </DialogHeader>
+    <>
+      <Dialog
+        open={open}
+        onOpenChange={(o) => {
+          if (!o) onClose();
+        }}
+      >
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="pr-6 leading-snug">
+              {cleanTaskTitle(task.title)}
+            </DialogTitle>
+          </DialogHeader>
 
-        <div className="space-y-4 py-1">
-          <div className="flex flex-wrap gap-2">
-            <Badge
-              variant="outline"
-              className={
-                priorityConfig[task.priority as keyof typeof priorityConfig]
-                  ?.class
-              }
-            >
-              {
-                priorityConfig[task.priority as keyof typeof priorityConfig]
-                  ?.label
-              }
-            </Badge>
-            {task.is_auto_generated && (
-              <Badge variant="outline" className="text-muted-foreground">
-                Auto-generated
-              </Badge>
-            )}
-            {task.booking_reference && (
+          <div className="space-y-4 py-1">
+            <div className="flex flex-wrap gap-2">
               <Badge
                 variant="outline"
-                className="text-blue-600 border-blue-200 bg-blue-50"
+                className={
+                  priorityConfig[task.priority as keyof typeof priorityConfig]
+                    ?.class
+                }
               >
-                <BookOpen className="h-3 w-3 mr-1" />
-                {task.booking_reference}
+                {
+                  priorityConfig[task.priority as keyof typeof priorityConfig]
+                    ?.label
+                }
               </Badge>
-            )}
-          </div>
-          {task.booking_id && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                onClose();
-                navigate(`/bookings/${task.booking_id}`);
-              }}
-            >
-              <BookOpen className="h-4 w-4 mr-2" />
-              View Booking {task.booking_reference ?? ""}
-            </Button>
-          )}
-
-          {task.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {task.description}
-            </p>
-          )}
-
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            {task.assignee_name && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <User className="h-3.5 w-3.5 shrink-0" />
-                <span>{task.assignee_name}</span>
-              </div>
-            )}
-            {task.due_date && (
-              <div
-                className={`flex items-center gap-2 ${
-                  isOverdue ? "text-red-500" : "text-muted-foreground"
-                }`}
-              >
-                <Calendar className="h-3.5 w-3.5 shrink-0" />
-                <span>
-                  {isOverdue ? "Overdue · " : ""}
-                  {formatDate(task.due_date)}
-                </span>
-              </div>
-            )}
-            {task.creator_name && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Tag className="h-3.5 w-3.5 shrink-0" />
-                <span>Created by {task.creator_name}</span>
-              </div>
-            )}
-          </div>
-
-          {pendingAction ? (
-            <div className="flex items-center gap-2 p-2 rounded-lg bg-muted text-sm">
-              <span className="text-muted-foreground flex-1">
-                {pendingAction === "done" && "Mark this task as done?"}
-                {pendingAction === "in_progress" && "Mark as in progress?"}
-                {pendingAction === "open" && "Reopen this task?"}
-                {pendingAction === "cancelled" && "Cancel this task?"}
-              </span>
+              {task.is_auto_generated && (
+                <Badge variant="outline" className="text-muted-foreground">
+                  Auto-generated
+                </Badge>
+              )}
+              {isDone && (
+                <Badge
+                  variant="outline"
+                  className="text-emerald-700 border-emerald-200 bg-emerald-50"
+                >
+                  {closedBySystem ? "Done · closed by System" : "Done"}
+                </Badge>
+              )}
+              {isDismissed && (
+                <Badge variant="outline" className="text-muted-foreground">
+                  Dismissed
+                </Badge>
+              )}
+              {task.booking_reference && (
+                <Badge
+                  variant="outline"
+                  className="text-blue-600 border-blue-200 bg-blue-50"
+                >
+                  <BookOpen className="h-3 w-3 mr-1" />
+                  {task.booking_reference}
+                </Badge>
+              )}
+            </div>
+            {task.booking_id && (
               <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setPendingAction(null)}
-              >
-                No
-              </Button>
-              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => {
-                  handleStatusChange(pendingAction);
-                  setPendingAction(null);
+                  onClose();
+                  navigate(`/bookings/${task.booking_id}`);
                 }}
-                disabled={isUpdatingStatus}
               >
-                {isUpdatingStatus ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Yes, confirm"
-                )}
+                <BookOpen className="h-4 w-4 mr-2" />
+                View Booking {task.booking_reference ?? ""}
               </Button>
+            )}
+
+            {task.description && (
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {task.description}
+              </p>
+            )}
+
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              {task.assignee_name && (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <User className="h-3.5 w-3.5 shrink-0" />
+                  <span>{task.assignee_name}</span>
+                </div>
+              )}
+              {task.due_date && (
+                <div
+                  className={`flex items-center gap-2 ${
+                    isOverdue ? "text-red-500" : "text-muted-foreground"
+                  }`}
+                >
+                  <Calendar className="h-3.5 w-3.5 shrink-0" />
+                  <span>
+                    {isOverdue ? "Overdue · " : ""}
+                    {formatDate(task.due_date)}
+                  </span>
+                </div>
+              )}
+              {task.creator_name && (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Tag className="h-3.5 w-3.5 shrink-0" />
+                  <span>Created by {task.creator_name}</span>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="flex gap-2 flex-wrap">
-              {task.status !== "done" && (
-                <Button
-                  size="sm"
-                  className="bg-emerald-600 hover:bg-emerald-700"
-                  onClick={() => setPendingAction("done")}
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" />
-                  Mark Done
-                </Button>
-              )}
-              {task.status === "open" && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setPendingAction("in_progress")}
-                >
-                  <Clock className="h-4 w-4 mr-2" />
-                  Start
-                </Button>
-              )}
-              {task.status === "done" && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setPendingAction("open")}
-                >
-                  <Circle className="h-4 w-4 mr-2" />
-                  Reopen
-                </Button>
-              )}
-              {isManager && (
+
+            {pendingAction ? (
+              <div className="flex items-center gap-2 p-2 rounded-lg bg-muted text-sm">
+                <span className="text-muted-foreground flex-1">
+                  {pendingAction === "in_progress" && "Mark as in progress?"}
+                  {pendingAction === "open" && "Reopen this task?"}
+                </span>
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="text-destructive hover:text-destructive ml-auto"
-                  onClick={() => setPendingAction("cancelled")}
+                  onClick={() => setPendingAction(null)}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  No
                 </Button>
-              )}
-            </div>
-          )}
-
-          {isManager && (
-            <div className="space-y-1.5">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                Reassign
-              </p>
-              <Select
-                value={task.assigned_to ? String(task.assigned_to) : ""}
-                onValueChange={handleReassign}
-              >
-                <SelectTrigger className="h-8 text-sm">
-                  <SelectValue placeholder="Unassigned" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="unassigned">Unassigned</SelectItem>
-                  {employees.map((e) => (
-                    <SelectItem key={e.id} value={String(e.id)}>
-                      {e.first_name} {e.last_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          <Separator />
-
-          <div className="space-y-3">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-              Comments {comments.length > 0 && `(${comments.length})`}
-            </p>
-
-            {comments.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No comments yet.</p>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    handleStatusChange(pendingAction);
+                    setPendingAction(null);
+                  }}
+                  disabled={isUpdatingStatus}
+                >
+                  {isUpdatingStatus ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Yes, confirm"
+                  )}
+                </Button>
+              </div>
             ) : (
-              <div className="space-y-3">
-                {comments.map((c) => (
-                  <div key={c.id} className="flex gap-2.5">
-                    <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-semibold shrink-0">
-                      {c.author_name?.charAt(0) ?? "?"}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium">
-                          {c.author_name ?? "Unknown"}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(c.created_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-sm mt-0.5 text-muted-foreground">
-                        {c.content}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex gap-2 flex-wrap">
+                {isOpenTask && (
+                  <Button
+                    size="sm"
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                    onClick={() => flow.markDone([task.id])}
+                    disabled={flow.busy}
+                  >
+                    {flow.busy ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                    )}
+                    Mark Done
+                  </Button>
+                )}
+                {task.status === "open" && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setPendingAction("in_progress")}
+                  >
+                    <Clock className="h-4 w-4 mr-2" />
+                    Start
+                  </Button>
+                )}
+                {isClosed && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setPendingAction("open")}
+                  >
+                    <Circle className="h-4 w-4 mr-2" />
+                    Reopen
+                  </Button>
+                )}
+
+                {isOpenTask && flow.canDismiss && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="ml-auto text-muted-foreground"
+                    onClick={() => flow.dismiss([task.id])}
+                    disabled={flow.busy}
+                  >
+                    <Ban className="h-4 w-4 mr-2" />
+                    Dismiss…
+                  </Button>
+                )}
               </div>
             )}
 
-            <div className="flex gap-2">
-              <Textarea
-                placeholder="Add a comment..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                className="resize-none min-h-[60px] text-sm"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && e.metaKey) handleComment();
-                }}
-              />
-              <Button
-                size="icon"
-                onClick={handleComment}
-                disabled={isPostingComment || !newComment.trim()}
-                className="shrink-0 self-end"
-              >
-                {isPostingComment ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-              </Button>
+            {isManager && (
+              <div className="space-y-1.5">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
+                  Reassign
+                </p>
+                <Select
+                  value={task.assigned_to ? String(task.assigned_to) : ""}
+                  onValueChange={handleReassign}
+                >
+                  <SelectTrigger className="h-8 text-sm">
+                    <SelectValue placeholder="Unassigned" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="unassigned">Unassigned</SelectItem>
+                    {employees.map((e) => (
+                      <SelectItem key={e.id} value={String(e.id)}>
+                        {e.first_name} {e.last_name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            <Separator />
+
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
+                Comments {comments.length > 0 && `(${comments.length})`}
+              </p>
+
+              {comments.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No comments yet.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {comments.map((c) => (
+                    <div key={c.id} className="flex gap-2.5">
+                      <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-semibold shrink-0">
+                        {c.author_name?.charAt(0) ?? "?"}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-medium">
+                            {c.author_name ?? "Unknown"}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(c.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm mt-0.5 text-muted-foreground">
+                          {c.content}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <Textarea
+                  placeholder="Add a comment..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  className="resize-none min-h-[60px] text-sm"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && e.metaKey) handleComment();
+                  }}
+                />
+                <Button
+                  size="icon"
+                  onClick={handleComment}
+                  disabled={isPostingComment || !newComment.trim()}
+                  className="shrink-0 self-end"
+                  aria-label="Post comment"
+                >
+                  {isPostingComment ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                ⌘ + Enter to submit
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">⌘ + Enter to submit</p>
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+
+      <TaskCloseFlow flow={flow} />
+    </>
   );
 }
