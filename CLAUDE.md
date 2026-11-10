@@ -1,0 +1,57 @@
+# CityGo
+
+Production tour-booking platform for Istanbul city tours. It is also the owner's main portfolio project, so code quality and a clear commit history matter.
+
+## Apps
+- `client/` – public site. React + Vite, SCSS, Redux Toolkit, Stripe.
+- `dashboard/` – staff dashboard. React + TypeScript + Vite, shadcn/ui.
+- `server/` – Express API (ES modules). Moving from JS to TS and from Knex to Drizzle, one file at a time. Postgres on Supabase, auth via Supabase.
+- `ai-service/` – FastAPI service behind the Milo chat widget (Gemini).
+- `notifications/` – BullMQ worker (TypeScript) that sends emails via Brevo SMTP.
+- `scripts/seeder/` – Python seeder for dashboard demo data.
+
+## Branches and deploys
+- Work on a feature branch off `develop`, then open a PR into `develop`.
+- Push to `develop` deploys **staging** (`/var/www/citygo-staging`, `docker-compose.staging.yml`).
+- Merging `develop` into `main` deploys **production** (`/var/www/citygo`).
+- Deploys run through GitHub Actions on a self-hosted runner on the VPS.
+- Never push directly to `main`.
+
+## Working rules
+- **Push only when the owner says so.** Show the diff first.
+- Staging first. Production only after the owner has checked staging.
+- One step at a time. Do not bundle unrelated changes in one commit.
+- The owner commits with single quotes: `git commit -m 'fix(cart): ...'`.
+- Never put secrets in the repo. Env var names are fine, values are not.
+- When a change makes a statement in this file untrue, propose the edit to this file in the same PR.
+
+## Testing
+Keep tests few and high-value. Do not aim for coverage numbers.
+- Always test: money and price calculation, payment-intent rules, date handling, role and permission checks, and anything that can lose or corrupt data.
+- Test pure logic that is easy to get wrong (for example keyword matching, rate limits, status flows).
+- Skip: styling, thin wrappers around libraries, and one-off scripts.
+- Add the tests in the same PR as the feature and run them before opening the PR.
+- Tools: `vitest` in `client/` (`npm run test:run`), `jest` in `server/` (`npm test`). The dashboard has no test runner yet.
+
+## Run locally
+- client: `cd client && npm run dev`
+- dashboard: `cd dashboard && npm run dev`
+- server: `cd server && npm run dev` (tsx watch; port comes from the `PORT` env var, default 8080)
+- Env files: `.env` per app, and `.env.staging` on the VPS.
+
+## Gotchas
+- Staging client intentionally uses the production API, so production `ALLOWED_ORIGINS` must include the staging URL.
+- `prometheus.yml` is a mounted file. A deploy does not always update it, so edit it on the VPS.
+- The shared Docker network is `citygo-shared-network`. Recreating it can drop Nginx Proxy Manager's port bindings.
+- Nginx Proxy Manager needs Websockets Support turned on for any socket host.
+- Roles come from the `user_roles` table (`requireRole` in `server/middleware/auth.js`). Never decide roles in the client.
+- Dates are `YYYY-MM-DD` strings. Compare them as strings, not with `setHours`, because the VPS runs in UTC.
+
+## Never
+- No destructive seeder runs against real data. The seeder only touches rows with the seed email domain.
+- No unauthenticated endpoints that issue sessions.
+- No real customer data in logs, tests or screenshots.
+
+## Roadmap
+- Milo chat: guided FAQ chips first, then a rate-limited AI fallback, then a human handoff (Socket.IO + Telegram) with recorded transcripts.
+- Finish the TS and Drizzle migration of server routes.
