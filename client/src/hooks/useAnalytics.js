@@ -67,6 +67,10 @@ export const useAnalytics = () => {
     trackEvent("milo_message_sent");
   };
 
+  const trackMiloChip = (chipId) => {
+    trackEvent("milo_chip_click", { chip_id: chipId });
+  };
+
   return {
     trackTourView,
     trackBookingStarted,
@@ -77,5 +81,6 @@ export const useAnalytics = () => {
     trackContactFormSubmit,
     trackMiloOpen,
     trackMiloMessage,
+    trackMiloChip,
   };
 };
