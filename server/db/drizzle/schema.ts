@@ -559,3 +559,18 @@ export const tourRatingSummary = pgView("tour_rating_summary", {	tourId: integer
 	avgRating: numeric("avg_rating"),
 	reviewCount: integer("review_count"),
 }).with({"securityInvoker":"on"}).as(sql`SELECT reviews.tour_id, round(avg(reviews.rating), 1) AS avg_rating, count(*)::integer AS review_count FROM reviews GROUP BY reviews.tour_id`);
+// Typed Milo chat messages, kept to improve the FAQ. Text is redacted before
+// insert and rows are deleted after 90 days. Written only by the server
+// (RLS on, no public policy).
+export const miloMessages = pgTable("milo_messages", {
+	id: serial().primaryKey().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	sessionId: varchar("session_id", { length: 64 }).notNull(),
+	text: varchar({ length: 500 }).notNull(),
+	source: varchar({ length: 16 }).notNull(),
+	matchedId: varchar("matched_id", { length: 40 }),
+}, (table) => [
+	index("milo_messages_created_at_idx").using("btree", table.createdAt.desc()),
+	index("milo_messages_source_idx").using("btree", table.source),
+	check("milo_messages_source_check", sql`${table.source} IN ('faq', 'topic', 'tour', 'none')`),
+]).enableRLS();

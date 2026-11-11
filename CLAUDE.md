@@ -31,7 +31,7 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 - Test pure logic that is easy to get wrong (for example keyword matching, rate limits, status flows).
 - Skip: styling, thin wrappers around libraries, and one-off scripts.
 - Add the tests in the same PR as the feature and run them before opening the PR.
-- Tools: `vitest` in `client/` (`npm run test:run`), `jest` in `server/` (`npm test`). The dashboard has no test runner yet.
+- Tools: `vitest` in `client/` (`npm run test:run`), `vitest` in `server/` (`npm test`). The dashboard has no test runner yet.
 
 ## Run locally
 - client: `cd client && npm run dev`
@@ -44,6 +44,7 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 - `prometheus.yml` is a mounted file. A deploy does not always update it, so edit it on the VPS.
 - The shared Docker network is `citygo-shared-network`. Recreating it can drop Nginx Proxy Manager's port bindings.
 - Nginx Proxy Manager needs Websockets Support turned on for any socket host.
+- Milo typed messages are saved (redacted, 90-day retention) in `milo_messages`. The table SQL is `server/db/sql/001_milo_messages.sql`, applied by hand in the Supabase SQL editor. Drizzle's baseline snapshot is malformed, so `drizzle-kit generate` does not work yet.
 - FAQ content lives in `client/src/data/faq.js`. It feeds both the Help & Contact page and Milo's typed-question matching (`miloMatch.js`). Edit answers and keywords there only.
 - Roles come from the `user_roles` table (`requireRole` in `server/middleware/auth.js`). Never decide roles in the client.
 - Dates are `YYYY-MM-DD` strings. Compare them as strings, not with `setHours`, because the VPS runs in UTC.
