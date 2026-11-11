@@ -11,6 +11,7 @@ describe("answerTyped", () => {
   it("answers policy questions from the FAQ", () => {
     const r = answerTyped("Can I get a refund if I cancel?", tours);
     expect(r.source).toBe("faq");
+    expect(r.matchedId).toBe("cancel");
     expect(r.reply).toContain(faqs.find((f) => f.id === "cancel").answer);
   });
 
@@ -27,6 +28,6 @@ describe("answerTyped", () => {
 
   it("falls back politely and never invents anything", () => {
     const r = answerTyped("what is the meaning of life", tours);
-    expect(r).toEqual({ reply: NO_MATCH_REPLY, source: "none" });
+    expect(r).toEqual({ reply: NO_MATCH_REPLY, source: "none", matchedId: null });
   });
 });

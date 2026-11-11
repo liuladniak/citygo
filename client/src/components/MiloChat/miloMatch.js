@@ -95,21 +95,22 @@ const matchTours = (words, tours) => {
   return scored.filter((x) => x.s >= top * 0.6).slice(0, 3).map((x) => x.t);
 };
 
-// Returns { reply, source } where source is "faq" | "topic" | "tour" | "none".
+// Returns { reply, source, matchedId }: source is "faq" | "topic" | "tour" | "none";
+// matchedId is the FAQ entry or topic id that answered (null for tours / no match).
 export const answerTyped = (text, tours = []) => {
   const tokens = tokenize(text);
   const haystack = pad(tokens);
 
   if (matchTopic(haystack, "human")) {
-    return { reply: buildAnswer("human"), source: "topic" };
+    return { reply: buildAnswer("human"), source: "topic", matchedId: "human" };
   }
 
   const faq = matchFaq(haystack);
-  if (faq) return { reply: faqReply(faq), source: "faq" };
+  if (faq) return { reply: faqReply(faq), source: "faq", matchedId: faq.id };
 
   for (const id of ["popular", "food", "private", "faq"]) {
     if (matchTopic(haystack, id)) {
-      return { reply: buildAnswer(id, tours), source: "topic" };
+      return { reply: buildAnswer(id, tours), source: "topic", matchedId: id };
     }
   }
 
@@ -122,12 +123,12 @@ export const answerTyped = (text, tours = []) => {
           `**${t.tour_name}** · ${t.duration} · from $${t.price}\n[View tour →](/tours/${t.slug})`,
       )
       .join("\n\n");
-    return { reply: `This looks like what you're after:\n\n${lines}`, source: "tour" };
+    return { reply: `This looks like what you're after:\n\n${lines}`, source: "tour", matchedId: null };
   }
 
   if (matchTopic(haystack, "tours")) {
-    return { reply: buildAnswer("tours", tours), source: "topic" };
+    return { reply: buildAnswer("tours", tours), source: "topic", matchedId: "tours" };
   }
 
-  return { reply: NO_MATCH_REPLY, source: "none" };
+  return { reply: NO_MATCH_REPLY, source: "none", matchedId: null };
 };
