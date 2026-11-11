@@ -15,6 +15,12 @@ describe("answerTyped", () => {
     expect(r.reply).toContain(faqs.find((f) => f.id === "cancel").answer);
   });
 
+  it("answers sea, beach and outdoor questions from the FAQ", () => {
+    expect(answerTyped("can we go hiking", tours).matchedId).toBe("outdoors");
+    expect(answerTyped("is there a beach where we can swim?", tours).matchedId).toBe("beach");
+    expect(answerTyped("do you have boat trips", tours).matchedId).toBe("cruise");
+  });
+
   it("finds a specific tour by name, with a real link", () => {
     const r = answerTyped("tell me about the bosphorus cruise", tours);
     expect(r.source).toBe("tour");
