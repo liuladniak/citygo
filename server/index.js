@@ -34,6 +34,9 @@ import generateAutoTasks from "./jobs/autoTaskGenerator.js";
 import { sendReminders } from "./jobs/reminderJob.js";
 
 const app = express();
+// One proxy hop (Nginx Proxy Manager) sits in front of the API, so req.ip and the
+// rate limiters see the real visitor IP from X-Forwarded-For.
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
