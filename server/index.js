@@ -27,6 +27,7 @@ import tourRoutes from "./routes/tourRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import webhook from "./routes/webhook.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import miloRoutes, { deleteOldMiloMessages } from "./routes/miloRoutes.js";
 import rateLimit from "express-rate-limit";
 
 import generateAutoTasks from "./jobs/autoTaskGenerator.js";
@@ -87,6 +88,7 @@ app.use("/api/company", requireAuth, companyRoutes);
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 app.use("/api/articles", articleRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/milo", miloRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
 app.use(
@@ -107,6 +109,10 @@ cron.schedule(
   },
   { timezone: "Europe/Istanbul" },
 );
+
+cron.schedule("30 3 * * *", deleteOldMiloMessages, {
+  timezone: "Europe/Istanbul",
+});
 
 generateAutoTasks();
 
