@@ -3,6 +3,7 @@ import { MessageCircle, X, Send, Bot, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./MiloChat.scss";
 import { useAnalytics } from "../../hooks/useAnalytics.js";
+import { MENU, NEEDS_TOURS, buildAnswer } from "./miloGuided.js";
 
 const MAX_LENGTH = 500;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -53,7 +54,7 @@ const renderContent = (text, navigate) => {
 };
 
 const MiloChat = () => {
-  const { trackMiloOpen, trackMiloMessage } = useAnalytics();
+  const { trackMiloOpen, trackMiloMessage, trackMiloChip } = useAnalytics();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -68,18 +69,55 @@ const MiloChat = () => {
   ]);
 
   const scrollRef = useRef(null);
+  const toursRef = useRef(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const el = scrollRef.current;
+    if (!el) return;
+    const last = messages[messages.length - 1];
+
+    // A new answer: show the question (the tapped chip) with its answer
+    // right below it, so the reader sees both without scrolling.
+    if (messages.length > 1 && last.role === "model" && !isLoading) {
+      const rows = el.querySelectorAll(".message-row");
+      const prev = messages[messages.length - 2];
+      const anchor =
+        prev.role === "user" ? rows[rows.length - 2] : rows[rows.length - 1];
+      if (anchor) {
+        const offset =
+          anchor.getBoundingClientRect().top - el.getBoundingClientRect().top;
+        el.scrollTop += offset - 8;
+        return;
+      }
     }
+    // Otherwise (user message, typing indicator): stay at the bottom.
+    el.scrollTop = el.scrollHeight;
   }, [messages, isLoading]);
 
-  const suggestions = [
-    "What tours do you offer?",
-    "Something romantic on the water",
-    "Best tour for history lovers",
-  ];
+  const loadTours = async () => {
+    if (toursRef.current) return toursRef.current;
+    try {
+      const res = await fetch(`${API_URL}/api/tours?limit=50`);
+      const json = await res.json();
+      toursRef.current = Array.isArray(json.data) ? json.data : [];
+    } catch {
+      toursRef.current = [];
+    }
+    return toursRef.current;
+  };
+
+  const handleChip = async (item) => {
+    if (isLoading) return;
+    trackMiloChip(item.id);
+    setMessages((prev) => [...prev, { role: "user", content: item.label }]);
+    setIsLoading(true);
+    const tours = NEEDS_TOURS.includes(item.id) ? await loadTours() : [];
+    setMessages((prev) => [
+      ...prev,
+      { role: "model", content: buildAnswer(item.id, tours) },
+    ]);
+    setIsLoading(false);
+  };
 
   const sendMessage = async (text) => {
     if (!text.trim() || isLoading) return;
@@ -203,17 +241,17 @@ const MiloChat = () => {
               </div>
             )}
 
-            {/* suggestion chips */}
-            {messages.length === 1 && !isLoading && (
+            {/* guided menu chips */}
+            {!isLoading && messages[messages.length - 1].role === "model" && (
               <div className="milo-suggestions">
-                {suggestions.map((s, i) => (
+                {MENU.map((item) => (
                   <button
-                    key={i}
-                    onClick={() => sendMessage(s)}
+                    key={item.id}
+                    onClick={() => handleChip(item)}
                     className="suggestion-chip"
                     type="button"
                   >
-                    {s}
+                    {item.label}
                   </button>
                 ))}
               </div>
