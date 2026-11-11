@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./MiloChat.scss";
 import { useAnalytics } from "../../hooks/useAnalytics.js";
 import { MENU, NEEDS_TOURS, buildAnswer } from "./miloGuided.js";
+import { answerTyped } from "./miloMatch.js";
 
 const MAX_LENGTH = 500;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -54,11 +55,16 @@ const renderContent = (text, navigate) => {
 };
 
 const MiloChat = () => {
-  const { trackMiloOpen, trackMiloMessage, trackMiloChip } = useAnalytics();
+  const {
+    trackMiloOpen,
+    trackMiloMessage,
+    trackMiloChip,
+    trackMiloLocal,
+    trackMiloNoMatch,
+  } = useAnalytics();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [history, setHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -138,41 +144,12 @@ const MiloChat = () => {
     setInput("");
     setIsLoading(true);
 
-    try {
-      const response = await fetch(`${API_URL}/api/ai/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text.trim(), history: history || [] }),
-      });
-
-      const data = await response.json();
-
-      if (data.reply) {
-        setMessages((prev) => [
-          ...prev,
-          { role: "model", content: data.reply },
-        ]);
-        setHistory(data.history);
-      } else {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "model",
-            content: "Milo is offline for a quick espresso. Try again?",
-          },
-        ]);
-      }
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "model",
-          content: "Milo is offline for a quick espresso. Try again?",
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
+    const tours = await loadTours();
+    const { reply, source } = answerTyped(text, tours);
+    if (source === "none") trackMiloNoMatch();
+    else trackMiloLocal(source);
+    setMessages((prev) => [...prev, { role: "model", content: reply }]);
+    setIsLoading(false);
   };
 
   const charsLeft = MAX_LENGTH - input.length;
