@@ -23,7 +23,7 @@
     "seed:highlights": "knex seed:run --specific=seed_highlights.js",
     "seed:images": "knex seed:run --specific=seed_images.js",
     "seed:bookings": "knex seed:run --specific=seed_bookings.js",
-    "test": "jest"
+    "test": "vitest run"
   },
   "author": "Liu Ladniak",
   "license": "ISC",
@@ -60,6 +60,7 @@
     "@types/pg": "^8.23.1",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.23.13",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.0"
   }
 }
