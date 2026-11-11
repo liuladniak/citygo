@@ -5,6 +5,7 @@ import "./MiloChat.scss";
 import { useAnalytics } from "../../hooks/useAnalytics.js";
 import { MENU, NEEDS_TOURS, buildAnswer } from "./miloGuided.js";
 import { answerTyped } from "./miloMatch.js";
+import { logTypedMessage } from "./miloLog.js";
 
 const MAX_LENGTH = 500;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -145,7 +146,8 @@ const MiloChat = () => {
     setIsLoading(true);
 
     const tours = await loadTours();
-    const { reply, source } = answerTyped(text, tours);
+    const { reply, source, matchedId } = answerTyped(text, tours);
+    logTypedMessage({ text: text.trim(), source, matchedId });
     if (source === "none") trackMiloNoMatch();
     else trackMiloLocal(source);
     setMessages((prev) => [...prev, { role: "model", content: reply }]);
