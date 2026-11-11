@@ -572,5 +572,5 @@ export const miloMessages = pgTable("milo_messages", {
 }, (table) => [
 	index("milo_messages_created_at_idx").using("btree", table.createdAt.desc()),
 	index("milo_messages_source_idx").using("btree", table.source),
-	check("milo_messages_source_check", sql`${table.source} IN ('faq', 'topic', 'tour', 'none')`),
+	check("milo_messages_source_check", sql`${table.source} IN ('faq', 'topic', 'tour', 'none', 'ai')`),
 ]).enableRLS();
