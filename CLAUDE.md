@@ -44,6 +44,7 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 - `prometheus.yml` is a mounted file. A deploy does not always update it, so edit it on the VPS.
 - The shared Docker network is `citygo-shared-network`. Recreating it can drop Nginx Proxy Manager's port bindings.
 - Nginx Proxy Manager needs Websockets Support turned on for any socket host.
+- FAQ content lives in `client/src/data/faq.js`. It feeds both the Help & Contact page and Milo's typed-question matching (`miloMatch.js`). Edit answers and keywords there only.
 - Roles come from the `user_roles` table (`requireRole` in `server/middleware/auth.js`). Never decide roles in the client.
 - Dates are `YYYY-MM-DD` strings. Compare them as strings, not with `setHours`, because the VPS runs in UTC.
 
