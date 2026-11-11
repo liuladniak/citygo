@@ -144,22 +144,4 @@ router.put("/profile", verifyToken, async (req, res) => {
   }
 });
 
-router.post("/test-login", async (req, res) => {
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: process.env.TEST_USER_EMAIL,
-      password: process.env.TEST_USER_PASSWORD,
-    });
-    if (error) throw error;
-    res.status(200).json({
-      message: "Test user logged in successfully",
-      token: data.session.access_token,
-      expiresIn: data.session.expires_in,
-    });
-  } catch (err) {
-    console.error("Test login error:", err);
-    res.status(500).send("Server error");
-  }
-});
-
 export default router;
