@@ -1,6 +1,6 @@
-// import knex from "../db/knex.js";
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
+import { autoTaskKind, findUnresolved } from "../lib/autoTaskConditions.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 
@@ -129,12 +129,31 @@ const generateAutoTasks = async () => {
       }
     }
 
+    const openAuto = await knex("tasks")
+      .where("is_auto_generated", true)
+      .whereIn("status", ["open", "in_progress"])
+      .whereNull("archived_at");
+
+    const stillOpen = await findUnresolved(knex, openAuto);
+    const fixedIds = openAuto
+      .filter((t) => autoTaskKind(t.title) && !stillOpen.has(t.id))
+      .map((t) => t.id);
+
+    if (fixedIds.length > 0) {
+      await knex("tasks").whereIn("id", fixedIds).update({
+        status: "done",
+        completed_at: now,
+        completed_by: null,
+        updated_at: now,
+      });
+    }
+
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     yesterday.setHours(23, 59, 59, 999);
 
     await knex("tasks")
-      .where("status", "done")
+      .whereIn("status", ["done", "dismissed"])
       .where("completed_at", "<=", yesterday)
       .whereNull("archived_at")
       .update({ archived_at: new Date() });
