@@ -43,6 +43,7 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 - Staging client intentionally uses the production API, so production `ALLOWED_ORIGINS` must include the staging URL.
 - `prometheus.yml` is a mounted file. A deploy does not always update it, so edit it on the VPS.
 - The shared Docker network is `citygo-shared-network`. Recreating it can drop Nginx Proxy Manager's port bindings.
+- The API trusts exactly one proxy hop (`trust proxy` = 1, Nginx Proxy Manager). If another proxy or CDN (for example Cloudflare) is ever put in front, update that number or rate limits and `req.ip` will be wrong.
 - Nginx Proxy Manager needs Websockets Support turned on for any socket host.
 - Milo typed messages are saved (redacted, 90-day retention) in `milo_messages`. The table SQL is `server/db/sql/001_milo_messages.sql`, applied by hand in the Supabase SQL editor. Drizzle's baseline snapshot is malformed, so `drizzle-kit generate` does not work yet.
 - FAQ content lives in `client/src/data/faq.js`. It feeds both the Help & Contact page and Milo's typed-question matching (`miloMatch.js`). Edit answers and keywords there only.
