@@ -27,12 +27,16 @@ import tourRoutes from "./routes/tourRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import webhook from "./routes/webhook.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import miloRoutes, { deleteOldMiloMessages } from "./routes/miloRoutes.js";
 import rateLimit from "express-rate-limit";
 
 import generateAutoTasks from "./jobs/autoTaskGenerator.js";
 import { sendReminders } from "./jobs/reminderJob.js";
 
 const app = express();
+// One proxy hop (Nginx Proxy Manager) sits in front of the API, so req.ip and the
+// rate limiters see the real visitor IP from X-Forwarded-For.
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -87,6 +91,7 @@ app.use("/api/company", requireAuth, companyRoutes);
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 app.use("/api/articles", articleRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/milo", miloRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
 app.use(
@@ -107,6 +112,10 @@ cron.schedule(
   },
   { timezone: "Europe/Istanbul" },
 );
+
+cron.schedule("30 3 * * *", deleteOldMiloMessages, {
+  timezone: "Europe/Istanbul",
+});
 
 generateAutoTasks();
 

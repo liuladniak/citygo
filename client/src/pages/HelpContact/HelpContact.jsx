@@ -13,26 +13,9 @@ import {
 import contactImg from "../../assets/images/office.jpg";
 import { useState } from "react";
 import axios from "axios";
+import { faqs } from "../../data/faq.js";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-const faqs = [
-  {
-    id: 1,
-    question: "What is your refund policy?",
-    answer: "Our refund policy allows returns within 30 days of purchase.",
-  },
-  {
-    id: 2,
-    question: "How do I change my booking date?",
-    answer: "You can change your booking date by contacting our support team.",
-  },
-  {
-    id: 3,
-    question: "Do you offer group discounts?",
-    answer: "Yes, we offer discounts for groups of 10 or more.",
-  },
-];
 
 const HelpContact = () => {
   const [formData, setFormData] = useState({

@@ -71,6 +71,15 @@ export const useAnalytics = () => {
     trackEvent("milo_chip_click", { chip_id: chipId });
   };
 
+  // Never send the typed text: only how it was answered.
+  const trackMiloLocal = (source) => {
+    trackEvent("milo_local_answer", { source });
+  };
+
+  const trackMiloNoMatch = () => {
+    trackEvent("milo_no_match");
+  };
+
   return {
     trackTourView,
     trackBookingStarted,
@@ -82,5 +91,7 @@ export const useAnalytics = () => {
     trackMiloOpen,
     trackMiloMessage,
     trackMiloChip,
+    trackMiloLocal,
+    trackMiloNoMatch,
   };
 };
