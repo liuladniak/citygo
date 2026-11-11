@@ -72,9 +72,23 @@ const MiloChat = () => {
   const toursRef = useRef(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const el = scrollRef.current;
+    if (!el) return;
+    const last = messages[messages.length - 1];
+
+    // A new answer: show its first line, so the reader starts at the top.
+    if (messages.length > 1 && last.role === "model" && !isLoading) {
+      const rows = el.querySelectorAll(".message-row");
+      const row = rows[rows.length - 1];
+      if (row) {
+        const offset =
+          row.getBoundingClientRect().top - el.getBoundingClientRect().top;
+        el.scrollTop += offset - 8;
+        return;
+      }
     }
+    // Otherwise (user message, typing indicator): stay at the bottom.
+    el.scrollTop = el.scrollHeight;
   }, [messages, isLoading]);
 
   const loadTours = async () => {
