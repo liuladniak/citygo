@@ -76,13 +76,16 @@ const MiloChat = () => {
     if (!el) return;
     const last = messages[messages.length - 1];
 
-    // A new answer: show its first line, so the reader starts at the top.
+    // A new answer: show the question (the tapped chip) with its answer
+    // right below it, so the reader sees both without scrolling.
     if (messages.length > 1 && last.role === "model" && !isLoading) {
       const rows = el.querySelectorAll(".message-row");
-      const row = rows[rows.length - 1];
-      if (row) {
+      const prev = messages[messages.length - 2];
+      const anchor =
+        prev.role === "user" ? rows[rows.length - 2] : rows[rows.length - 1];
+      if (anchor) {
         const offset =
-          row.getBoundingClientRect().top - el.getBoundingClientRect().top;
+          anchor.getBoundingClientRect().top - el.getBoundingClientRect().top;
         el.scrollTop += offset - 8;
         return;
       }
