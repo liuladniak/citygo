@@ -3,6 +3,9 @@ import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import { getAiItinerary } from "../services/aiService.js";
 import axios from "axios";
+import { redact } from "../lib/redact.js";
+import { checkAiCaps } from "../lib/aiCaps.js";
+import { getRedis } from "../lib/redis.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
@@ -115,51 +118,51 @@ const getTourContext = async (message) => {
   }
 };
 // const tourContext = await getTourContext(message.trim());
+// Milo's AI fallback. Reached only when the widget found no local answer.
+// Single question, no history. Switched on with AI_ENABLED=true and capped per
+// IP and per day (see lib/aiCaps.ts). Every failure returns a plain error so the
+// widget can show its normal "not sure" reply.
 router.post("/chat", async (req, res) => {
-  const { message, history } = req.body;
+  if (process.env.AI_ENABLED !== "true") {
+    return res.status(503).json({ error: "unavailable" });
+  }
 
+  const { message } = req.body ?? {};
   if (!message || typeof message !== "string") {
     return res.status(400).json({ error: "Invalid message." });
-  }
-  if (message.trim().length === 0) {
-    return res.status(400).json({ error: "Message cannot be empty." });
   }
   if (message.length > 500) {
     return res
       .status(400)
       .json({ error: "Message too long. Keep it under 500 characters." });
   }
-
-  if (history && !Array.isArray(history)) {
-    return res.status(400).json({ error: "Invalid history format." });
+  // Gemini's free tier may use content to improve Google products: send nothing personal.
+  const clean = redact(message);
+  if (!clean) {
+    return res.status(400).json({ error: "Message cannot be empty." });
   }
 
-  const safeHistory = Array.isArray(history)
-    ? history
-        .slice(-20)
-        .filter(
-          (m) =>
-            m &&
-            typeof m.role === "string" &&
-            typeof m.content === "string" &&
-            ["user", "model"].includes(m.role) &&
-            m.content.length <= 1000,
-        )
-    : [];
+  const caps = await checkAiCaps(getRedis(), req.ip);
+  if (!caps.allowed) {
+    return res
+      .status(caps.reason === "error" ? 503 : 429)
+      .json({ error: caps.reason === "error" ? "unavailable" : "limit" });
+  }
 
   try {
-    const tourContext = await getTourContext(message.trim());
-    console.log("Tour context being sent:\n", tourContext.slice(0, 500));
-    const response = await axios.post(`${process.env.AI_SERVICE_URL}/ai/chat`, {
-      message: message.trim(),
-      history: safeHistory,
-      tour_context: tourContext,
-    });
-
-    res.json(response.data);
+    const tourContext = await getTourContext(clean);
+    const response = await axios.post(
+      `${process.env.AI_SERVICE_URL}/ai/chat`,
+      { message: clean, tour_context: tourContext },
+      { timeout: 15000 },
+    );
+    if (!response.data?.reply) {
+      return res.status(503).json({ error: "unavailable" });
+    }
+    res.json({ reply: response.data.reply });
   } catch (err) {
     console.error("Milo chat error:", err.message);
-    res.status(503).json({ error: "AI service unavailable." });
+    res.status(503).json({ error: "unavailable" });
   }
 });
 
