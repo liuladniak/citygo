@@ -6,6 +6,8 @@ import axios from "axios";
 import { redact } from "../lib/redact.js";
 import { checkAiCaps } from "../lib/aiCaps.js";
 import { getRedis } from "../lib/redis.js";
+import { isOwner } from "../lib/ownerKey.js";
+import { getLimits } from "../lib/aiCaps.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
@@ -142,7 +144,11 @@ router.post("/chat", async (req, res) => {
     return res.status(400).json({ error: "Message cannot be empty." });
   }
 
-  const caps = await checkAiCaps(getRedis(), req.ip);
+  // The owner (secret header) skips the per-IP cap to test; the site-wide cap still applies.
+  const limits = isOwner(req.get("x-milo-owner"))
+    ? { ...getLimits(), perIp: Infinity }
+    : undefined;
+  const caps = await checkAiCaps(getRedis(), req.ip, limits);
   if (!caps.allowed) {
     return res
       .status(caps.reason === "error" ? 503 : 429)
