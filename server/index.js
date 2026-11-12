@@ -7,11 +7,12 @@ import { fileURLToPath } from "url";
 
 import cors from "cors";
 import cron from "node-cron";
+import http from "node:http";
 import express from "express";
 import morgan from "morgan";
 import { promClient, metricsMiddleware } from "./metrics.js";
 
-import { requireAuth } from "./middleware/auth.js";
+import { requireAuth, authenticateToken } from "./middleware/auth.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
@@ -28,6 +29,10 @@ import userRoutes from "./routes/userRoutes.js";
 import webhook from "./routes/webhook.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import miloRoutes, { deleteOldMiloMessages } from "./routes/miloRoutes.js";
+import miloHandoffRoutes from "./routes/miloHandoffRoutes.js";
+import { createRealtime } from "./realtime/index.js";
+import { dbStore } from "./realtime/dbStore.js";
+import { notifyTelegram } from "./lib/telegram.js";
 import rateLimit from "express-rate-limit";
 
 import generateAutoTasks from "./jobs/autoTaskGenerator.js";
@@ -91,6 +96,7 @@ app.use("/api/company", requireAuth, companyRoutes);
 app.use("/", express.static(path.join(staticFilesPath, "tours")));
 app.use("/api/articles", articleRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/milo/handoff", miloHandoffRoutes);
 app.use("/api/milo", miloRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
@@ -113,8 +119,28 @@ cron.schedule(
   { timezone: "Europe/Istanbul" },
 );
 
-cron.schedule("30 3 * * *", deleteOldMiloMessages, {
-  timezone: "Europe/Istanbul",
+cron.schedule(
+  "30 3 * * *",
+  async () => {
+    await deleteOldMiloMessages();
+    await dbStore.deleteOldConversations(90);
+  },
+  { timezone: "Europe/Istanbul" },
+);
+
+// Live chat for Milo's human handoff (Socket.IO on the same port).
+const server = http.createServer(app);
+const realtime = createRealtime(server, {
+  store: dbStore,
+  authenticateAgent: authenticateToken,
+  allowedOrigins,
+  agentName: process.env.MILO_AGENT_NAME,
+  notify: notifyTelegram,
+  consoleUrl: process.env.MILO_CONSOLE_URL,
+});
+// Requests nobody picks up within 5 minutes become "missed".
+cron.schedule("* * * * *", () => {
+  realtime.expireWaiting(5).catch((err) => console.error("[Milo] expire failed:", err.message));
 });
 
 generateAutoTasks();
@@ -123,6 +149,6 @@ app.use((req, res) => {
   res.status(404).send("Route not found");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -6,6 +6,24 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
+// Checks a Supabase access token and looks up the user's role.
+// Shared by the HTTP middleware below and the Milo live-chat sockets.
+export async function authenticateToken(token) {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(token);
+  if (error || !user) return null;
+
+  const { data: roleData } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  return { user, role: roleData?.role ?? null };
+}
+
 export async function requireAuth(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
@@ -15,23 +33,13 @@ export async function requireAuth(req, res, next) {
   }
 
   const token = authHeader.split(" ")[1];
-
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser(token);
-  if (error || !user) {
+  const auth = await authenticateToken(token);
+  if (!auth) {
     return res.status(401).json({ error: "Invalid or expired token" });
   }
 
-  const { data: roleData } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  req.user = user;
-  req.role = roleData?.role ?? null;
+  req.user = auth.user;
+  req.role = auth.role;
   next();
 }
 
