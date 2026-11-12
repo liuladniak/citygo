@@ -11,6 +11,9 @@ const STOPWORDS = new Set([
   "the", "a", "an", "and", "or", "of", "to", "in", "on", "for", "with", "is",
   "are", "do", "you", "your", "i", "we", "me", "my", "can", "have", "any",
   "tour", "istanbul", "price", "what", "about", "there", "it", "this", "that",
+  "by", "get", "around", "easy", "good", "how", "where", "when", "which", "who",
+  "would", "could", "should", "will", "be", "at", "from", "if", "so", "as",
+  "some", "more", "go", "see", "visit", "want", "like", "need", "much", "many",
 ]);
 
 // lowercase, strip punctuation, light stemming: ies->y, drop trailing s
@@ -70,29 +73,43 @@ const matchFaq = (haystack) => {
 const faqReply = (f) =>
   f.link ? `${f.answer}\n\n[${f.link.label} →](${f.link.to})` : f.answer;
 
+// A tour only qualifies if a typed word hits its name or category. Matches in
+// the long description just help rank tours that already qualify: otherwise common
+// words ("easy", "around") add up across descriptions and a general question
+// gets an unrelated tour.
 const scoreTour = (tour, words) => {
   const name = pad(tokenize(tour.tour_name || ""));
   const cat = pad(tokenize(tour.category || ""));
   const over = pad(tokenize(tour.overview || ""));
   let score = 0;
+  let strong = false;
   for (const w of words) {
     const p = ` ${w} `;
-    if (name.includes(p)) score += 3;
-    if (cat.includes(p)) score += 2;
+    if (name.includes(p)) {
+      score += 3;
+      strong = true;
+    }
+    if (cat.includes(p)) {
+      score += 2;
+      strong = true;
+    }
     if (over.includes(p)) score += 1;
   }
-  return score;
+  return { score, strong };
 };
 
 const matchTours = (words, tours) => {
   if (!words.length || !tours.length) return [];
   const scored = tours
-    .map((t) => ({ t, s: scoreTour(t, words) }))
-    .filter((x) => x.s >= 3)
-    .sort((a, b) => b.s - a.s);
+    .map((t) => ({ t, ...scoreTour(t, words) }))
+    .filter((x) => x.strong && x.score >= 3)
+    .sort((a, b) => b.score - a.score);
   if (!scored.length) return [];
-  const top = scored[0].s;
-  return scored.filter((x) => x.s >= top * 0.6).slice(0, 3).map((x) => x.t);
+  const top = scored[0].score;
+  return scored
+    .filter((x) => x.score >= top * 0.6)
+    .slice(0, 3)
+    .map((x) => x.t);
 };
 
 // Returns { reply, source, matchedId }: source is "faq" | "topic" | "tour" | "none";
