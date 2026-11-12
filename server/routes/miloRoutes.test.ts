@@ -58,6 +58,10 @@ describe("POST /api/milo/log", () => {
     });
   });
 
+  it("accepts messages answered by the AI fallback", async () => {
+    expect((await post({ ...valid, source: "ai", matched_id: null })).status).toBe(204);
+  });
+
   it("redacts personal data before saving", async () => {
     await post({ ...valid, text: "my email is a@b.com, phone 555 123 4567" });
     expect(values.mock.calls[0][0].text).toBe(

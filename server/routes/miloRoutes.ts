@@ -7,7 +7,7 @@ import { redact } from "../lib/redact.js";
 
 const router = express.Router();
 
-export const SOURCES = ["faq", "topic", "tour", "none"] as const;
+export const SOURCES = ["faq", "topic", "tour", "none", "ai"] as const;
 const SESSION_ID = /^[a-zA-Z0-9-]{8,64}$/;
 const MATCHED_ID = /^[a-z0-9_-]{1,40}$/;
 
