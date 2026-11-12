@@ -176,6 +176,7 @@ const MiloChat = () => {
   };
 
   const charsLeft = MAX_LENGTH - input.length;
+  // Tell the visitor about the limit before they hit it, and say so clearly when they do.
   const showCounter = input.length > MAX_LENGTH * 0.75;
 
   return (
@@ -276,15 +277,6 @@ const MiloChat = () => {
                   disabled={isLoading}
                   aria-label="Message Milo"
                 />
-                {showCounter && (
-                  <span
-                    className={`milo-char-count ${
-                      charsLeft < 25 ? "milo-char-count--warn" : ""
-                    }`}
-                  >
-                    {charsLeft}
-                  </span>
-                )}
               </div>
               <button
                 type="submit"
@@ -294,6 +286,18 @@ const MiloChat = () => {
                 <Send size={16} />
               </button>
             </form>
+            {showCounter && (
+              <p
+                className={`milo-limit-hint ${
+                  charsLeft === 0 ? "milo-limit-hint--max" : ""
+                }`}
+                role="status"
+              >
+                {charsLeft === 0
+                  ? `You've reached the ${MAX_LENGTH}-character limit. Please shorten your question.`
+                  : `${charsLeft} characters left`}
+              </p>
+            )}
           </footer>
         </div>
       )}
