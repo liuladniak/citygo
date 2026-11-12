@@ -131,10 +131,10 @@ router.post("/chat", async (req, res) => {
   if (!message || typeof message !== "string") {
     return res.status(400).json({ error: "Invalid message." });
   }
-  if (message.length > 500) {
+  if (message.length > 200) {
     return res
       .status(400)
-      .json({ error: "Message too long. Keep it under 500 characters." });
+      .json({ error: "Message too long. Keep it under 200 characters." });
   }
   // Gemini's free tier may use content to improve Google products: send nothing personal.
   const clean = redact(message);
