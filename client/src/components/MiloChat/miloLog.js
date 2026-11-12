@@ -1,4 +1,5 @@
-// Sends a typed Milo message to our own server so we can improve the FAQ.
+// Sends one exchange (what the visitor typed or tapped, and Milo's reply) to our own
+// server so we can review conversations and improve the FAQ.
 // Fire-and-forget: a failure must never affect the chat.
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -22,7 +23,7 @@ export const getSessionId = () => {
   }
 };
 
-export const logTypedMessage = ({ text, source, matchedId }) => {
+export const logExchange = ({ text, source, matchedId, reply }) => {
   try {
     fetch(`${API_URL}/api/milo/log`, {
       method: "POST",
@@ -31,6 +32,7 @@ export const logTypedMessage = ({ text, source, matchedId }) => {
         text,
         source,
         matched_id: matchedId ?? undefined,
+        reply,
         session_id: getSessionId(),
       }),
       keepalive: true,

@@ -7,7 +7,7 @@ import { MENU, NEEDS_TOURS, buildAnswer } from "./miloGuided.js";
 import { answerTyped } from "./miloMatch.js";
 import { askAi } from "./miloAi.js";
 import { linkKind } from "./miloLinks.js";
-import { logTypedMessage } from "./miloLog.js";
+import { logExchange } from "./miloLog.js";
 
 const MAX_LENGTH = 200;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -123,10 +123,14 @@ const MiloChat = () => {
     setMessages((prev) => [...prev, { role: "user", content: item.label }]);
     setIsLoading(true);
     const tours = NEEDS_TOURS.includes(item.id) ? await loadTours() : [];
-    setMessages((prev) => [
-      ...prev,
-      { role: "model", content: buildAnswer(item.id, tours) },
-    ]);
+    const answer = buildAnswer(item.id, tours);
+    logExchange({
+      text: item.label,
+      source: "chip",
+      matchedId: item.id,
+      reply: answer,
+    });
+    setMessages((prev) => [...prev, { role: "model", content: answer }]);
     setIsLoading(false);
   };
 
@@ -166,10 +170,11 @@ const MiloChat = () => {
     if (source === "ai") trackMiloAi();
     else if (source === "none") trackMiloNoMatch();
     else trackMiloLocal(source);
-    logTypedMessage({
+    logExchange({
       text: text.trim(),
       source,
       matchedId: local.matchedId,
+      reply,
     });
     setMessages((prev) => [...prev, { role: "model", content: reply }]);
     setIsLoading(false);
