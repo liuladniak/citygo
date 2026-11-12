@@ -76,6 +76,10 @@ export const useAnalytics = () => {
     trackEvent("milo_local_answer", { source });
   };
 
+  const trackMiloAi = () => {
+    trackEvent("milo_ai_answer");
+  };
+
   const trackMiloNoMatch = () => {
     trackEvent("milo_no_match");
   };
@@ -93,5 +97,6 @@ export const useAnalytics = () => {
     trackMiloChip,
     trackMiloLocal,
     trackMiloNoMatch,
+    trackMiloAi,
   };
 };

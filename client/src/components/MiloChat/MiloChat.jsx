@@ -5,9 +5,11 @@ import "./MiloChat.scss";
 import { useAnalytics } from "../../hooks/useAnalytics.js";
 import { MENU, NEEDS_TOURS, buildAnswer } from "./miloGuided.js";
 import { answerTyped } from "./miloMatch.js";
+import { askAi } from "./miloAi.js";
+import { linkKind } from "./miloLinks.js";
 import { logTypedMessage } from "./miloLog.js";
 
-const MAX_LENGTH = 500;
+const MAX_LENGTH = 200;
 const API_URL = import.meta.env.VITE_API_URL;
 
 // ─── render message content — handles **bold** and [text](url) ────────────────
@@ -17,8 +19,9 @@ const renderContent = (text, navigate) => {
     const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
     if (linkMatch) {
       const [, label, url] = linkMatch;
-      const isInternal = url.startsWith("/");
-      if (isInternal) {
+      const kind = linkKind(url);
+      if (kind === "none") return label;
+      if (kind === "internal") {
         return (
           <button
             key={i}
@@ -62,6 +65,7 @@ const MiloChat = () => {
     trackMiloChip,
     trackMiloLocal,
     trackMiloNoMatch,
+    trackMiloAi,
   } = useAnalytics();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -146,16 +150,33 @@ const MiloChat = () => {
     setIsLoading(true);
 
     const tours = await loadTours();
-    const { reply, source, matchedId } = answerTyped(text, tours);
-    logTypedMessage({ text: text.trim(), source, matchedId });
-    if (source === "none") trackMiloNoMatch();
+    const local = answerTyped(text, tours);
+    let { reply, source } = local;
+
+    // No local answer: try the capped AI fallback; if it declines or fails,
+    // keep the normal "not sure" reply.
+    if (source === "none") {
+      const aiReply = await askAi(text.trim());
+      if (aiReply) {
+        reply = aiReply;
+        source = "ai";
+      }
+    }
+
+    if (source === "ai") trackMiloAi();
+    else if (source === "none") trackMiloNoMatch();
     else trackMiloLocal(source);
+    logTypedMessage({
+      text: text.trim(),
+      source,
+      matchedId: local.matchedId,
+    });
     setMessages((prev) => [...prev, { role: "model", content: reply }]);
     setIsLoading(false);
   };
 
   const charsLeft = MAX_LENGTH - input.length;
-  const showCounter = input.length > 400;
+  const showCounter = input.length > MAX_LENGTH * 0.75;
 
   return (
     <div className="milo-wrapper">
@@ -258,7 +279,7 @@ const MiloChat = () => {
                 {showCounter && (
                   <span
                     className={`milo-char-count ${
-                      charsLeft < 50 ? "milo-char-count--warn" : ""
+                      charsLeft < 25 ? "milo-char-count--warn" : ""
                     }`}
                   >
                     {charsLeft}
