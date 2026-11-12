@@ -50,12 +50,31 @@ describe("POST /api/milo/log", () => {
   it("saves a valid message and returns 204", async () => {
     const res = await post(valid);
     expect(res.status).toBe(204);
-    expect(values).toHaveBeenCalledWith({
-      sessionId: valid.session_id,
-      text: "do kids pay?",
-      source: "faq",
-      matchedId: "kids",
-    });
+    expect(values).toHaveBeenCalledWith([
+      {
+        sessionId: valid.session_id,
+        role: "visitor",
+        text: "do kids pay?",
+        source: "faq",
+        matchedId: "kids",
+      },
+    ]);
+  });
+
+  it("saves Milo's reply as a second row, in order, with the same source", async () => {
+    const res = await post({ ...valid, reply: "Children 2 to 14 pay 50%." });
+    expect(res.status).toBe(204);
+    const rows = values.mock.calls[0][0];
+    expect(rows.map((r: { role: string }) => r.role)).toEqual(["visitor", "milo"]);
+    expect(rows[1]).toMatchObject({ text: "Children 2 to 14 pay 50%.", source: "faq", matchedId: "kids" });
+  });
+
+  it("records chip taps, redacts replies and caps their length", async () => {
+    await post({ ...valid, text: "Most popular tours", source: "chip", matched_id: "popular", reply: `write to a@b.com ${"x".repeat(3000)}` });
+    const rows = values.mock.calls[0][0];
+    expect(rows[0].source).toBe("chip");
+    expect(rows[1].text.startsWith("write to [email] x")).toBe(true);
+    expect(rows[1].text).toHaveLength(2000);
   });
 
   it("accepts messages answered by the AI fallback", async () => {
@@ -64,7 +83,7 @@ describe("POST /api/milo/log", () => {
 
   it("redacts personal data before saving", async () => {
     await post({ ...valid, text: "my email is a@b.com, phone 555 123 4567" });
-    expect(values.mock.calls[0][0].text).toBe(
+    expect(values.mock.calls[0][0][0].text).toBe(
       "my email is [email], phone [number]",
     );
   });
@@ -75,6 +94,7 @@ describe("POST /api/milo/log", () => {
       { ...valid, session_id: "short" },
       { ...valid, text: "   " },
       { ...valid, matched_id: "x'; drop table users;--" },
+      { ...valid, reply: { not: "a string" } },
       {},
     ]) {
       expect((await post(body)).status).toBe(400);
