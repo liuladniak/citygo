@@ -335,17 +335,15 @@ $milo-radius: 1.6rem;
   }
 }
 
-.milo-char-count {
-  position: absolute;
-  right: 1.2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  color: #94a3b8;
-  pointer-events: none;
+.milo-limit-hint {
+  margin: 0.6rem 0 0;
+  padding: 0 1.2rem;
+  font-size: 1.2rem;
+  color: #64748b;
 
-  &--warn {
-    color: #ef4444;
+  &--max {
+    color: #dc2626;
+    font-weight: 500;
   }
 }
 

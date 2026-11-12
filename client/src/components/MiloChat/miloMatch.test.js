@@ -32,6 +32,13 @@ describe("answerTyped", () => {
     expect(answerTyped("I want to talk to a real person", tours).reply).toContain("/contact");
   });
 
+  it("does not match a tour from common words that only appear in its description", () => {
+    const wordy = [
+      { tour_name: "Old City Walking Tour", slug: "old-city", duration: "4 hours", price: 30, category: "Cultural tour", overview: "An easy way to get around the old town by foot, and to see the sights" },
+    ];
+    expect(answerTyped("is it easy to get around by taxi or metro", wordy).source).toBe("none");
+  });
+
   it("falls back politely and never invents anything", () => {
     const r = answerTyped("what is the meaning of life", tours);
     expect(r).toEqual({ reply: NO_MATCH_REPLY, source: "none", matchedId: null });
