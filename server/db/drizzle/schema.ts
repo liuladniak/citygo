@@ -1,4 +1,4 @@
-import { pgTable, index, foreignKey, unique, check, serial, integer, boolean, date, time, text, varchar, timestamp, numeric, pgPolicy, uuid, smallint, pgView, pgEnum } from "drizzle-orm/pg-core"
+import { pgTable, index, foreignKey, unique, check, serial, integer, boolean, date, time, text, varchar, char, timestamp, numeric, pgPolicy, uuid, smallint, pgView, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const bookingStatus = pgEnum("booking_status", ['pending', 'requires_action', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show', 'refunded'])
@@ -575,6 +575,21 @@ export const miloMessages = pgTable("milo_messages", {
 	index("milo_messages_created_at_idx").using("btree", table.createdAt.desc()),
 	index("milo_messages_source_idx").using("btree", table.source),
 	index("milo_messages_session_idx").using("btree", table.sessionId, table.id),
-	check("milo_messages_source_check", sql`${table.source} IN ('faq', 'topic', 'tour', 'none', 'ai', 'chip')`),
+	check("milo_messages_source_check", sql`${table.source} IN ('faq', 'topic', 'tour', 'none', 'ai', 'chip', 'human')`),
 	check("milo_messages_role_check", sql`${table.role} IN ('visitor', 'milo', 'agent')`),
+]).enableRLS();
+
+// A visitor who asked to talk to a person. Messages are in milo_messages.
+export const miloConversations = pgTable("milo_conversations", {
+	sessionId: varchar("session_id", { length: 64 }).primaryKey().notNull(),
+	status: varchar({ length: 8 }).default('waiting').notNull(),
+	tokenHash: char("token_hash", { length: 64 }).notNull(),
+	visitorName: varchar("visitor_name", { length: 80 }),
+	visitorEmail: varchar("visitor_email", { length: 120 }),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	agentJoinedAt: timestamp("agent_joined_at", { withTimezone: true, mode: 'string' }),
+	closedAt: timestamp("closed_at", { withTimezone: true, mode: 'string' }),
+}, (table) => [
+	index("milo_conversations_status_idx").using("btree", table.status, table.createdAt),
+	check("milo_conversations_status_check", sql`${table.status} IN ('waiting', 'live', 'closed', 'missed')`),
 ]).enableRLS();
