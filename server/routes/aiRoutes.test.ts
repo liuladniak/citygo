@@ -6,7 +6,10 @@ const post = vi.fn();
 const checkAiCaps = vi.fn();
 
 vi.mock("axios", () => ({ default: { post: (...a: unknown[]) => post(...a) } }));
-vi.mock("../lib/aiCaps.js", () => ({ checkAiCaps: (...a: unknown[]) => checkAiCaps(...a) }));
+vi.mock("../lib/aiCaps.js", () => ({
+  checkAiCaps: (...a: unknown[]) => checkAiCaps(...a),
+  getLimits: () => ({ perIp: 5, global: 150 }),
+}));
 vi.mock("../lib/redis.js", () => ({ getRedis: () => ({}) }));
 vi.mock("knex", () => ({
   default: () => {
@@ -44,10 +47,10 @@ beforeEach(() => {
   process.env.AI_SERVICE_URL = "http://ai";
 });
 
-const ask = (message: unknown) =>
+const ask = (message: unknown, headers: Record<string, string> = {}) =>
   fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headers },
     body: JSON.stringify({ message }),
   });
 
@@ -70,6 +73,19 @@ describe("POST /api/ai/chat", () => {
     const res = await ask("mail me at a@b.com about hidden gems");
     expect(await res.json()).toEqual({ reply: "Try the Old City tour." });
     expect(post.mock.calls[0][1].message).toBe("mail me at [email] about hidden gems");
+  });
+
+  it("lets the owner key skip the per-IP cap but nobody else", async () => {
+    process.env.AI_OWNER_KEY = "a-long-random-owner-key-1234567890";
+    checkAiCaps.mockResolvedValue({ allowed: true });
+    post.mockResolvedValue({ data: { reply: "ok" } });
+
+    await ask("hello there", { "X-Milo-Owner": "a-long-random-owner-key-1234567890" });
+    expect(checkAiCaps.mock.calls[0][2]).toEqual({ perIp: Infinity, global: 150 });
+
+    await ask("hello there", { "X-Milo-Owner": "wrong" });
+    expect(checkAiCaps.mock.calls[1][2]).toBeUndefined();
+    delete process.env.AI_OWNER_KEY;
   });
 
   it("returns 503 when the AI service fails", async () => {
