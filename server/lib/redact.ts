@@ -1,7 +1,7 @@
 // Cleans a typed chat message before it is stored. Not a perfect PII filter
 // (a name typed in a sentence stays); the table is private and short-lived.
 
-export const MAX_TEXT = 500;
+export const MAX_TEXT = 200;
 
 const EMAIL = /[^\s@,;]+@[^\s@,;]+\.[^\s@,;]+/g;
 // 7+ digits, optionally split by spaces, dots, dashes or brackets (phone, card, booking-like numbers)
