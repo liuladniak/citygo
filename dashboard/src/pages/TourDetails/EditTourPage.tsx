@@ -126,10 +126,6 @@ export default function EditTourPage() {
     status: "active",
   });
 
-  if (role && role !== "admin" && role !== "manager") {
-    return <Navigate to={`/tours/${slug}`} replace />;
-  }
-
   useEffect(() => {
     axios
       .get(`/api/tours/${slug}`)
@@ -172,6 +168,10 @@ export default function EditTourPage() {
       })
       .catch(() => setIsLoading(false));
   }, [slug]);
+
+  if (role && role !== "admin" && role !== "manager") {
+    return <Navigate to={`/tours/${slug}`} replace />;
+  }
 
   const saveOverview = async () => {
     setIsSaving(true);
@@ -324,7 +324,7 @@ export default function EditTourPage() {
         set("images", [...form.images, data.publicUrl]);
       }
       toast.success("Image uploaded");
-    } catch (err) {
+    } catch {
       toast.error("Image upload failed");
     } finally {
       setIsUploadingImage(false);

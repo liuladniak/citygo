@@ -58,7 +58,7 @@ const Bookings = () => {
         });
         setBookings(response.data.data);
         setTotal(response.data.total);
-      } catch (error) {
+      } catch {
         console.error("There was an error fetching the bookings data!");
       } finally {
         setIsLoading(false);

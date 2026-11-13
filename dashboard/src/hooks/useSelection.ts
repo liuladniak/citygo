@@ -12,9 +12,9 @@ export function useSelection<T>(
   const [selected, setSelected] = useState<Set<number>>(() => new Set());
 
   // getId/canSelect are usually inline functions, so depend on items only
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectableIds = useMemo(
     () => items.filter(canSelect).map(getId),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [items],
   );
 

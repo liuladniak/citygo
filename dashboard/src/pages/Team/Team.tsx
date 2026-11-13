@@ -167,8 +167,6 @@ export default function Team() {
   const queryClient = useQueryClient();
   const [addOpen, setAddOpen] = useState(false);
 
-  if (role === "associate") return <Navigate to="/" replace />;
-
   const { data: employees = [], isLoading } = useQuery<Employee[]>({
     queryKey: ["employees-availability"],
     queryFn: async () => {
@@ -176,7 +174,10 @@ export default function Team() {
       return data;
     },
     refetchInterval: 5 * 60 * 1000,
+    enabled: role !== "associate",
   });
+
+  if (role === "associate") return <Navigate to="/" replace />;
 
   const positions = [...new Set(employees.map((e) => e.position))].sort();
 

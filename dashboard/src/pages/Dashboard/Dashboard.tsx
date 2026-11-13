@@ -17,12 +17,14 @@ const getDateParams = (range: DashboardRange) => {
   switch (range) {
     case "today":
       return { dateFrom: today, dateTo: today };
-    case "tomorrow":
+    case "tomorrow": {
       const tomorrow = format(addDays(now, 1), "yyyy-MM-dd");
       return { dateFrom: tomorrow, dateTo: tomorrow };
-    case "week":
+    }
+    case "week": {
       const weekEnd = format(addDays(now, 7), "yyyy-MM-dd");
       return { dateFrom: today, dateTo: weekEnd };
+    }
     case "upcoming":
     default:
       return { dateFrom: today, dateTo: undefined };
@@ -56,7 +58,7 @@ const Dashboard = () => {
           },
         });
         setBookings(response.data.data);
-      } catch (error) {
+      } catch {
         console.error("There was an error fetching the bookings data!");
       } finally {
         setIsLoading(false);
