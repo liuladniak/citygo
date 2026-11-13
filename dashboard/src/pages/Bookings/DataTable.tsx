@@ -119,7 +119,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
 
   return (
     <div className={className}>
-      <div className="flex items-center justify-between py-4">
+      <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
         <Input
           placeholder="Search bookings..."
           value={isServerSide ? inputValue : globalFilter}
@@ -128,16 +128,16 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               ? setInputValue(e.target.value)
               : setGlobalFilter(e.target.value)
           }
-          className="max-w-sm"
+          className="sm:max-w-sm"
         />
         <div className="flex items-center gap-6">
-          <div className="text-muted-foreground flex-1 text-sm px-6">
+          <div className="text-muted-foreground hidden flex-1 px-6 text-sm lg:block">
             {table.getSelectedRowModel().rows.length} of{" "}
             {table.getRowModel().rows.length} row(s) selected.
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button variant="outline" className="w-full sm:ml-auto sm:w-auto">
                 Columns
               </Button>
             </DropdownMenuTrigger>
@@ -164,7 +164,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
         </div>
       </div>
       <div className="overflow-hidden rounded-md border">
-        <Table>
+        <Table className="min-w-[44rem]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -229,7 +229,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-center py-4 sm:justify-end">
         <DataTablePagination table={table} />
       </div>
     </div>
