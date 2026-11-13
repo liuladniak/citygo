@@ -73,22 +73,88 @@
 } */
 
 body {
-  font-family: "Helvetica Neue";
-  font-weight: 400;
   /* Text colour comes from the theme (text-foreground on body). A fixed grey
      here used to override it and was unreadable in dark mode. */
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-feature-settings: "cv11", "ss03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  overflow-wrap: break-word;
+}
+
+/* Headings balance their lines, paragraphs avoid orphans. */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* Numbers line up in tables, stats and badges. */
+table,
+.tabular {
+  font-variant-numeric: tabular-nums;
 }
 
 body::-webkit-scrollbar {
   display: none;
 }
-.label {
-  font-size: 1.35rem;
-  font-weight: 600;
-}
 /*
   ---break---
 */
+@utility page-title {
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
+  font-weight: 650;
+  letter-spacing: var(--tracking-tight);
+}
+@utility page-description {
+  margin-top: 0.25rem;
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+  color: var(--muted-foreground);
+}
+@utility section-title {
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas,
+    monospace;
+
+  /* Fluid type scale: small text stays fixed (it must stay legible and
+     aligned), headings grow smoothly between 360px and 1440px viewports. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.375rem;
+  --text-base: clamp(0.9375rem, 0.9rem + 0.12vw, 1rem);
+  --text-base--line-height: 1.5rem;
+  --text-lg: clamp(1.0625rem, 1.02rem + 0.14vw, 1.125rem);
+  --text-lg--line-height: 1.625rem;
+  --text-xl: clamp(1.125rem, 1.05rem + 0.28vw, 1.25rem);
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: clamp(1.375rem, 1.2rem + 0.65vw, 1.75rem);
+  --text-2xl--line-height: 1.2;
+  --text-3xl: clamp(1.625rem, 1.4rem + 0.9vw, 2.125rem);
+  --text-3xl--line-height: 1.15;
+
+  /* Heading tracking tightens as size grows. */
+  --tracking-tight: -0.02em;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

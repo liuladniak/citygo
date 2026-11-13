@@ -1243,7 +1243,7 @@ const AddBooking = () => {
     <div className="p-4">
       <div className="flex items-center gap-3 mb-6">
         <BackButton />
-        <h1 className="text-xl font-semibold">New Booking</h1>
+        <h1 className="page-title">New Booking</h1>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6 items-start">

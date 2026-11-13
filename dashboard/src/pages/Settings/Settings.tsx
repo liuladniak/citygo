@@ -236,10 +236,10 @@ export default function SettingsPage() {
     );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-3xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
+        <h1 className="page-title">Settings</h1>
+        <p className="page-description">
           Manage your profile, company and preferences
         </p>
       </div>
