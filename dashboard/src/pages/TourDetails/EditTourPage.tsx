@@ -353,7 +353,7 @@ export default function EditTourPage() {
     );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Button
@@ -367,8 +367,8 @@ export default function EditTourPage() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-xl font-bold tracking-tight">Edit Tour</h1>
-            <p className="text-xs text-muted-foreground">{form.tour_name}</p>
+            <h1 className="page-title">Edit Tour</h1>
+            <p className="page-description">{form.tour_name}</p>
           </div>
         </div>
       </div>

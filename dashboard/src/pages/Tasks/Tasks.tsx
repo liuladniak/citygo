@@ -231,11 +231,11 @@ export default function TasksPage() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Tasks</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <h1 className="page-title">Tasks</h1>
+          <p className="page-description">
             {isManager ? "All team tasks" : "Your assigned tasks"}
           </p>
         </div>

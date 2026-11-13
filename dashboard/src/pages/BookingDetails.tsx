@@ -101,13 +101,13 @@ export default function BookingDetailsPage() {
     statusConfig[booking.status?.toLowerCase() ?? ""] ?? statusConfig.draft;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <BackButton />
           <div>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-2xl font-bold tracking-tight">
+              <h1 className="page-title">
                 {booking.booking_reference}
               </h1>
               <Badge

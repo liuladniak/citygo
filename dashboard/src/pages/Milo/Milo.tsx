@@ -200,8 +200,8 @@ export default function Milo() {
     <div className="flex flex-col gap-3 py-4 h-[calc(100svh-5rem)]">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold">Milo</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="page-title">Milo</h1>
+          <p className="page-description">
             {!available
               ? "You are away. Visitors are told to leave a message."
               : connected

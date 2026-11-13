@@ -154,7 +154,7 @@ export default function Schedule() {
           .pending { background: #fef3c7; color: #92400e; }
         </style>
       </head><body>
-        <h1>Daily Schedule</h1>
+        <h1 className="page-title">Daily Schedule</h1>
         <p>${format(new Date(), "EEEE, MMMM d, yyyy")} · CityGo Tours</p>
         ${
           todayBookings.length === 0
@@ -196,11 +196,11 @@ export default function Schedule() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Schedule</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <h1 className="page-title">Schedule</h1>
+          <p className="page-description">
             Tour operations calendar
           </p>
         </div>
