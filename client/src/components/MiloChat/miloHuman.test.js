@@ -29,7 +29,9 @@ describe("Milo human chat rules", () => {
   });
 
   it("tells a visitor whose request was missed where to go next", () => {
-    expect(endedMessage("missed", "Liu")).toContain("contact page");
-    expect(endedMessage("closed", "Liu")).toContain("Liu");
+    expect(endedMessage("missed")).toContain("contact page");
+    expect(endedMessage("closed")).toContain("chat has ended");
+    // Visitors never learn a name they have not met.
+    expect(endedMessage("missed") + endedMessage("closed")).not.toContain("Liu");
   });
 });
