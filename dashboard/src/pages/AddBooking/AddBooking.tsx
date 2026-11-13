@@ -697,6 +697,7 @@ function Step5({
         });
         setGuides(res.data.data);
       } catch {
+        // The guide list just stays empty.
       } finally {
         setIsLoading(false);
       }
