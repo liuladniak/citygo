@@ -1,3 +1,4 @@
+import { BrandMark } from "./BrandMark";
 import { LoginForm } from "./LoginForm";
 
 export function LoginWithGoogle() {
@@ -13,9 +14,7 @@ export function LoginWithGoogle() {
 
         <div className="relative z-10 flex flex-col justify-between p-10 text-white h-full">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-sm">
-              CG
-            </div>
+            <BrandMark />
             <span className="font-semibold text-lg">CityGo</span>
           </div>
 
@@ -38,9 +37,7 @@ export function LoginWithGoogle() {
       <div className="flex w-full lg:w-1/2 items-center justify-center p-6 md:p-10 bg-background">
         <div className="w-full max-w-sm space-y-6">
           <div className="flex items-center gap-2 lg:hidden">
-            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-sm text-white">
-              CG
-            </div>
+            <BrandMark />
             <span className="font-semibold text-lg">CityGo</span>
           </div>
 

@@ -19,7 +19,7 @@ import { useEmployee } from "@/hooks/useEmployee";
 import { useRole } from "@/hooks/useRole";
 import { useMilo } from "@/lib/miloContext";
 import { supabase } from "@/lib/supabaseClient";
-import logoIcon from "@/assets/logos/logo-icon.png";
+import { BrandMark } from "@/components/BrandMark";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,7 +97,7 @@ const AppSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton asChild className="p-0">
                 <Link to="/" className="overflow-visible">
-                  <img src={logoIcon} className="w-5 h-5" alt="logo" />
+                  <BrandMark className="size-6 text-xs" />
                   <span className="font-semibold text-brand-secondary">
                     CityGo
                   </span>
