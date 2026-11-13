@@ -19,9 +19,9 @@ function LayoutContent({ user, role }: HeaderProps) {
   return (
     <>
       <AppSidebar />
-      <div className="flex-1 flex flex-col min-h-screen transition-all duration-300 w-full">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <Header user={user} role={role} />
-        <main className="flex-1 transition-all duration-300 w-full px-4">
+        <main className="min-w-0 flex-1 px-4">
           <RequireRole allowed={["admin", "manager", "associate"]}>
             <Outlet />
           </RequireRole>
