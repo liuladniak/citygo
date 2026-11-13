@@ -45,9 +45,9 @@ const categoryConfig: Record<string, { class: string }> = {
 };
 
 const activityConfig: Record<string, { color: string }> = {
-  Easy: { color: "text-emerald-500" },
-  Moderate: { color: "text-amber-500" },
-  Hard: { color: "text-red-500" },
+  Easy: { color: "text-emerald-700 dark:text-emerald-400" },
+  Moderate: { color: "text-amber-700 dark:text-amber-400" },
+  Hard: { color: "text-red-600 dark:text-red-400" },
 };
 
 interface Tour {
@@ -306,7 +306,7 @@ export default function TourDetails() {
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {tour.highlights.map((h, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm">
-                  <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <CheckCircle className="h-4 w-4 text-emerald-700 dark:text-emerald-400 shrink-0 mt-0.5" />
                   <span>{h}</span>
                 </li>
               ))}
@@ -321,7 +321,7 @@ export default function TourDetails() {
         {includesItems.length > 0 && (
           <section className="space-y-3">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-emerald-500" /> What's
+              <CheckCircle className="h-4 w-4 text-emerald-700 dark:text-emerald-400" /> What's
               Included
             </h2>
             <ul className="space-y-1.5">
@@ -330,7 +330,7 @@ export default function TourDetails() {
                   key={i}
                   className="flex items-start gap-2 text-sm text-muted-foreground"
                 >
-                  <CheckCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                  <CheckCircle className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400 shrink-0 mt-0.5" />
                   {item}
                 </li>
               ))}
@@ -341,7 +341,7 @@ export default function TourDetails() {
         {essentialsItems.length > 0 && (
           <section className="space-y-3">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Info className="h-4 w-4 text-blue-500" /> What to Bring
+              <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" /> What to Bring
             </h2>
             <ul className="space-y-1.5">
               {essentialsItems.map((item, i) => (
@@ -349,7 +349,7 @@ export default function TourDetails() {
                   key={i}
                   className="flex items-start gap-2 text-sm text-muted-foreground"
                 >
-                  <ArrowRight className="h-3.5 w-3.5 text-blue-500 shrink-0 mt-0.5" />
+                  <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
                   {item}
                 </li>
               ))}
@@ -363,7 +363,7 @@ export default function TourDetails() {
           <Separator />
           <section className="space-y-2">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-amber-500" /> Additional Costs
+              <DollarSign className="h-4 w-4 text-amber-700 dark:text-amber-400" /> Additional Costs
             </h2>
             <p className="text-sm text-muted-foreground">
               {tour.additional_costs}

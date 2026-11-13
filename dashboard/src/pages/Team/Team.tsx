@@ -37,11 +37,11 @@ interface Employee {
 }
 
 const availabilityConfig = {
-  on_tour: { dot: "bg-blue-500", label: "On Tour", class: "text-blue-500" },
+  on_tour: { dot: "bg-blue-500", label: "On Tour", class: "text-blue-600 dark:text-blue-400" },
   available: {
     dot: "bg-emerald-500",
     label: "Available",
-    class: "text-emerald-500",
+    class: "text-emerald-700 dark:text-emerald-400",
   },
   offline: {
     dot: "bg-muted-foreground/30",
@@ -138,7 +138,7 @@ function EmployeeCard({
           employee.tours_today > 0 && (
             <Badge
               variant="outline"
-              className="text-[10px] px-1.5 py-0 h-4 text-blue-500 border-blue-200"
+              className="text-[10px] px-1.5 py-0 h-4 text-blue-600 dark:text-blue-400 border-blue-200"
             >
               {employee.tours_today} tour{employee.tours_today > 1 ? "s" : ""}{" "}
               today
@@ -226,9 +226,9 @@ export default function Team() {
           {
             label: "Available",
             value: counts.available,
-            color: "text-emerald-500",
+            color: "text-emerald-700 dark:text-emerald-400",
           },
-          { label: "On Tour", value: counts.on_tour, color: "text-blue-500" },
+          { label: "On Tour", value: counts.on_tour, color: "text-blue-600 dark:text-blue-400" },
           {
             label: "Offline",
             value: counts.offline,

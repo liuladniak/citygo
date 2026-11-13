@@ -122,7 +122,7 @@ function StatCard({
         {trend !== undefined && (
           <div
             className={`flex items-center gap-1 mt-1 text-xs font-medium ${
-              trend >= 0 ? "text-emerald-500" : "text-destructive"
+              trend >= 0 ? "text-emerald-700 dark:text-emerald-400" : "text-destructive"
             }`}
           >
             {trend >= 0 ? (
@@ -183,7 +183,7 @@ function WeatherCard({ data }: { data: WeatherData }) {
         </div>
       </div>
       {!isGoodWeather && (
-        <p className="text-[10px] text-amber-500 font-medium flex items-center gap-1 mt-1">
+        <p className="text-[10px] text-amber-700 dark:text-amber-400 font-medium flex items-center gap-1 mt-1">
           <AlertTriangle className="h-2.5 w-2.5" />
           Weather advisory — check meeting points
         </p>
@@ -252,7 +252,7 @@ export default function MainStats() {
             : "No tours scheduled"
         }
         icon={CalendarDays}
-        iconClass="text-blue-500"
+        iconClass="text-blue-600 dark:text-blue-400"
         trend={stats?.tours_trend}
       />
       <StatCard
@@ -264,7 +264,7 @@ export default function MainStats() {
             : undefined
         }
         icon={Euro}
-        iconClass="text-emerald-500"
+        iconClass="text-emerald-700 dark:text-emerald-400"
         valueClass={stats?.revenue_today === 0 ? "text-muted-foreground" : ""}
       />
       <StatCard
@@ -278,8 +278,8 @@ export default function MainStats() {
               } unpaid`
         }
         icon={AlertTriangle}
-        iconClass={issuesCount > 0 ? "text-amber-500" : "text-muted-foreground"}
-        valueClass={issuesCount > 0 ? "text-amber-500" : ""}
+        iconClass={issuesCount > 0 ? "text-amber-700 dark:text-amber-400" : "text-muted-foreground"}
+        valueClass={issuesCount > 0 ? "text-amber-700 dark:text-amber-400" : ""}
       />
       {weather ? (
         <WeatherCard data={weather} />

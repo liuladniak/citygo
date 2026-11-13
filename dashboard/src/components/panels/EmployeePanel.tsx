@@ -32,11 +32,11 @@ const colors = [
 ];
 
 const availabilityConfig = {
-  on_tour: { dot: "bg-blue-500", label: "On Tour", class: "text-blue-500" },
+  on_tour: { dot: "bg-blue-500", label: "On Tour", class: "text-blue-600 dark:text-blue-400" },
   available: {
     dot: "bg-emerald-500",
     label: "Available",
-    class: "text-emerald-500",
+    class: "text-emerald-700 dark:text-emerald-400",
   },
   offline: {
     dot: "bg-muted-foreground/30",

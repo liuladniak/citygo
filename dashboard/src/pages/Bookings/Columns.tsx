@@ -99,7 +99,7 @@ export const Columns: ColumnDef<Booking>[] = [
           <p
             className={`text-sm ${
               isToday
-                ? "font-semibold text-blue-500"
+                ? "font-semibold text-blue-600 dark:text-blue-400"
                 : isPast && row.original.status !== "cancelled"
                 ? "text-muted-foreground"
                 : ""
@@ -133,12 +133,12 @@ export const Columns: ColumnDef<Booking>[] = [
         <div>
           <p className="text-sm font-medium">€{paid.toFixed(0)}</p>
           {hasBalance && (
-            <p className="text-xs text-red-500">
+            <p className="text-xs text-red-600 dark:text-red-400">
               €{(total - paid).toFixed(0)} due
             </p>
           )}
           {isFullyPaid && (
-            <p className="text-xs text-emerald-500">Paid in full</p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-400">Paid in full</p>
           )}
         </div>
       );

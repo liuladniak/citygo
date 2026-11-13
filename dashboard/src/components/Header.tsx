@@ -43,13 +43,13 @@ const Header = ({ user, role }: HeaderProps) => {
     else window.location.href = "/";
   };
   return (
-    <header className="w-full flex items-center justify-between px-6 py-4 transition-all duration-300 ease-in-out">
+    <header className="w-full flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 ease-in-out">
       <SidebarTrigger />
 
       <section className="user-nav ">
         <nav>
           <ul className="">
-            <li className="user-nav-item flex gap-6 items-center relative">
+            <li className="user-nav-item flex gap-2 sm:gap-6 items-center relative">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon">
@@ -87,7 +87,7 @@ const Header = ({ user, role }: HeaderProps) => {
                         </span>
                       )}
                     </div>
-                    <div className="text-left">
+                    <div className="hidden text-left sm:block">
                       <p className="text-sm font-medium text-foreground">
                         {displayName}
                       </p>

@@ -229,7 +229,7 @@ export default function BookingDetailsPage() {
                     ) : (
                       <button
                         onClick={() => setEditDetailsOpen(true)}
-                        className="text-sm text-orange-500 hover:underline"
+                        className="text-sm text-orange-700 dark:text-orange-400 hover:underline"
                       >
                         + Set meeting point
                       </button>
@@ -441,11 +441,11 @@ export default function BookingDetailsPage() {
                           <>
                             <div className="flex justify-between font-semibold">
                               <span>Refund Pending</span>
-                              <span className="text-orange-500">
+                              <span className="text-orange-700 dark:text-orange-400">
                                 €{refundDue.toFixed(2)}
                               </span>
                             </div>
-                            <div className="flex items-center justify-center gap-2 py-2 text-sm text-orange-500 font-medium">
+                            <div className="flex items-center justify-center gap-2 py-2 text-sm text-orange-700 dark:text-orange-400 font-medium">
                               <AlertTriangle className="h-4 w-4" /> Refund not
                               yet issued
                             </div>
@@ -478,7 +478,7 @@ export default function BookingDetailsPage() {
                     <span>Balance Due</span>
                     <span
                       className={
-                        balance > 0 ? "text-red-500" : "text-emerald-600"
+                        balance > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600"
                       }
                     >
                       €{balance.toFixed(2)}
@@ -520,7 +520,7 @@ export default function BookingDetailsPage() {
                           <span
                             className={`font-medium ${
                               Number(p.amount) < 0
-                                ? "text-orange-500"
+                                ? "text-orange-700 dark:text-orange-400"
                                 : "text-foreground"
                             }`}
                           >
@@ -566,7 +566,7 @@ export default function BookingDetailsPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-orange-500">
+                <p className="text-sm text-orange-700 dark:text-orange-400">
                   No staff assigned yet.
                 </p>
               )}

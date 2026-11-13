@@ -227,7 +227,7 @@ export default function TaskDetailModal({
               {task.due_date && (
                 <div
                   className={`flex items-center gap-2 ${
-                    isOverdue ? "text-red-500" : "text-muted-foreground"
+                    isOverdue ? "text-red-600 dark:text-red-400" : "text-muted-foreground"
                   }`}
                 >
                   <Calendar className="h-3.5 w-3.5 shrink-0" />

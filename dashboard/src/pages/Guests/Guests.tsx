@@ -186,7 +186,7 @@ function GuestPanel({ guest }: { guest: Guest; onClose: () => void }) {
             <p className="text-xs text-muted-foreground">Bookings</p>
           </div>
           <div className="bg-muted/40 rounded-lg p-3 text-center">
-            <p className="text-lg font-bold text-emerald-500">
+            <p className="text-lg font-bold text-emerald-700 dark:text-emerald-400">
               €{totalSpend > 0 ? totalSpend.toLocaleString() : "0"}
             </p>
             <p className="text-xs text-muted-foreground">Total Spend</p>
