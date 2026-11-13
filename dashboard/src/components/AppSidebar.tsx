@@ -40,6 +40,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const navItems = [
@@ -59,7 +60,13 @@ const AppSidebar = () => {
   const { user } = useAuth();
   const { role } = useRole(user?.id);
   const { employee, googleAvatar } = useEmployee();
-  const navigate = useNavigate();
+  const routerNavigate = useNavigate();
+  const { setOpenMobile } = useSidebar();
+  // On a phone the sidebar is a drawer: close it once a page is chosen.
+  const navigate = (to: string) => {
+    setOpenMobile(false);
+    routerNavigate(to);
+  };
 
   const { data: pendingCount } = useQuery({
     queryKey: ["pending-bookings-count"],
@@ -120,7 +127,7 @@ const AppSidebar = () => {
                       <item.icon />
                       <span>{item.title}</span>
                     </SidebarMenuButton>
-                    {item.badge && pendingCount && pendingCount > 0 && (
+                    {item.badge && (pendingCount ?? 0) > 0 && (
                       <SidebarMenuBadge>{pendingCount}</SidebarMenuBadge>
                     )}
                     {item.adminOnly && attention > 0 && (
