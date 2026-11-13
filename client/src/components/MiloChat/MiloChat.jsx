@@ -8,6 +8,8 @@ import { answerTyped } from "./miloMatch.js";
 import { askAi } from "./miloAi.js";
 import { linkKind } from "./miloLinks.js";
 import { logExchange } from "./miloLog.js";
+import { useHumanChat } from "./useHumanChat.js";
+import { endedMessage, fetchAvailability } from "./miloHuman.js";
 
 const MAX_LENGTH = 200;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -82,6 +84,43 @@ const MiloChat = () => {
   const scrollRef = useRef(null);
   const toursRef = useRef(null);
 
+  // Live chat with a person (Phase 5). Messages from the person are rendered
+  // as plain text and tagged `human` so a reload can replace them with history.
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [formError, setFormError] = useState("");
+  const [availability, setAvailability] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const human = useHumanChat({
+    isOpen,
+    onHistory: (rows) =>
+      setMessages((prev) => [
+        ...prev.filter((m) => !m.human),
+        ...rows
+          .filter((r) => r.role !== "milo")
+          .map((r) => ({
+            role: r.role === "agent" ? "agent" : "user",
+            content: r.text,
+            human: true,
+          })),
+      ]),
+    onMessage: (m) =>
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: m.from === "agent" ? "agent" : "user",
+          content: m.text,
+          name: m.name,
+          human: true,
+        },
+      ]),
+    onEnded: (kind, agentName) =>
+      setMessages((prev) => [
+        ...prev,
+        { role: "model", content: endedMessage(kind, agentName) },
+      ]),
+  });
+
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -89,7 +128,7 @@ const MiloChat = () => {
 
     // A new answer: show the question (the tapped chip) with its answer
     // right below it, so the reader sees both without scrolling.
-    if (messages.length > 1 && last.role === "model" && !isLoading) {
+    if (messages.length > 1 && last.role === "model" && !isLoading && !last.human) {
       const rows = el.querySelectorAll(".message-row");
       const prev = messages[messages.length - 2];
       const anchor =
@@ -117,9 +156,50 @@ const MiloChat = () => {
     return toursRef.current;
   };
 
+  const openHumanForm = async () => {
+    human.openForm();
+    setFormError("");
+    setAvailability(null);
+    setAvailability(await fetchAvailability());
+  };
+
+  const submitHumanForm = async (e) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setFormError("");
+    const res = await human.start({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
+    });
+    setSubmitting(false);
+    if (!res.ok) return setFormError(res.error);
+    setForm({ name: "", email: "", message: "" });
+  };
+
+  const sendToHuman = async (text) => {
+    const t = text.trim();
+    if (!t) return;
+    if (t.length > MAX_LENGTH) {
+      setSendError(`Please keep messages under ${MAX_LENGTH} characters.`);
+      return;
+    }
+    setSendError("");
+    const res = await human.send(t);
+    if (res?.ok) setInput("");
+    else if (res?.error === "slow_down") setSendError("You're sending messages very fast. Please wait a moment.");
+    else setSendError("Message not sent. Check your connection and try again.");
+  };
+
   const handleChip = async (item) => {
     if (isLoading) return;
     trackMiloChip(item.id);
+    if (item.id === "human") {
+      setMessages((prev) => [...prev, { role: "user", content: item.label }]);
+      openHumanForm();
+      return;
+    }
     setMessages((prev) => [...prev, { role: "user", content: item.label }]);
     setIsLoading(true);
     const tours = NEEDS_TOURS.includes(item.id) ? await loadTours() : [];
@@ -135,6 +215,7 @@ const MiloChat = () => {
   };
 
   const sendMessage = async (text) => {
+    if (human.active) return sendToHuman(text);
     if (!text.trim() || isLoading) return;
     trackMiloMessage();
     if (text.length > MAX_LENGTH) {
@@ -207,13 +288,30 @@ const MiloChat = () => {
           <header className="milo-header">
             <div className="milo-profile">
               <div className="milo-avatar">
-                <Bot size={18} />
+                {human.active ? human.agent.name.charAt(0) : <Bot size={18} />}
               </div>
               <div className="milo-info">
-                <span className="milo-name">Milo</span>
+                <span className="milo-name">
+                  {human.active ? human.agent.name : "Milo"}
+                </span>
                 <span className="milo-status">
-                  <Sparkles size={10} />
-                  CityGo Specialist
+                  {human.active ? (
+                    <>
+                      <span
+                        className={`milo-dot ${human.agent.online ? "milo-dot--on" : ""}`}
+                      />
+                      {human.phase === "waiting"
+                        ? "Waiting for a reply…"
+                        : human.agent.online
+                          ? "Online"
+                          : "Away"}
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={10} />
+                      CityGo Specialist
+                    </>
+                  )}
                 </span>
               </div>
             </div>
@@ -231,7 +329,13 @@ const MiloChat = () => {
             {messages.map((msg, i) => (
               <div key={i} className={`message-row ${msg.role}`}>
                 <div className="message-bubble">
-                  {renderContent(msg.content, navigate)}
+                  {msg.role === "agent" && (
+                    <span className="milo-agent-name">
+                      {msg.name || human.agent.name}
+                    </span>
+                  )}
+                  {/* Text from a person is shown as plain text, never parsed. */}
+                  {msg.human ? msg.content : renderContent(msg.content, navigate)}
                 </div>
               </div>
             ))}
@@ -247,8 +351,93 @@ const MiloChat = () => {
               </div>
             )}
 
+            {human.active && human.agentTyping && (
+              <div className="message-row agent">
+                <div className="message-bubble milo-typing">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              </div>
+            )}
+            {human.active && human.seen && messages[messages.length - 1]?.role === "user" && (
+              <span className="milo-seen">Seen</span>
+            )}
+
+            {human.phase === "form" && (
+              <form className="milo-handoff" onSubmit={submitHumanForm}>
+                <p className="milo-handoff__lead">
+                  {availability === null
+                    ? "Checking if Liu is around…"
+                    : availability.online
+                      ? `${availability.agentName} is online and can reply here.`
+                      : `${availability.agentName} is away right now. Leave your email and a short note, and you'll get a reply there.`}
+                </p>
+                <input
+                  type="text"
+                  placeholder="Your name (optional)"
+                  value={form.name}
+                  maxLength={60}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  aria-label="Your name (optional)"
+                />
+                <input
+                  type="email"
+                  placeholder="Email (optional)"
+                  value={form.email}
+                  maxLength={120}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  aria-label="Email (optional)"
+                />
+                <textarea
+                  placeholder="What would you like to ask?"
+                  value={form.message}
+                  maxLength={MAX_LENGTH}
+                  rows={3}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  aria-label="What would you like to ask?"
+                />
+                <p className="milo-handoff__note">
+                  Name and email are optional and kept for 90 days. Emails and
+                  phone numbers typed in the chat itself are removed.
+                </p>
+                {formError && (
+                  <p className="milo-limit-hint milo-limit-hint--max" role="alert">
+                    {formError}{" "}
+                    <button
+                      type="button"
+                      className="milo-link"
+                      onClick={() => navigate("/contact")}
+                    >
+                      Contact page
+                    </button>
+                  </p>
+                )}
+                <div className="milo-handoff__actions">
+                  <button type="submit" className="milo-handoff__go" disabled={submitting}>
+                    {submitting ? "Sending…" : "Ask a person"}
+                  </button>
+                  <button
+                    type="button"
+                    className="suggestion-chip"
+                    onClick={() => {
+                      human.cancelForm();
+                      setMessages((prev) => [
+                        ...prev,
+                        { role: "model", content: buildAnswer("human", []) },
+                      ]);
+                    }}
+                  >
+                    No thanks
+                  </button>
+                </div>
+              </form>
+            )}
+
             {/* guided menu chips */}
-            {!isLoading && messages[messages.length - 1].role === "model" && (
+            {!isLoading &&
+              human.phase === "bot" &&
+              messages[messages.length - 1].role === "model" && (
               <div className="milo-suggestions">
                 {MENU.map((item) => (
                   <button
@@ -275,22 +464,32 @@ const MiloChat = () => {
               <div className="milo-input-wrap">
                 <input
                   type="text"
-                  placeholder="Ask Milo..."
+                  placeholder={
+                    human.active ? `Message ${human.agent.name}...` : "Ask Milo..."
+                  }
                   value={input}
                   maxLength={MAX_LENGTH}
-                  onChange={(e) => setInput(e.target.value)}
-                  disabled={isLoading}
-                  aria-label="Message Milo"
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    if (human.active) human.notifyTyping();
+                  }}
+                  disabled={isLoading || human.phase === "form"}
+                  aria-label={human.active ? `Message ${human.agent.name}` : "Message Milo"}
                 />
               </div>
               <button
                 type="submit"
-                disabled={!input.trim() || isLoading}
+                disabled={!input.trim() || isLoading || human.phase === "form"}
                 aria-label="Send message"
               >
                 <Send size={16} />
               </button>
             </form>
+            {sendError && human.active && (
+              <p className="milo-limit-hint milo-limit-hint--max" role="alert">
+                {sendError}
+              </p>
+            )}
             {showCounter && (
               <p
                 className={`milo-limit-hint ${

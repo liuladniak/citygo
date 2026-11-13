@@ -201,7 +201,8 @@ $milo-radius: 1.6rem;
   &.user {
     justify-content: flex-end;
   }
-  &.model {
+  &.model,
+  &.agent {
     justify-content: flex-start;
   }
 }
@@ -225,7 +226,8 @@ $milo-radius: 1.6rem;
   }
 }
 
-.message-row.model .message-bubble {
+.message-row.model .message-bubble,
+.message-row.agent .message-bubble {
   background: white;
   color: $milo-text;
   border-bottom-left-radius: 0.4rem;
@@ -420,5 +422,99 @@ $milo-radius: 1.6rem;
   30% {
     transform: translateY(-4px);
     opacity: 1;
+  }
+}
+
+// ─── live chat with a person ─────────────────────────────────────────────────
+.milo-agent-name {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $main-teal;
+  margin-bottom: 0.2rem;
+}
+
+.milo-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #94a3b8;
+  margin-right: 0.4rem;
+
+  &--on {
+    background: #22c55e;
+  }
+}
+
+.milo-seen {
+  align-self: flex-end;
+  font-size: 1.1rem;
+  color: #94a3b8;
+  margin-top: -0.4rem;
+}
+
+.milo-handoff {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.4rem;
+  padding: 1.2rem;
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border-radius: 1rem;
+    border: 1.5px solid #e2e8f0;
+    font-size: 1.3rem;
+    font-family: inherit;
+    color: $milo-text;
+    background: $milo-surface-2;
+    outline: none;
+    resize: none;
+
+    &:focus {
+      border-color: $main-teal;
+      background: white;
+    }
+  }
+
+  &__lead {
+    margin: 0;
+    font-size: 1.3rem;
+    color: $milo-text;
+    font-weight: 500;
+  }
+
+  &__note {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #64748b;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  &__go {
+    background: $milo-bg;
+    color: white;
+    border: none;
+    border-radius: 10rem;
+    padding: 0.8rem 1.6rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 }
