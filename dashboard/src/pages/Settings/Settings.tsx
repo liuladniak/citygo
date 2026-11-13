@@ -245,27 +245,29 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="profile">
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="profile" className="gap-2">
-            <User className="h-3.5 w-3.5" /> Profile
-          </TabsTrigger>
-          {isManager && (
-            <TabsTrigger value="company" className="gap-2">
-              <Building2 className="h-3.5 w-3.5" /> Company
+        <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <TabsList className="w-max min-w-full justify-start">
+            <TabsTrigger value="profile" className="gap-2">
+              <User className="h-3.5 w-3.5" /> Profile
             </TabsTrigger>
-          )}
-          {isManager && (
-            <TabsTrigger value="availability" className="gap-2">
-              <Calendar className="h-3.5 w-3.5" /> Availability
+            {isManager && (
+              <TabsTrigger value="company" className="gap-2">
+                <Building2 className="h-3.5 w-3.5" /> Company
+              </TabsTrigger>
+            )}
+            {isManager && (
+              <TabsTrigger value="availability" className="gap-2">
+                <Calendar className="h-3.5 w-3.5" /> Availability
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="appearance" className="gap-2">
+              <Sun className="h-3.5 w-3.5" /> Appearance
             </TabsTrigger>
-          )}
-          <TabsTrigger value="appearance" className="gap-2">
-            <Sun className="h-3.5 w-3.5" /> Appearance
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="gap-2">
-            <Bell className="h-3.5 w-3.5" /> Notifications
-          </TabsTrigger>
-        </TabsList>
+            <TabsTrigger value="notifications" className="gap-2">
+              <Bell className="h-3.5 w-3.5" /> Notifications
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* PROFILE TAB */}
         <TabsContent value="profile" className="space-y-6 pt-4">
