@@ -182,8 +182,8 @@ export default function MiloReview() {
           >
             <ArrowLeft className="size-4" /> Live chat
           </Link>
-          <h1 className="text-xl font-semibold">Chat review</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="page-title">Chat review</h1>
+          <p className="page-description">
             What visitors asked Milo and you. Chats are kept for 90 days.
           </p>
         </div>

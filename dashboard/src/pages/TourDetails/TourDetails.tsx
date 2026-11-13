@@ -155,7 +155,7 @@ export default function TourDetails() {
     : [];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-8">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <Button
@@ -234,7 +234,7 @@ export default function TourDetails() {
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="page-title">
               {tour.tour_name}
             </h1>
             <div className="flex items-center gap-3 mt-2 flex-wrap">
