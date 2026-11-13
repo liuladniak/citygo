@@ -8,6 +8,7 @@ import { LoginWithGoogle } from "./LoginWithGoogle";
 import { RequireRole } from "./RequireRole";
 import Header, { HeaderProps } from "./Header";
 import AppSidebar from "./AppSidebar";
+import { MiloProvider } from "./milo/MiloProvider";
 import { ThemeProvider } from "./providers/theme-provider";
 import { SidebarProvider } from "./ui/sidebar";
 
@@ -52,7 +53,9 @@ function AppLayout() {
 
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <SidebarProvider defaultOpen={defaultOpen}>
-          <LayoutContent user={user} role={role} />
+          <MiloProvider>
+            <LayoutContent user={user} role={role} />
+          </MiloProvider>
         </SidebarProvider>
       </ThemeProvider>
     </div>
