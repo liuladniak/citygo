@@ -3,7 +3,7 @@ import type { Server as HttpServer } from "node:http";
 import { redact } from "../lib/redact.js";
 import { SESSION_ID, tokenMatches, createRateLimiter } from "../lib/handoff.js";
 import { setAgentOnlineCheck } from "./presence.js";
-import type { Store } from "./types.js";
+import type { Conversation, Store } from "./types.js";
 
 // Live chat between a visitor (widget) and the owner (dashboard console).
 // Visitors authenticate with the token from POST /api/milo/handoff; the owner with
@@ -44,6 +44,19 @@ export const createRealtime = (httpServer: HttpServer, deps: RealtimeDeps) => {
 
   const agentCount = () => io.sockets.adapter.rooms.get("agents")?.size ?? 0;
   setAgentOnlineCheck(() => agentCount() > 0);
+
+  // What the console may see about a conversation: never the token hash.
+  const publicView = async (c: Conversation) => {
+    const [last] = await store.history(c.sessionId, { humanOnly: true, limit: 1 });
+    return {
+      sessionId: c.sessionId,
+      status: c.status,
+      visitorName: c.visitorName,
+      visitorEmail: c.visitorEmail,
+      createdAt: c.createdAt,
+      preview: last?.text?.slice(0, 80) ?? null,
+    };
+  };
 
   const lastNotified = new Map<string, number>();
   const notifyThrottled = (sessionId: string, text: string) => {
@@ -88,7 +101,8 @@ export const createRealtime = (httpServer: HttpServer, deps: RealtimeDeps) => {
       socket.join("visitors");
 
       const conv = await store.getConversation(sessionId);
-      socket.emit("status", { status: conv?.status ?? "closed", agentName, agentOnline: agentCount() > 0 });
+      socket.emit("status", { sessionId, status: conv?.status ?? "closed", agentName, agentOnline: agentCount() > 0 });
+      if (conv) io.to("agents").emit("conversation_new", await publicView(conv));
       socket.emit("history", await store.history(sessionId, { humanOnly: true, limit: 50 }));
 
       socket.on("message", async (text: unknown, ack?: Ack) => {
@@ -100,7 +114,7 @@ export const createRealtime = (httpServer: HttpServer, deps: RealtimeDeps) => {
           return ack?.({ ok: false, error: "closed" });
         }
         await store.saveMessage(sessionId, "visitor", clean);
-        const msg = { from: "visitor", text: clean, at: new Date().toISOString() };
+        const msg = { sessionId, from: "visitor", text: clean, at: new Date().toISOString() };
         io.to(room).emit("message", msg);
         io.to("agents").emit("activity", { sessionId, preview: clean.slice(0, 80), at: msg.at });
         // No agent socket in the room means nobody has taken this chat yet.
@@ -110,15 +124,15 @@ export const createRealtime = (httpServer: HttpServer, deps: RealtimeDeps) => {
         }
         return ack?.({ ok: true });
       });
-      socket.on("typing", (on: unknown) => socket.to(room).emit("typing", { from: "visitor", on: !!on }));
-      socket.on("seen", () => socket.to(room).emit("seen", { by: "visitor" }));
+      socket.on("typing", (on: unknown) => socket.to(room).emit("typing", { sessionId, from: "visitor", on: !!on }));
+      socket.on("seen", () => socket.to(room).emit("seen", { sessionId, by: "visitor" }));
       return;
     }
 
     // Agent (owner console)
     socket.join("agents");
     io.to("visitors").emit("presence", { agentOnline: true });
-    socket.emit("conversations", await store.listOpen());
+    socket.emit("conversations", await Promise.all((await store.listOpen()).map(publicView)));
 
     const joined = (sessionId: unknown): sessionId is string =>
       typeof sessionId === "string" && socket.rooms.has(roomOf(sessionId));
@@ -129,11 +143,11 @@ export const createRealtime = (httpServer: HttpServer, deps: RealtimeDeps) => {
       if (!conv || (conv.status !== "waiting" && conv.status !== "live")) return ack?.({ ok: false, error: "closed" });
       socket.join(roomOf(sessionId));
       if (conv.status === "waiting") await store.markLive(sessionId);
-      io.to(roomOf(sessionId)).emit("status", { status: "live", agentName, agentOnline: true });
+      io.to(roomOf(sessionId)).emit("status", { sessionId, status: "live", agentName, agentOnline: true });
       io.to("agents").emit("conversation_updated", { sessionId, status: "live" });
       return ack?.({
         ok: true,
-        conversation: { ...conv, status: "live", tokenHash: undefined },
+        conversation: await publicView({ ...conv, status: "live" }),
         history: await store.history(sessionId, { limit: 100 }),
       });
     });
@@ -143,23 +157,23 @@ export const createRealtime = (httpServer: HttpServer, deps: RealtimeDeps) => {
       const text = cleanAgentText(data?.text);
       if (!joined(sessionId) || !text) return ack?.({ ok: false });
       await store.saveMessage(sessionId, "agent", text);
-      io.to(roomOf(sessionId)).emit("message", { from: "agent", name: agentName, text, at: new Date().toISOString() });
+      io.to(roomOf(sessionId)).emit("message", { sessionId, from: "agent", name: agentName, text, at: new Date().toISOString() });
       return ack?.({ ok: true });
     });
 
     socket.on("typing", (data: { sessionId?: unknown; on?: unknown } | null) => {
-      if (joined(data?.sessionId)) socket.to(roomOf(data!.sessionId as string)).emit("typing", { from: "agent", name: agentName, on: !!data!.on });
+      if (joined(data?.sessionId)) socket.to(roomOf(data!.sessionId as string)).emit("typing", { sessionId: data!.sessionId, from: "agent", name: agentName, on: !!data!.on });
     });
 
     socket.on("seen", (data: { sessionId?: unknown } | null) => {
-      if (joined(data?.sessionId)) socket.to(roomOf(data!.sessionId as string)).emit("seen", { by: "agent" });
+      if (joined(data?.sessionId)) socket.to(roomOf(data!.sessionId as string)).emit("seen", { sessionId: data!.sessionId, by: "agent" });
     });
 
     socket.on("close", async (data: { sessionId?: unknown } | null, ack?: Ack) => {
       const sessionId = data?.sessionId;
       if (!joined(sessionId)) return ack?.({ ok: false });
       await store.close(sessionId, "closed");
-      io.to(roomOf(sessionId)).emit("status", { status: "closed", agentName, agentOnline: agentCount() > 0 });
+      io.to(roomOf(sessionId)).emit("status", { sessionId, status: "closed", agentName, agentOnline: agentCount() > 0 });
       for (const s of await io.in(roomOf(sessionId)).fetchSockets()) {
         if (s.data.kind === "visitor") s.disconnect(true);
       }
@@ -176,7 +190,7 @@ export const createRealtime = (httpServer: HttpServer, deps: RealtimeDeps) => {
   const expireWaiting = async (minutes: number) => {
     const missed = await store.expireWaiting(minutes);
     for (const c of missed) {
-      io.to(roomOf(c.sessionId)).emit("status", { status: "missed", agentName, agentOnline: false });
+      io.to(roomOf(c.sessionId)).emit("status", { sessionId: c.sessionId, status: "missed", agentName, agentOnline: false });
       io.to("agents").emit("conversation_updated", { sessionId: c.sessionId, status: "missed" });
       void notify(
         `⏰ Missed Milo chat request${c.visitorName ? ` from ${c.visitorName}` : ""}.${

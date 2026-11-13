@@ -124,6 +124,26 @@ describe("live chat access rules", () => {
     expect(await bQuiet).toBe(true);
   });
 
+  it("never sends token hashes to the console, announces new requests, and tags messages with their conversation", async () => {
+    // The list arrives right after connecting, so listen before the connect finishes.
+    const agent = connect(url, { auth: { accessToken: "admin-jwt" }, transports: ["websocket"], forceNew: true });
+    sockets.push(agent);
+    const list = await next<Record<string, unknown>[]>(agent, "conversations");
+    expect(JSON.stringify(list)).not.toContain("tokenHash");
+
+    ctx.add("session-dddddddd", "token-d");
+    const announced = next(agent, "conversation_new");
+    const visitor = await open({ sessionId: "session-dddddddd", token: "token-d" });
+    const item = await announced;
+    expect(item).toMatchObject({ sessionId: "session-dddddddd", status: "waiting" });
+    expect(item).not.toHaveProperty("tokenHash");
+
+    await emitAck(agent, "join", "session-dddddddd");
+    const got = next(agent, "message");
+    await emitAck(visitor, "message", "hello");
+    expect(await got).toMatchObject({ sessionId: "session-dddddddd", from: "visitor" });
+  });
+
   it("marks unanswered requests as missed and tells the visitor", async () => {
     ctx.add("session-cccccccc", "token-c");
     const visitor = await open({ sessionId: "session-cccccccc", token: "token-c" });
