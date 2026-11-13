@@ -82,7 +82,7 @@ export const Columns: ColumnDef<Booking>[] = [
     header: ({ column }) => (
       <Button
         variant="ghost"
-        className="p-0 h-auto font-medium text-xs"
+        className="h-auto p-0 text-sm font-medium hover:bg-transparent"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Tour Date
