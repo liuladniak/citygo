@@ -7,7 +7,8 @@ import { MiloContext } from "@/lib/miloContext";
 import { askNotificationPermission, notify, playChime, readFlag, writeFlag } from "@/lib/miloAlerts";
 import type { ConvStatus, MiloConv, MiloMsg } from "@/lib/miloTypes";
 
-const BASE_TITLE_KEY = "milo-base-title";
+// The tab title without our "(2)" prefix, captured once.
+let baseTitle: string | null = null;
 
 type ServerConv = Partial<MiloConv> & { sessionId: string; status: ConvStatus };
 type HistoryRow = { role: "visitor" | "milo" | "agent"; text: string; at: string };
@@ -231,9 +232,8 @@ export function MiloProvider({ children }: { children: ReactNode }) {
   // Show the count in the browser tab so it is noticed from another tab.
   useEffect(() => {
     if (!enabled) return;
-    const store = document.documentElement.dataset;
-    if (!store[BASE_TITLE_KEY]) store[BASE_TITLE_KEY] = document.title;
-    const base = store[BASE_TITLE_KEY] ?? "";
+    baseTitle ??= document.title;
+    const base = baseTitle;
     document.title = attention > 0 ? `(${attention}) ${base}` : base;
     return () => {
       document.title = base;
