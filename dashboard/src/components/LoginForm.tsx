@@ -146,7 +146,7 @@ export function LoginForm({
 
           {demoError && (
             <div className="flex items-start gap-2 rounded-md bg-amber-50 border border-amber-200 px-3 py-2">
-              <span className="text-amber-500 text-sm mt-0.5">⚠</span>
+              <span className="text-amber-700 dark:text-amber-400 text-sm mt-0.5">⚠</span>
               <p className="text-xs text-amber-700 leading-relaxed">
                 Demo login failed. Please try again or contact the
                 administrator.
@@ -213,7 +213,7 @@ export function LoginForm({
 
                 {emailError && (
                   <div className="flex items-start gap-2 rounded-md bg-amber-50 border border-amber-200 px-3 py-2">
-                    <span className="text-amber-500 text-sm mt-0.5">⚠</span>
+                    <span className="text-amber-700 dark:text-amber-400 text-sm mt-0.5">⚠</span>
                     <p className="text-xs text-amber-700 leading-relaxed">
                       No account found with these credentials. Staff accounts
                       are created by an administrator — try a demo account above

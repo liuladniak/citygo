@@ -204,7 +204,7 @@ export function RecentBookingCard({
               ))}
             </span>
           ) : (
-            <span className="font-medium text-orange-500">Unassigned</span>
+            <span className="font-medium text-orange-700 dark:text-orange-400">Unassigned</span>
           )}
         </div>
       </div>
@@ -218,11 +218,11 @@ export function RecentBookingCard({
             </span>
           </p>
           {balance > 0 ? (
-            <p className="text-xs text-red-500 mt-0.5">
+            <p className="text-xs text-red-600 dark:text-red-400 mt-0.5">
               €{balance.toFixed(2)} due
             </p>
           ) : (
-            <p className="text-xs text-emerald-500 mt-0.5">Paid in full</p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">Paid in full</p>
           )}
         </div>
 

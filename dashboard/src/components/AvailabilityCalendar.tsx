@@ -91,7 +91,7 @@ export function AvailabilityCalendar({ slug, selected, onSelect }: Props) {
       {pendingDate && (
         <div className="rounded-md border border-amber-200 bg-amber-50 p-3 space-y-2">
           <div className="flex items-start gap-2">
-            <span className="text-amber-500">⚠️</span>
+            <span className="text-amber-700 dark:text-amber-400">⚠️</span>
             <div>
               <p className="text-sm font-medium text-amber-700">
                 {pendingDate.toLocaleDateString("en-US", {

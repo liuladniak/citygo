@@ -118,7 +118,7 @@ export default function CancelBookingDialog({
 
         <div className="space-y-4 py-1">
           <div className="flex items-start gap-3 p-3 rounded-lg bg-red-50 border border-red-200">
-            <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
+            <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
             <div>
               <p className="text-sm font-medium text-red-800">
                 Cancel {bookingReference ?? "this booking"}?
