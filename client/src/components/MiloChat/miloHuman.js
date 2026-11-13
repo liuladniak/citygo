@@ -28,21 +28,10 @@ export const startErrorMessage = (status, error) => {
   return "Couldn't start the chat. Please try again, or use the contact page.";
 };
 
-export const endedMessage = (phase, agentName) =>
+export const endedMessage = (phase) =>
   phase === "missed"
-    ? `${agentName} couldn't answer right now. If you left an email, we'll reply there. Otherwise, the contact page is the best way to reach us.`
-    : `This chat has ended. Thanks for talking with ${agentName}! I'm still here if you have more questions.`;
-
-export const fetchAvailability = async () => {
-  try {
-    const res = await fetch(`${API_URL}/api/milo/handoff/availability`);
-    if (!res.ok) throw new Error();
-    const json = await res.json();
-    return { online: !!json.online, agentName: json.agentName || "Liu" };
-  } catch {
-    return { online: false, agentName: "Liu" };
-  }
-};
+    ? "Sorry, nobody was able to join right now. If you left an email, we'll reply there. Otherwise, the contact page is the best way to reach us."
+    : "This chat has ended. Thanks for talking with us! I'm still here if you have more questions.";
 
 export const requestHuman = async ({ sessionId, name, email, message }) => {
   try {
