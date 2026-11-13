@@ -8,6 +8,7 @@ import {
   Flag,
   Home,
   ListTodo,
+  MessageCircle,
   Settings,
   UserSearch,
   Users,
@@ -16,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useEmployee } from "@/hooks/useEmployee";
 import { useRole } from "@/hooks/useRole";
+import { useMilo } from "@/lib/miloContext";
 import { supabase } from "@/lib/supabaseClient";
 import logoIcon from "@/assets/logos/logo-icon.png";
 import {
@@ -49,6 +51,7 @@ const navItems = [
   { url: "/analytics", title: "Analytics", icon: ChartColumnBig },
   { url: "/tasks", title: "Tasks", icon: ListTodo },
   { url: "/guests", title: "Guests", icon: UserSearch },
+  { url: "/milo", title: "Milo", icon: MessageCircle, adminOnly: true },
   { url: "/settings", title: "Settings", icon: Settings },
 ];
 
@@ -75,9 +78,11 @@ const AppSidebar = () => {
 
   const avatarUrl = googleAvatar ?? employee?.profile_image ?? null;
 
-  const visibleItems = navItems.filter(
-    (item) => !item.managerOnly || role === "admin" || role === "manager"
-  );
+  const { attention } = useMilo();
+  const visibleItems = navItems.filter((item) => {
+    if (item.adminOnly) return role === "admin";
+    return !item.managerOnly || role === "admin" || role === "manager";
+  });
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -117,6 +122,9 @@ const AppSidebar = () => {
                     </SidebarMenuButton>
                     {item.badge && pendingCount && pendingCount > 0 && (
                       <SidebarMenuBadge>{pendingCount}</SidebarMenuBadge>
+                    )}
+                    {item.adminOnly && attention > 0 && (
+                      <SidebarMenuBadge>{attention}</SidebarMenuBadge>
                     )}
                   </SidebarMenuItem>
                 ))}

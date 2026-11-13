@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "./components/AppLayout";
 import { RequireManager } from "./components/RequireManager";
+import { RequireRole } from "./components/RequireRole";
 import Analytics from "./pages/Analytics/Analytics";
 import AddBooking from "./pages/AddBooking/AddBooking";
 import AddTour from "./pages/AddTour/AddTour";
@@ -9,6 +10,7 @@ import Bookings from "./pages/Bookings/Bookings";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import EditTourPage from "./pages/TourDetails/EditTourPage";
 import Guests from "./pages/Guests/Guests";
+import Milo from "./pages/Milo/Milo";
 import Schedule from "./pages/Schedule/Schedule";
 import SettingsPage from "./pages/Settings/Settings";
 import TasksPage from "./pages/Tasks/Tasks";
@@ -77,6 +79,14 @@ const router = createBrowserRouter([
           <RequireManager>
             <Guests />
           </RequireManager>
+        ),
+      },
+      {
+        path: "/milo",
+        element: (
+          <RequireRole allowed={["admin"]}>
+            <Milo />
+          </RequireRole>
         ),
       },
       { path: "/tours", element: <Tours /> },
