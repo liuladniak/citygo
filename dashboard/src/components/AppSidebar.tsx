@@ -102,10 +102,10 @@ const AppSidebar = () => {
         <SidebarHeader className="py-4">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild className="p-0">
-                <Link to="/" className="overflow-visible">
-                  <BrandMark className="size-6 text-xs" />
-                  <span className="font-semibold text-brand-secondary">
+              <SidebarMenuButton asChild size="lg">
+                <Link to="/">
+                  <BrandMark className="size-8" />
+                  <span className="text-base font-semibold text-brand-secondary">
                     CityGo
                   </span>
                 </Link>
