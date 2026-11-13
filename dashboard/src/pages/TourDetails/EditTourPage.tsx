@@ -509,7 +509,7 @@ export default function EditTourPage() {
               />
               <div>
                 <p className="text-sm font-medium flex items-center gap-1.5">
-                  <Star className="h-3.5 w-3.5 text-amber-500" /> Bestseller
+                  <Star className="h-3.5 w-3.5 text-amber-700 dark:text-amber-400" /> Bestseller
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Show bestseller badge
@@ -523,7 +523,7 @@ export default function EditTourPage() {
               />
               <div>
                 <p className="text-sm font-medium flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5 text-blue-500" /> Featured
+                  <Zap className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Featured
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Show on homepage

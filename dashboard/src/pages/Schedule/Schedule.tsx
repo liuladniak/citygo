@@ -253,31 +253,31 @@ export default function Schedule() {
 
       <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         <style>{`
-          .fc { font-family: inherit; color: hsl(var(--foreground)); }
-          .fc-toolbar-title { font-size: 1rem !important; font-weight: 600 !important; color: hsl(var(--foreground)); }
-          .fc-button { font-size: 0.75rem !important; padding: 0.25rem 0.75rem !important; background-color: hsl(var(--secondary)) !important; border-color: hsl(var(--border)) !important; color: hsl(var(--foreground)) !important; border-radius: 6px !important; box-shadow: none !important; }
-          .fc-button:hover { background-color: hsl(var(--accent)) !important; }
-          .fc-button-primary.fc-button-active, .fc-button-primary:not(.fc-button-active):focus { background-color: hsl(var(--primary)) !important; border-color: hsl(var(--primary)) !important; color: hsl(var(--primary-foreground)) !important; box-shadow: none !important; }
-          .fc-today-button { background-color: hsl(var(--primary)) !important; border-color: hsl(var(--primary)) !important; color: hsl(var(--primary-foreground)) !important; }
+          .fc { font-family: inherit; color: var(--foreground); --fc-page-bg-color: var(--card); --fc-neutral-bg-color: var(--muted); --fc-border-color: var(--border); --fc-list-event-hover-bg-color: var(--muted); }
+          .fc-toolbar-title { font-size: 1rem !important; font-weight: 600 !important; color: var(--foreground); }
+          .fc-button { font-size: 0.75rem !important; padding: 0.25rem 0.75rem !important; background-color: var(--secondary) !important; border-color: var(--border) !important; color: var(--foreground) !important; border-radius: 6px !important; box-shadow: none !important; }
+          .fc-button:hover { background-color: var(--accent) !important; }
+          .fc-button-primary.fc-button-active, .fc-button-primary:not(.fc-button-active):focus { background-color: var(--primary) !important; border-color: var(--primary) !important; color: var(--primary-foreground) !important; box-shadow: none !important; }
+          .fc-today-button { background-color: var(--primary) !important; border-color: var(--primary) !important; color: var(--primary-foreground) !important; }
           .fc-event { cursor: pointer; font-size: 0.7rem !important; padding: 2px 4px !important; border-radius: 4px !important; border: none !important; font-weight: 500 !important; }
           .fc-event:hover { opacity: 0.85; }
-          .fc-day-today { background-color: hsl(var(--primary)/0.06) !important; }
-          .fc-col-header-cell { font-size: 0.7rem !important; font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.05em; background: hsl(var(--muted)/0.5); color: hsl(var(--muted-foreground)); padding: 6px !important; }
-          .fc-daygrid-day-number { font-size: 0.75rem !important; color: hsl(var(--muted-foreground)); padding: 4px 6px !important; }
-          .fc-day-today .fc-daygrid-day-number { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin: 2px; }
-          .fc th, .fc td { border-color: hsl(var(--border)) !important; }
-          .fc-scrollgrid { border-color: hsl(var(--border)) !important; border-radius: 0 !important; }
-          .fc-toolbar { padding: 1rem 1.25rem !important; border-bottom: 1px solid hsl(var(--border)); }
-          .fc-view-harness { background: hsl(var(--card)); }
-          .fc-more-link, .fc-daygrid-more-link { color: hsl(var(--primary)) !important; font-size: 0.65rem !important; }
-          .fc-popover { background: hsl(var(--card)) !important; border: 1px solid hsl(var(--border)) !important; border-radius: 8px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; }
-          .fc-popover-header { background: hsl(var(--muted)) !important; color: hsl(var(--foreground)) !important; border-radius: 8px 8px 0 0 !important; font-size: 0.75rem !important; padding: 6px 10px !important; }
+          .fc-day-today { background-color: color-mix(in oklab, var(--primary) 6%, transparent) !important; }
+          .fc-col-header-cell { font-size: 0.7rem !important; font-weight: 600 !important; text-transform: uppercase; letter-spacing: 0.05em; background: color-mix(in oklab, var(--muted) 50%, transparent); color: var(--muted-foreground); padding: 6px !important; }
+          .fc-daygrid-day-number { font-size: 0.75rem !important; color: var(--muted-foreground); padding: 4px 6px !important; }
+          .fc-day-today .fc-daygrid-day-number { background: var(--primary); color: var(--primary-foreground); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin: 2px; }
+          .fc th, .fc td { border-color: var(--border) !important; }
+          .fc-scrollgrid { border-color: var(--border) !important; border-radius: 0 !important; }
+          .fc-toolbar { padding: 1rem 1.25rem !important; border-bottom: 1px solid var(--border); }
+          .fc-view-harness { background: var(--card); }
+          .fc-more-link, .fc-daygrid-more-link { color: var(--primary) !important; font-size: 0.65rem !important; }
+          .fc-popover { background: var(--card) !important; border: 1px solid var(--border) !important; border-radius: 8px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; }
+          .fc-popover-header { background: var(--muted) !important; color: var(--foreground) !important; border-radius: 8px 8px 0 0 !important; font-size: 0.75rem !important; padding: 6px 10px !important; }
           .fc-list-event { cursor: pointer; }
-.fc-list-event:hover td { background: hsl(var(--muted)/0.5) !important; }
-.fc-list-day-cushion { background: hsl(var(--muted)/0.3) !important; }
+.fc-list-event:hover td { background: color-mix(in oklab, var(--muted) 50%, transparent) !important; }
+.fc-list-day-cushion { background: color-mix(in oklab, var(--muted) 30%, transparent) !important; }
 .fc-list-event-dot { border-color: inherit !important; }
-.fc-list-empty { color: hsl(var(--muted-foreground)); font-size: 0.875rem; }
-.fc-list-day-text, .fc-list-day-side-text { color: hsl(var(--foreground)) !important; font-size: 0.75rem !important; }
+.fc-list-empty { color: var(--muted-foreground); font-size: 0.875rem; }
+.fc-list-day-text, .fc-list-day-side-text { color: var(--foreground) !important; font-size: 0.75rem !important; }
         `}</style>
         <FullCalendar
           ref={calendarRef}
@@ -423,7 +423,7 @@ export default function Schedule() {
                     </div>
                     {parseFloat(booking.total_price ?? 0) >
                       parseFloat(booking.amount_paid ?? 0) && (
-                      <span className="text-xs text-red-500 font-medium">
+                      <span className="text-xs text-red-600 dark:text-red-400 font-medium">
                         €
                         {(
                           parseFloat(booking.total_price) -
@@ -435,7 +435,7 @@ export default function Schedule() {
                     {parseFloat(booking.amount_paid ?? 0) >=
                       parseFloat(booking.total_price ?? 0) &&
                       parseFloat(booking.total_price ?? 0) > 0 && (
-                        <span className="text-xs text-emerald-500 font-medium">
+                        <span className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">
                           Paid in full
                         </span>
                       )}

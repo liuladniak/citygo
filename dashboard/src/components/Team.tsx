@@ -25,7 +25,7 @@ const availabilityConfig = {
   on_tour: {
     dot: "bg-blue-500",
     label: "On tour",
-    labelClass: "text-blue-500",
+    labelClass: "text-blue-600 dark:text-blue-400",
   },
   available: {
     dot: "bg-emerald-500",
@@ -143,12 +143,12 @@ export default function Team() {
           {
             label: "Available",
             value: availableCount,
-            color: "text-emerald-500",
+            color: "text-emerald-700 dark:text-emerald-400",
           },
           {
             label: "On Tour",
             value: onTourCount,
-            color: "text-blue-500",
+            color: "text-blue-600 dark:text-blue-400",
           },
         ].map((stat) => (
           <div

@@ -216,7 +216,7 @@ export function AssignGuideModal({
                           className={`text-xs ${
                             g.is_available
                               ? "text-emerald-600"
-                              : "text-orange-500"
+                              : "text-orange-700 dark:text-orange-400"
                           }`}
                         >
                           {g.booking_count} booking

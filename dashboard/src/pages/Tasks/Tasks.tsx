@@ -126,7 +126,7 @@ function TaskRow({
               className={cn(
                 "text-xs flex items-center gap-1",
                 isOverdue
-                  ? "text-red-500 font-medium"
+                  ? "text-red-600 dark:text-red-400 font-medium"
                   : "text-muted-foreground",
               )}
             >
@@ -263,14 +263,14 @@ export default function TasksPage() {
           {
             label: "In Progress",
             value: counts.in_progress,
-            color: "text-blue-500",
+            color: "text-blue-600 dark:text-blue-400",
           },
           {
             label: "Completed Today",
             value: counts.done,
-            color: "text-emerald-500",
+            color: "text-emerald-700 dark:text-emerald-400",
           },
-          { label: "Urgent", value: counts.urgent, color: "text-red-500" },
+          { label: "Urgent", value: counts.urgent, color: "text-red-600 dark:text-red-400" },
         ].map((stat) => (
           <div
             key={stat.label}
@@ -357,7 +357,7 @@ export default function TasksPage() {
           {urgent.length > 0 && (
             <Card className="border-red-200">
               <CardHeader className="pb-0 pt-3 px-4">
-                <CardTitle className="text-xs font-semibold uppercase tracking-wider text-red-500 flex items-center gap-1.5">
+                <CardTitle className="text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400 flex items-center gap-1.5">
                   <AlertTriangle className="h-3.5 w-3.5" />
                   Urgent · {urgent.length}
                 </CardTitle>

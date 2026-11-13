@@ -797,7 +797,7 @@ function Step5({
                           className={`text-xs ${
                             g.is_available
                               ? "text-emerald-600"
-                              : "text-orange-500"
+                              : "text-orange-700 dark:text-orange-400"
                           }`}
                         >
                           {g.booking_count} booking
@@ -978,7 +978,7 @@ function BookingSummary({
             {balance > 0 && (
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Balance due</span>
-                <span className="text-red-500">€{balance.toFixed(2)}</span>
+                <span className="text-red-600 dark:text-red-400">€{balance.toFixed(2)}</span>
               </div>
             )}
           </div>

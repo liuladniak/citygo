@@ -105,7 +105,7 @@ function KPICard({
         {trend !== undefined && (
           <div
             className={`flex items-center gap-1 mt-1.5 text-xs font-medium ${
-              trend >= 0 ? "text-emerald-500" : "text-destructive"
+              trend >= 0 ? "text-emerald-700 dark:text-emerald-400" : "text-destructive"
             }`}
           >
             {trend >= 0 ? (
@@ -200,7 +200,7 @@ export default function Analytics() {
               title="Total Revenue"
               value={`€${data?.kpis?.total_revenue?.toLocaleString()}`}
               icon={Euro}
-              iconClass="text-emerald-500"
+              iconClass="text-emerald-700 dark:text-emerald-400"
               trend={data?.mom_growth?.revenue_growth}
               trendLabel="vs last month"
             />
@@ -208,7 +208,7 @@ export default function Analytics() {
               title="Total Bookings"
               value={data?.kpis?.total_bookings}
               icon={Calendar}
-              iconClass="text-blue-500"
+              iconClass="text-blue-600 dark:text-blue-400"
               trend={data?.mom_growth?.bookings_growth}
               trendLabel="vs last month"
             />
@@ -228,7 +228,7 @@ export default function Analytics() {
               value={`${data?.kpis?.avg_group_size} guests`}
               subtitle="per booking"
               icon={Users}
-              iconClass="text-purple-500"
+              iconClass="text-purple-600 dark:text-purple-400"
             />
           </div>
 
@@ -368,7 +368,7 @@ export default function Analytics() {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                  <Award className="h-4 w-4 text-amber-500" />
+                  <Award className="h-4 w-4 text-amber-700 dark:text-amber-400" />
                   Guide Performance
                 </CardTitle>
               </CardHeader>
@@ -384,7 +384,7 @@ export default function Analytics() {
                           <p className="text-sm font-medium truncate">
                             {g.guide_name}
                           </p>
-                          <p className="text-sm font-semibold text-emerald-500 shrink-0 ml-2">
+                          <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400 shrink-0 ml-2">
                             €{parseFloat(g.revenue).toLocaleString()}
                           </p>
                         </div>
