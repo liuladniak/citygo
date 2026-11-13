@@ -37,6 +37,7 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 - client: `cd client && npm run dev`
 - dashboard: `cd dashboard && npm run dev`
 - server: `cd server && npm run dev` (tsx watch; port comes from the `PORT` env var, default 8080)
+- dashboard lint: `cd dashboard && npm run lint` (ESLint 10 flat config in `eslint.config.js`). Errors must be zero. The remaining warnings are older `any` types and hook dependency notes: fix them when touching that file.
 - Env files: `.env` per app, and `.env.staging` on the VPS.
 
 ## Gotchas
