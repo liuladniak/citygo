@@ -9,7 +9,7 @@ import { askAi } from "./miloAi.js";
 import { linkKind } from "./miloLinks.js";
 import { logExchange } from "./miloLog.js";
 import { useHumanChat } from "./useHumanChat.js";
-import { endedMessage, fetchAvailability } from "./miloHuman.js";
+import { endedMessage } from "./miloHuman.js";
 
 const MAX_LENGTH = 200;
 const API_URL = import.meta.env.VITE_API_URL;
@@ -88,7 +88,6 @@ const MiloChat = () => {
   // as plain text and tagged `human` so a reload can replace them with history.
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [formError, setFormError] = useState("");
-  const [availability, setAvailability] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [sendError, setSendError] = useState("");
   const human = useHumanChat({
@@ -114,10 +113,10 @@ const MiloChat = () => {
           human: true,
         },
       ]),
-    onEnded: (kind, agentName) =>
+    onEnded: (kind) =>
       setMessages((prev) => [
         ...prev,
-        { role: "model", content: endedMessage(kind, agentName) },
+        { role: "model", content: endedMessage(kind) },
       ]),
   });
 
@@ -159,8 +158,6 @@ const MiloChat = () => {
   const openHumanForm = async () => {
     human.openForm();
     setFormError("");
-    setAvailability(null);
-    setAvailability(await fetchAvailability());
   };
 
   const submitHumanForm = async (e) => {
@@ -288,23 +285,31 @@ const MiloChat = () => {
           <header className="milo-header">
             <div className="milo-profile">
               <div className="milo-avatar">
-                {human.active ? human.agent.name.charAt(0) : <Bot size={18} />}
+                {human.phase === "live" ? (
+                  human.agent.name.charAt(0)
+                ) : human.active ? (
+                  <MessageCircle size={18} />
+                ) : (
+                  <Bot size={18} />
+                )}
               </div>
               <div className="milo-info">
                 <span className="milo-name">
-                  {human.active ? human.agent.name : "Milo"}
+                  {human.phase === "live"
+                    ? human.agent.name
+                    : human.active
+                      ? "CityGo Support"
+                      : "Milo"}
                 </span>
                 <span className="milo-status">
                   {human.active ? (
                     <>
                       <span
-                        className={`milo-dot ${human.agent.online ? "milo-dot--on" : ""}`}
+                        className={`milo-dot ${human.phase === "live" ? "milo-dot--on" : ""}`}
                       />
                       {human.phase === "waiting"
-                        ? "Waiting for a reply…"
-                        : human.agent.online
-                          ? "Online"
-                          : "Away"}
+                        ? "Someone will be with you in a moment"
+                        : "CityGo Support"}
                     </>
                   ) : (
                     <>
@@ -367,11 +372,7 @@ const MiloChat = () => {
             {human.phase === "form" && (
               <form className="milo-handoff" onSubmit={submitHumanForm}>
                 <p className="milo-handoff__lead">
-                  {availability === null
-                    ? "Checking if Liu is around…"
-                    : availability.online
-                      ? `${availability.agentName} is online and can reply here.`
-                      : `${availability.agentName} is away right now. Leave your email and a short note, and you'll get a reply there.`}
+                  Leave your question and someone from our team will be with you in a moment.
                 </p>
                 <input
                   type="text"
@@ -383,7 +384,7 @@ const MiloChat = () => {
                 />
                 <input
                   type="email"
-                  placeholder="Email (optional)"
+                  placeholder="Email (optional, so we can reply if you leave)"
                   value={form.email}
                   maxLength={120}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -465,7 +466,7 @@ const MiloChat = () => {
                 <input
                   type="text"
                   placeholder={
-                    human.active ? `Message ${human.agent.name}...` : "Ask Milo..."
+                    human.active ? "Type your message..." : "Ask Milo..."
                   }
                   value={input}
                   maxLength={MAX_LENGTH}
@@ -474,7 +475,7 @@ const MiloChat = () => {
                     if (human.active) human.notifyTyping();
                   }}
                   disabled={isLoading || human.phase === "form"}
-                  aria-label={human.active ? `Message ${human.agent.name}` : "Message Milo"}
+                  aria-label={human.active ? "Type your message" : "Message Milo"}
                 />
               </div>
               <button
