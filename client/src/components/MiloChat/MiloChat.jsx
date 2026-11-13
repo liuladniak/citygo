@@ -398,10 +398,6 @@ const MiloChat = () => {
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   aria-label="What would you like to ask?"
                 />
-                <p className="milo-handoff__note">
-                  Name and email are optional and kept for 90 days. Emails and
-                  phone numbers typed in the chat itself are removed.
-                </p>
                 {formError && (
                   <p className="milo-limit-hint milo-limit-hint--max" role="alert">
                     {formError}{" "}
