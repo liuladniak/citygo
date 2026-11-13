@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import EditTourPage from "./pages/TourDetails/EditTourPage";
 import Guests from "./pages/Guests/Guests";
 import Milo from "./pages/Milo/Milo";
+import MiloReview from "./pages/MiloReview/MiloReview";
 import Schedule from "./pages/Schedule/Schedule";
 import SettingsPage from "./pages/Settings/Settings";
 import TasksPage from "./pages/Tasks/Tasks";
@@ -86,6 +87,14 @@ const router = createBrowserRouter([
         element: (
           <RequireRole allowed={["admin"]}>
             <Milo />
+          </RequireRole>
+        ),
+      },
+      {
+        path: "/milo/review",
+        element: (
+          <RequireRole allowed={["admin"]}>
+            <MiloReview />
           </RequireRole>
         ),
       },

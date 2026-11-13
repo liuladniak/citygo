@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, Bell, BellOff, Send, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Bell, BellOff, History, Send, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -209,6 +210,13 @@ export default function Milo() {
           </p>
         </div>
         <div className="flex items-center gap-4">
+          <Link
+            to="/milo/review"
+            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <History className="size-4" />
+            Review chats
+          </Link>
           <button
             type="button"
             onClick={() => setSoundOn(!soundOn)}
