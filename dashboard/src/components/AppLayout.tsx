@@ -4,6 +4,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { useRole } from "@/hooks/useRole";
+import { LoadingScreen } from "./LoadingScreen";
 import { LoginWithGoogle } from "./LoginWithGoogle";
 import { RequireRole } from "./RequireRole";
 import Header, { HeaderProps } from "./Header";
@@ -45,7 +46,7 @@ function AppLayout() {
     document.body.scrollTop = 0;
   }, [location]);
 
-  if (loading || roleLoading) return <p>Loading...</p>;
+  if (loading || roleLoading) return <LoadingScreen />;
   if (!user) return <LoginWithGoogle />;
   return (
     <div>
