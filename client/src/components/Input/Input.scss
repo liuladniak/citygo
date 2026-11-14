@@ -4,7 +4,7 @@
 .field {
   display: flex;
   flex-direction: column;
-  font-family: Montserrat;
+  font-family: $font-main;
 
   &__label {
     margin-bottom: 0.5rem;

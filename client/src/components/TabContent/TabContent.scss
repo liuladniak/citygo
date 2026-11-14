@@ -84,7 +84,7 @@
       border-radius: 0.6rem;
       background: transparent;
       color: $charcoal;
-      font-family: "Montserrat", sans-serif;
+      font-family: $font-main;
       font-weight: 500;
       font-size: 1.3rem;
       transition:
@@ -152,7 +152,7 @@
   padding: 0 1.2rem;
   border: 1.5px solid transparent;
   border-radius: 0.6rem;
-  font-family: "Montserrat", sans-serif;
+  font-family: $font-main;
   font-size: 1.4rem;
   font-weight: 500;
   color: $charcoal;
