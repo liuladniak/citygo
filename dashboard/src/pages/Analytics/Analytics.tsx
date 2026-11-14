@@ -91,14 +91,16 @@ function KPICard({
 }) {
   return (
     <Card>
-      <CardContent className="pt-6">
+      <CardContent className="px-4 pt-5 sm:px-6 sm:pt-6">
         <div className="flex items-center justify-between mb-3">
           <p className="text-sm text-muted-foreground">{title}</p>
           <div className={`p-1.5 rounded-lg bg-muted/50 ${iconClass}`}>
             <Icon className="h-4 w-4" />
           </div>
         </div>
-        <p className="text-2xl font-bold">{value}</p>
+        <p className="text-xl font-bold whitespace-nowrap tabular-nums sm:text-2xl">
+          {value}
+        </p>
         {subtitle && (
           <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>
         )}
@@ -342,18 +344,15 @@ export default function Analytics() {
                   Bookings by Source
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex items-center justify-center">
-                <ResponsiveContainer width="100%" height={240}>
+              <CardContent className="space-y-4">
+                <ResponsiveContainer width="100%" height={200}>
                   <PieChart>
                     <Pie
                       data={sourceData}
                       cx="50%"
                       cy="50%"
-                      outerRadius={90}
+                      outerRadius={80}
                       dataKey="value"
-                      label={({ name, percent }) =>
-                        `${name} ${(percent * 100).toFixed(0)}%`
-                      }
                     >
                       {sourceData.map((_: any, i: number) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -362,6 +361,20 @@ export default function Analytics() {
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
+                <ul className="space-y-1.5 text-sm">
+                  {sourceData.map((entry: any, i: number) => (
+                    <li key={entry.name} className="flex items-center gap-2">
+                      <span
+                        className="size-2.5 shrink-0 rounded-full"
+                        style={{ background: COLORS[i % COLORS.length] }}
+                      />
+                      <span className="flex-1 capitalize">{entry.name}</span>
+                      <span className="tabular-nums text-muted-foreground">
+                        {entry.value}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
 
