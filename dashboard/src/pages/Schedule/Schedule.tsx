@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "@/lib/apiClient";
 import FullCalendar from "@fullcalendar/react";
@@ -16,6 +16,7 @@ import {
   Users,
 } from "lucide-react";
 import { format } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -67,6 +68,14 @@ const statusConfig: Record<string, { label: string; class: string }> = {
 export default function Schedule() {
   const navigate = useNavigate();
   const calendarRef = useRef<any>(null);
+  const isMobile = useIsMobile();
+
+  // A month grid is unreadable on a phone: show the week as a list instead.
+  useEffect(() => {
+    calendarRef.current
+      ?.getApi()
+      .changeView(isMobile ? "listWeek" : "dayGridMonth");
+  }, [isMobile]);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [guideFilter, setGuideFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -206,7 +215,7 @@ export default function Schedule() {
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <Select value={guideFilter} onValueChange={setGuideFilter}>
-            <SelectTrigger className="h-8 w-44 text-xs">
+            <SelectTrigger className="h-8 w-full text-xs sm:w-44">
               <SelectValue placeholder="All guides" />
             </SelectTrigger>
             <SelectContent>
@@ -220,7 +229,7 @@ export default function Schedule() {
           </Select>
 
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-8 w-36 text-xs">
+            <SelectTrigger className="h-8 w-full text-xs sm:w-36">
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
             <SelectContent>
@@ -235,7 +244,7 @@ export default function Schedule() {
             Print Today
           </Button>
 
-          <div className="flex items-center gap-3 text-xs text-muted-foreground pl-2">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:pl-2">
             {Object.entries(statusColors)
               .filter(([k]) => k !== "draft")
               .map(([status, color]) => (
@@ -267,7 +276,8 @@ export default function Schedule() {
           .fc-day-today .fc-daygrid-day-number { background: var(--primary); color: var(--primary-foreground); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin: 2px; }
           .fc th, .fc td { border-color: var(--border) !important; }
           .fc-scrollgrid { border-color: var(--border) !important; border-radius: 0 !important; }
-          .fc-toolbar { padding: 1rem 1.25rem !important; border-bottom: 1px solid var(--border); }
+          .fc-toolbar { padding: 1rem 1.25rem !important; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem; }
+          @media (max-width: 767px) { .fc-toolbar { padding: 0.75rem !important; } .fc-toolbar-title { font-size: 0.9375rem !important; } }
           .fc-view-harness { background: var(--card); }
           .fc-more-link, .fc-daygrid-more-link { color: var(--primary) !important; font-size: 0.65rem !important; }
           .fc-popover { background: var(--card) !important; border: 1px solid var(--border) !important; border-radius: 8px !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; }
@@ -284,11 +294,15 @@ export default function Schedule() {
           plugins={[dayGridPlugin, listPlugin, interactionPlugin]}
           navLinks={true}
           initialView="dayGridMonth"
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,listWeek",
-          }}
+          headerToolbar={
+            isMobile
+              ? { left: "prev,next", center: "title", right: "today" }
+              : {
+                  left: "prev,next today",
+                  center: "title",
+                  right: "dayGridMonth,listWeek",
+                }
+          }
           buttonText={{
             today: "Today",
             month: "Month",
