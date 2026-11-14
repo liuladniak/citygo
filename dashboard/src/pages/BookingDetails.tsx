@@ -103,9 +103,9 @@ export default function BookingDetailsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-start gap-3">
           <BackButton />
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="page-title">
                 {booking.booking_reference}
@@ -116,15 +116,15 @@ export default function BookingDetailsPage() {
               >
                 {statusStyle.label}
               </Badge>
-              {booking.tour_name && (
-                <span className="text-muted-foreground text-sm font-medium">
-                  {booking.is_custom_tour
-                    ? "✨ Custom Tour"
-                    : `🗺️ ${booking.tour_name}`}
-                </span>
-              )}
             </div>
-            <p className="text-sm text-muted-foreground mt-0.5">
+            {booking.tour_name && (
+              <p className="mt-1 text-sm font-medium text-muted-foreground">
+                {booking.is_custom_tour
+                  ? "✨ Custom Tour"
+                  : `🗺️ ${booking.tour_name}`}
+              </p>
+            )}
+            <p className="mt-0.5 text-sm text-muted-foreground">
               Created{" "}
               {new Date(booking.created_at!).toLocaleDateString("en-US", {
                 month: "short",
