@@ -98,14 +98,11 @@ const PrivacyPolicy = () => {
           <p>
             You can ask us to show you the information we hold about you,
             correct it, or delete it. Write to{" "}
-            <a
-              className="cookie-policy__link"
-              href={`mailto:${SUPPORT_EMAIL}`}
-            >
+            <a className="cookie-policy__link" href={`mailto:${SUPPORT_EMAIL}`}>
               {SUPPORT_EMAIL}
             </a>{" "}
-            and we will reply as soon as we can. You can also change your cookie
-            choices at any time from the footer. See our{" "}
+            and we will reply as soon as we can. You can block or delete cookies
+            in your browser settings. See our{" "}
             <Link to="/cookie-policy" className="cookie-policy__link">
               Cookie Policy
             </Link>{" "}

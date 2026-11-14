@@ -73,7 +73,7 @@ import { useCookieConsent } from "../../hooks/useCookieConsent";
 function AppLayout() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const { hasDecided, acceptAll, rejectAll, resetConsent } = useCookieConsent();
+  const { hasDecided, acceptAll, resetConsent } = useCookieConsent();
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -122,7 +122,7 @@ function AppLayout() {
       <Footer resetConsent={resetConsent} />
       <MiloChat />
       {!hasDecided && (
-        <CookieBanner onAcceptAll={acceptAll} onRejectAll={rejectAll} />
+        <CookieBanner onAccept={acceptAll} />
       )}
     </div>
   );

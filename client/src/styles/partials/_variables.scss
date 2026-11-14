@@ -45,3 +45,6 @@ $space-x-small: 1.6rem;
 $max-width: 123.4rem;
 $border-radius-main: 3rem;
 $border-radius: 1.6rem;
+
+// Main typeface (self-hosted via @fontsource/poppins, see main.tsx)
+$font-main: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

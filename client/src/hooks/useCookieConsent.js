@@ -31,7 +31,6 @@ export const useCookieConsent = () => {
   };
 
   const acceptAll = () => saveConsent({ essential: true, analytics: true });
-  const rejectAll = () => saveConsent({ essential: true, analytics: false });
 
   const resetConsent = () => {
     localStorage.removeItem(STORAGE_KEY);
@@ -42,7 +41,6 @@ export const useCookieConsent = () => {
     consent,
     hasDecided: consent !== null,
     acceptAll,
-    rejectAll,
     resetConsent,
   };
 };
