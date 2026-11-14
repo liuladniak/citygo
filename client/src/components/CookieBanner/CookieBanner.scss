@@ -86,16 +86,6 @@
       padding: 1rem 2rem;
     }
 
-    &--reject {
-      background: white;
-      border: 1px solid #d1d5db;
-      color: #4b5563;
-
-      &:hover {
-        background: #f9fafb;
-      }
-    }
-
     &--accept {
       background: $main-teal;
       border: 1px solid $main-teal;
