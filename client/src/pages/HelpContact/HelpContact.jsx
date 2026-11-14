@@ -10,7 +10,7 @@ import {
   Clock,
   CheckCircle,
 } from "lucide-react";
-import contactImg from "../../assets/images/office.jpg";
+import contactImg from "../../assets/images/office.webp";
 import { useState } from "react";
 import axios from "axios";
 import { faqs } from "../../data/faq.js";
