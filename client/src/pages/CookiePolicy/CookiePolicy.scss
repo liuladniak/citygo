@@ -173,6 +173,22 @@
   }
 
   // ─── browser links ─────────────────────────────────────────────────────────
+  &__list {
+    margin-top: $space-x-small;
+    padding-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    font-size: 1.5rem;
+    line-height: 1.7;
+    color: #4b5563;
+    list-style: disc;
+
+    strong {
+      color: $charcoal;
+    }
+  }
+
   &__links {
     list-style: none;
     padding: 0;
