@@ -245,18 +245,18 @@ export default function Team() {
         ))}
       </div>
 
-      <div className="flex items-center gap-2 flex-wrap">
-        <div className="relative">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+        <div className="relative col-span-2">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search team..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="h-9 pl-8 w-48"
+            className="h-9 w-full pl-8 sm:w-48"
           />
         </div>
         <Select value={positionFilter} onValueChange={setPositionFilter}>
-          <SelectTrigger className="h-9 w-44">
+          <SelectTrigger className="h-9 w-full sm:w-44">
             <SelectValue placeholder="All Positions" />
           </SelectTrigger>
           <SelectContent>
@@ -272,7 +272,7 @@ export default function Team() {
           value={availabilityFilter}
           onValueChange={setAvailabilityFilter}
         >
-          <SelectTrigger className="h-9 w-36">
+          <SelectTrigger className="h-9 w-full sm:w-36">
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
