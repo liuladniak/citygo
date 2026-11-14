@@ -1,6 +1,6 @@
 import "./Hero.scss";
-// import videoHero from "../../assets/videos/newcool381sec230516webyk2.mp4";
 import videoHero from "../../assets/videos/hero-video.mp4";
+import heroPoster from "../../assets/images/hero-poster.webp";
 import VideoComponent from "../VideoComponent/VideoComponent";
 import { Link } from "react-router-dom";
 import culinaryImg from "../../assets/images/culinarytours.webp";
@@ -16,7 +16,7 @@ const Hero = () => {
       <div className="hero-wrp">
         <div className="hero-intro">
           <div className="hero-video">
-            <VideoComponent src={videoHero} speed="0.8" />
+            <VideoComponent src={videoHero} poster={heroPoster} speed="0.8" />
           </div>
           <div className="hero-content">
             <p className="hero-subheading">

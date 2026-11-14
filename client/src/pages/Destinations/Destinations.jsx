@@ -11,11 +11,11 @@ import videoExp3 from "../../assets/videos/story18.mp4";
 import videoExp4 from "../../assets/videos/story22.mp4";
 import videoExp5 from "../../assets/videos/story10.mp4";
 import videoExp7 from "../../assets/videos/story12.mp4";
-import hamamImg from "../../assets/images/hamam1.jpg";
-import imgExp6 from "../../assets/videos/story8.jpg";
-import breakfastImg from "../../assets/images/breakfast.jpg";
+import hamamImg from "../../assets/images/hamam1.webp";
+import imgExp6 from "../../assets/videos/story8.webp";
+import breakfastImg from "../../assets/images/breakfast.webp";
 import imgShopping2 from "../../assets/images/egyptian-bazaar.webp";
-import chooseImg from "../../assets/images/choose-4.jpg";
+import chooseImg from "../../assets/images/choose-4.webp";
 import VideoComponent from "../../components/VideoComponent/VideoComponent";
 import Accordion from "../../components/Accordion/Accordion";
 import arrowUpRightIcon from "../../assets/icons/arrow-up-right.svg";
@@ -276,22 +276,22 @@ const Destinations = () => {
         <div>
           <div className="destinations-img">
             <div className="glimpse-el">
-              <VideoComponent src={videoExp} speed="1" />
+              <VideoComponent lazy src={videoExp} speed="1" />
             </div>
             <div className="glimpse-el">
-              <VideoComponent src={videoExp2} speed="1" />
+              <VideoComponent lazy src={videoExp2} speed="1" />
             </div>
             <div className="glimpse-el">
-              <VideoComponent src={videoExp3} speed="1" />
+              <VideoComponent lazy src={videoExp3} speed="1" />
             </div>
             <div className="glimpse-el--2">
-              <VideoComponent src={videoExp4} speed="1" />
+              <VideoComponent lazy src={videoExp4} speed="1" />
             </div>
             <div className="glimpse-el">
-              <VideoComponent src={videoExp7} speed="1" />
+              <VideoComponent lazy src={videoExp7} speed="1" />
             </div>
             <div className="glimpse-el">
-              <VideoComponent src={videoExp5} speed="2" />
+              <VideoComponent lazy src={videoExp5} speed="2" />
             </div>
             <div className="glimpse-el">
               <img className="glimpse-el" src={imgExp6} alt="" />
