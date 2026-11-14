@@ -39,6 +39,9 @@ const Footer = ({ resetConsent }) => {
               <Link className="footer-col-link" to="/contact">
                 Partnerships
               </Link>
+              <Link className="footer-col-link" to="/privacy">
+                Privacy Policy
+              </Link>
               <Link className="footer-col-link" to="/cookie-policy">
                 Cookie Policy
               </Link>
