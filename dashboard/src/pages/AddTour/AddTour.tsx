@@ -192,8 +192,8 @@ export default function AddTour() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+        <div className="flex items-center gap-3 whitespace-nowrap">
           <Button
             variant="ghost"
             size="sm"
@@ -220,13 +220,15 @@ export default function AddTour() {
       </div>
 
       <Tabs defaultValue="overview">
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="media">Media</TabsTrigger>
-          <TabsTrigger value="details">Details</TabsTrigger>
-          <TabsTrigger value="schedule">Schedule</TabsTrigger>
-          <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <TabsList className="w-max min-w-full justify-start">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="media">Media</TabsTrigger>
+            <TabsTrigger value="details">Details</TabsTrigger>
+            <TabsTrigger value="schedule">Schedule</TabsTrigger>
+            <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="overview" className="space-y-6 pt-4">
           <div className="grid grid-cols-2 gap-4">
@@ -359,7 +361,8 @@ export default function AddTour() {
               />
               <div>
                 <p className="text-sm font-medium flex items-center gap-1.5">
-                  <Star className="h-3.5 w-3.5 text-amber-700 dark:text-amber-400" /> Bestseller
+                  <Star className="h-3.5 w-3.5 text-amber-700 dark:text-amber-400" />{" "}
+                  Bestseller
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Show bestseller badge
@@ -373,7 +376,8 @@ export default function AddTour() {
               />
               <div>
                 <p className="text-sm font-medium flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Featured
+                  <Zap className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />{" "}
+                  Featured
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Show on homepage
