@@ -152,13 +152,13 @@ export default function EditTourPage() {
                   .split(",")
                   .map((s: string) => s.trim())
                   .filter(Boolean)
-              : t.accessibility ?? [],
+              : (t.accessibility ?? []),
           best_seller: t.best_seller ?? false,
           featured: t.featured ?? false,
           images: t.images ?? [],
           time_slots: t.tour_time_slots ?? [],
           itinerary: (t.tour_itinerary_coordinates ?? []).sort(
-            (a: ItineraryPoint, b: ItineraryPoint) => a.order - b.order
+            (a: ItineraryPoint, b: ItineraryPoint) => a.order - b.order,
           ),
           status: t.status ?? "active",
         };
@@ -341,7 +341,7 @@ export default function EditTourPage() {
   const removeImage = (index: number) => {
     set(
       "images",
-      form.images.filter((_, i) => i !== index)
+      form.images.filter((_, i) => i !== index),
     );
   };
 
@@ -374,14 +374,16 @@ export default function EditTourPage() {
       </div>
 
       <Tabs defaultValue="overview">
-        <TabsList className="w-full justify-start">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="media">Media</TabsTrigger>
-          <TabsTrigger value="details">Details</TabsTrigger>
-          <TabsTrigger value="schedule">Schedule</TabsTrigger>
-          <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-          <TabsTrigger value="availability">Availability</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <TabsList className="w-max min-w-full justify-start">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="media">Media</TabsTrigger>
+            <TabsTrigger value="details">Details</TabsTrigger>
+            <TabsTrigger value="schedule">Schedule</TabsTrigger>
+            <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
+            <TabsTrigger value="availability">Availability</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* OVERVIEW TAB */}
         <TabsContent value="overview" className="space-y-6 pt-4">
@@ -509,7 +511,8 @@ export default function EditTourPage() {
               />
               <div>
                 <p className="text-sm font-medium flex items-center gap-1.5">
-                  <Star className="h-3.5 w-3.5 text-amber-700 dark:text-amber-400" /> Bestseller
+                  <Star className="h-3.5 w-3.5 text-amber-700 dark:text-amber-400" />{" "}
+                  Bestseller
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Show bestseller badge
@@ -523,7 +526,8 @@ export default function EditTourPage() {
               />
               <div>
                 <p className="text-sm font-medium flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Featured
+                  <Zap className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />{" "}
+                  Featured
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Show on homepage
@@ -677,7 +681,7 @@ export default function EditTourPage() {
                     onClick={() =>
                       set(
                         "highlights",
-                        form.highlights.filter((_, j) => j !== i)
+                        form.highlights.filter((_, j) => j !== i),
                       )
                     }
                   >
@@ -741,7 +745,7 @@ export default function EditTourPage() {
                         "accessibility",
                         selected
                           ? form.accessibility.filter((a) => a !== option)
-                          : [...form.accessibility, option]
+                          : [...form.accessibility, option],
                       );
                     }}
                     className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
@@ -810,7 +814,7 @@ export default function EditTourPage() {
                   onClick={() =>
                     set(
                       "time_slots",
-                      form.time_slots.filter((_, j) => j !== i)
+                      form.time_slots.filter((_, j) => j !== i),
                     )
                   }
                 >
