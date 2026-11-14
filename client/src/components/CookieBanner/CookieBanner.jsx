@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./CookieBanner.scss";
 
-const CookieBanner = ({ onAcceptAll, onRejectAll }) => {
+const CookieBanner = ({ onAccept }) => {
   return (
     <div
       className="cookie-banner"
@@ -12,8 +12,8 @@ const CookieBanner = ({ onAcceptAll, onRejectAll }) => {
       <div className="cookie-banner__inner">
         <div className="cookie-banner__text">
           <p className="cookie-banner__message">
-            We use essential cookies to keep the site working — for sign-in and
-            bookings. No tracking, no advertising.{" "}
+            We use essential cookies to keep the site working, and Google
+            Analytics to understand how it is used so we can improve it.{" "}
             <Link to="/cookie-policy" className="cookie-banner__link">
               Cookie Policy
             </Link>
@@ -22,17 +22,10 @@ const CookieBanner = ({ onAcceptAll, onRejectAll }) => {
         <div className="cookie-banner__actions">
           <button
             type="button"
-            className="cookie-banner__btn cookie-banner__btn--reject"
-            onClick={onRejectAll}
-          >
-            Essential only
-          </button>
-          <button
-            type="button"
             className="cookie-banner__btn cookie-banner__btn--accept"
-            onClick={onAcceptAll}
+            onClick={onAccept}
           >
-            Accept all
+            OK, got it
           </button>
         </div>
       </div>

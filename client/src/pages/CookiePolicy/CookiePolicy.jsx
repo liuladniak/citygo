@@ -26,6 +26,14 @@ const cookies = [
     duration: "Up to 1 year",
     source: "Supabase Auth",
   },
+  {
+    name: "_ga, _ga_*",
+    type: "Analytics",
+    purpose:
+      "Google Analytics cookies that tell us, anonymously, how many people visit and which pages are used, so we can improve the site.",
+    duration: "Up to 2 years",
+    source: "Google Analytics",
+  },
 ];
 
 const CookiePolicy = () => {
@@ -33,7 +41,7 @@ const CookiePolicy = () => {
     <div className="cookie-policy">
       <div className="cookie-policy__header">
         <h1 className="cookie-policy__title">Cookie Policy</h1>
-        <p className="cookie-policy__updated">Last updated: May 2025</p>
+        <p className="cookie-policy__updated">Last updated: November 2026</p>
       </div>
 
       <div className="cookie-policy__body">
@@ -50,9 +58,9 @@ const CookiePolicy = () => {
         <section className="cookie-policy__section">
           <h2 className="cookie-policy__heading">What we use</h2>
           <p>
-            CityGo uses only essential cookies. We do not use advertising,
-            tracking, or third-party analytics cookies. The table below lists
-            everything we set.
+            CityGo uses essential cookies to keep the site working, and Google
+            Analytics cookies to understand how the site is used. We do not use
+            advertising cookies. The table below lists everything we set.
           </p>
 
           <div className="cookie-policy__table-wrap">
@@ -116,6 +124,25 @@ const CookiePolicy = () => {
         </section>
 
         <section className="cookie-policy__section">
+          <h2 className="cookie-policy__heading">Analytics cookies</h2>
+          <p>
+            We use Google Analytics to collect anonymous statistics such as
+            pages visited and device type, to see what works and improve the
+            site. These cookies are set when you visit the site. You can block
+            them in your browser settings, or install Google's{" "}
+            <a
+              className="cookie-policy__link"
+              href="https://tools.google.com/dlpage/gaoptout"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              opt-out browser add-on
+            </a>
+            .
+          </p>
+        </section>
+
+        <section className="cookie-policy__section">
           <h2 className="cookie-policy__heading">Local storage</h2>
           <p>
             In addition to cookies, CityGo stores some data in your browser's
@@ -175,9 +202,8 @@ const CookiePolicy = () => {
         <section className="cookie-policy__section">
           <h2 className="cookie-policy__heading">Changes to this policy</h2>
           <p>
-            If we introduce new cookies — for example if we add analytics in the
-            future — we will update this page and, where required by law, ask
-            for your consent before setting them.
+            If we introduce new cookies, we will update this page and the date
+            at the top.
           </p>
         </section>
 
