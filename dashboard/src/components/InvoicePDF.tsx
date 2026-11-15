@@ -1,15 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { FileText } from "lucide-react";
+import { escapeDeep } from "@/lib/utils";
 
 interface InvoiceProps {
   booking: any;
   company: any;
 }
 
-export function DownloadInvoiceButton({ booking, company }: InvoiceProps) {
-  if (!booking) return null;
+export function DownloadInvoiceButton({
+  booking: rawBooking,
+  company: rawCompany,
+}: InvoiceProps) {
+  if (!rawBooking) return null;
 
   const handlePrintInvoice = () => {
+    // Customer-supplied text goes into document.write, so escape it first.
+    const booking = escapeDeep(rawBooking);
+    const company = escapeDeep(rawCompany);
     const invoiceNumber = `INV-${booking.booking_reference}`;
     const issueDate = new Date().toLocaleDateString("en-GB", {
       day: "2-digit",

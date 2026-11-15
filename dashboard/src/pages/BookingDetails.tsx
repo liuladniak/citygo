@@ -21,7 +21,7 @@ import {
   Users,
   XCircle,
 } from "lucide-react";
-import { formatDate, formatTime } from "@/lib/utils";
+import { escapeDeep, formatDate, formatTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -642,7 +642,8 @@ export default function BookingDetailsPage() {
 
 const handlePrintVoucher = async (id: number) => {
   try {
-    const { data } = await axios.get(`/api/bookings/${id}/voucher`);
+    const { data: raw } = await axios.get(`/api/bookings/${id}/voucher`);
+    const data = escapeDeep(raw);
 
     const includesList = data.includes
       ? data.includes
