@@ -50,3 +50,11 @@ export function escapeDeep<T>(value: T): T {
   }
   return value;
 }
+
+const money = new Intl.NumberFormat("en-IE", {
+  style: "currency",
+  currency: "EUR",
+});
+
+export const formatMoney = (value: number | string | null | undefined) =>
+  money.format(Number(value ?? 0));
