@@ -5,7 +5,6 @@ import "dotenv/config";
 import { requireRole } from "../middleware/auth.js";
 import {
   sendBookingConfirmation,
-  sendCancellationConfirmation,
   sendGuideAssignment,
   sendGuideUnassignment,
 } from "../services/emailService.js";
@@ -1290,10 +1289,7 @@ router.post(
                 .first()
             )?.tour_name
           : null;
-        sendCancellationConfirmation(
-          { ...booking, tour_name: tourName },
-          refund_amount ?? 0,
-        );
+        // Worker only: a direct send as well would email the customer twice.
         await notificationQueue.add("booking-cancellation", {
           to: booking.primary_contact_email,
           userName: booking.primary_contact_name,
