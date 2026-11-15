@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "@/lib/apiClient";
 import { Link, useParams } from "react-router-dom";
@@ -9,6 +10,7 @@ import {
   ChevronRight,
   CreditCard,
   FileText,
+  Mail,
   MoreHorizontal,
   Pencil,
   UserPlus,
@@ -148,6 +150,7 @@ export default function BookingDetailsPage() {
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
+  const [sendingReminder, setSendingReminder] = useState(false);
   const [editContactOpen, setEditContactOpen] = useState(false);
   const [editGuestsOpen, setEditGuestsOpen] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
@@ -182,6 +185,21 @@ export default function BookingDetailsPage() {
   const isCancelled = status === "cancelled";
   const canConfirm = status === "pending" || status === "draft";
   const canCancel = !isCancelled && status !== "completed";
+  const canRemind =
+    (status === "pending" || status === "confirmed") &&
+    Boolean(booking.primary_contact_email);
+
+  const handleSendReminder = async () => {
+    setSendingReminder(true);
+    try {
+      await axios.post(`/api/bookings/${booking.id}/reminder`);
+      toast.success(`Reminder sent to ${booking.primary_contact_email}`);
+    } catch (err: any) {
+      toast.error(err.response?.data?.error ?? "Could not send the reminder");
+    } finally {
+      setSendingReminder(false);
+    }
+  };
 
   const totalPrice = Number(booking.total_price);
   const amountPaid = Number(booking.amount_paid);
@@ -281,6 +299,15 @@ export default function BookingDetailsPage() {
                   booking={booking}
                   company={company}
                 />
+                {canRemind && (
+                  <DropdownMenuItem
+                    disabled={sendingReminder}
+                    onSelect={handleSendReminder}
+                  >
+                    <Mail className="size-4" />
+                    Send reminder
+                  </DropdownMenuItem>
+                )}
                 {canCancel && (
                   <>
                     <DropdownMenuSeparator />
