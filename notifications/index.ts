@@ -73,22 +73,29 @@ const worker = new Worker(
               <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours — Istanbul</p>
             </div>
             <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
-              <p style="font-size:16px">Dear <strong>${d.userName}</strong>,</p>
+              <p style="font-size:16px">Dear <strong>${esc(d.userName)}</strong>,</p>
               <p>Your booking has been confirmed. Here are your details:</p>
               <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:20px 0">
                 <table style="width:100%;border-collapse:collapse;font-size:14px">
                   <tr><td style="padding:6px 0;color:#666">Booking Reference</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.bookingReference}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.bookingReference)}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Tour</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.tourName}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.tourName)}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Date</td>
                       <td style="padding:6px 0;font-weight:600;text-align:right">${formatDate(d.bookingDate)}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Time</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.bookingTime || "—"}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.bookingTime ? `${d.bookingTime}${d.endTime ? ` – ${d.endTime}` : ""}` : "—")}</td></tr>
+                  ${
+                    d.meetingPoint
+                      ? `
+                  <tr><td style="padding:6px 0;color:#666">Meeting Point</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.meetingPoint)}</td></tr>`
+                      : ""
+                  }
                   <tr><td style="padding:6px 0;color:#666">Guests</td>
                       <td style="padding:6px 0;font-weight:600;text-align:right">${d.guests}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Total</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.totalPrice} ${d.currency}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">€${Number(d.totalPrice).toFixed(2)}</td></tr>
                 </table>
               </div>
               <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:16px;margin:20px 0">
@@ -104,7 +111,7 @@ const worker = new Worker(
           </div>`;
         await sendEmail(
           d.to,
-          `Booking Confirmed — ${d.bookingReference} | CityGo Tours`,
+          `Booking Confirmed — ${esc(d.bookingReference)} | CityGo Tours`,
           html,
         );
         break;
