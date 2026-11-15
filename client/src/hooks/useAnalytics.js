@@ -1,4 +1,4 @@
-import { trackEvent } from "../lib/gtm.js";
+import { trackEvent } from "../lib/analytics.js";
 
 export const useAnalytics = () => {
   const trackTourView = (tour) => {
