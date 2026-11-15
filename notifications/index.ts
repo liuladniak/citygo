@@ -31,6 +31,16 @@ const formatDate = (dateStr: string) =>
     year: "numeric",
   });
 
+// Customer-supplied text goes into HTML emails, so escape it.
+const esc = (value: unknown) =>
+  String(value ?? "").replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ] as string,
+  );
+
 const SEED_EMAIL_DOMAIN = "@seed.example.com";
 
 const isSeedAddress = (address: unknown): boolean =>
@@ -180,6 +190,60 @@ const worker = new Worker(
         await sendEmail(
           d.to,
           `Reminder: Your Tour Tomorrow — ${d.tourName} | CityGo`,
+          html,
+        );
+        break;
+      }
+
+      case "booking-reminder-manual": {
+        const owes = Number(d.balanceDue) > 0;
+        const html = `
+          <div style="${baseStyle}">
+            <div style="background:#3b82f6;padding:24px 32px;border-radius:12px 12px 0 0">
+              <h1 style="color:white;margin:0;font-size:22px">Reminder about your booking</h1>
+              <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours</p>
+            </div>
+            <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+              <p style="font-size:16px">Dear <strong>${esc(d.userName)}</strong>,</p>
+              <p>This is a reminder about your upcoming tour:</p>
+              <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:20px 0">
+                <table style="width:100%;border-collapse:collapse;font-size:14px">
+                  <tr><td style="padding:6px 0;color:#666">Tour</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.tourName)}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Date</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(formatDate(d.bookingDate))}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Start Time</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.bookingTime ? String(d.bookingTime).slice(0, 5) : "—")}</td></tr>
+                  ${
+                    d.meetingPoint
+                      ? `
+                  <tr><td style="padding:6px 0;color:#666">Meeting Point</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.meetingPoint)}</td></tr>`
+                      : ""
+                  }
+                  ${
+                    owes
+                      ? `
+                  <tr><td style="padding:6px 0;color:#666">Balance due</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">€${Number(d.balanceDue).toFixed(2)}</td></tr>`
+                      : ""
+                  }
+                </table>
+              </div>
+              ${
+                owes
+                  ? `<p style="font-size:14px;color:#666">The balance can be paid to your guide on the day. Reply to this email if you would like to arrange it in advance.</p>`
+                  : ""
+              }
+              <p style="font-size:14px;color:#666">Questions? Just reply to this email. — CityGo Tours Team</p>
+              <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;font-size:12px;color:#aaa;text-align:center">
+                CityGo Tours · Ref: ${esc(d.bookingReference)}
+              </div>
+            </div>
+          </div>`;
+        await sendEmail(
+          d.to,
+          `Reminder: your tour — ${d.tourName} | CityGo`,
           html,
         );
         break;

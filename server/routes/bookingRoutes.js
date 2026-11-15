@@ -10,6 +10,12 @@ import {
   sendGuideUnassignment,
 } from "../services/emailService.js";
 import { notificationQueue } from "../queues/notificationQueue.js";
+import { getRedis } from "../lib/redis.js";
+import {
+  balanceDue,
+  reminderBlockReason,
+  REMINDER_BLOCK_MESSAGES,
+} from "../lib/reminder.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
@@ -1303,6 +1309,76 @@ router.post(
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Failed to cancel booking" });
+    }
+  },
+);
+
+// Staff-triggered reminder email. One per booking every 10 minutes so a
+// double click or a bored finger cannot spam a customer.
+const REMINDER_COOLDOWN_SECONDS = 600;
+
+router.post(
+  "/:id/reminder",
+  requireRole("admin", "manager"),
+  async (req, res) => {
+    const { id } = req.params;
+    try {
+      const booking = await getFullBooking(id);
+      if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+      const today = new Date().toISOString().slice(0, 10);
+      const blocked = reminderBlockReason(booking, today);
+      if (blocked) {
+        return res.status(400).json({ error: REMINDER_BLOCK_MESSAGES[blocked] });
+      }
+
+      try {
+        const first = await getRedis().set(
+          `booking-reminder:${id}`,
+          "1",
+          "EX",
+          REMINDER_COOLDOWN_SECONDS,
+          "NX",
+        );
+        if (!first) {
+          return res
+            .status(429)
+            .json({ error: "A reminder was just sent. Try again in a few minutes" });
+        }
+      } catch (err) {
+        console.error("Reminder cooldown unavailable:", err);
+        return res
+          .status(503)
+          .json({ error: "Reminders are unavailable right now" });
+      }
+
+      const { paid } = await knex("booking_payments")
+        .where({ booking_id: id, status: "paid" })
+        .sum({ paid: "amount" })
+        .first();
+
+      await notificationQueue.add("booking-reminder-manual", {
+        to: booking.primary_contact_email,
+        userName: booking.primary_contact_name,
+        tourName: booking.tour_name || "Custom Tour",
+        bookingReference: booking.booking_reference,
+        bookingDate: booking.tour_date,
+        bookingTime: booking.display_start_time || "",
+        meetingPoint: booking.meeting_point || "",
+        balanceDue: balanceDue(booking.total_price, paid ?? 0),
+      });
+
+      await logActivity(
+        id,
+        "reminder",
+        `Reminder emailed to ${booking.primary_contact_email}`,
+        null,
+        "agent",
+      );
+      res.json({ sent: true });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Failed to send reminder" });
     }
   },
 );
