@@ -1,7 +1,6 @@
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import "dotenv/config";
-import { sendBookingReminder } from "../services/emailService.js";
 import { notificationQueue } from "../queues/notificationQueue.js";
 import { format, addDays } from "date-fns";
 
@@ -59,15 +58,17 @@ export const sendReminders = async (): Promise<void> => {
     );
 
     for (const booking of bookings) {
-      await sendBookingReminder(booking);
+      // Worker only: a direct send as well would email the customer twice.
       await notificationQueue.add("booking-reminder", {
         to: booking.primary_contact_email,
         userName: booking.primary_contact_name,
         tourName: booking.tour_name || "Custom Tour",
         bookingReference: booking.booking_reference,
         bookingDate: booking.tour_date,
-        bookingTime: booking.display_start_time || "",
+        bookingTime: booking.display_start_time?.slice(0, 5) || "",
         meetingPoint: booking.meeting_point || "",
+        includes: booking.includes || "",
+        essentials: booking.essentials || "",
       });
     }
   } catch (err) {
