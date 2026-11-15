@@ -244,7 +244,7 @@ items below when you touch a file.
 | Raw palette colours in `.tsx` | about 280 classes, 30 hex values (payment text, "Today" label, Tours status, Team, MiloReview, Analytics) |
 | Hand-picked heading sizes | AddBooking (7), Guests (4), others |
 | Pages without the standard width and padding | Dashboard, Guests, Team, Tasks, Tours, AddBooking |
-| Titled sections built with `Card` instead of `Panel` | 7 files |
+| Titled sections built with `Card` instead of `Panel` | 7 files (migrate per page, see section 9) |
 | "Loading…" text instead of skeletons | 5 places |
 | Shadow levels beyond the rule above | 6 levels in use |
 
@@ -255,9 +255,14 @@ Planned, not built yet:
 - A `/styleguide` page that renders every size, tone, button and panel.
 - A lint rule that flags arbitrary text sizes, raw palette colours and hex values.
 
-## 9. Open decisions
+## 9. Decisions
 
-- **Touch target height:** the default `Button` is 36px (`h-9`). The written
-  standard is 40px on phones. Decide whether to raise the default on small screens.
-- **`Card` vs `Panel`:** the target is `Panel` for every titled section. `Card` is
-  kept only for the dashboard widgets until those are migrated.
+- **Touch targets:** controls are 40px high on touch screens and keep the compact
+  36px on mouse screens. This is done with the `pointer-coarse:` variant in
+  `components/ui/button.tsx`, not with screen width, so a tablet gets the larger
+  targets too. Never set a button height by hand. (Decided; the `Button` change
+  ships in its own PR.)
+- **`Card` vs `Panel`:** `Panel` is the standard for any titled section. `Card`
+  stays only as a low-level shadcn primitive for stat tiles and clickable cards.
+  There is no mass migration: switch a page when you touch it, and the page
+  migrations in section 8 include it.
