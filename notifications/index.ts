@@ -41,6 +41,15 @@ const esc = (value: unknown) =>
       ] as string,
   );
 
+// "a, b, c" from the tour record -> one escaped line per item.
+const listLines = (csv: unknown, bullet: string) =>
+  String(csv ?? "")
+    .split(",")
+    .map((i) => i.trim())
+    .filter(Boolean)
+    .map((i) => `<p style="margin:2px 0;font-size:14px">${bullet} ${esc(i)}</p>`)
+    .join("");
+
 const SEED_EMAIL_DOMAIN = "@seed.example.com";
 
 const isSeedAddress = (address: unknown): boolean =>
@@ -125,16 +134,16 @@ const worker = new Worker(
               <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours</p>
             </div>
             <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
-              <p style="font-size:16px">Dear <strong>${d.userName}</strong>,</p>
+              <p style="font-size:16px">Dear <strong>${esc(d.userName)}</strong>,</p>
               <p>Your booking has been cancelled.</p>
               <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:20px 0">
                 <table style="width:100%;border-collapse:collapse;font-size:14px">
                   <tr><td style="padding:6px 0;color:#666">Booking Reference</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.bookingReference}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.bookingReference)}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Tour</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.tourName}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.tourName)}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Original Date</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${formatDate(d.bookingDate)}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(formatDate(d.bookingDate))}</td></tr>
                 </table>
               </div>
               ${
@@ -155,7 +164,7 @@ const worker = new Worker(
           </div>`;
         await sendEmail(
           d.to,
-          `Booking Cancelled — ${d.bookingReference} | CityGo Tours`,
+          `Booking Cancelled — ${esc(d.bookingReference)} | CityGo Tours`,
           html,
         );
         break;
@@ -169,34 +178,44 @@ const worker = new Worker(
               <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours — Reminder</p>
             </div>
             <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
-              <p style="font-size:16px">Dear <strong>${d.userName}</strong>,</p>
+              <p style="font-size:16px">Dear <strong>${esc(d.userName)}</strong>,</p>
               <p>Your tour is <strong>tomorrow</strong>. Here's everything you need:</p>
               <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:20px 0">
                 <table style="width:100%;border-collapse:collapse;font-size:14px">
                   <tr><td style="padding:6px 0;color:#666">Tour</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.tourName}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.tourName)}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Date</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${formatDate(d.bookingDate)}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(formatDate(d.bookingDate))}</td></tr>
                   <tr><td style="padding:6px 0;color:#666">Start Time</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.bookingTime || "—"}</td></tr>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.bookingTime || "—")}</td></tr>
                   ${
                     d.meetingPoint
                       ? `
                   <tr><td style="padding:6px 0;color:#666">Meeting Point</td>
-                      <td style="padding:6px 0;font-weight:600;text-align:right">${d.meetingPoint}</td></tr>`
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.meetingPoint)}</td></tr>`
                       : ""
                   }
                 </table>
               </div>
+              ${
+                d.includes
+                  ? `<div style="margin:20px 0"><p style="font-weight:600;margin-bottom:8px">What's included:</p>${listLines(d.includes, "✓")}</div>`
+                  : ""
+              }
+              ${
+                d.essentials
+                  ? `<div style="margin:20px 0"><p style="font-weight:600;margin-bottom:8px">What to bring:</p>${listLines(d.essentials, "·")}</div>`
+                  : ""
+              }
               <p style="font-size:14px;color:#666">See you tomorrow! — CityGo Tours Team</p>
               <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;font-size:12px;color:#aaa;text-align:center">
-                CityGo Tours · Ref: ${d.bookingReference}
+                CityGo Tours · Ref: ${esc(d.bookingReference)}
               </div>
             </div>
           </div>`;
         await sendEmail(
           d.to,
-          `Reminder: Your Tour Tomorrow — ${d.tourName} | CityGo`,
+          `Reminder: Your Tour Tomorrow — ${esc(d.tourName)} | CityGo`,
           html,
         );
         break;
