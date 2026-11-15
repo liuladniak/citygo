@@ -4,7 +4,6 @@ import knexConfig from "../knexfile.js";
 import "dotenv/config";
 import { requireRole } from "../middleware/auth.js";
 import {
-  sendBookingConfirmation,
   sendGuideAssignment,
   sendGuideUnassignment,
 } from "../services/emailService.js";
@@ -45,6 +44,22 @@ const logActivity = async (
     console.error("Activity log failed:", err);
   }
 };
+
+// Confirmation emails go through the notifications worker only. Do not also
+// send directly from here: the customer would get the email twice.
+const queueBookingConfirmation = (booking) =>
+  notificationQueue.add("booking-confirmation", {
+    to: booking.primary_contact_email,
+    userName: booking.primary_contact_name,
+    tourName: booking.tour_name,
+    bookingReference: booking.booking_reference,
+    bookingDate: booking.tour_date,
+    bookingTime: booking.display_start_time?.slice(0, 5) || "",
+    endTime: booking.display_end_time?.slice(0, 5) || "",
+    meetingPoint: booking.meeting_point || "",
+    guests: booking.total_guests || 1,
+    totalPrice: booking.total_price,
+  });
 
 const getFullBooking = async (id) =>
   knex("bookings")
@@ -1017,18 +1032,7 @@ router.patch("/:id", async (req, res) => {
 
       if (status === "confirmed" && updated?.primary_contact_email) {
         const fullBooking = await getFullBooking(id);
-        sendBookingConfirmation(fullBooking);
-        await notificationQueue.add("booking-confirmation", {
-          to: updated.primary_contact_email,
-          userName: updated.primary_contact_name,
-          tourName: fullBooking.tour_name,
-          bookingReference: fullBooking.booking_reference,
-          bookingDate: fullBooking.tour_date,
-          bookingTime: fullBooking.display_start_time || "",
-          guests: fullBooking.total_guests || 1,
-          totalPrice: fullBooking.total_price,
-          currency: "USD",
-        });
+        await queueBookingConfirmation(fullBooking);
       }
     }
     if (
@@ -1213,18 +1217,7 @@ router.post(
           );
           const fullBooking = await getFullBooking(id);
           if (fullBooking?.primary_contact_email) {
-            sendBookingConfirmation(fullBooking);
-            await notificationQueue.add("booking-confirmation", {
-              to: fullBooking.primary_contact_email,
-              userName: fullBooking.primary_contact_name,
-              tourName: fullBooking.tour_name,
-              bookingReference: fullBooking.booking_reference,
-              bookingDate: fullBooking.tour_date,
-              bookingTime: fullBooking.display_start_time || "",
-              guests: fullBooking.total_guests || 1,
-              totalPrice: fullBooking.total_price,
-              currency: "USD",
-            });
+            await queueBookingConfirmation(fullBooking);
           }
         }
       }
