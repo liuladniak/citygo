@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { escapeDeep } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -142,8 +143,10 @@ export default function Schedule() {
 
   const handlePrintDay = () => {
     const today = format(new Date(), "yyyy-MM-dd");
-    const todayBookings = bookings.filter(
-      (b: any) => b.tour_date?.startsWith(today) && b.status !== "cancelled"
+    const todayBookings = escapeDeep(
+      bookings.filter(
+        (b: any) => b.tour_date?.startsWith(today) && b.status !== "cancelled"
+      )
     );
     const win = window.open("", "_blank");
     if (!win) return;
