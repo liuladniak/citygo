@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { FileText } from "lucide-react";
 import { escapeDeep } from "@/lib/utils";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 interface InvoiceProps {
   booking: any;
   company: any;
+  /** "menu" renders a dropdown item instead of a button. */
+  variant?: "button" | "menu";
 }
 
 export function DownloadInvoiceButton({
   booking: rawBooking,
   company: rawCompany,
+  variant = "button",
 }: InvoiceProps) {
   if (!rawBooking) return null;
 
@@ -299,6 +303,15 @@ export function DownloadInvoiceButton({
     `);
     win.document.close();
   };
+
+  if (variant === "menu") {
+    return (
+      <DropdownMenuItem onSelect={handlePrintInvoice}>
+        <FileText className="h-4 w-4" />
+        Print invoice
+      </DropdownMenuItem>
+    );
+  }
 
   return (
     <Button variant="outline" onClick={handlePrintInvoice}>

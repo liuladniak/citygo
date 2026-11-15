@@ -12,10 +12,10 @@ const BackButton: React.FC<BackButtonProps> = ({ to }) => {
   return (
     <button
       onClick={() => (to ? navigate(to) : navigate(-1))}
-      className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+      className="p-2 rounded-lg hover:bg-accent transition-colors"
       aria-label="Go back"
     >
-      <Icon iconPath={chevronLeftPath} size={24} className=" stroke-gray-700" />
+      <Icon iconPath={chevronLeftPath} size={24} className=" stroke-foreground" />
     </button>
   );
 };

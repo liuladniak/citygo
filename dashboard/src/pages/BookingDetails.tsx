@@ -1,32 +1,37 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "@/lib/apiClient";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useBookingDetails } from "@/hooks/useBookingDetails";
 import {
   AlertTriangle,
-  Building2,
-  Calendar,
-  CheckCircle,
-  Clock,
+  CheckCircle2,
+  ChevronRight,
   CreditCard,
   FileText,
-  Globe,
-  Loader2,
-  Mail,
-  MapPin,
+  MoreHorizontal,
   Pencil,
-  Phone,
   UserPlus,
-  Users,
   XCircle,
 } from "lucide-react";
-import { escapeDeep, formatDate, formatTime } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import {
+  cn,
+  escapeDeep,
+  formatDate,
+  formatMoney,
+  formatTime,
+} from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import BackButton from "@/components/ui/BackButton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
+import { DetailList, DetailRow, Panel } from "@/components/DetailPanel";
+import { StatusBadge } from "@/components/StatusBadge";
 import { AssignGuideModal } from "@/components/modals/AssignGuideModal";
 import CancelBookingDialog from "@/components/modals/CancelBookingDialog";
 import ConfirmBookingDialog from "@/components/modals/ConfirmBookingDialog";
@@ -36,28 +41,104 @@ import EditGuestsModal from "@/components/modals/EditGuestsModal";
 import PaymentModal from "@/components/modals/PaymentModal";
 import { DownloadInvoiceButton } from "@/components/InvoicePDF";
 
-const statusConfig: Record<
-  string,
-  { bg: string; text: string; label: string }
-> = {
-  confirmed: { bg: "bg-green-100", text: "text-green-800", label: "Confirmed" },
-  pending: { bg: "bg-yellow-100", text: "text-yellow-800", label: "Pending" },
-  draft: { bg: "bg-gray-100", text: "text-gray-700", label: "Draft" },
-  completed: { bg: "bg-blue-100", text: "text-blue-800", label: "Completed" },
-  cancelled: { bg: "bg-red-100", text: "text-red-800", label: "Cancelled" },
-};
-
-const roleStyles: Record<string, string> = {
-  lead_guide: "bg-blue-100 text-blue-700",
-  assistant_guide: "bg-purple-100 text-purple-700",
-  driver: "bg-orange-100 text-orange-700",
-};
-
 const ROLE_LABELS: Record<string, string> = {
-  lead_guide: "Lead Guide",
-  assistant_guide: "Assistant Guide",
+  lead_guide: "Lead guide",
+  assistant_guide: "Assistant guide",
   driver: "Driver",
 };
+
+const humanize = (value?: string | null) =>
+  value ? value.replace(/_/g, " ") : "";
+
+const languageName = (code?: string | null) => {
+  if (!code) return "—";
+  try {
+    return new Intl.DisplayNames(["en"], { type: "language" }).of(code) ?? code;
+  } catch {
+    return code.toUpperCase();
+  }
+};
+
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+function EditButton({
+  onClick,
+  label,
+}: {
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="-mr-2 h-8 text-muted-foreground"
+      onClick={onClick}
+      aria-label={label}
+    >
+      <Pencil className="size-3.5" />
+      Edit
+    </Button>
+  );
+}
+
+function SummaryCell({
+  label,
+  value,
+  hint,
+  valueClassName,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  valueClassName?: string;
+}) {
+  return (
+    <div className="bg-card p-4">
+      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dd
+        className={cn(
+          "mt-1 text-base font-semibold tabular-nums break-words",
+          valueClassName,
+        )}
+      >
+        {value}
+      </dd>
+      {hint && (
+        <p className="mt-0.5 text-xs text-muted-foreground break-words">
+          {hint}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function BookingDetailsSkeleton() {
+  return (
+    <div
+      className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-8"
+      aria-busy="true"
+      aria-label="Loading booking"
+    >
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-8 w-72 max-w-full" />
+        <Skeleton className="h-4 w-56 max-w-full" />
+      </div>
+      <Skeleton className="h-24 w-full rounded-xl" />
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <Skeleton className="h-56 rounded-xl" />
+          <Skeleton className="h-64 rounded-xl" />
+        </div>
+        <div className="space-y-6">
+          <Skeleton className="h-72 rounded-xl" />
+          <Skeleton className="h-40 rounded-xl" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function BookingDetailsPage() {
   const { bookingId } = useParams();
@@ -83,503 +164,463 @@ export default function BookingDetailsPage() {
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: ["booking", bookingId] });
 
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+  if (isLoading) return <BookingDetailsSkeleton />;
   if (!booking)
     return (
-      <div className="p-10 text-center text-muted-foreground">
-        Booking not found
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="page-title">Booking not found</h1>
+        <p className="page-description">
+          It may have been deleted, or the link is wrong.
+        </p>
+        <Button asChild variant="outline" className="mt-6">
+          <Link to="/bookings">Back to bookings</Link>
+        </Button>
       </div>
     );
 
-  const balance = Number(booking.total_price) - Number(booking.amount_paid);
-  const statusStyle =
-    statusConfig[booking.status?.toLowerCase() ?? ""] ?? statusConfig.draft;
+  const status = booking.status?.toLowerCase() ?? "";
+  const isCancelled = status === "cancelled";
+  const canConfirm = status === "pending" || status === "draft";
+  const canCancel = !isCancelled && status !== "completed";
+
+  const totalPrice = Number(booking.total_price);
+  const amountPaid = Number(booking.amount_paid);
+  const balance = totalPrice - amountPaid;
+  const paidPercent =
+    totalPrice > 0
+      ? Math.min(100, Math.max(0, (amountPaid / totalPrice) * 100))
+      : 0;
+
+  const payments: any[] = booking.payment_history ?? [];
+  const totalCharged = payments
+    .filter((p) => Number(p.amount) > 0)
+    .reduce((sum, p) => sum + Number(p.amount), 0);
+  const totalRefunded = payments
+    .filter((p) => Number(p.amount) < 0)
+    .reduce((sum, p) => sum + Math.abs(Number(p.amount)), 0);
+  const refundDue = totalCharged - totalRefunded;
+
+  const adults = booking.guest_distribution?.adults ?? 0;
+  const children = booking.guest_distribution?.children ?? 0;
+  const infants = booking.guest_distribution?.infants ?? 0;
+  const totalGuests = adults + children + infants;
+  const partyBreakdown = [
+    plural(adults, "adult"),
+    children ? `${children} ${children === 1 ? "child" : "children"}` : null,
+    infants ? plural(infants, "infant") : null,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const showCollect = !isCancelled && balance > 0;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div className="flex min-w-0 items-start gap-3">
-          <BackButton />
-          <div className="min-w-0">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="page-title">
-                {booking.booking_reference}
-              </h1>
-              <Badge
-                className={`${statusStyle.bg} ${statusStyle.text} font-medium`}
-                variant="secondary"
-              >
-                {statusStyle.label}
-              </Badge>
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+      <header className="space-y-4">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex items-center gap-1.5 text-sm text-muted-foreground"
+        >
+          <Link to="/bookings" className="hover:text-foreground">
+            Bookings
+          </Link>
+          <ChevronRight className="size-3.5" aria-hidden />
+          <span className="text-foreground">{booking.booking_reference}</span>
+        </nav>
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <h1 className="page-title">{booking.booking_reference}</h1>
+              <StatusBadge status={booking.status} />
             </div>
-            {booking.tour_name && (
-              <p className="mt-1 text-sm font-medium text-muted-foreground">
-                {booking.is_custom_tour
-                  ? "✨ Custom Tour"
-                  : `🗺️ ${booking.tour_name}`}
-              </p>
-            )}
-            <p className="mt-0.5 text-sm text-muted-foreground">
-              Created{" "}
+            <p className="page-description">
+              {booking.is_custom_tour
+                ? "Custom tour"
+                : (booking.tour_name ?? "No tour selected")}
+              {" · "}
+              Booked{" "}
               {new Date(booking.created_at!).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",
               })}
-              {booking.source && (
-                <span className="ml-2 text-xs">
-                  · via {booking.source.replace("_", " ")}
-                </span>
-              )}
+              {booking.source && <> via {humanize(booking.source)}</>}
             </p>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
-          {(booking.status === "pending" || booking.status === "draft") && (
-            <Button
-              variant="outline"
-              className="text-green-700 border-green-300 hover:bg-green-50"
-              onClick={() => setConfirmDialogOpen(true)}
-            >
-              <CheckCircle className="h-4 w-4 mr-2" />
-              Confirm Booking
-            </Button>
-          )}
-          {booking.status !== "cancelled" && booking.status !== "completed" && (
-            <Button
-              variant="outline"
-              className="text-red-600 border-red-200 hover:bg-red-50"
-              onClick={() => setCancelDialogOpen(true)}
-            >
-              <XCircle className="h-4 w-4 mr-2" />
-              Cancel
-            </Button>
-          )}
-          <Button
-            variant="outline"
-            onClick={() => handlePrintVoucher(booking.id)}
-          >
-            Print Voucher
-          </Button>
-          <DownloadInvoiceButton booking={booking} company={company} />
-          <Button>Send Reminder</Button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <CardTitle className="text-base">Experience Details</CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setEditDetailsOpen(true)}
-              >
-                <Pencil className="h-3.5 w-3.5 mr-1.5" /> Edit
+          <div className="flex shrink-0 items-center gap-2">
+            {canConfirm ? (
+              <Button onClick={() => setConfirmDialogOpen(true)}>
+                <CheckCircle2 className="size-4" />
+                Confirm booking
               </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 p-1.5 rounded-md bg-muted">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">
-                      Date
-                    </p>
-                    <p className="text-sm font-medium">
-                      {formatDate(booking.tour_date)}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 p-1.5 rounded-md bg-muted">
-                    <Clock className="w-4 h-4 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">
-                      Time
-                    </p>
-                    <p className="text-sm font-medium">
-                      {formatTime(booking.display_start_time)} –{" "}
-                      {formatTime(booking.display_end_time)}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 sm:col-span-2">
-                  <div className="mt-0.5 p-1.5 rounded-md bg-muted shrink-0">
-                    <MapPin className="w-4 h-4 text-muted-foreground" />
-                  </div>
-                  <div className="w-full">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">
-                      Meeting Point
-                    </p>
-                    {booking.meeting_point ? (
-                      <p className="text-sm font-medium">
-                        {booking.meeting_point}
-                      </p>
-                    ) : (
-                      <button
-                        onClick={() => setEditDetailsOpen(true)}
-                        className="text-sm text-orange-700 dark:text-orange-400 hover:underline"
-                      >
-                        + Set meeting point
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {booking.notes && (
-                  <div className="flex items-start gap-3 sm:col-span-2">
-                    <div className="mt-0.5 p-1.5 rounded-md bg-muted shrink-0">
-                      <FileText className="w-4 h-4 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">
-                        Notes
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {booking.notes}
-                      </p>
-                    </div>
-                  </div>
+            ) : showCollect ? (
+              <Button onClick={() => setPaymentModalOpen(true)}>
+                <CreditCard className="size-4" />
+                Collect {formatMoney(balance)}
+              </Button>
+            ) : null}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" aria-label="More actions">
+                  <MoreHorizontal className="size-4" />
+                  <span className="hidden sm:inline">More</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem
+                  onSelect={() => handlePrintVoucher(booking.id)}
+                >
+                  <FileText className="size-4" />
+                  Print voucher
+                </DropdownMenuItem>
+                <DownloadInvoiceButton
+                  variant="menu"
+                  booking={booking}
+                  company={company}
+                />
+                {canCancel && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive"
+                      onSelect={() => setCancelDialogOpen(true)}
+                    >
+                      <XCircle className="size-4" />
+                      Cancel booking
+                    </DropdownMenuItem>
+                  </>
                 )}
-              </div>
-            </CardContent>
-          </Card>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </header>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Guest Manifest</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                    Primary Contact
-                  </p>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-xs"
-                    onClick={() => setEditContactOpen(true)}
+      <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border bg-border lg:grid-cols-4">
+        <SummaryCell label="Tour date" value={formatDate(booking.tour_date)} />
+        <SummaryCell
+          label="Time"
+          value={`${formatTime(booking.display_start_time)} – ${formatTime(
+            booking.display_end_time,
+          )}`.replace(/ (AM|PM)/g, "\u00A0$1")}
+          hint={booking.tour_duration ?? undefined}
+        />
+        <SummaryCell
+          label="Guests"
+          value={plural(totalGuests, "guest")}
+          hint={partyBreakdown}
+        />
+        {isCancelled ? (
+          <SummaryCell
+            label="Refund due"
+            value={formatMoney(Math.max(refundDue, 0))}
+            hint={refundDue > 0 ? "Not yet issued" : "Nothing owed"}
+            valueClassName={
+              refundDue > 0 ? "text-amber-700 dark:text-amber-400" : undefined
+            }
+          />
+        ) : (
+          <SummaryCell
+            label="Balance due"
+            value={formatMoney(Math.max(balance, 0))}
+            hint={
+              balance > 0
+                ? `${formatMoney(amountPaid)} of ${formatMoney(totalPrice)} paid`
+                : "Paid in full"
+            }
+            valueClassName={
+              balance > 0
+                ? "text-red-700 dark:text-red-400"
+                : "text-emerald-700 dark:text-emerald-400"
+            }
+          />
+        )}
+      </dl>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <Panel
+            title="Tour details"
+            action={
+              <EditButton
+                label="Edit tour details"
+                onClick={() => setEditDetailsOpen(true)}
+              />
+            }
+          >
+            <DetailList>
+              <DetailRow label="Tour">
+                {booking.is_custom_tour
+                  ? "Custom tour"
+                  : (booking.tour_name ?? "—")}
+              </DetailRow>
+              <DetailRow label="Meeting point">
+                {booking.meeting_point ? (
+                  booking.meeting_point
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setEditDetailsOpen(true)}
+                    className="text-amber-700 hover:underline dark:text-amber-400"
                   >
-                    <Pencil className="h-3 w-3 mr-1" /> Edit
-                  </Button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 p-1.5 rounded-md bg-muted">
-                      <Mail className="w-4 h-4 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">
-                        {booking.primary_contact_name}
-                      </p>
-                      {booking.primary_contact_email && (
-                        <p className="text-xs text-muted-foreground">
-                          {booking.primary_contact_email}
-                        </p>
-                      )}
-                      {booking.primary_contact_phone && (
-                        <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                          <Phone className="h-3 w-3" />
-                          {booking.primary_contact_phone}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 p-1.5 rounded-md bg-muted">
-                      <Globe className="w-4 h-4 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">
-                        Language
-                      </p>
-                      <p className="text-sm font-medium uppercase">
-                        {booking.language}
-                      </p>
-                    </div>
-                  </div>
-                  {booking.source && (
-                    <div className="flex items-start gap-3">
-                      <div className="mt-0.5 p-1.5 rounded-md bg-muted">
-                        <Building2 className="w-4 h-4 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">
-                          Source
-                        </p>
-                        <p className="text-sm font-medium capitalize">
-                          {booking.source.replace("_", " ")}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <Separator />
-
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                    Party Size
-                  </p>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-xs"
-                    onClick={() => setEditGuestsOpen(true)}
-                  >
-                    <Pencil className="h-3 w-3 mr-1" /> Edit
-                  </Button>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="mt-0.5 p-1.5 rounded-md bg-muted">
-                    <Users className="w-4 h-4 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">
-                      {(booking.guest_distribution?.adults ?? 0) +
-                        (booking.guest_distribution?.children ?? 0) +
-                        (booking.guest_distribution?.infants ?? 0)}{" "}
-                      total
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {booking.guest_distribution?.adults} adults
-                      {booking.guest_distribution?.children
-                        ? `, ${booking.guest_distribution.children} children`
-                        : ""}
-                      {booking.guest_distribution?.infants
-                        ? `, ${booking.guest_distribution.infants} infants`
-                        : ""}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {booking.guest_list && booking.guest_list.length > 0 && (
-                <>
-                  <Separator />
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-2">
-                      Guest Names
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {booking.guest_list.map((g: any, i: number) => (
-                        <Badge
-                          key={i}
-                          variant="secondary"
-                          className="text-xs font-normal"
-                        >
-                          {g.full_name}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </>
+                    Set meeting point
+                  </button>
+                )}
+              </DetailRow>
+              {booking.notes && (
+                <DetailRow label="Notes">
+                  <span className="font-normal whitespace-pre-line">
+                    {booking.notes}
+                  </span>
+                </DetailRow>
               )}
-            </CardContent>
-          </Card>
+            </DetailList>
+          </Panel>
+
+          <Panel title="Guests">
+            <DetailList>
+              <DetailRow
+                label="Contact"
+                action={
+                  <EditButton
+                    label="Edit contact"
+                    onClick={() => setEditContactOpen(true)}
+                  />
+                }
+              >
+                <p>{booking.primary_contact_name}</p>
+                {booking.primary_contact_email && (
+                  <a
+                    href={`mailto:${booking.primary_contact_email}`}
+                    className="block font-normal text-muted-foreground hover:text-foreground hover:underline"
+                  >
+                    {booking.primary_contact_email}
+                  </a>
+                )}
+                {booking.primary_contact_phone && (
+                  <a
+                    href={`tel:${booking.primary_contact_phone}`}
+                    className="block font-normal text-muted-foreground hover:text-foreground hover:underline"
+                  >
+                    {booking.primary_contact_phone}
+                  </a>
+                )}
+              </DetailRow>
+              <DetailRow label="Language">
+                {languageName(booking.language)}
+              </DetailRow>
+              <DetailRow
+                label="Party"
+                action={
+                  <EditButton
+                    label="Edit guests"
+                    onClick={() => setEditGuestsOpen(true)}
+                  />
+                }
+              >
+                <p>{plural(totalGuests, "guest")}</p>
+                <p className="font-normal text-muted-foreground">
+                  {partyBreakdown}
+                </p>
+              </DetailRow>
+              {booking.guest_list && booking.guest_list.length > 0 && (
+                <DetailRow label="Guest names">
+                  <ul className="space-y-0.5 font-normal">
+                    {booking.guest_list.map((g: any, i: number) => (
+                      <li key={i}>{g.full_name}</li>
+                    ))}
+                  </ul>
+                </DetailRow>
+              )}
+            </DetailList>
+          </Panel>
         </div>
 
         <div className="space-y-6">
-          <Card className="border-t-4 border-t-primary">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Financial Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {booking.status === "cancelled" ? (
+          <Panel title="Payment">
+            <div className="space-y-4 py-4">
+              {isCancelled ? (
                 <>
-                  {(() => {
-                    const totalPaid =
-                      booking.payment_history
-                        ?.filter((p: any) => Number(p.amount) > 0)
-                        .reduce(
-                          (sum: number, p: any) => sum + Number(p.amount),
-                          0
-                        ) ?? 0;
-                    const totalRefunded =
-                      booking.payment_history
-                        ?.filter((p: any) => Number(p.amount) < 0)
-                        .reduce(
-                          (sum: number, p: any) =>
-                            sum + Math.abs(Number(p.amount)),
-                          0
-                        ) ?? 0;
-                    const refundDue = totalPaid - totalRefunded;
-
-                    return (
-                      <>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            Total Charged
-                          </span>
-                          <span className="font-medium">
-                            €{totalPaid.toFixed(2)}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            Total Refunded
-                          </span>
-                          <span className="font-medium text-emerald-600">
-                            €{totalRefunded.toFixed(2)}
-                          </span>
-                        </div>
-                        <Separator />
-                        {refundDue > 0 ? (
-                          <>
-                            <div className="flex justify-between font-semibold">
-                              <span>Refund Pending</span>
-                              <span className="text-orange-700 dark:text-orange-400">
-                                €{refundDue.toFixed(2)}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-center gap-2 py-2 text-sm text-orange-700 dark:text-orange-400 font-medium">
-                              <AlertTriangle className="h-4 w-4" /> Refund not
-                              yet issued
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex items-center justify-center gap-2 py-2 text-sm text-emerald-600 font-medium">
-                            <CheckCircle className="h-4 w-4" /> Fully Refunded
-                          </div>
-                        )}
-                      </>
-                    );
-                  })()}
+                  <dl className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Charged</dt>
+                      <dd className="font-medium tabular-nums">
+                        {formatMoney(totalCharged)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Refunded</dt>
+                      <dd className="font-medium tabular-nums">
+                        {formatMoney(totalRefunded)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between border-t pt-2 font-semibold">
+                      <dt>Refund due</dt>
+                      <dd className="tabular-nums">
+                        {formatMoney(Math.max(refundDue, 0))}
+                      </dd>
+                    </div>
+                  </dl>
+                  {refundDue > 0 ? (
+                    <p className="flex items-center gap-2 text-sm font-medium text-amber-700 dark:text-amber-400">
+                      <AlertTriangle className="size-4 shrink-0" />
+                      Refund not issued yet
+                    </p>
+                  ) : (
+                    <p className="flex items-center gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-400">
+                      <CheckCircle2 className="size-4 shrink-0" />
+                      Fully refunded
+                    </p>
+                  )}
                 </>
               ) : (
                 <>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Total Price</span>
-                    <span className="font-medium">
-                      €{Number(booking.total_price).toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Amount Paid</span>
-                    <span className="font-medium text-emerald-600">
-                      €{Number(booking.amount_paid).toFixed(2)}
-                    </span>
-                  </div>
-                  <Separator />
-                  <div className="flex justify-between font-semibold">
-                    <span>Balance Due</span>
-                    <span
-                      className={
-                        balance > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600"
-                      }
+                  <div>
+                    <div
+                      className="h-1.5 overflow-hidden rounded-full bg-muted"
+                      role="progressbar"
+                      aria-label="Amount paid"
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={Math.round(paidPercent)}
                     >
-                      €{balance.toFixed(2)}
-                    </span>
+                      <div
+                        className="h-full rounded-full bg-emerald-600 dark:bg-emerald-500"
+                        style={{ width: `${paidPercent}%` }}
+                      />
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {Math.round(paidPercent)}% paid
+                    </p>
                   </div>
-                  {balance > 0 ? (
+                  <dl className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Total</dt>
+                      <dd className="font-medium tabular-nums">
+                        {formatMoney(totalPrice)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-muted-foreground">Paid</dt>
+                      <dd className="font-medium tabular-nums">
+                        {formatMoney(amountPaid)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between border-t pt-2 font-semibold">
+                      <dt>Balance due</dt>
+                      <dd
+                        className={cn(
+                          "tabular-nums",
+                          balance > 0
+                            ? "text-red-700 dark:text-red-400"
+                            : "text-emerald-700 dark:text-emerald-400",
+                        )}
+                      >
+                        {formatMoney(Math.max(balance, 0))}
+                      </dd>
+                    </div>
+                  </dl>
+                  {showCollect && (
                     <Button
-                      className="w-full mt-1"
+                      className="w-full"
                       onClick={() => setPaymentModalOpen(true)}
                     >
-                      <CreditCard className="h-4 w-4 mr-2" />
-                      Collect €{balance.toFixed(2)}
+                      <CreditCard className="size-4" />
+                      Collect {formatMoney(balance)}
                     </Button>
-                  ) : (
-                    <div className="flex items-center justify-center gap-2 py-2 text-sm text-emerald-600 font-medium">
-                      <CheckCircle className="h-4 w-4" /> Fully Paid
-                    </div>
                   )}
                 </>
               )}
 
-              {booking.payment_history &&
-                booking.payment_history.length > 0 && (
-                  <>
-                    <Separator />
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-2">
-                        Payment History
-                      </p>
-                      {booking.payment_history.map((p: any) => (
-                        <div
-                          key={p.id}
-                          className="flex justify-between text-xs text-muted-foreground py-1"
+              {payments.length > 0 && (
+                <div className="border-t pt-4">
+                  <h3 className="mb-2 text-sm font-medium">History</h3>
+                  <ul className="space-y-2 text-sm">
+                    {payments.map((p) => (
+                      <li key={p.id} className="flex justify-between gap-3">
+                        <span className="text-muted-foreground capitalize">
+                          {humanize(p.method)}
+                          {p.paid_at &&
+                            ` · ${new Date(p.paid_at).toLocaleDateString(
+                              "en-US",
+                              { month: "short", day: "numeric" },
+                            )}`}
+                        </span>
+                        <span
+                          className={cn(
+                            "font-medium tabular-nums",
+                            Number(p.amount) < 0 &&
+                              "text-amber-700 dark:text-amber-400",
+                          )}
                         >
-                          <span className="capitalize">
-                            {p.method?.replace("_", " ")} ·{" "}
-                            {new Date(p.paid_at).toLocaleDateString()}
-                          </span>
-                          <span
-                            className={`font-medium ${
-                              Number(p.amount) < 0
-                                ? "text-orange-700 dark:text-orange-400"
-                                : "text-foreground"
-                            }`}
-                          >
-                            €{Number(p.amount).toFixed(2)}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-            </CardContent>
-          </Card>
+                          {formatMoney(p.amount)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </Panel>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Staffing</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+          <Panel
+            title="Staff"
+            action={
+              booking.staff && booking.staff.length > 0 ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="-mr-2 h-8 text-muted-foreground"
+                  onClick={() => setAssignModalOpen(true)}
+                >
+                  <UserPlus className="size-3.5" />
+                  Manage
+                </Button>
+              ) : undefined
+            }
+          >
+            <div className="py-4">
               {booking.staff && booking.staff.length > 0 ? (
-                <div className="flex flex-col gap-2">
+                <ul className="space-y-3">
                   {booking.staff.map((s: any) => (
-                    <div
-                      key={s.guide_id}
-                      className="flex items-center gap-3 py-1"
-                    >
-                      <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center font-semibold text-sm text-secondary-foreground shrink-0">
+                    <li key={s.guide_id} className="flex items-center gap-3">
+                      <span
+                        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-sm font-semibold text-secondary-foreground"
+                        aria-hidden
+                      >
                         {s.guide_name.charAt(0)}
-                      </div>
+                      </span>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">
+                        <p className="truncate text-sm font-medium">
                           {s.guide_name}
                         </p>
-                        <Badge
-                          variant="secondary"
-                          className={`text-xs mt-0.5 ${
-                            roleStyles[s.role] ?? "bg-gray-100 text-gray-700"
-                          }`}
-                        >
-                          {ROLE_LABELS[s.role] ?? s.role}
-                        </Badge>
+                        <p className="text-xs text-muted-foreground">
+                          {ROLE_LABELS[s.role] ?? humanize(s.role)}
+                        </p>
                       </div>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
-                <p className="text-sm text-orange-700 dark:text-orange-400">
-                  No staff assigned yet.
-                </p>
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    No one is assigned to this tour yet.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setAssignModalOpen(true)}
+                  >
+                    <UserPlus className="size-4" />
+                    Assign staff
+                  </Button>
+                </div>
               )}
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => setAssignModalOpen(true)}
-              >
-                <UserPlus className="h-4 w-4 mr-2" />
-                Manage Staff
-              </Button>
-            </CardContent>
-          </Card>
+            </div>
+          </Panel>
         </div>
       </div>
 
@@ -730,10 +771,10 @@ const handlePrintVoucher = async (id: number) => {
                   data.category ?? "—"
                 }</p></div>
                 <div class="field"><label>Date</label><p>${formatDate(
-                  data.tour_date
+                  data.tour_date,
                 )}</p></div>
                 <div class="field"><label>Time</label><p>${formatTime(
-                  data.display_start_time
+                  data.display_start_time,
                 )} – ${formatTime(data.display_end_time)}</p></div>
                 <div class="field"><label>Duration</label><p>${
                   data.tour_duration ?? "—"
@@ -815,7 +856,7 @@ const handlePrintVoucher = async (id: number) => {
                       <p class="guide-role">${ROLE_LABELS[s.role] ?? s.role}</p>
                     </div>
                   </div>
-                `
+                `,
                   )
                   .join("")}
               </div>
@@ -853,7 +894,7 @@ const handlePrintVoucher = async (id: number) => {
                     <div class="highlight-dot"></div>
                     <span>${h.highlight}</span>
                   </div>
-                `
+                `,
                   )
                   .join("")}
               </div>
@@ -871,7 +912,7 @@ const handlePrintVoucher = async (id: number) => {
                   ${includesList
                     .map(
                       (item: string) =>
-                        `<span class="include-tag">✓ ${item}</span>`
+                        `<span class="include-tag">✓ ${item}</span>`,
                     )
                     .join("")}
                 </div>
@@ -890,7 +931,7 @@ const handlePrintVoucher = async (id: number) => {
                   ${essentialsList
                     .map(
                       (item: string) =>
-                        `<span class="essential-tag">· ${item}</span>`
+                        `<span class="essential-tag">· ${item}</span>`,
                     )
                     .join("")}
                 </div>
@@ -912,10 +953,10 @@ const handlePrintVoucher = async (id: number) => {
                       <p class="ad-card-name">${t.tour_name}</p>
                       <p class="ad-card-meta">${t.category} · ${t.duration}</p>
                       <p class="ad-card-price">From €${Number(t.price).toFixed(
-                        2
+                        2,
                       )}pp</p>
                     </div>
-                  `
+                  `,
                     )
                     .join("")}
                 </div>
