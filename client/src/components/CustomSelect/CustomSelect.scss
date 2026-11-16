@@ -22,13 +22,13 @@
     transition: background 0.15s;
 
     &:hover {
-      background: #f9fafb;
+      background: $gray-100;
     }
 
     @include tablet {
       justify-content: center;
       padding: 1.2rem 0.8rem;
-      font-size: 1.5rem;
+      font-size: $fs-md;
     }
   }
 
@@ -59,7 +59,7 @@
   width: 100%;
   box-shadow: none;
   border-radius: 0;
-  background: #f9fafb;
+  background: $gray-100;
 
   &.open {
     opacity: 1;
@@ -73,7 +73,7 @@
     top: 115%;
     left: 0;
     right: 0;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: $shadow-raised;
     border-radius: 1.2rem;
     background: white;
   }
@@ -81,7 +81,7 @@
 
 .select__option {
   cursor: pointer;
-  font-size: 1.3rem;
+  font-size: $fs-sm;
   line-height: 1;
   padding: 1rem 1.6rem;
   text-transform: capitalize;
@@ -90,10 +90,6 @@
   &:hover {
     background-color: $gray-100;
   }
-
-  @include tablet {
-    font-size: $fs-sm;
-  }
 }
 
 .placeholder {
@@ -101,5 +97,5 @@
 }
 
 .input-active {
-  background: #f9fafb;
+  background: $gray-100;
 }
