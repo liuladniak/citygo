@@ -7,9 +7,17 @@
   margin: $space-large auto;
 
   &-heading {
-    font-size: $fs-4xl;
+    font-size: $fs-2xl;
     color: $main-teal;
     margin-bottom: $space-medium;
+
+    @include tablet {
+      font-size: $fs-4xl;
+    }
+
+    @include desktop {
+      font-size: $fs-5xl;
+    }
   }
 
   &__layout {
@@ -81,7 +89,7 @@
     border: none;
     border-radius: $border-radius-main;
     padding: 1.4rem 3.2rem;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -126,7 +134,7 @@
   }
 
   &__empty-text {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     color: $gray-500;
     max-width: 40rem;
     line-height: 1.6;
@@ -139,7 +147,7 @@
     color: white;
     padding: 1.2rem 3.2rem;
     border-radius: $border-radius-main;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 600;
     text-decoration: none;
     margin-top: 0.8rem;
@@ -206,7 +214,7 @@
   &:focus {
     outline: none;
     border-color: $main-teal;
-    box-shadow: 0 0 0 3px rgba(30, 85, 109, 0.1);
+    box-shadow: $focus-ring;
   }
 
   &--textarea {
@@ -229,7 +237,7 @@
     gap: 0.4rem;
 
     h3 {
-      font-size: 1.1rem;
+      font-size: $fs-xs;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -248,7 +256,7 @@
   background: none;
   border: none;
   color: $main-teal;
-  font-size: 1.3rem;
+  font-size: $fs-sm;
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
@@ -291,9 +299,9 @@
   }
 }
 .cart__error {
-  background: #fdecea;
-  border: 1px solid #f5c2c0;
-  color: #8a1c1c;
+  background: $danger-bg;
+  border: 1px solid $danger-border;
+  color: $danger-text;
   border-radius: $border-radius;
   padding: 1.6rem;
   font-size: $fs-sm;
