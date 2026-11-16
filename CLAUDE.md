@@ -55,6 +55,7 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 - Dashboard typography: Inter (self-hosted via `@fontsource-variable/inter`), fluid type scale and tokens in `dashboard/src/App.css`. Page titles use `page-title`, subtitles `page-description`, section headings `section-title`; do not hand-pick `text-2xl font-bold` on new pages. Keep body text at `text-sm` or larger. Detail pages are built from `Panel`, `DetailList`/`DetailRow` (`components/DetailPanel.tsx`) and `StatusBadge`; start from `pages/BookingDetails.tsx`.
 - Roles come from the `user_roles` table (`requireRole` in `server/middleware/auth.js`). Never decide roles in the client.
 - Dates are `YYYY-MM-DD` strings. Compare them as strings, not with `setHours`, because the VPS runs in UTC.
+- Public site design: `client/DESIGN.md` is the source of truth (type scale, colour tokens, spacing, breakpoints, radius and shadow, components, checklist). Read it before any client UI work and update it in the same PR when a rule changes. The client and dashboard are meant to look different; each follows its own guide.
 
 ## Never
 - No destructive seeder runs against real data. The seeder only touches rows with the seed email domain.
