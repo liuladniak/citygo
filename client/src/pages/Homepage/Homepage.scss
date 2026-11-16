@@ -15,18 +15,11 @@
     }
 
     &__title {
-      font-size: $fs-xl;
-      font-weight: 700;
+      @include heading-2;
       margin-bottom: $space-x-small;
-      line-height: 1.2;
 
       @include tablet {
-        font-size: $fs-3xl;
         margin-bottom: 1.2rem;
-      }
-
-      @include desktop {
-        font-size: $fs-4xl;
       }
     }
 

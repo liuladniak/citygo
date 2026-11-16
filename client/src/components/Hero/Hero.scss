@@ -280,7 +280,7 @@
   }
 
   @include desktop {
-    font-size: 5.4rem;
+    font-size: $fs-display-sm;
   }
 }
 
@@ -350,7 +350,7 @@
 }
 
 .hero-subheading {
-  font-size: 1.5rem;
+  font-size: $fs-md;
   font-weight: 400;
   text-align: center;
   color: $charcoal;
@@ -394,11 +394,11 @@
   }
 
   &:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-raised;
   }
 
   &__eyebrow {
-    font-size: 1.1rem;
+    font-size: $fs-xs;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -414,18 +414,18 @@
   }
 
   &__number {
-    font-size: 6.4rem;
+    font-size: $fs-display-md;
     font-weight: 800;
     color: $main-maroon;
     line-height: 1;
     letter-spacing: -0.2rem;
 
     @include tablet {
-      font-size: 7.2rem;
+      font-size: $fs-display-lg;
     }
 
     @include desktop {
-      font-size: 9.6rem;
+      font-size: $fs-display-xl;
     }
   }
 
@@ -441,7 +441,7 @@
   }
 
   &__desc {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $gray-500;
     line-height: 1.6;
     margin-top: 0.8rem;
@@ -492,7 +492,7 @@
   }
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-raised;
     transition: box-shadow 0.3s ease;
   }
 

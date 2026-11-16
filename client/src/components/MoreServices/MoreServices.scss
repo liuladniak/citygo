@@ -78,18 +78,8 @@
 
 .service {
   &__heading {
+    @include heading-2;
     color: white;
-    font-size: $fs-2xl;
-    font-weight: 700;
-    line-height: 1.2;
-
-    @include tablet {
-      font-size: $fs-3xl;
-    }
-
-    @include desktop {
-      font-size: $fs-4xl;
-    }
   }
 
   &-wrp {
@@ -100,7 +90,7 @@
 
   &__desc {
     color: white;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 400;
     line-height: 1.5;
     max-width: 36rem;

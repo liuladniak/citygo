@@ -56,3 +56,18 @@
   margin: 0 auto;
   padding: 0 1.6rem;
 }
+
+// Section heading (h2): 24px on phones, 28px tablet, 32px desktop.
+@mixin heading-2 {
+  font-size: $fs-2xl;
+  font-weight: 700;
+  line-height: 1.2;
+
+  @include tablet {
+    font-size: $fs-3xl;
+  }
+
+  @include desktop {
+    font-size: $fs-4xl;
+  }
+}
