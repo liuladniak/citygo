@@ -1,5 +1,6 @@
+@use "../../styles/partials/variables" as *;
 .loader-header {
-  font-size: 1.8rem;
+  font-size: $fs-lg;
   font-weight: 600;
 }
 .loader-wrp {

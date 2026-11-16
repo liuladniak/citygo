@@ -21,7 +21,7 @@
 .stat {
   &__number {
     font-weight: 700;
-    font-size: 2.8rem;
+    font-size: $fs-3xl;
     padding: $space-x-small;
 
     @include tablet {
@@ -31,7 +31,7 @@
   }
 
   &__heading {
-    font-size: 1.6rem;
+    font-size: $fs-md;
     font-weight: 700;
 
     @include tablet {
@@ -184,5 +184,5 @@
 
 .about-stats h3 {
   margin-bottom: 0;
-  font-size: 2rem;
+  font-size: $fs-xl;
 }

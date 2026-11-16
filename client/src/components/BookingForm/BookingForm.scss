@@ -300,11 +300,11 @@
   align-items: center;
 
   &__heading {
-    font-size: 2rem;
+    font-size: $fs-xl;
     font-weight: 700;
 
     @include tablet {
-      font-size: 2.4rem;
+      font-size: $fs-2xl;
     }
 
     &-wrp {
@@ -331,7 +331,7 @@
 }
 
 .guest__heading {
-  font-size: 1.6rem;
+  font-size: $fs-md;
   font-weight: 600;
 }
 
@@ -341,7 +341,7 @@
   padding: 1.2rem 1.6rem;
   @include border-radius;
   cursor: pointer;
-  font-size: 1.4rem;
+  font-size: $fs-sm;
   position: relative;
   transition: border-color 0.3s;
 
@@ -384,7 +384,7 @@
   span {
     width: 3rem;
     text-align: center;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-weight: 600;
   }
 
@@ -408,7 +408,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-weight: 700;
     transition: background 0.2s;
 
@@ -439,7 +439,7 @@
     color: $charcoal !important;
     border: none !important;
     border-radius: 3rem !important;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     align-self: center;
     padding: 0.4rem 1.2rem !important;
   }
@@ -456,18 +456,18 @@
   text-align: center;
 
   &__icon {
-    font-size: 3.2rem;
+    font-size: $fs-4xl;
   }
 
   &__title {
-    font-size: 2rem;
+    font-size: $fs-xl;
     font-weight: 700;
     color: $charcoal;
   }
 
   &__message {
-    font-size: 1.4rem;
-    color: #6b7280;
+    font-size: $fs-sm;
+    color: $gray-500;
     line-height: 1.6;
     max-width: 28rem;
   }
@@ -481,7 +481,7 @@
   }
 
   &__link {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     color: $main-teal;
     text-decoration: underline;
     cursor: pointer;

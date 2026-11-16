@@ -14,14 +14,14 @@
 
   &__item {
     background: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
     border-radius: $border-radius;
     overflow: hidden;
   }
 }
 
 .review-details {
-  font-size: 1.4rem;
+  font-size: $fs-sm;
   display: flex;
   gap: $space-small;
   padding: 1.6rem;
@@ -49,7 +49,7 @@
   }
 
   &__heading {
-    font-size: 1.8rem;
+    font-size: $fs-lg;
     font-weight: 700;
     padding: 1.6rem 1.6rem 0;
     color: $charcoal;
@@ -73,7 +73,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #9ca3af;
+    color: $gray-400;
   }
 
   &__edit {
@@ -114,11 +114,11 @@
   gap: 0.8rem;
   background: none;
   border: none;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid $gray-100;
   width: 100%;
   padding: 1.2rem 1.6rem;
   font-size: 1.3rem;
-  color: #9ca3af;
+  color: $gray-400;
   cursor: pointer;
   font-family: inherit;
   transition: color 0.2s, background 0.2s;

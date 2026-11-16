@@ -20,13 +20,13 @@
   }
 
   &-heading--main {
-    font-size: 3.2rem;
+    font-size: $fs-4xl;
     z-index: 0;
     color: #fff;
   }
 
   &__heading {
-    font-size: 2.4rem;
+    font-size: $fs-2xl;
     z-index: 0;
     margin: $space-medium auto;
     @include layout-constrain;
@@ -56,7 +56,7 @@
       display: flex;
       flex-direction: column;
       gap: $space-medium;
-      font-size: 1.6rem;
+      font-size: $fs-md;
     }
 
     &__title {
@@ -85,14 +85,14 @@
 
     &__desc {
       font-size: 1.5rem;
-      color: #4b5563;
+      color: $gray-600;
       line-height: 1.5;
     }
   }
 
   &-faq {
     &__heading {
-      font-size: 2.4rem;
+      font-size: $fs-2xl;
       font-weight: 600;
       margin-bottom: $space-small;
     }
@@ -150,19 +150,19 @@
   }
 
   &__title {
-    font-size: 2.4rem;
+    font-size: $fs-2xl;
     font-weight: 700;
     color: $charcoal;
     margin: 0 0 0.4rem;
 
     @media (max-width: 600px) {
-      font-size: 2rem;
+      font-size: $fs-xl;
     }
   }
 
   &__subtitle {
-    font-size: 1.4rem;
-    color: #6b7280;
+    font-size: $fs-sm;
+    color: $gray-500;
     margin: 0;
   }
 
@@ -196,17 +196,17 @@
   }
 
   &__optional {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     font-weight: 400;
-    color: #9ca3af;
+    color: $gray-400;
     margin-left: 0.4rem;
   }
 
   &__input {
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
     border-radius: 0.8rem;
     padding: 1.1rem 1.4rem;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-family: inherit;
     color: $charcoal;
     width: 100%;
@@ -217,7 +217,7 @@
       box-shadow 0.2s;
 
     &::placeholder {
-      color: #9ca3af;
+      color: $gray-400;
     }
 
     &:focus {
@@ -227,7 +227,7 @@
     }
 
     &--error {
-      border-color: #ef4444;
+      border-color: $danger;
 
       &:focus {
         box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
@@ -253,13 +253,13 @@
   }
 
   &__error {
-    font-size: 1.2rem;
-    color: #ef4444;
+    font-size: $fs-xs;
+    color: $danger;
   }
 
   &__count {
-    font-size: 1.2rem;
-    color: #9ca3af;
+    font-size: $fs-xs;
+    color: $gray-400;
     margin-left: auto;
   }
 
@@ -319,7 +319,7 @@
   }
 
   &__text {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     color: #166534;
     margin: 0;
   }

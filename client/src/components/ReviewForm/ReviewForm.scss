@@ -6,13 +6,13 @@
   flex-direction: column;
   gap: $space-medium;
   padding: $space-medium;
-  border: 1px solid #e5e7eb;
+  border: 1px solid $gray-200;
   @include border-radius;
   background: white;
   margin-bottom: $space-medium;
 
   &__heading {
-    font-size: 1.8rem;
+    font-size: $fs-lg;
     font-weight: 700;
   }
 
@@ -36,7 +36,7 @@
 
   &__optional {
     font-weight: 400;
-    color: #9ca3af;
+    color: $gray-400;
   }
 
   &__input,
@@ -44,7 +44,7 @@
     border: 1px solid #ddd;
     border-radius: $border-radius;
     padding: 1rem 1.4rem;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-family: inherit;
     transition: border-color 0.2s;
     width: 100%;
@@ -58,7 +58,7 @@
 
   &__count {
     font-size: 1.1rem;
-    color: #9ca3af;
+    color: $gray-400;
     text-align: right;
   }
 
@@ -74,7 +74,7 @@
     height: 9rem;
     border-radius: $border-radius;
     overflow: hidden;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
 
     img {
       width: 100%;
@@ -116,7 +116,7 @@
     border-radius: $border-radius;
     font-size: 1.3rem;
     font-weight: 500;
-    color: #6b7280;
+    color: $gray-500;
     cursor: pointer;
     transition: all 0.2s;
     width: fit-content;

@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: $space-x-small;
   padding: $space-medium;
-  border: 1px solid #e5e7eb;
+  border: 1px solid $gray-200;
   @include border-radius;
   background: white;
 
@@ -33,9 +33,9 @@
   }
 
   &__body {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     line-height: 1.7;
-    color: #4b5563;
+    color: $gray-600;
   }
 
   &__photos {
@@ -82,7 +82,7 @@
     gap: 0.2rem;
     margin-top: $space-x-small;
     padding-top: $space-x-small;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid $gray-100;
   }
 
   &__name {
@@ -93,12 +93,12 @@
 
   &__country {
     font-weight: 400;
-    color: #6b7280;
+    color: $gray-500;
   }
 
   &__tour-year {
-    font-size: 1.2rem;
-    color: #9ca3af;
+    font-size: $fs-xs;
+    color: $gray-400;
     font-style: italic;
   }
 }

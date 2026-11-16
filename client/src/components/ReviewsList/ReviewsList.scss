@@ -18,11 +18,11 @@
   }
 
   &__heading {
-    font-size: 2rem;
+    font-size: $fs-xl;
     font-weight: 700;
 
     @include tablet {
-      font-size: 2.4rem;
+      font-size: $fs-2xl;
     }
   }
 
@@ -33,14 +33,14 @@
   }
 
   &__avg {
-    font-size: 1.8rem;
+    font-size: $fs-lg;
     font-weight: 700;
     color: $charcoal;
   }
 
   &__count {
-    font-size: 1.4rem;
-    color: #6b7280;
+    font-size: $fs-sm;
+    color: $gray-500;
   }
 
   &__write-cta {
@@ -53,7 +53,7 @@
     background: $supportive-2;
     border-radius: $border-radius;
     margin-bottom: $space-medium;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
   }
 
   &__write-btn {
@@ -62,7 +62,7 @@
     border: none;
     border-radius: $border-radius-main;
     padding: 0.8rem 2rem;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -84,7 +84,7 @@
 
   &__sort-label {
     font-size: 1.3rem;
-    color: #6b7280;
+    color: $gray-500;
     font-weight: 500;
   }
 
@@ -100,7 +100,7 @@
     border-radius: $border-radius-main;
     background: white;
     color: $charcoal;
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     font-family: inherit;
     cursor: pointer;
     transition: all 0.2s;
@@ -134,8 +134,8 @@
 
   &__empty,
   &__loading {
-    font-size: 1.4rem;
-    color: #6b7280;
+    font-size: $fs-sm;
+    color: $gray-500;
     padding: $space-medium 0;
   }
 
@@ -170,7 +170,7 @@
 
   &__page-info {
     font-size: 1.3rem;
-    color: #6b7280;
+    color: $gray-500;
   }
 
   &__empty-state {
@@ -182,7 +182,7 @@
 
   &__empty-hint {
     font-size: 1.3rem;
-    color: #9ca3af;
+    color: $gray-400;
     line-height: 1.6;
 
     a {

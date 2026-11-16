@@ -15,10 +15,10 @@
   }
 
   &__count {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     font-weight: 500;
-    color: #9ca3af;
-    background: #f3f4f6;
+    color: $gray-400;
+    background: $gray-100;
     border-radius: 10rem;
     padding: 0.2rem 0.8rem;
   }
