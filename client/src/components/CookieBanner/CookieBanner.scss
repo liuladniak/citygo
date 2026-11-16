@@ -7,18 +7,16 @@
   left: 0;
   right: 0;
   z-index: 9000;
-  background: white;
+  background: $main-white;
   border-top: 1px solid $gray-200;
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
-  padding: $space-x-small $space-x-small;
+  box-shadow: $shadow-bar;
+  padding: $space-x-small;
 
   @include tablet {
     padding: $space-x-small $space-medium;
   }
 
-  // on mobile — sits above the MobileBookingBar if visible
-  // MobileBookingBar is z-index 100, banner is 9000 so banner wins
-  // but we add bottom padding compensation on tour pages via body class if needed
+  // z-index 9000 keeps the banner above the MobileBookingBar (100)
 
   &__inner {
     @include layout-constrain;
@@ -40,13 +38,9 @@
   }
 
   &__message {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     line-height: 1.6;
     color: $gray-600;
-
-    @include tablet {
-      font-size: $fs-sm;
-    }
   }
 
   &__link {
@@ -70,9 +64,10 @@
 
   &__btn {
     flex: 1;
+    min-height: 4rem;
     padding: 1rem 1.6rem;
-    border-radius: $border-radius-main;
-    font-size: 1.3rem;
+    border-radius: $border-radius;
+    font-size: $fs-sm;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
@@ -89,7 +84,7 @@
     &--accept {
       background: $main-teal;
       border: 1px solid $main-teal;
-      color: white;
+      color: $main-white;
 
       &:hover {
         opacity: 0.88;
