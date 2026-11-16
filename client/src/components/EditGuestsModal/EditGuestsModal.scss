@@ -2,7 +2,7 @@
 @use "../../styles/partials/variables" as *;
 
 .guest-field {
-  border: 1px solid #ccc;
+  border: 1px solid $gray-300;
 }
 
 .modal-guest-details {

@@ -8,12 +8,12 @@
 }
 
 .disclaimer-alert {
-  background: #fff8e1;
-  border: 1px solid #f59e0b;
+  background: $warning-bg;
+  border: 1px solid $warning-border;
   border-radius: $border-radius;
   padding: 1.6rem;
-  font-size: 1.3rem;
-  color: #92400e;
+  font-size: $fs-sm;
+  color: $warning-text;
   line-height: 1.5;
 
   &__heading {
@@ -24,7 +24,7 @@
 }
 
 .test-card-note {
-  font-size: 1.3rem;
+  font-size: $fs-sm;
   color: $gray-500;
   display: flex;
   flex-direction: column;
@@ -44,12 +44,12 @@
   font-size: $fs-sm;
   text-align: center;
   padding: 1.6rem;
-  background: #f0fdf4;
+  background: $success-bg;
   border-radius: $border-radius;
 }
 
 .error {
   color: $main-maroon;
-  font-size: 1.3rem;
+  font-size: $fs-sm;
   text-align: center;
 }

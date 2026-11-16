@@ -83,6 +83,15 @@ $gray-600: #4b5563;
 // FEEDBACK
 $danger: #ef4444;
 
+// Notice banners (warning, error and success tints)
+$warning-bg: #fff8e1;
+$warning-border: #f59e0b;
+$warning-text: #92400e;
+$danger-bg: #fdecea;
+$danger-border: #f5c2c0;
+$danger-text: #8a1c1c;
+$success-bg: #f0fdf4;
+
 // SHADOWS AND FOCUS
 $shadow-card: 0 2px 10px rgba(0, 0, 0, 0.1);
 $shadow-raised: 0 8px 24px rgba(0, 0, 0, 0.12);
