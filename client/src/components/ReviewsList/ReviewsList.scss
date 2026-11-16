@@ -83,7 +83,7 @@
   }
 
   &__sort-label {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $gray-500;
     font-weight: 500;
   }
@@ -96,7 +96,7 @@
 
   &__sort-btn {
     padding: 0.4rem 1.2rem;
-    border: 1px solid #ddd;
+    border: 1px solid $gray-200;
     border-radius: $border-radius-main;
     background: white;
     color: $charcoal;
@@ -149,10 +149,10 @@
 
   &__page-btn {
     background: white;
-    border: 1px solid #ddd;
+    border: 1px solid $gray-200;
     border-radius: $border-radius;
     padding: 0.8rem 1.6rem;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-family: inherit;
     cursor: pointer;
     transition: all 0.2s;
@@ -169,7 +169,7 @@
   }
 
   &__page-info {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $gray-500;
   }
 
@@ -181,8 +181,8 @@
   }
 
   &__empty-hint {
-    font-size: 1.3rem;
-    color: $gray-400;
+    font-size: $fs-sm;
+    color: $gray-500;
     line-height: 1.6;
 
     a {
