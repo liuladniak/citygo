@@ -25,7 +25,7 @@
     color: $accent-4;
   }
   &--empty {
-    color: #d1d5db;
+    color: $gray-300;
   }
 
   &--input {
@@ -34,7 +34,7 @@
     cursor: pointer;
     padding: 0.2rem;
     font-size: inherit;
-    color: #d1d5db;
+    color: $gray-300;
     transition:
       color 0.15s ease,
       transform 0.1s ease;

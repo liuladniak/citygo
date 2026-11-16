@@ -78,6 +78,7 @@ carry the action. Avoid 800.
 | Role | Size | Weight |
 |---|---|---|
 | Page title (h1) | `$fs-2xl` on phones, `$fs-4xl` from tablet, `$fs-5xl` from desktop (as on Tours and About) | 700 |
+| Detail-page title (h1 that is a long name, such as a tour) | `$fs-xl` on phones, `$fs-3xl` from tablet, `$fs-4xl` from desktop (as on Tour details) | 700 |
 | Section heading (h2) | `heading-2` mixin: `$fs-2xl`, `$fs-3xl` from tablet, `$fs-4xl` from desktop | 700 |
 | Sub-heading (h3) | `$fs-2xl` (mobile `$fs-xl`) | 600 |
 | Card and panel title | `$fs-md` or `$fs-xl` | 600–700 |
@@ -124,7 +125,8 @@ raw values:
 | Token | Value | Replaces | Use |
 |---|---|---|---|
 | `$gray-100` | #f3f4f6 | #f3f4f6, #f0f0f0, #f9fafb | Subtle fills |
-| `$gray-200` | #e5e7eb | #e5e7eb, #e0e0e0, #e2e8f0, #d1d5db | Borders, dividers |
+| `$gray-200` | #e5e7eb | #e5e7eb, #e0e0e0, #e2e8f0 | Borders, dividers |
+| `$gray-300` | #d1d5db | #d1d5db, #ccc | Empty rating stars, borders of small round controls |
 | `$gray-400` | #9ca3af | #9ca3af, #94a3b8 | Placeholders, disabled |
 | `$gray-500` | #6b7280 | #6b7280 | Secondary text (AA on white) |
 | `$gray-600` | #4b5563 | #4b5563 | Strong secondary text |
@@ -134,6 +136,8 @@ raw values:
 - One call-to-action colour per screen area. Do not use yellow for anything else.
 - Error red is `#ef4444` (used in Login and Help & Contact today); add it as `$danger` and use it for form errors and danger text.
 - Text on teal is white; text on yellow is charcoal.
+- Pure black (`#000`) is allowed as the backdrop behind photos (image gallery and
+  full-screen viewer) and nowhere else.
 - Never convey meaning by colour alone (errors also get text and an icon).
 
 ---
@@ -180,6 +184,11 @@ Three shadows only (to add as tokens):
 | `$shadow-card` | `0 2px 10px rgba(0,0,0,.1)` | Resting cards |
 | `$shadow-raised` | `0 8px 24px rgba(0,0,0,.12)` | Hover, dropdowns, modals |
 | `$focus-ring` | `0 0 0 3px rgba(30,85,109,.25)` | Keyboard focus |
+
+One exception: a bar fixed to the bottom of the screen casts its shadow upward
+(`0 -4px 12px rgba(0,0,0,.08)` on `MobileBookingBar`), which the tokens above cannot
+express. A thin divider under in-flow bars (the tour tab bar) is a `$gray-200`
+border, not a shadow.
 
 ---
 
@@ -261,25 +270,27 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 159 declarations, 17 raw values |
-| Text below 12px (`1rem`, `1.1rem`) | 24 uses |
-| Hex colours in component SCSS (target: tokens only) | 54 distinct, 145 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 53 uses, 36 distinct variants |
-| Grey text lighter than `$gray-500` (fails AA on white) | up to 36 uses of `$gray-400` (placeholders and icons are allowed) |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 141 declarations, 17 raw values |
+| Text below 12px (`1rem`, `1.1rem`) | 23 uses |
+| Hex colours in component SCSS (target: tokens only) | 51 distinct, 128 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 46 uses, 31 distinct variants |
+| Grey text lighter than `$gray-500` (fails AA on white) | up to 31 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
 | Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
 
 Counts are of live SCSS (comment lines excluded, `_variables.scss` excluded), last
-measured after the Home migration. The tokens exist and the exact matches are
+measured after the Tour details migration. The tokens exist and the exact matches are
 swapped in. What remains needs a visual decision per page: snapping odd sizes
 (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
-Order of work: tokens are done, and **Home and Tours are migrated** (Tours includes
-`TourCard`, the filters, `CustomSelect` and the tour skeleton card). Next, page by
-page: Tour details, Booking, then the layout pieces (Header, Footer, Subscribe,
-cookie banner) and the shared `Button`, then the Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
-at 365px, 768px and 1281px.
+Order of work: tokens are done, and **Home, Tours and Tour details are migrated**
+(Tours includes `TourCard`, the filters, `CustomSelect` and the tour skeleton card;
+Tour details includes the booking form, mobile booking bar, gallery, reviews, star
+rating and Why Us). Next, page by page: Booking (cart and checkout), then the layout
+pieces (Header, Footer, Subscribe, cookie banner) and the shared `Button` and
+`Modal`, then the Roboto and root-size cleanups. Each page is its own PR with before
+and after screenshots at 365px, 768px and 1281px.
 
 ## 9. Decisions
 
