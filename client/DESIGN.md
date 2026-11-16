@@ -77,7 +77,7 @@ carry the action. Avoid 800.
 
 | Role | Size | Weight |
 |---|---|---|
-| Page title (h1) | `$fs-5xl` (mobile `$fs-4xl`) | 700 |
+| Page title (h1) | `$fs-2xl` on phones, `$fs-4xl` from tablet, `$fs-5xl` from desktop (as on Tours and About) | 700 |
 | Section heading (h2) | `heading-2` mixin: `$fs-2xl`, `$fs-3xl` from tablet, `$fs-4xl` from desktop | 700 |
 | Sub-heading (h3) | `$fs-2xl` (mobile `$fs-xl`) | 600 |
 | Card and panel title | `$fs-md` or `$fs-xl` | 600–700 |
@@ -113,7 +113,8 @@ Only the tokens below. No new hex values in component SCSS.
 | `$success` | #378712 | Success text and confirmation. |
 
 Category tints `$guided`, `$culinary`, `$experiences` are for tour-category chips
-only.
+only, with `$guided-text`, `$culinary-text` and `$experiences-text` for the text
+on them.
 
 ### Neutrals (to add)
 
@@ -260,10 +261,11 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 172 declarations, 17 raw values |
-| Text below 12px (`1rem`, `1.1rem`) | 27 uses |
-| Hex colours in component SCSS (target: tokens only) | 64 distinct, 173 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 57 uses, 37 distinct variants |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 159 declarations, 17 raw values |
+| Text below 12px (`1rem`, `1.1rem`) | 24 uses |
+| Hex colours in component SCSS (target: tokens only) | 54 distinct, 145 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 53 uses, 36 distinct variants |
+| Grey text lighter than `$gray-500` (fails AA on white) | up to 36 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
 | Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
@@ -273,10 +275,10 @@ measured after the Home migration. The tokens exist and the exact matches are
 swapped in. What remains needs a visual decision per page: snapping odd sizes
 (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
-Order of work: tokens are done and **Home is migrated** (hero, tiles, map, service
-cards, contact block, spotlight). Next, page by page: Tours, Tour details, Booking,
-then the layout pieces (Header, Footer, Subscribe, cookie banner), then the Roboto
-and root-size cleanups. Each page is its own PR with before and after screenshots
+Order of work: tokens are done, and **Home and Tours are migrated** (Tours includes
+`TourCard`, the filters, `CustomSelect` and the tour skeleton card). Next, page by
+page: Tour details, Booking, then the layout pieces (Header, Footer, Subscribe,
+cookie banner) and the shared `Button`, then the Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
 at 365px, 768px and 1281px.
 
 ## 9. Decisions
