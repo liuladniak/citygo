@@ -158,6 +158,7 @@ const Destinations = () => {
               <TourCard
                 key={tour.id}
                 id={tour.id}
+                slug={tour.slug}
                 tour_name={tour.tour_name}
                 tour_thumbnail={tour.images[0]}
                 highlights={tour.highlights}
