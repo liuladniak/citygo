@@ -44,17 +44,7 @@
   }
 
   &-title {
-    font-size: $fs-2xl;
-    font-weight: 700;
-    line-height: 1.2;
-
-    @include tablet {
-      font-size: $fs-3xl;
-    }
-
-    @include desktop {
-      font-size: $fs-4xl;
-    }
+    @include heading-2;
   }
 
   &-description {
@@ -80,7 +70,7 @@
 
       @include tablet {
         padding: 1.2rem 2.4rem;
-        font-size: 1.5rem;
+        font-size: $fs-md;
       }
     }
   }
