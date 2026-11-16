@@ -27,7 +27,7 @@
     border-left: none;
     border-right: none;
     border-top: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-raised;
 
     .filters__panel {
       max-height: 70vh;
@@ -44,19 +44,19 @@
     background: white;
     border: none;
     font-family: $font-main;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 600;
     color: $charcoal;
     cursor: pointer;
     transition: background 0.2s;
 
     &:hover {
-      background: #f9fafb;
+      background: $gray-100;
     }
   }
 
   &__toggle-arrow {
-    font-size: 1rem;
+    font-size: $fs-xs;
     color: $gray-400;
   }
 

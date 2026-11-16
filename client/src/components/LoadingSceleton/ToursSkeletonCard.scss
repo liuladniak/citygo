@@ -1,6 +1,8 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
+$shimmer: linear-gradient(100deg, $gray-200 40%, $gray-100 50%, $gray-200 60%);
+
 .skeleton-cards {
   display: flex;
   flex-wrap: wrap;
@@ -15,13 +17,13 @@
 .skeleton-card {
   flex-basis: 37.8rem;
   height: 320px;
-  background: #f3f3f3;
+  background: $gray-100;
   border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow-card;
   overflow: hidden;
 }
 
@@ -29,7 +31,7 @@
   width: 100%;
   height: 160px;
   border-radius: 8px;
-  background: linear-gradient(100deg, #e0e0e0 40%, #f0f0f0 50%, #e0e0e0 60%);
+  background: $shimmer;
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
 }
@@ -43,7 +45,7 @@
 .skeleton-title {
   width: 80%;
   height: 22px;
-  background: linear-gradient(100deg, #e0e0e0 40%, #f0f0f0 50%, #e0e0e0 60%);
+  background: $shimmer;
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
   border-radius: 4px;
@@ -52,7 +54,7 @@
 .skeleton-text {
   width: 100%;
   height: 14px;
-  background: linear-gradient(100deg, #e0e0e0 40%, #f0f0f0 50%, #e0e0e0 60%);
+  background: $shimmer;
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
   border-radius: 4px;
