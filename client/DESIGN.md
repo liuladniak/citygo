@@ -288,10 +288,10 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 119 declarations, 17 raw values |
-| Text below 12px (`1rem`, `1.1rem`) | 21 uses |
-| Hex colours in component SCSS (target: tokens only) | 44 distinct, 105 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 34 uses, 26 distinct variants |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 118 declarations, 17 raw values |
+| Text below 12px (`1rem`, `1.1rem`) | 20 uses |
+| Hex colours in component SCSS (target: tokens only) | 43 distinct, 102 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 32 uses, 24 distinct variants |
 | Grey text lighter than `$gray-500` (fails AA on white) | up to 29 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
@@ -303,13 +303,13 @@ swapped in. What remains needs a visual decision per page: snapping odd sizes
 (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
 Order of work: tokens are done, and **Home, Tours, Tour details and Booking are
-migrated, and so are the shared `Button` and `Modal`, the footer, the newsletter
-block and the cookie banner** (Tours includes `TourCard`, the filters, `CustomSelect`
+migrated, and so are the shared `Button` and `Modal`, the header, the footer, the
+newsletter block and the cookie banner** (Tours includes `TourCard`, the filters, `CustomSelect`
 and the tour skeleton card; Tour details includes the booking form, mobile booking
 bar, gallery, reviews, star rating and Why Us; Booking is the cart, checkout form,
-order summary and cart item card). Next: the Header, then the remaining pages
-(Destinations, Wishlist, Profile, Manage bookings, content pages), then the Roboto and
-root-size cleanups. Each page is its own PR with before and after screenshots at
+order summary and cart item card). Next: the remaining pages (Destinations,
+Wishlist, Profile, Manage bookings, content pages), then the Roboto and root-size
+cleanups. Each page is its own PR with before and after screenshots at
 365px, 768px and 1281px.
 
 ## 9. Decisions
