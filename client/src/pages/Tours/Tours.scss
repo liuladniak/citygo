@@ -17,7 +17,7 @@
 
   &-type {
     font-size: $fs-xs;
-    color: $gray-400;
+    color: $gray-500;
     text-transform: uppercase;
     letter-spacing: 0.08em;
 
@@ -94,17 +94,17 @@
     &-r {
       flex: 1;
       width: 100%;
-      border-top: 1px solid #ecedeb;
+      border-top: 1px solid $gray-200;
     }
 
     @include desktop-s {
       border-top: none;
-      border-left: 1px solid #ecedeb;
+      border-left: 1px solid $gray-200;
     }
 
     &__select-wrp {
       flex: 1;
-      border-bottom: 1px solid #ecedeb;
+      border-bottom: 1px solid $gray-200;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -112,7 +112,7 @@
 
       @include tablet {
         border-bottom: none;
-        border-right: 1px solid #ecedeb;
+        border-right: 1px solid $gray-200;
         min-height: 5.6rem;
 
         &:last-child {
@@ -176,7 +176,7 @@
     border: 1px solid $supportive-4;
     border-radius: $border-radius-main;
     padding: 0.4rem 1.2rem;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 500;
 
     &__close {
@@ -192,7 +192,7 @@
 
     &--reset {
       background: none;
-      border: 1px solid #ddd;
+      border: 1px solid $gray-200;
       color: $gray-500;
       cursor: pointer;
       font-family: inherit;
@@ -206,8 +206,8 @@
   }
 
   &-filter__count {
-    font-size: 1.3rem;
-    color: $gray-400;
+    font-size: $fs-sm;
+    color: $gray-500;
     white-space: nowrap;
   }
 
@@ -235,7 +235,7 @@
     color: $gray-500;
     font-size: $fs-md;
     text-align: center;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $gray-200;
     margin-bottom: $space-medium;
   }
 
@@ -272,13 +272,13 @@
       span {
         font-size: $fs-xs;
         font-weight: 700;
-        color: $gray-400;
+        color: $gray-500;
         white-space: nowrap;
         text-transform: uppercase;
         letter-spacing: 0.08em;
 
         @include tablet {
-          font-size: 1.3rem;
+          font-size: $fs-sm;
         }
       }
     }
@@ -300,8 +300,8 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      background-color: #e9eef0;
-      font-size: 1.3rem;
+      background-color: $supportive-2;
+      font-size: $fs-sm;
       font-weight: 600;
       transition: background-color 0.3s;
 
@@ -311,7 +311,7 @@
       }
 
       &:hover:not(:disabled) {
-        background-color: #bcccd3;
+        background-color: $supportive-4;
       }
 
       &:disabled {
