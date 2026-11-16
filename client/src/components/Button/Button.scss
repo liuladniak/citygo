@@ -186,6 +186,7 @@
     color: $main-white;
     flex-shrink: 0;
     white-space: nowrap;
+    border-radius: $border-radius-main;
     padding: 1rem 1.8rem;
     font-size: $fs-sm;
     height: auto;
@@ -193,6 +194,7 @@
     @include tablet {
       padding: 1.2rem 2.8rem;
       font-size: $fs-md;
+      border-radius: $border-radius;
     }
 
     .btn__text--subscribe {

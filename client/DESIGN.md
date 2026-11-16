@@ -128,6 +128,9 @@ no other tints. Each notice has a text, so colour is never the only signal.
 | Error (payment or pricing failed) | `$danger-bg` | `$danger-border` | `$danger-text` |
 | Success (payment confirmed) | `$success-bg` | none | `$success` |
 
+Short messages under a field or form (newsletter, login, contact) are text only:
+`$success-text` for confirmations and `$error-text` for errors, both AA on white.
+
 ### Neutrals (to add)
 
 Greys are currently hard-coded about 230 times. Add this ramp and replace the
@@ -190,18 +193,20 @@ Mobile first, with the mixins only (`@include tablet { … }`). No hand-written
 | Hero and large feature containers | `$border-radius-main` (3rem) |
 | Pills, avatars | full (`10rem` or `50%`) |
 
-Three shadows only (to add as tokens):
+Three shadows, plus one for fixed bottom bars:
 
 | Token | Value | Use |
 |---|---|---|
 | `$shadow-card` | `0 2px 10px rgba(0,0,0,.1)` | Resting cards |
 | `$shadow-raised` | `0 8px 24px rgba(0,0,0,.12)` | Hover, dropdowns, modals |
 | `$focus-ring` | `0 0 0 3px rgba(30,85,109,.25)` | Keyboard focus |
+| `$shadow-bar` | `0 -4px 12px rgba(0,0,0,.08)` | Bars fixed to the bottom of the screen (`MobileBookingBar`, cookie banner) |
 
-One exception: a bar fixed to the bottom of the screen casts its shadow upward
-(`0 -4px 12px rgba(0,0,0,.08)` on `MobileBookingBar`), which the tokens above cannot
-express. A thin divider under in-flow bars (the tour tab bar) is a `$gray-200`
-border, not a shadow.
+A bar fixed to the bottom of the screen casts its shadow upward, which the card and
+raised shadows cannot express, so it has its own token. A thin divider under in-flow
+bars (the tour tab bar) is a `$gray-200` border, not a shadow. A form field that
+removes its outline (the newsletter pill) shows `$focus-ring` on the wrapper with
+`:focus-within` instead.
 
 ---
 
@@ -283,10 +288,10 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 124 declarations, 17 raw values |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 119 declarations, 17 raw values |
 | Text below 12px (`1rem`, `1.1rem`) | 21 uses |
-| Hex colours in component SCSS (target: tokens only) | 44 distinct, 108 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 37 uses, 29 distinct variants |
+| Hex colours in component SCSS (target: tokens only) | 44 distinct, 105 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 34 uses, 26 distinct variants |
 | Grey text lighter than `$gray-500` (fails AA on white) | up to 29 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
@@ -298,14 +303,14 @@ swapped in. What remains needs a visual decision per page: snapping odd sizes
 (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
 Order of work: tokens are done, and **Home, Tours, Tour details and Booking are
-migrated, and so are the shared `Button` and `Modal`** (Tours includes `TourCard`, the filters, `CustomSelect` and the tour
-skeleton card; Tour details includes the booking form, mobile booking bar, gallery,
-reviews, star rating and Why Us; Booking is the cart, checkout form, order summary
-and cart item card). Next: the layout pieces (Header, Footer, Subscribe, cookie
-banner), then the remaining pages (Destinations,
-Wishlist, Profile, Manage bookings, content pages), then the Roboto and root-size
-cleanups. Each page is its own PR with before and after screenshots at 365px, 768px
-and 1281px.
+migrated, and so are the shared `Button` and `Modal`, the footer, the newsletter
+block and the cookie banner** (Tours includes `TourCard`, the filters, `CustomSelect`
+and the tour skeleton card; Tour details includes the booking form, mobile booking
+bar, gallery, reviews, star rating and Why Us; Booking is the cart, checkout form,
+order summary and cart item card). Next: the Header, then the remaining pages
+(Destinations, Wishlist, Profile, Manage bookings, content pages), then the Roboto and
+root-size cleanups. Each page is its own PR with before and after screenshots at
+365px, 768px and 1281px.
 
 ## 9. Decisions
 
