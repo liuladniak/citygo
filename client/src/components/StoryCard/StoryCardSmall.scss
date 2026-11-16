@@ -21,12 +21,12 @@
   }
 
   &-tag {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     color: $main-teal;
   }
 
   &-heading {
-    font-size: 1.6rem;
+    font-size: $fs-md;
   }
 
   &-timestamp {

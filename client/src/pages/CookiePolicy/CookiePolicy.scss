@@ -9,11 +9,11 @@
   &__header {
     margin-bottom: $space-large;
     padding-bottom: $space-medium;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid $gray-200;
   }
 
   &__title {
-    font-size: 2.8rem;
+    font-size: $fs-3xl;
     font-weight: 700;
     margin-bottom: 0.8rem;
 
@@ -24,7 +24,7 @@
 
   &__updated {
     font-size: 1.3rem;
-    color: #9ca3af;
+    color: $gray-400;
   }
 
   &__section {
@@ -33,19 +33,19 @@
     p {
       font-size: 1.5rem;
       line-height: 1.8;
-      color: #4b5563;
+      color: $gray-600;
       margin-top: $space-x-small;
     }
   }
 
   &__heading {
-    font-size: 1.8rem;
+    font-size: $fs-lg;
     font-weight: 700;
     color: $charcoal;
     margin-bottom: $space-x-small;
 
     @include tablet {
-      font-size: 2rem;
+      font-size: $fs-xl;
     }
   }
 
@@ -67,7 +67,7 @@
     display: none;
     overflow-x: auto;
     margin-top: $space-medium;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
     border-radius: $border-radius;
 
     @include tablet {
@@ -78,7 +78,7 @@
   &__table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     min-width: 60rem;
 
     th {
@@ -88,13 +88,13 @@
       font-weight: 700;
       color: $charcoal;
       white-space: nowrap;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid $gray-200;
     }
 
     td {
       padding: 1.2rem 1.6rem;
-      border-bottom: 1px solid #f3f4f6;
-      color: #4b5563;
+      border-bottom: 1px solid $gray-100;
+      color: $gray-600;
       line-height: 1.6;
       vertical-align: top;
 
@@ -109,8 +109,8 @@
 
     code {
       font-family: monospace;
-      font-size: 1.2rem;
-      background: #f3f4f6;
+      font-size: $fs-xs;
+      background: $gray-100;
       padding: 0.2rem 0.6rem;
       border-radius: 0.4rem;
       color: $charcoal;
@@ -130,7 +130,7 @@
   }
 
   &__card {
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
     border-radius: $border-radius;
     padding: $space-x-small;
     display: flex;
@@ -140,14 +140,14 @@
     p {
       margin: 0;
       font-size: 1.3rem;
-      color: #4b5563;
+      color: $gray-600;
       line-height: 1.6;
     }
 
     code {
       font-family: monospace;
-      font-size: 1.2rem;
-      background: #f3f4f6;
+      font-size: $fs-xs;
+      background: $gray-100;
       padding: 0.2rem 0.6rem;
       border-radius: 0.4rem;
       color: $charcoal;
@@ -166,10 +166,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    font-size: 1.2rem;
-    color: #6b7280;
+    font-size: $fs-xs;
+    color: $gray-500;
     padding-top: 0.4rem;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid $gray-100;
   }
 
   // ─── browser links ─────────────────────────────────────────────────────────
@@ -181,7 +181,7 @@
     gap: 0.8rem;
     font-size: 1.5rem;
     line-height: 1.7;
-    color: #4b5563;
+    color: $gray-600;
     list-style: disc;
 
     strong {
@@ -204,7 +204,7 @@
     }
 
     li a {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       color: $main-teal;
       text-decoration: underline;
       text-underline-offset: 0.2rem;

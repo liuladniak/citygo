@@ -8,7 +8,7 @@
   right: 0;
   z-index: 9000;
   background: white;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid $gray-200;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
   padding: $space-x-small $space-x-small;
 
@@ -42,10 +42,10 @@
   &__message {
     font-size: 1.3rem;
     line-height: 1.6;
-    color: #4b5563;
+    color: $gray-600;
 
     @include tablet {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
     }
   }
 

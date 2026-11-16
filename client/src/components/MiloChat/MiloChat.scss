@@ -210,7 +210,7 @@ $milo-radius: 1.6rem;
 .message-bubble {
   max-width: 82%;
   padding: 1rem 1.4rem;
-  font-size: 1.4rem;
+  font-size: $fs-sm;
   line-height: 1.6;
   border-radius: 1.4rem;
   white-space: pre-line;
@@ -311,7 +311,7 @@ $milo-radius: 1.6rem;
     padding: 1rem 1.6rem;
     border-radius: 10rem;
     border: 1.5px solid #e2e8f0;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-family: inherit;
     outline: none;
     background: $milo-surface-2;
@@ -340,7 +340,7 @@ $milo-radius: 1.6rem;
 .milo-limit-hint {
   margin: 0.6rem 0 0;
   padding: 0 1.2rem;
-  font-size: 1.2rem;
+  font-size: $fs-xs;
   color: #64748b;
 
   &--max {

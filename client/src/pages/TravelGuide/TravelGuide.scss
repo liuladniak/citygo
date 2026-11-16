@@ -18,8 +18,8 @@
     padding: $space-medium 0 $space-large;
 
     &__info {
-      font-size: 1.4rem;
-      color: #6b7280;
+      font-size: $fs-sm;
+      color: $gray-500;
     }
   }
 
@@ -35,7 +35,7 @@
     border-radius: $border-radius-main;
     border: 1px solid #ddd;
     background: white;
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
@@ -89,7 +89,7 @@
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      box-shadow: $shadow-raised;
     }
 
     &__img {
@@ -138,13 +138,13 @@
       line-height: 1.4;
 
       @include tablet {
-        font-size: 1.6rem;
+        font-size: $fs-md;
       }
     }
 
     &__excerpt {
       font-size: 1.3rem;
-      color: #6b7280;
+      color: $gray-500;
       line-height: 1.5;
       flex: 1;
       display: -webkit-box;
@@ -154,8 +154,8 @@
     }
 
     &__meta {
-      font-size: 1.2rem;
-      color: #9ca3af;
+      font-size: $fs-xs;
+      color: $gray-400;
       margin-top: 0.4rem;
     }
   }

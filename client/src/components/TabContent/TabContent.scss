@@ -7,7 +7,7 @@
   }
 
   &-heading {
-    font-size: 2rem;
+    font-size: $fs-xl;
     font-weight: 700;
     color: $charcoal;
     margin-bottom: 0.4rem;
@@ -15,7 +15,7 @@
 
   &-subheading {
     font-size: 1.3rem;
-    color: #6b7280;
+    color: $gray-500;
     font-weight: 400;
   }
 
@@ -51,7 +51,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.07em;
-      color: #6b7280;
+      color: $gray-500;
     }
 
     &__action {
@@ -137,13 +137,13 @@
 }
 
 .field__label {
-  font-size: 1.2rem;
+  font-size: $fs-xs;
   font-weight: 500;
   color: #94a3b8;
   transition: color 0.15s ease;
 
   .is-editing & {
-    color: #6b7280;
+    color: $gray-500;
   }
 }
 
@@ -153,7 +153,7 @@
   border: 1.5px solid transparent;
   border-radius: 0.6rem;
   font-family: $font-main;
-  font-size: 1.4rem;
+  font-size: $fs-sm;
   font-weight: 500;
   color: $charcoal;
   background-color: transparent;
@@ -170,7 +170,7 @@
     color: $charcoal;
 
     &::placeholder {
-      color: #9ca3af;
+      color: $gray-400;
       font-weight: 400;
     }
 
@@ -197,16 +197,16 @@
     align-items: center;
     height: 4rem;
     padding: 0;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-weight: 400;
-    color: #9ca3af;
+    color: $gray-400;
     border: none;
     background: transparent;
     width: auto;
   }
 
   &--empty {
-    color: #9ca3af;
+    color: $gray-400;
     font-weight: 400;
   }
 }

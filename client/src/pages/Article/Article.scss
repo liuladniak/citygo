@@ -38,7 +38,7 @@
 
     &__category {
       display: inline-block;
-      font-size: 1.2rem;
+      font-size: $fs-xs;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -47,7 +47,7 @@
     }
 
     &__title {
-      font-size: 4rem;
+      font-size: $fs-5xl;
       font-weight: 700;
       line-height: 1.2;
       max-width: 80rem;
@@ -73,12 +73,12 @@
     }
 
     &__author {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       font-weight: 600;
     }
 
     &__date {
-      font-size: 1.2rem;
+      font-size: $fs-xs;
       opacity: 0.75;
     }
   }
@@ -92,22 +92,22 @@
     }
 
     &__lead {
-      font-size: 2rem;
+      font-size: $fs-xl;
       line-height: 1.6;
       color: $charcoal;
       font-weight: 400;
       margin-bottom: $space-medium;
       padding-bottom: $space-medium;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid $gray-200;
     }
 
     &__content {
-      font-size: 1.6rem;
+      font-size: $fs-md;
       line-height: 1.8;
       color: $charcoal;
 
       h2 {
-        font-size: 2.8rem;
+        font-size: $fs-3xl;
         font-weight: 700;
         margin: $space-medium 0 $space-x-small;
       }
@@ -144,7 +144,7 @@
         background: $supportive-1;
         border-radius: 0 $border-radius $border-radius 0;
         font-style: italic;
-        font-size: 1.8rem;
+        font-size: $fs-lg;
       }
 
       .article-tip {
@@ -155,7 +155,7 @@
         margin: $space-medium 0;
 
         h3 {
-          font-size: 1.6rem;
+          font-size: $fs-md;
           font-weight: 700;
           margin-bottom: 0.8rem;
           color: $main-maroon;
@@ -188,8 +188,8 @@
       }
 
       figcaption {
-        font-size: 1.2rem;
-        color: #6b7280;
+        font-size: $fs-xs;
+        color: $gray-500;
         margin-top: 0.8rem;
         text-align: center;
         font-style: italic;
@@ -206,7 +206,7 @@
     }
 
     &__heading {
-      font-size: 2.4rem;
+      font-size: $fs-2xl;
       font-weight: 700;
       margin-bottom: $space-medium;
     }
@@ -265,7 +265,7 @@
     }
 
     &__title {
-      font-size: 1.6rem;
+      font-size: $fs-md;
       font-weight: 600;
       margin: 0.6rem 0;
       line-height: 1.4;
@@ -273,7 +273,7 @@
 
     &__desc {
       font-size: 1.3rem;
-      color: #6b7280;
+      color: $gray-500;
       line-height: 1.5;
     }
   }
@@ -283,7 +283,7 @@
     padding: $space-medium 0;
 
     &__link {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       color: $main-teal;
       text-decoration: none;
       font-weight: 500;

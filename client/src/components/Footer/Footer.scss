@@ -7,7 +7,7 @@
   flex-direction: column;
   margin: $space-large 0 0;
   padding: $space-x-small;
-  font-size: 1.4rem;
+  font-size: $fs-sm;
   gap: $space-medium;
   width: 100%;
   @include layout-constrain;
@@ -26,7 +26,7 @@
     background-color: $main-teal;
   }
   &-logo-link {
-    font-size: 3.2rem;
+    font-size: $fs-4xl;
   }
 
   &-ist-logo {
@@ -100,11 +100,11 @@
 .credit {
   color: white;
   font-weight: 600;
-  font-size: 1.6rem;
+  font-size: $fs-md;
   text-align: center;
 }
 .disclaimer {
-  font-size: 1.6rem;
+  font-size: $fs-md;
   font-weight: 600;
   text-align: center;
   margin: $space-medium;
@@ -115,7 +115,7 @@
 .copy {
   color: white;
   font-weight: 600;
-  font-size: 1.6rem;
+  font-size: $fs-md;
   text-align: center;
   margin: $space-medium;
   @include tablet {

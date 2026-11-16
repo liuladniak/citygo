@@ -129,7 +129,7 @@
   right: 0;
   z-index: 200;
   background: white;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid $gray-200;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -148,19 +148,19 @@
   }
 
   &__price-main {
-    font-size: 1.6rem;
+    font-size: $fs-md;
     font-weight: 700;
     color: $charcoal;
   }
 
   &__price-old {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     text-decoration: line-through;
-    color: #9ca3af;
+    color: $gray-400;
   }
 
   &__price-new {
-    font-size: 1.6rem;
+    font-size: $fs-md;
     font-weight: 700;
     color: $success;
   }
@@ -211,12 +211,12 @@
     position: absolute;
     top: 1.2rem;
     right: 1.2rem;
-    background: #f3f4f6;
+    background: $gray-100;
     border: none;
     border-radius: 50%;
     width: 3.2rem;
     height: 3.2rem;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -224,7 +224,7 @@
     transition: background 0.2s;
 
     &:hover {
-      background: #e5e7eb;
+      background: $gray-200;
     }
   }
 }

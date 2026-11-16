@@ -10,7 +10,7 @@
   }
 
   &--mobile {
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
     @include border-radius;
     overflow: hidden;
     background: white;
@@ -57,11 +57,11 @@
 
   &__toggle-arrow {
     font-size: 1rem;
-    color: #9ca3af;
+    color: $gray-400;
   }
 
   &__panel {
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid $gray-200;
     background: white;
   }
 

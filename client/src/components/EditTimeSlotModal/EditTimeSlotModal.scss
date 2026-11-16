@@ -5,7 +5,7 @@
     background-color: white;
     padding: $space-small;
     border-radius: $border-radius;
-    font-size: 1.6rem;
+    font-size: $fs-md;
     display: flex;
     flex-direction: column;
     gap: $space-medium;
@@ -24,7 +24,7 @@
   }
 
   &-select {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-card;
     border: 1px solid #ccc;
     border-radius: $border-radius;
   }
