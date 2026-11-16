@@ -246,16 +246,19 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Distinct font sizes (target 10) | 29 |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 193 declarations, 26 raw values (the 10 exact scale sizes are already tokens: 346 swapped) |
 | Text below 12px (`1rem`, `1.1rem`) | 31 uses |
-| Distinct hex colours in SCSS (target: tokens only) | 86 distinct, 396 uses |
-| Box-shadow variants (target 3) | about 8 variants, 81 uses |
+| Hex colours in component SCSS (target: tokens only) | 68 distinct, 195 uses (181 greys and reds already swapped to `$gray-*` and `$danger`) |
+| Box-shadow variants (target 3) | about 8 variants, 81 uses (8 swapped to `$shadow-card` and `$shadow-raised`) |
 | Hand-written `@media (max-width: …)` instead of mixins | 14 |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
-| Unused Roboto `@font-face` rules and font files | `_typography.scss`, `assets/fonts/static/Roboto` |
+| Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
 
-Order of work: tokens first (`$fs-*`, `$gray-*`, `$danger`, shadows), then
-replace values page by page starting with the most visited (Home, Tours, Tour
+The tokens exist and the exact matches are swapped in (verified: the compiled CSS is
+identical before and after). What remains needs a visual decision per page: snapping
+odd sizes (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
+
+Order of work: tokens are done; now replace the remaining values page by page starting with the most visited (Home, Tours, Tour
 details, Booking), then the Roboto and root-size cleanups.
 
 ## 9. Decisions
