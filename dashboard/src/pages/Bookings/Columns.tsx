@@ -1,38 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Users } from "lucide-react";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ActionsCell } from "./ActionsCell";
+import { StatusBadge } from "@/components/StatusBadge";
 import type { Booking } from "@/types/booking";
-
-const statusConfig: Record<string, { label: string; class: string }> = {
-  confirmed: {
-    label: "Confirmed",
-    class:
-      "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800",
-  },
-  pending: {
-    label: "Pending",
-    class:
-      "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800",
-  },
-  cancelled: {
-    label: "Cancelled",
-    class:
-      "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400 dark:border-red-800",
-  },
-  completed: {
-    label: "Completed",
-    class:
-      "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800",
-  },
-  draft: {
-    label: "Draft",
-    class:
-      "bg-gray-50 text-gray-600 border-gray-200 dark:bg-gray-900/30 dark:text-gray-400",
-  },
-};
 
 export const Columns: ColumnDef<Booking>[] = [
   {
@@ -147,17 +119,7 @@ export const Columns: ColumnDef<Booking>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => {
-      const config = statusConfig[row.original.status] ?? {
-        label: row.original.status,
-        class: "",
-      };
-      return (
-        <Badge variant="outline" className={`text-xs ${config.class}`}>
-          {config.label}
-        </Badge>
-      );
-    },
+    cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
     id: "actions",
