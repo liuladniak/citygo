@@ -77,7 +77,7 @@ carry the action. Avoid 800.
 
 | Role | Size | Weight |
 |---|---|---|
-| Page title (h1) | `$fs-2xl` on phones, `$fs-4xl` from tablet, `$fs-5xl` from desktop (as on Tours and About) | 700 |
+| Page title (h1) | `$fs-2xl` on phones, `$fs-4xl` from tablet, `$fs-5xl` from desktop (as on Tours, About and Cart) | 700 |
 | Detail-page title (h1 that is a long name, such as a tour) | `$fs-xl` on phones, `$fs-3xl` from tablet, `$fs-4xl` from desktop (as on Tour details) | 700 |
 | Section heading (h2) | `heading-2` mixin: `$fs-2xl`, `$fs-3xl` from tablet, `$fs-4xl` from desktop | 700 |
 | Sub-heading (h3) | `$fs-2xl` (mobile `$fs-xl`) | 600 |
@@ -116,6 +116,17 @@ Only the tokens below. No new hex values in component SCSS.
 Category tints `$guided`, `$culinary`, `$experiences` are for tour-category chips
 only, with `$guided-text`, `$culinary-text` and `$experiences-text` for the text
 on them.
+
+### Notice banners
+
+Messages inside a page (a warning, an error, a confirmation) use these tokens and
+no other tints. Each notice has a text, so colour is never the only signal.
+
+| Notice | Background | Border | Text |
+|---|---|---|---|
+| Warning (disclaimers, "try again" prompts) | `$warning-bg` | `$warning-border` | `$warning-text` |
+| Error (payment or pricing failed) | `$danger-bg` | `$danger-border` | `$danger-text` |
+| Success (payment confirmed) | `$success-bg` | none | `$success` |
 
 ### Neutrals (to add)
 
@@ -270,27 +281,29 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 141 declarations, 17 raw values |
-| Text below 12px (`1rem`, `1.1rem`) | 23 uses |
-| Hex colours in component SCSS (target: tokens only) | 51 distinct, 128 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 46 uses, 31 distinct variants |
-| Grey text lighter than `$gray-500` (fails AA on white) | up to 31 uses of `$gray-400` (placeholders and icons are allowed) |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 128 declarations, 17 raw values |
+| Text below 12px (`1rem`, `1.1rem`) | 21 uses |
+| Hex colours in component SCSS (target: tokens only) | 45 distinct, 114 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 45 uses, 31 distinct variants |
+| Grey text lighter than `$gray-500` (fails AA on white) | up to 29 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
 | Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
 
 Counts are of live SCSS (comment lines excluded, `_variables.scss` excluded), last
-measured after the Tour details migration. The tokens exist and the exact matches are
+measured after the Booking migration. The tokens exist and the exact matches are
 swapped in. What remains needs a visual decision per page: snapping odd sizes
 (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
-Order of work: tokens are done, and **Home, Tours and Tour details are migrated**
-(Tours includes `TourCard`, the filters, `CustomSelect` and the tour skeleton card;
-Tour details includes the booking form, mobile booking bar, gallery, reviews, star
-rating and Why Us). Next, page by page: Booking (cart and checkout), then the layout
-pieces (Header, Footer, Subscribe, cookie banner) and the shared `Button` and
-`Modal`, then the Roboto and root-size cleanups. Each page is its own PR with before
-and after screenshots at 365px, 768px and 1281px.
+Order of work: tokens are done, and **Home, Tours, Tour details and Booking are
+migrated** (Tours includes `TourCard`, the filters, `CustomSelect` and the tour
+skeleton card; Tour details includes the booking form, mobile booking bar, gallery,
+reviews, star rating and Why Us; Booking is the cart, checkout form, order summary
+and cart item card). Next: the layout pieces (Header, Footer, Subscribe, cookie
+banner) and the shared `Button` and `Modal`, then the remaining pages (Destinations,
+Wishlist, Profile, Manage bookings, content pages), then the Roboto and root-size
+cleanups. Each page is its own PR with before and after screenshots at 365px, 768px
+and 1281px.
 
 ## 9. Decisions
 
