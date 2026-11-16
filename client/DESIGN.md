@@ -148,7 +148,9 @@ raw values:
 - Error red is `#ef4444` (used in Login and Help & Contact today); add it as `$danger` and use it for form errors and danger text.
 - Text on teal is white; text on yellow is charcoal.
 - Pure black (`#000`) is allowed as the backdrop behind photos (image gallery and
-  full-screen viewer) and nowhere else.
+  full-screen viewer) and nowhere else. The modal overlay (`rgba(0,0,0,.75)`) and
+  the text shadow on `.btn--category` (white text on the hero video) are the same
+  kind of exception: they exist to separate content from a photo or page behind it.
 - Never convey meaning by colour alone (errors also get text and an icon).
 
 ---
@@ -209,9 +211,9 @@ Build from these before writing new markup.
 
 | Need | Use |
 |---|---|
-| Buttons | `Button` (`components/Button`): `.btn`, `--cta` (yellow), plus the existing variants. Height 4rem (40px). |
+| Buttons | `Button` (`components/Button`): `.btn`, `--cta` (yellow), plus the existing variants. Height 4rem (40px) for every variant, including `--cancel`. Resting shadow is `$shadow-card`; outline buttons use a `$gray-200` or `$gray-300` border. Add a variant only when no existing one fits, and use tokens in it. |
 | Tour card | `TourCard` |
-| Modal | `Modal` |
+| Modal | `Modal`: dimmed overlay, a 40px round close button (a real `button` with `aria-label`), closes on Escape and on a click outside. Content brings its own background. |
 | Inputs and selects | `Input`, `CustomSelect` |
 | Loading | `LoadingSceleton`, `Loader`, `PageLoader` |
 | Icons | `UI/Icon` |
@@ -281,10 +283,10 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 128 declarations, 17 raw values |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 124 declarations, 17 raw values |
 | Text below 12px (`1rem`, `1.1rem`) | 21 uses |
-| Hex colours in component SCSS (target: tokens only) | 45 distinct, 114 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 45 uses, 31 distinct variants |
+| Hex colours in component SCSS (target: tokens only) | 44 distinct, 108 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 37 uses, 29 distinct variants |
 | Grey text lighter than `$gray-500` (fails AA on white) | up to 29 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
@@ -296,11 +298,11 @@ swapped in. What remains needs a visual decision per page: snapping odd sizes
 (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
 Order of work: tokens are done, and **Home, Tours, Tour details and Booking are
-migrated** (Tours includes `TourCard`, the filters, `CustomSelect` and the tour
+migrated, and so are the shared `Button` and `Modal`** (Tours includes `TourCard`, the filters, `CustomSelect` and the tour
 skeleton card; Tour details includes the booking form, mobile booking bar, gallery,
 reviews, star rating and Why Us; Booking is the cart, checkout form, order summary
 and cart item card). Next: the layout pieces (Header, Footer, Subscribe, cookie
-banner) and the shared `Button` and `Modal`, then the remaining pages (Destinations,
+banner), then the remaining pages (Destinations,
 Wishlist, Profile, Manage bookings, content pages), then the Roboto and root-size
 cleanups. Each page is its own PR with before and after screenshots at 365px, 768px
 and 1281px.
