@@ -36,7 +36,7 @@
   &__price-old {
     font-size: $fs-xs;
     text-decoration: line-through;
-    color: $gray-400;
+    color: $gray-500;
   }
 
   &__price-new {
@@ -51,7 +51,7 @@
     border: none;
     border-radius: $border-radius-main;
     padding: 1.2rem 3.2rem;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 700;
     font-family: inherit;
     cursor: pointer;
