@@ -7,13 +7,13 @@
   align-items: center;
 
   &--sm {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
   }
   &--md {
-    font-size: 1.8rem;
+    font-size: $fs-lg;
   }
   &--lg {
-    font-size: 2.4rem;
+    font-size: $fs-2xl;
   }
 }
 

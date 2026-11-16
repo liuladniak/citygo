@@ -23,7 +23,7 @@
   }
 
   &-heading {
-    font-size: 2.4rem;
+    font-size: $fs-2xl;
     font-weight: 700;
     color: white;
     text-align: center;
@@ -33,11 +33,11 @@
     z-index: 1;
 
     @include tablet {
-      font-size: 3.2rem;
+      font-size: $fs-4xl;
     }
 
     @include desktop-s {
-      font-size: 4rem;
+      font-size: $fs-5xl;
     }
   }
 
@@ -54,26 +54,26 @@
     }
 
     &__heading {
-      font-size: 2rem;
+      font-size: $fs-xl;
       font-weight: 700;
       line-height: 1.2;
 
       @include tablet {
-        font-size: 2.8rem;
+        font-size: $fs-3xl;
       }
 
       @include desktop-s {
-        font-size: 3.2rem;
+        font-size: $fs-4xl;
       }
     }
 
     &__desc {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       line-height: 1.7;
-      color: #4b5563;
+      color: $gray-600;
 
       @include tablet {
-        font-size: 1.6rem;
+        font-size: $fs-md;
       }
     }
   }
@@ -128,19 +128,19 @@
     }
 
     &__heading {
-      font-size: 2rem;
+      font-size: $fs-xl;
       font-weight: 700;
       line-height: 1.2;
 
       @include tablet {
-        font-size: 2.4rem;
+        font-size: $fs-2xl;
       }
     }
 
     &__desc {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       line-height: 1.7;
-      color: #4b5563;
+      color: $gray-600;
 
       display: -webkit-box;
       -webkit-line-clamp: 12;
@@ -153,7 +153,7 @@
 
       @include desktop-s {
         -webkit-line-clamp: unset;
-        font-size: 1.6rem;
+        font-size: $fs-md;
       }
     }
   }
@@ -167,19 +167,19 @@
     }
 
     h3 {
-      font-size: 2rem;
+      font-size: $fs-xl;
       font-weight: 700;
       margin-bottom: $space-x-small;
 
       @include tablet {
-        font-size: 2.8rem;
+        font-size: $fs-3xl;
       }
     }
   }
 
   &-section {
     &__heading {
-      font-size: 2rem;
+      font-size: $fs-xl;
       font-weight: 700;
       text-align: center;
       width: 100%;
@@ -187,12 +187,12 @@
       line-height: 1.2;
 
       @include tablet {
-        font-size: 2.8rem;
+        font-size: $fs-3xl;
         margin: $space-medium auto;
       }
 
       @include desktop-s {
-        font-size: 3.2rem;
+        font-size: $fs-4xl;
       }
 
       &--careers {
@@ -202,10 +202,10 @@
     }
 
     &__subheading {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       line-height: 1.7;
       font-weight: 400;
-      color: #4b5563;
+      color: $gray-600;
       width: 100%;
 
       @include tablet {
@@ -213,7 +213,7 @@
       }
 
       @include desktop-s {
-        font-size: 1.6rem;
+        font-size: $fs-md;
       }
     }
   }

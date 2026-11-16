@@ -7,7 +7,7 @@
   margin: $space-large auto;
 
   &-heading {
-    font-size: 3.2rem;
+    font-size: $fs-4xl;
     color: $main-teal;
     margin-bottom: $space-medium;
   }
@@ -45,7 +45,7 @@
 
   &__section {
     background: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
     border-radius: $border-radius;
     overflow: hidden;
   }
@@ -54,11 +54,11 @@
     display: flex;
     align-items: center;
     gap: 1.2rem;
-    font-size: 1.8rem;
+    font-size: $fs-lg;
     font-weight: 700;
     color: $charcoal;
     padding: 2rem 2.4rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid $gray-100;
   }
 
   &__section-number {
@@ -67,7 +67,7 @@
     border-radius: 50%;
     background: $main-teal;
     color: white;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -96,8 +96,8 @@
 
   &__loading {
     padding: 2.4rem;
-    font-size: 1.4rem;
-    color: #6b7280;
+    font-size: $fs-sm;
+    color: $gray-500;
   }
 
   &__empty {
@@ -108,18 +108,18 @@
     text-align: center;
     padding: 6.4rem 2.4rem;
     background: white;
-    border: 1px solid #e5e7eb;
+    border: 1px solid $gray-200;
     border-radius: $border-radius;
     gap: 1.6rem;
   }
 
   &__empty-icon {
-    font-size: 4.8rem;
+    font-size: $fs-6xl;
     line-height: 1;
   }
 
   &__empty-title {
-    font-size: 2.4rem;
+    font-size: $fs-2xl;
     font-weight: 700;
     color: $charcoal;
     margin: 0;
@@ -127,7 +127,7 @@
 
   &__empty-text {
     font-size: 1.5rem;
-    color: #6b7280;
+    color: $gray-500;
     max-width: 40rem;
     line-height: 1.6;
     margin: 0;
@@ -180,19 +180,19 @@
   min-width: 0;
 
   label {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     font-weight: 600;
-    color: #6b7280;
+    color: $gray-500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
 }
 
 .contact-input {
-  border: 1px solid #e5e7eb;
+  border: 1px solid $gray-200;
   border-radius: 0.8rem;
   padding: 1.1rem 1.4rem;
-  font-size: 1.4rem;
+  font-size: $fs-sm;
   font-family: inherit;
   color: $charcoal;
   width: 100%;
@@ -238,7 +238,7 @@
     }
 
     p {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       color: $charcoal;
     }
   }
@@ -270,8 +270,8 @@
   gap: 1.6rem;
 
   p {
-    font-size: 1.4rem;
-    color: #6b7280;
+    font-size: $fs-sm;
+    color: $gray-500;
   }
 }
 
@@ -281,7 +281,7 @@
   color: white;
   padding: 1rem 2.4rem;
   border-radius: $border-radius-main;
-  font-size: 1.4rem;
+  font-size: $fs-sm;
   font-weight: 600;
   text-decoration: none;
   transition: opacity 0.2s;
@@ -296,5 +296,5 @@
   color: #8a1c1c;
   border-radius: $border-radius;
   padding: 1.6rem;
-  font-size: 1.4rem;
+  font-size: $fs-sm;
 }

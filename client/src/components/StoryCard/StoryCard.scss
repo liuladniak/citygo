@@ -16,18 +16,18 @@
     margin-top: 0.8rem;
   }
   &-tag {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     color: $main-teal;
   }
 
   &-heading {
-    font-size: 1.6rem;
+    font-size: $fs-md;
   }
 
   &-timestamp {
     font-size: 1.1rem;
   }
   &-desc {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
   }
 }

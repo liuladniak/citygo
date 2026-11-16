@@ -18,7 +18,7 @@
     justify-content: space-between;
     text-transform: capitalize;
     padding: 1.2rem 1.6rem;
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     transition: background 0.15s;
 
     &:hover {
@@ -88,16 +88,16 @@
   transition: background 0.15s;
 
   &:hover {
-    background-color: #f3f4f6;
+    background-color: $gray-100;
   }
 
   @include tablet {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
   }
 }
 
 .placeholder {
-  color: #9ca3af;
+  color: $gray-400;
 }
 
 .input-active {

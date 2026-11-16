@@ -16,37 +16,37 @@
   }
 
   &-type {
-    font-size: 1.2rem;
-    color: #9ca3af;
+    font-size: $fs-xs;
+    color: $gray-400;
     text-transform: uppercase;
     letter-spacing: 0.08em;
 
     @include tablet {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
     }
   }
 
   &-heading {
-    font-size: 2.4rem;
+    font-size: $fs-2xl;
     font-weight: 700;
     line-height: 1.2;
 
     @include tablet {
-      font-size: 3.2rem;
+      font-size: $fs-4xl;
     }
 
     @include desktop {
-      font-size: 4rem;
+      font-size: $fs-5xl;
     }
   }
 
   &-description {
-    font-size: 1.4rem;
-    color: #6b7280;
+    font-size: $fs-sm;
+    color: $gray-500;
     line-height: 1.6;
 
     @include tablet {
-      font-size: 1.6rem;
+      font-size: $fs-md;
     }
   }
 
@@ -67,8 +67,8 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      font-size: 1.6rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      font-size: $fs-md;
+      box-shadow: $shadow-card;
       @include border-radius;
 
       @include tablet {
@@ -127,7 +127,7 @@
 
       @include tablet {
         position: absolute;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: $shadow-card;
       }
     }
 
@@ -137,17 +137,17 @@
       border: none;
       height: 100%;
       font-family: $font-main;
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       color: $charcoal;
       background: transparent;
       outline: none;
 
       &::placeholder {
-        color: #9ca3af;
+        color: $gray-400;
       }
 
       @include tablet {
-        font-size: 1.6rem;
+        font-size: $fs-md;
         padding: 0 0 0 3.8rem;
       }
     }
@@ -180,7 +180,7 @@
     font-weight: 500;
 
     &__close {
-      font-size: 1.4rem;
+      font-size: $fs-sm;
       line-height: 1;
       cursor: pointer;
       opacity: 0.6;
@@ -193,7 +193,7 @@
     &--reset {
       background: none;
       border: 1px solid #ddd;
-      color: #6b7280;
+      color: $gray-500;
       cursor: pointer;
       font-family: inherit;
       transition: all 0.2s;
@@ -207,7 +207,7 @@
 
   &-filter__count {
     font-size: 1.3rem;
-    color: #9ca3af;
+    color: $gray-400;
     white-space: nowrap;
   }
 
@@ -232,8 +232,8 @@
     align-items: center;
     gap: 1.6rem;
     padding: $space-medium 0;
-    color: #6b7280;
-    font-size: 1.6rem;
+    color: $gray-500;
+    font-size: $fs-md;
     text-align: center;
     border-bottom: 1px solid #eee;
     margin-bottom: $space-medium;
@@ -241,13 +241,13 @@
 
   &-suggestions {
     &__heading {
-      font-size: 1.8rem;
+      font-size: $fs-lg;
       font-weight: 600;
       margin-bottom: $space-medium;
       color: $charcoal;
 
       @include tablet {
-        font-size: 2rem;
+        font-size: $fs-xl;
       }
     }
   }
@@ -266,13 +266,13 @@
         content: "";
         flex: 1;
         height: 1px;
-        background: #e5e7eb;
+        background: $gray-200;
       }
 
       span {
-        font-size: 1.2rem;
+        font-size: $fs-xs;
         font-weight: 700;
-        color: #9ca3af;
+        color: $gray-400;
         white-space: nowrap;
         text-transform: uppercase;
         letter-spacing: 0.08em;

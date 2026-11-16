@@ -51,7 +51,7 @@
         background 0.15s ease,
         color 0.15s ease;
       white-space: nowrap;
-      font-size: 1.2rem;
+      font-size: $fs-xs;
       color: #94a3b8;
       font-weight: 500;
 
@@ -60,7 +60,7 @@
         align-items: center;
         justify-content: flex-start;
         gap: $space-x-small;
-        font-size: 1.4rem;
+        font-size: $fs-sm;
         flex: unset;
         width: 100%;
         padding: 1rem 1.2rem;
@@ -110,11 +110,11 @@
   text-align: center;
 
   @include mobile-m {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
   }
 
   @include desktop-s {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     text-align: left;
   }
 }

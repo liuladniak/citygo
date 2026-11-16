@@ -74,12 +74,12 @@ body {
     }
   }
   &-description {
-    font-size: 1.4rem;
+    font-size: $fs-sm;
     line-height: 2.2rem;
     max-width: 80rem;
   }
   &-type {
-    font-size: 1.2rem;
+    font-size: $fs-xs;
     text-transform: uppercase;
   }
 }
@@ -118,7 +118,7 @@ body {
 }
 
 .loader {
-  font-size: 1.6rem;
+  font-size: $fs-md;
 }
 
 html,
