@@ -27,7 +27,8 @@ Stack: `$font-main`. Never write a font stack by hand.
 
 ### Scale (target)
 
-Ten steps. Every `font-size` in SCSS must be one of these.
+Ten steps. Every `font-size` in SCSS must be one of these (the four hero-only
+display sizes below are the only exception).
 
 | Token | Size | Use for |
 |---|---|---|
@@ -42,7 +43,17 @@ Ten steps. Every `font-size` in SCSS must be one of these.
 | `$fs-5xl` | 4rem (40px) | Page titles (h1) on tour and content pages. |
 | `$fs-6xl` | 4.8rem (48px) | Hero headline on small desktops. |
 
-The hero headline above 48px is the one place for a fluid `clamp()` value.
+### Display sizes (hero only)
+
+Four extra tokens exist for the Home hero and nothing else. Do not use them for
+ordinary headings.
+
+| Token | Size | Use for |
+|---|---|---|
+| `$fs-display-sm` | 5.4rem (54px) | Hero headline |
+| `$fs-display-md` | 6.4rem (64px) | Hero stat number, phones |
+| `$fs-display-lg` | 7.2rem (72px) | Hero stat number, tablet |
+| `$fs-display-xl` | 9.6rem (96px) | Hero stat number, desktop |
 
 ### Weights
 
@@ -67,7 +78,7 @@ carry the action. Avoid 800.
 | Role | Size | Weight |
 |---|---|---|
 | Page title (h1) | `$fs-5xl` (mobile `$fs-4xl`) | 700 |
-| Section heading (h2) | `$fs-4xl` (mobile `$fs-2xl`) | 700 |
+| Section heading (h2) | `heading-2` mixin: `$fs-2xl`, `$fs-3xl` from tablet, `$fs-4xl` from desktop | 700 |
 | Sub-heading (h3) | `$fs-2xl` (mobile `$fs-xl`) | 600 |
 | Card and panel title | `$fs-md` or `$fs-xl` | 600–700 |
 | Body | `$fs-md` | 400 |
@@ -77,6 +88,9 @@ carry the action. Avoid 800.
 ### Rules
 
 - Set the size once per element; do not restyle the same heading on each page.
+- **Section headings (h2) use `@include heading-2`** (`styles/partials/_mixins.scss`):
+  24px on phones, 28px from tablet, 32px from desktop, weight 700. Do not write
+  those sizes by hand; add margins and colour next to the include.
 - Prose lines stay under about 70 characters.
 - Sentence case for headings and buttons.
 
@@ -246,20 +260,24 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 193 declarations, 26 raw values (the 10 exact scale sizes are already tokens: 346 swapped) |
-| Text below 12px (`1rem`, `1.1rem`) | 31 uses |
-| Hex colours in component SCSS (target: tokens only) | 68 distinct, 195 uses (181 greys and reds already swapped to `$gray-*` and `$danger`) |
-| Box-shadow variants (target 3) | about 8 variants, 81 uses (8 swapped to `$shadow-card` and `$shadow-raised`) |
-| Hand-written `@media (max-width: …)` instead of mixins | 14 |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 172 declarations, 17 raw values |
+| Text below 12px (`1rem`, `1.1rem`) | 27 uses |
+| Hex colours in component SCSS (target: tokens only) | 64 distinct, 173 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 57 uses, 37 distinct variants |
+| Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
 | Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
 
-The tokens exist and the exact matches are swapped in (verified: the compiled CSS is
-identical before and after). What remains needs a visual decision per page: snapping
-odd sizes (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
+Counts are of live SCSS (comment lines excluded, `_variables.scss` excluded), last
+measured after the Home migration. The tokens exist and the exact matches are
+swapped in. What remains needs a visual decision per page: snapping odd sizes
+(`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
-Order of work: tokens are done; now replace the remaining values page by page starting with the most visited (Home, Tours, Tour
-details, Booking), then the Roboto and root-size cleanups.
+Order of work: tokens are done and **Home is migrated** (hero, tiles, map, service
+cards, contact block, spotlight). Next, page by page: Tours, Tour details, Booking,
+then the layout pieces (Header, Footer, Subscribe, cookie banner), then the Roboto
+and root-size cleanups. Each page is its own PR with before and after screenshots
+at 365px, 768px and 1281px.
 
 ## 9. Decisions
 
