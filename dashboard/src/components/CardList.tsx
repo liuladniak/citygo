@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/StatusBadge";
+import { bookingStatus, TONE_ACCENT_BORDER } from "@/lib/status";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -38,48 +39,6 @@ interface RecentBookingCardProps {
   booking: Booking;
   onClick?: () => void;
 }
-
-const getStatusStyles = (status: string | null | undefined) => {
-  switch (status?.toLowerCase()) {
-    case "confirmed":
-      return {
-        bg: "bg-green-100",
-        text: "text-green-800",
-        label: "confirmed",
-      };
-
-    case "pending":
-      return {
-        bg: "bg-yellow-100",
-        text: "text-yellow-800",
-        label: "pending",
-      };
-    case "draft":
-      return {
-        bg: "bg-gray-100",
-        text: "text-gray-700",
-        label: "Draft",
-      };
-    case "completed":
-      return {
-        bg: "bg-blue-100",
-        text: "text-blue-800",
-        label: "Completed",
-      };
-    case "cancelled":
-      return {
-        bg: "bg-red-100",
-        text: "text-red-800",
-        label: "cancelled",
-      };
-    default:
-      return {
-        bg: "bg-gray-100",
-        text: "text-gray-800",
-        label: "unknown",
-      };
-  }
-};
 
 const CardList = ({ bookings, range, onRangeChange }: BookingsListProps) => {
   const navigate = useNavigate();
@@ -138,7 +97,6 @@ export function RecentBookingCard({
   booking,
   onClick,
 }: RecentBookingCardProps) {
-  const statusStyles = getStatusStyles(booking.status);
   const balance = Number(booking.total_price) - Number(booking.amount_paid);
   const timeDisplay = booking.is_custom_tour
     ? `${formatTime(booking.start_time)} – ${formatTime(booking.end_time)}`
@@ -146,16 +104,7 @@ export function RecentBookingCard({
         booking.display_end_time
       )}`;
 
-  const accentColor: Record<string, string> = {
-    confirmed: "border-l-green-500",
-    pending: "border-l-yellow-400",
-    draft: "border-l-gray-300",
-    completed: "border-l-blue-400",
-    cancelled: "border-l-red-400",
-  };
-
-  const accent =
-    accentColor[booking.status?.toLowerCase() ?? ""] ?? "border-l-gray-200";
+  const accent = TONE_ACCENT_BORDER[bookingStatus(booking.status).tone];
 
   return (
     <div
@@ -167,12 +116,7 @@ export function RecentBookingCard({
           <span className="text-base font-semibold truncate">
             {booking.primary_contact_name || "Unnamed"}
           </span>
-          <Badge
-            variant="secondary"
-            className={`${statusStyles.bg} ${statusStyles.text} text-xs px-2 py-0.5 font-medium shrink-0`}
-          >
-            {statusStyles.label}
-          </Badge>
+          <StatusBadge status={booking.status} className="shrink-0" />
           <span className="text-xs text-muted-foreground shrink-0">
             {booking.booking_reference}
           </span>

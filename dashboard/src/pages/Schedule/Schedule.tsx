@@ -17,7 +17,13 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/StatusBadge";
+import {
+  BOOKING_STATUS,
+  bookingStatus,
+  TONE_COLOR,
+  TONE_DOT,
+} from "@/lib/status";
 import { Button } from "@/components/ui/button";
 import { escapeDeep } from "@/lib/utils";
 import {
@@ -34,37 +40,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-
-const statusColors: Record<string, string> = {
-  confirmed: "#10b981",
-  pending: "#f59e0b",
-  cancelled: "#ef4444",
-  completed: "#3b82f6",
-  draft: "#6b7280",
-};
-
-const statusConfig: Record<string, { label: string; class: string }> = {
-  confirmed: {
-    label: "Confirmed",
-    class:
-      "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400",
-  },
-  pending: {
-    label: "Pending",
-    class:
-      "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400",
-  },
-  cancelled: {
-    label: "Cancelled",
-    class:
-      "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/30 dark:text-red-400",
-  },
-  completed: {
-    label: "Completed",
-    class:
-      "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400",
-  },
-};
 
 export default function Schedule() {
   const navigate = useNavigate();
@@ -127,8 +102,8 @@ export default function Schedule() {
         title: `${b.tour_name ?? "Custom Tour"} · ${guests}👥`,
         start: `${date}T${startTime}`,
         end: `${date}T${endTime}`,
-        backgroundColor: statusColors[b.status] ?? "#6b7280",
-        borderColor: statusColors[b.status] ?? "#6b7280",
+        backgroundColor: TONE_COLOR[bookingStatus(b.status).tone],
+        borderColor: TONE_COLOR[bookingStatus(b.status).tone],
         extendedProps: { booking: b },
       };
     });
@@ -202,11 +177,6 @@ export default function Schedule() {
   };
 
   const booking = selectedBooking;
-  const statusCfg = statusConfig[booking?.status] ?? {
-    label: booking?.status,
-    class: "",
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -248,15 +218,12 @@ export default function Schedule() {
           </Button>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground sm:pl-2">
-            {Object.entries(statusColors)
+            {Object.entries(BOOKING_STATUS)
               .filter(([k]) => k !== "draft")
-              .map(([status, color]) => (
+              .map(([status, { label, tone }]) => (
                 <div key={status} className="flex items-center gap-1.5">
-                  <div
-                    className="w-2.5 h-2.5 rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
-                  <span className="capitalize">{status}</span>
+                  <div className={`size-2.5 rounded-full ${TONE_DOT[tone]}`} />
+                  <span>{label}</span>
                 </div>
               ))}
           </div>
@@ -339,9 +306,7 @@ export default function Schedule() {
                   <SheetTitle className="text-base leading-snug">
                     {booking.tour_name ?? "Custom Tour"}
                   </SheetTitle>
-                  <Badge variant="outline" className={statusCfg.class}>
-                    {statusCfg.label}
-                  </Badge>
+                  <StatusBadge status={booking.status} />
                 </div>
                 <p className="text-xs text-muted-foreground font-mono">
                   {booking.booking_reference}

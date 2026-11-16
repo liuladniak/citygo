@@ -193,6 +193,14 @@ body::-webkit-scrollbar {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-brand-primary: var(--brand-primary);
   --color-brand-secondary: var(--brand-secondary);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
 }
 /*
   ---break---
@@ -232,6 +240,17 @@ body::-webkit-scrollbar {
   --sidebar-ring: oklch(0.708 0 0);
   --brand-primary: #1e556d;
   --brand-secondary: #9c110d;
+  /* Status tones. The plain token is the solid colour (dots, calendar events,
+     accent borders, and tinted backgrounds like bg-success/10). The
+     -foreground token is the text colour on that tint, tuned for AA contrast. */
+  --success: oklch(0.696 0.17 162.48);
+  --success-foreground: oklch(0.508 0.118 165.612);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.555 0.163 48.998);
+  --info: oklch(0.685 0.169 237.323);
+  --info-foreground: oklch(0.443 0.11 240.79);
+  --danger: oklch(0.637 0.237 25.331);
+  --danger-foreground: oklch(0.505 0.213 27.518);
 }
 /*
   ---break---
@@ -239,6 +258,10 @@ body::-webkit-scrollbar {
 .dark {
   --brand-primary: #7cc4e4;
   --brand-secondary: #ff7a73;
+  --success-foreground: oklch(0.765 0.177 163.223);
+  --warning-foreground: oklch(0.828 0.189 84.429);
+  --info-foreground: oklch(0.746 0.16 232.661);
+  --danger-foreground: oklch(0.704 0.191 22.216);
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
