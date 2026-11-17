@@ -33,7 +33,7 @@
     &__content {
       @include layout-constrain;
       padding-bottom: $space-medium;
-      color: white;
+      color: $main-white;
     }
 
     &__category {
@@ -54,7 +54,7 @@
       margin-bottom: 2rem;
 
       @include tablet {
-        font-size: 5.6rem;
+        font-size: $fs-display-sm;
       }
     }
 
@@ -113,7 +113,7 @@
       }
 
       h3 {
-        font-size: 2.2rem;
+        font-size: $fs-xl;
         font-weight: 600;
         margin: $space-small 0 1.2rem;
       }
@@ -163,7 +163,7 @@
         }
 
         p {
-          font-size: 1.5rem;
+          font-size: $fs-md;
           margin-bottom: 0;
           color: $charcoal;
         }
@@ -222,17 +222,17 @@
     }
 
     &__card {
-      background: white;
+      background: $main-white;
       border-radius: $border-radius;
       overflow: hidden;
       text-decoration: none;
       color: $charcoal;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      box-shadow: $shadow-card;
       transition: transform 0.2s, box-shadow 0.2s;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: $shadow-raised;
       }
     }
 
@@ -257,7 +257,7 @@
     }
 
     &__category {
-      font-size: 1.1rem;
+      font-size: $fs-xs;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -272,7 +272,7 @@
     }
 
     &__desc {
-      font-size: 1.3rem;
+      font-size: $fs-sm;
       color: $gray-500;
       line-height: 1.5;
     }

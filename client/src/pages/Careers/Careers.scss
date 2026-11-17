@@ -5,7 +5,7 @@
   width: 100%;
 
   &__tag {
-    font-size: 1.1rem;
+    font-size: $fs-xs;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -113,13 +113,13 @@
   }
 
   &__subtitle {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     color: rgba(255, 255, 255, 0.85);
     line-height: 1.7;
     max-width: 56rem;
 
     @include tablet {
-      font-size: 1.7rem;
+      font-size: $fs-lg;
     }
   }
 
@@ -165,13 +165,13 @@
   }
 
   &__value-title {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 700;
     color: $charcoal;
   }
 
   &__value-desc {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     line-height: 1.7;
     color: $gray-600;
   }
@@ -219,7 +219,7 @@
       border-color 0.2s;
 
     &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      box-shadow: $shadow-raised;
       transform: translateY(-2px);
       border-color: $main-teal;
     }
@@ -234,7 +234,7 @@
   }
 
   &__role-title {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 700;
     color: $charcoal;
     line-height: 1.3;
@@ -242,7 +242,7 @@
   }
 
   &__role-type {
-    font-size: 1.1rem;
+    font-size: $fs-xs;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -257,18 +257,18 @@
 
   &__role-location {
     font-size: $fs-xs;
-    color: $gray-400;
+    color: $gray-500;
   }
 
   &__role-desc {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     line-height: 1.7;
     color: $gray-600;
     flex: 1;
   }
 
   &__role-read {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $main-teal;
     margin-top: auto;
@@ -298,13 +298,13 @@
   }
 
   &__cta-desc {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     color: rgba(255, 255, 255, 0.88);
     max-width: 56rem;
     line-height: 1.6;
 
     @include tablet {
-      font-size: 1.7rem;
+      font-size: $fs-lg;
     }
   }
 
@@ -313,7 +313,7 @@
     background: white;
     color: $main-teal;
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     padding: 1.2rem 3.2rem;
     border-radius: $border-radius-main;
     text-decoration: none;
@@ -327,13 +327,13 @@
 
 .career-detail {
   &__back-bar {
-    background: #f9fafb;
+    background: $gray-100;
     border-bottom: 1px solid $gray-200;
     padding: 1.2rem 0;
   }
 
   &__back {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $charcoal;
     text-decoration: none;
@@ -378,7 +378,7 @@
   }
 
   &__location {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: rgba(255, 255, 255, 0.8);
   }
 
@@ -455,7 +455,7 @@
   }
 
   &__para {
-    font-size: 1.5rem;
+    font-size: $fs-sm;
     line-height: 1.8;
     color: $gray-600;
 
@@ -487,7 +487,7 @@
       }
 
       @include tablet {
-        font-size: 1.5rem;
+        font-size: $fs-md;
       }
     }
 
@@ -524,7 +524,7 @@
     display: flex;
     flex-direction: column;
     gap: $space-x-small;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: $shadow-card;
   }
 
   &__sidebar-title {
@@ -534,14 +534,14 @@
   }
 
   &__sidebar-desc {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     line-height: 1.6;
     color: $gray-500;
   }
 
   &__sidebar-email {
     font-size: $fs-xs;
-    color: $gray-400;
+    color: $gray-500;
     text-align: center;
 
     a {
@@ -564,7 +564,7 @@
     display: flex;
     justify-content: space-between;
     gap: $space-x-small;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $gray-600;
   }
 
@@ -585,7 +585,7 @@
   }
 
   &__sidebar-other-title {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 700;
     color: $charcoal;
     margin-bottom: 0.4rem;
@@ -599,7 +599,7 @@
     border-bottom: 1px solid $gray-100;
     text-decoration: none;
     color: $charcoal;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     transition: color 0.2s;
 
@@ -612,13 +612,13 @@
   }
 
   &__sidebar-other-type {
-    font-size: 1.1rem;
+    font-size: $fs-xs;
     font-weight: 400;
-    color: $gray-400;
+    color: $gray-500;
   }
 
   &__sidebar-all {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $main-teal;
     text-decoration: none;
