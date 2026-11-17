@@ -11,17 +11,18 @@
     margin-top: $space-large;
   }
 
-  &-heading {
-    font-size: $fs-xl;
+  &-title {
+    font-size: $fs-2xl;
     font-weight: 700;
+    line-height: 1.2;
     margin-bottom: $space-medium;
 
     @include tablet {
-      font-size: $fs-3xl;
+      font-size: $fs-4xl;
     }
 
-    @include desktop-s {
-      font-size: $fs-4xl;
+    @include desktop {
+      font-size: $fs-5xl;
     }
   }
 

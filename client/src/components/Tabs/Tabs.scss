@@ -13,9 +13,9 @@
   }
 
   &-menu {
-    background-color: white;
+    background-color: $main-white;
     padding: $space-x-small;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     border-radius: $border-radius;
     display: flex;
     flex-direction: row;
@@ -23,7 +23,7 @@
     align-items: stretch;
     overflow-x: auto;
     scrollbar-width: none;
-    border: 1px solid #f1f5f9;
+    border: 1px solid $gray-200;
 
     &::-webkit-scrollbar {
       display: none;
@@ -44,7 +44,7 @@
       gap: 0.4rem;
       cursor: pointer;
       padding: 1rem $space-x-small;
-      border-radius: 0.6rem;
+      border-radius: 0.8rem;
       flex: 1;
       flex-shrink: 0;
       transition:
@@ -52,7 +52,7 @@
         color 0.15s ease;
       white-space: nowrap;
       font-size: $fs-xs;
-      color: #94a3b8;
+      color: $gray-500;
       font-weight: 500;
 
       @include desktop-s {
@@ -67,7 +67,7 @@
       }
 
       &:hover {
-        background: #f8fafc;
+        background: $gray-100;
         color: $charcoal;
       }
 
@@ -80,13 +80,13 @@
   }
 
   .tab-content {
-    background-color: white;
+    background-color: $main-white;
     padding: $space-x-small;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     border-radius: $border-radius;
     flex: 1;
     min-width: 0;
-    border: 1px solid #f1f5f9;
+    border: 1px solid $gray-200;
 
     @include tablet {
       padding: $space-small;
@@ -106,12 +106,8 @@
 }
 
 .account-menu__title {
-  font-size: 1.1rem;
+  font-size: $fs-xs;
   text-align: center;
-
-  @include mobile-m {
-    font-size: $fs-xs;
-  }
 
   @include desktop-s {
     font-size: $fs-sm;
