@@ -54,7 +54,7 @@
   &__title {
     font-size: $fs-3xl;
     font-weight: 700;
-    color: white;
+    color: $main-white;
     line-height: 1.2;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 
@@ -63,12 +63,12 @@
     }
 
     @include desktop-s {
-      font-size: 5rem;
+      font-size: $fs-6xl;
     }
   }
 
   &__subtitle {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     color: rgba(255, 255, 255, 0.88);
     line-height: 1.6;
 
@@ -160,7 +160,7 @@
   }
 
   &__step-number {
-    font-size: 3.6rem;
+    font-size: $fs-4xl;
     font-weight: 800;
     color: $main-teal;
     opacity: 0.25;
@@ -196,7 +196,7 @@
     color: $gray-600;
 
     @include tablet {
-      font-size: 1.5rem;
+      font-size: $fs-md;
     }
   }
 
@@ -219,11 +219,11 @@
     padding: $space-medium;
     border: 1px solid $gray-200;
     @include border-radius;
-    background: white;
+    background: $main-white;
   }
 
   &__example-title {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 700;
     color: $charcoal;
   }
@@ -268,7 +268,7 @@
       }
 
       @include tablet {
-        font-size: 1.5rem;
+        font-size: $fs-md;
       }
     }
   }
@@ -296,7 +296,7 @@
   &__cta-title {
     font-size: $fs-2xl;
     font-weight: 700;
-    color: white;
+    color: $main-white;
 
     @include tablet {
       font-size: $fs-4xl;
@@ -304,22 +304,22 @@
   }
 
   &__cta-desc {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     color: rgba(255, 255, 255, 0.88);
     max-width: 52rem;
     line-height: 1.6;
 
     @include tablet {
-      font-size: 1.7rem;
+      font-size: $fs-lg;
     }
   }
 
   &__cta-btn {
     display: inline-block;
-    background: white;
+    background: $main-white;
     color: $main-teal;
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     padding: 1.2rem 3.2rem;
     border-radius: $border-radius-main;
     text-decoration: none;

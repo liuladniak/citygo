@@ -33,8 +33,8 @@
   &-filter {
     padding: 0.6rem 1.4rem;
     border-radius: $border-radius-main;
-    border: 1px solid #ddd;
-    background: white;
+    border: 1px solid $gray-200;
+    background: $main-white;
     font-size: $fs-xs;
     cursor: pointer;
     transition: all 0.2s;
@@ -42,7 +42,7 @@
     white-space: nowrap;
 
     @include tablet {
-      font-size: 1.3rem;
+      font-size: $fs-sm;
       padding: 0.6rem 1.6rem;
     }
 
@@ -53,7 +53,7 @@
 
     &--active {
       background: $main-teal;
-      color: white;
+      color: $main-white;
       border-color: $main-teal;
     }
   }
@@ -78,7 +78,7 @@
   &-card {
     @include border-radius;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: $shadow-card;
     text-decoration: none;
     color: $charcoal;
     display: flex;
@@ -125,7 +125,7 @@
     }
 
     &__category {
-      font-size: 1.1rem;
+      font-size: $fs-xs;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -133,7 +133,7 @@
     }
 
     &__title {
-      font-size: 1.5rem;
+      font-size: $fs-md;
       font-weight: 600;
       line-height: 1.4;
 
@@ -143,7 +143,7 @@
     }
 
     &__excerpt {
-      font-size: 1.3rem;
+      font-size: $fs-sm;
       color: $gray-500;
       line-height: 1.5;
       flex: 1;

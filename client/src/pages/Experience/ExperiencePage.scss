@@ -51,7 +51,7 @@
   }
 
   &__tag {
-    font-size: 1.1rem;
+    font-size: $fs-xs;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -61,16 +61,16 @@
   &__title {
     font-size: $fs-2xl;
     font-weight: 700;
-    color: white;
+    color: $main-white;
     line-height: 1.2;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 
     @include tablet {
-      font-size: 3.6rem;
+      font-size: $fs-4xl;
     }
 
     @include desktop-s {
-      font-size: 4.4rem;
+      font-size: $fs-5xl;
     }
   }
 
@@ -159,10 +159,10 @@
     padding: $space-medium;
     border: 1px solid $gray-200;
     @include border-radius;
-    background: white;
+    background: $main-white;
 
     h3 {
-      font-size: 1.5rem;
+      font-size: $fs-md;
       font-weight: 700;
       margin-bottom: 0.8rem;
       color: $charcoal;
@@ -198,7 +198,7 @@
       }
 
       @include tablet {
-        font-size: 1.5rem;
+        font-size: $fs-md;
       }
     }
   }
@@ -228,13 +228,13 @@
       transform 0.2s;
 
     &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      box-shadow: $shadow-raised;
       transform: translateY(-2px);
     }
   }
 
   &__affiliate-tag {
-    font-size: 1rem;
+    font-size: $fs-xs;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -242,20 +242,20 @@
   }
 
   &__affiliate-name {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 700;
     line-height: 1.3;
   }
 
   &__affiliate-desc {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     line-height: 1.6;
     color: $gray-500;
     flex: 1;
   }
 
   &__affiliate-link {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $main-teal;
     margin-top: auto;
@@ -283,19 +283,19 @@
     @include border-radius;
     text-decoration: none;
     color: $charcoal;
-    background: white;
+    background: $main-white;
     transition:
       box-shadow 0.2s,
       transform 0.2s;
 
     &:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      box-shadow: $shadow-raised;
       transform: translateY(-2px);
     }
   }
 
   &__tour-name {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 600;
     line-height: 1.3;
   }
@@ -303,12 +303,12 @@
   &__tour-meta {
     display: flex;
     gap: $space-medium;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $gray-500;
   }
 
   &__tour-cta {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $main-teal;
     margin-top: auto;
