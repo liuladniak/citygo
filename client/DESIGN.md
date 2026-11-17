@@ -128,6 +128,10 @@ no other tints. Each notice has a text, so colour is never the only signal.
 | Error (payment or pricing failed) | `$danger-bg` | `$danger-border` | `$danger-text` |
 | Success (payment confirmed) | `$success-bg` | none | `$success` |
 
+Booking status badges (`BookingStatus`) use the same tones: pending is warning,
+confirmed is success (`$success-bg`, `$success-border`, `$success-text`), denied and
+cancelled are danger, and anything else (completed) is neutral grey.
+
 Short messages under a field or form (newsletter, login, contact) are text only:
 `$success-text` for confirmations and `$error-text` for errors, both AA on white.
 
@@ -206,7 +210,8 @@ A bar fixed to the bottom of the screen casts its shadow upward, which the card 
 raised shadows cannot express, so it has its own token. A thin divider under in-flow
 bars (the tour tab bar) is a `$gray-200` border, not a shadow. A form field that
 removes its outline (the newsletter pill) shows `$focus-ring` on the wrapper with
-`:focus-within` instead.
+`:focus-within` instead. A toggle knob keeps its small `0 1px 3px` shadow so it reads
+on a grey track.
 
 ---
 
@@ -288,10 +293,10 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 109 declarations, 16 raw values |
-| Text below 12px (`1rem`, `1.1rem`) | 19 uses |
-| Hex colours in component SCSS (target: tokens only) | 40 distinct, 96 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 32 uses, 24 distinct variants |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 102 declarations, 16 raw values |
+| Text below 12px (`1rem`, `1.1rem`) | 17 uses |
+| Hex colours in component SCSS (target: tokens only) | 30 distinct, 67 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 29 uses, 22 distinct variants |
 | Grey text lighter than `$gray-500` (fails AA on white) | up to 28 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
@@ -302,13 +307,15 @@ measured after the Booking migration. The tokens exist and the exact matches are
 swapped in. What remains needs a visual decision per page: snapping odd sizes
 (`1.3rem`, `1.5rem`, …) onto the scale, and the leftover greys and shadows.
 
-Order of work: tokens are done, and **Home, Tours, Tour details, Booking, Destinations
-and Wishlist are migrated, and so are the shared `Button` and `Modal`, the header, the
-footer, the newsletter block and the cookie banner** (Tours includes `TourCard`, the
-filters, `CustomSelect` and the tour skeleton card; Tour details includes the booking
-form, mobile booking bar, gallery, reviews, star rating and Why Us; Booking is the cart,
-checkout form, order summary and cart item card; Destinations includes the testimonials
-block). Next: the remaining pages (Profile, Manage bookings, content pages), then the
+Order of work: tokens are done, and **Home, Tours, Tour details, Booking, Destinations,
+Wishlist, Profile and Manage bookings are migrated, and so are the shared `Button` and
+`Modal`, the header, the footer, the newsletter block and the cookie banner** (Tours
+includes `TourCard`, the filters, `CustomSelect` and the tour skeleton card; Tour
+details includes the booking form, mobile booking bar, gallery, reviews, star rating
+and Why Us; Booking is the cart, checkout form, order summary and cart item card;
+Destinations includes the testimonials block; Profile includes the tabs and field
+styles; Manage bookings includes the booking status badge). Next: the content pages
+(About, Careers, Help & Contact, legal pages, articles, custom itinerary), then the
 Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
 at 365px, 768px and 1281px.
 
