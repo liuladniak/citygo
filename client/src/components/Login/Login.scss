@@ -12,16 +12,16 @@
 .login-card {
   width: 100%;
   max-width: 42rem;
-  background: white;
+  background: $main-white;
   border-radius: $border-radius;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: $shadow-card;
   padding: 3.2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
 
   &__title {
-    font-size: 2.6rem;
+    font-size: $fs-2xl;
     font-weight: 700;
     color: $charcoal;
     margin: 0;
@@ -42,10 +42,10 @@
   }
 
   &__error {
-    font-size: 1.3rem;
-    color: #b91c1c;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+    font-size: $fs-sm;
+    color: $error-text;
+    background: $danger-bg;
+    border: 1px solid $danger-border;
     border-radius: 0.8rem;
     padding: 1rem 1.2rem;
     margin: 0;
@@ -56,9 +56,9 @@
     flex-direction: column;
     gap: 1.6rem;
     font-size: $fs-sm;
-    color: #166534;
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    color: $success-text;
+    background: $success-bg;
+    border: 1px solid $success-border;
     border-radius: 0.8rem;
     padding: 1.6rem;
     text-align: center;
@@ -68,7 +68,7 @@
     background: none;
     border: none;
     color: $main-teal;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     cursor: pointer;
     padding: 0;
     font-family: inherit;
@@ -94,7 +94,7 @@
   gap: 0.6rem;
 
   label {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $charcoal;
   }
@@ -115,7 +115,7 @@
   color: $charcoal;
   width: 100%;
   box-sizing: border-box;
-  background: white;
+  background: $main-white;
   transition: border-color 0.2s, box-shadow 0.2s;
 
   &::placeholder {
@@ -125,7 +125,7 @@
   &:focus {
     outline: none;
     border-color: $main-teal;
-    box-shadow: 0 0 0 3px rgba(30, 85, 109, 0.1);
+    box-shadow: $focus-ring;
   }
 }
 
@@ -137,7 +137,7 @@
   width: 100%;
   padding: 1.2rem 2rem;
   border-radius: 0.8rem;
-  font-size: 1.5rem;
+  font-size: $fs-md;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
@@ -151,7 +151,7 @@
 
   &--primary {
     background: $main-maroon;
-    color: white;
+    color: $main-white;
 
     &:hover:not(:disabled) {
       opacity: 0.88;
@@ -159,14 +159,14 @@
   }
 
   &--google {
-    background: white;
+    background: $main-white;
     color: $charcoal;
     border: 1px solid $gray-200;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: $shadow-card;
 
     &:hover:not(:disabled) {
-      background: #f9fafb;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      background: $gray-100;
+      box-shadow: $shadow-raised;
     }
   }
 
@@ -190,7 +190,7 @@
 
   &__text {
     font-size: $fs-xs;
-    color: $gray-400;
+    color: $gray-500;
     white-space: nowrap;
   }
 }
@@ -201,12 +201,12 @@
   justify-content: center;
   gap: 0.8rem;
   padding: 1.2rem;
-  background: #f9fafb;
+  background: $gray-100;
   border-radius: 0.8rem;
   border: 1px dashed $gray-200;
 
   &__label {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $gray-500;
   }
 
@@ -214,7 +214,7 @@
     background: none;
     border: none;
     color: $main-teal;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
@@ -278,10 +278,10 @@
       background: $danger;
     }
     &--fair {
-      background: #f59e0b;
+      background: $warning-border;
     }
     &--strong {
-      background: #22c55e;
+      background: $success;
     }
   }
 
@@ -291,13 +291,13 @@
     white-space: nowrap;
 
     &--weak {
-      color: $danger;
+      color: $error-text;
     }
     &--fair {
-      color: #f59e0b;
+      color: $warning-text;
     }
     &--strong {
-      color: #22c55e;
+      color: $success-text;
     }
   }
 }
@@ -315,16 +315,16 @@
     align-items: center;
     gap: 0.6rem;
     font-size: $fs-xs;
-    color: $gray-400;
+    color: $gray-500;
     transition: color 0.2s;
 
     &--met {
-      color: #22c55e;
+      color: $success-text;
     }
   }
 
   &__icon {
-    font-size: 1.1rem;
+    font-size: $fs-xs;
     width: 1.4rem;
     text-align: center;
   }
@@ -339,7 +339,7 @@
   }
 
   &--success {
-    border-color: #22c55e;
+    border-color: $success;
     &:focus {
       box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
     }
@@ -352,10 +352,10 @@
     margin: 0.4rem 0 0;
 
     &--error {
-      color: $danger;
+      color: $error-text;
     }
     &--success {
-      color: #22c55e;
+      color: $success-text;
     }
   }
 }
