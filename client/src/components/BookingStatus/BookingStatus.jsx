@@ -10,6 +10,10 @@ const BookingStatus = ({ status }) => {
         return "booking-status--confirmed";
       case "denied":
         return "booking-status--denied";
+      case "cancelled":
+        return "booking-status--cancelled";
+      case "completed":
+        return "booking-status--completed";
       default:
         return "";
     }

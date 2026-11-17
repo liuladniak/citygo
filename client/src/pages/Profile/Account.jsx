@@ -96,7 +96,7 @@ const Account = () => {
 
   return (
     <div className="account">
-      <h3 className="account-heading">Account Information</h3>
+      <h1 className="account-title">Account Information</h1>
       <div className="account-cols">
         <Tabs tabs={tabsData} user={user} />
       </div>

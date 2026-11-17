@@ -1,12 +1,6 @@
 @use "../../styles/partials/variables" as *;
 @use "../../styles/partials/mixins" as *;
 
-.reservations {
-  width: 100%;
-  background-color: rgba(0, 255, 255, 0.377);
-  @include border-radius;
-}
-
 .dashboard {
   padding: 1rem;
   display: flex;
@@ -18,33 +12,28 @@
   width: 100%;
   max-width: $max-width;
 
-  &--not-logged {
-    align-items: center;
-    margin-bottom: $space-large;
-  }
-
   &__title {
     margin: 0 0 1rem;
     padding: 0 0 0.5rem;
-    font-size: $fs-4xl;
-  }
+    font-size: $fs-2xl;
+    font-weight: 700;
+    line-height: 1.2;
 
-  &__logout {
-    margin-top: 2rem;
+    @include tablet {
+      font-size: $fs-4xl;
+    }
+
+    @include desktop {
+      font-size: $fs-5xl;
+    }
   }
 }
 
-.login-dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: $space-large;
-  margin-top: $space-large;
-}
 .bookings {
   &-tour-title {
     font-size: $fs-md;
     font-weight: 600;
-    color: black;
+    color: $charcoal;
   }
   &-details {
     display: flex;
@@ -55,7 +44,7 @@
   &-heading {
     font-size: $fs-2xl;
     margin-bottom: 1.6rem;
-    color: black;
+    color: $charcoal;
   }
   &-list {
     display: flex;
@@ -79,11 +68,11 @@
 .booking-date,
 .booking-people {
   font-size: $fs-sm;
-  color: black;
+  color: $charcoal;
 }
 .booking-message {
   font-size: $fs-md;
-  color: black;
+  color: $charcoal;
 }
 
 .btn--get-prepared {
@@ -98,28 +87,4 @@
   flex-direction: column;
   align-items: flex-end;
   gap: $space-large;
-}
-
-.booking-status {
-  width: fit-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.8rem 1.6rem;
-  font-size: $fs-sm;
-  border: 1px solid #faca15;
-  color: #92400e;
-  background-color: #fffbeb;
-  border-radius: $border-radius;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0px 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
-}
-
-.booking-status__dot {
-  display: block;
-  width: 0.8rem;
-  height: 0.8rem;
-  margin-right: 0.8rem;
-  background-color: #92400e;
-  border-radius: 50%;
 }
