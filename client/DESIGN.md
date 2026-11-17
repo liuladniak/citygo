@@ -293,11 +293,11 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 42 declarations, 11 raw values |
-| Text below 12px (`1rem`, `1.1rem`) | 9 uses |
-| Hex colours in component SCSS (target: tokens only) | 30 distinct, 64 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 22 uses, 17 distinct variants |
-| Grey text lighter than `$gray-500` (fails AA on white) | up to 25 uses of `$gray-400` (placeholders and icons are allowed) |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 34 declarations, 10 raw values |
+| Text below 12px (`1rem`, `1.1rem`) | 8 uses |
+| Hex colours in component SCSS (target: tokens only) | 29 distinct, 49 uses |
+| Box-shadow declarations not on a shadow token (target 0) | 18 uses, 14 distinct variants |
+| Grey text lighter than `$gray-500` (fails AA on white) | up to 23 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 15 (`MiloChat`, `Signup`, `HelpContact`) |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
 | Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
@@ -309,13 +309,14 @@ swapped in. What remains needs a visual decision per page: snapping odd sizes
 
 Order of work: tokens are done, and **Home, Tours, Tour details, Booking, Destinations,
 Wishlist, Profile, Manage bookings, About, Careers, Experience, Custom itinerary,
-Cookie policy, Article and Travel guide are migrated, and so are the shared `Button` and
+Cookie policy, Article, Travel guide, Login (which Sign up and Reset password share)
+are migrated, and so are the shared `Button` and
 `Modal`, the header, the footer, the newsletter block and the cookie banner** (Tours
 includes `TourCard`, the filters, `CustomSelect` and the tour skeleton card; Tour
 details includes the booking form, mobile booking bar, gallery, reviews, star rating
 and Why Us; Booking is the cart, checkout form, order summary and cart item card;
 Destinations includes the testimonials block; Profile includes the tabs and field
-styles; Manage bookings includes the booking status badge). Next: Help & Contact, Login,
+styles; Manage bookings includes the booking status badge). Next: Help & Contact,
 the Milo chat widget and the smaller components (review form, date picker, stats), then
 the Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
 at 365px, 768px and 1281px.
