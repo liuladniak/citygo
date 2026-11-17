@@ -18,18 +18,11 @@
   }
 
   &-heading {
-    font-size: $fs-xl;
-    font-weight: 600;
+    @include heading-2;
     margin-bottom: $space-x-small;
-    line-height: 1.2;
 
     @include tablet {
-      font-size: $fs-3xl;
       margin-bottom: $space-medium;
-    }
-
-    @include desktop-s {
-      font-size: $fs-4xl;
     }
   }
 
@@ -46,12 +39,6 @@
     @include desktop-s {
       width: 70%;
     }
-  }
-
-  &-categories {
-    display: flex;
-    gap: $space-x-small;
-    flex-wrap: wrap;
   }
 
   &-stories {
@@ -136,9 +123,9 @@
     }
 
     &__heading {
-      font-size: 2.2rem;
+      font-size: $fs-2xl;
       font-weight: 700;
-      color: white;
+      color: $main-white;
       line-height: 1.2;
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 
@@ -165,13 +152,13 @@
     }
 
     .btn--cta {
-      background: white;
+      background: $main-white;
       color: $main-teal;
       width: fit-content;
       margin-top: $space-x-small;
 
       &:hover {
-        background: #f0f9ff;
+        background: $gray-100;
       }
     }
   }
@@ -205,7 +192,7 @@
     .testimonials-item {
       @include border-radius;
       padding: $space-x-small;
-      background-color: white;
+      background-color: $main-white;
       flex: 1;
     }
   }
@@ -214,15 +201,11 @@
     margin-top: $space-large;
 
     h2 {
-      font-size: 1.3rem;
-      color: $gray-400;
+      font-size: $fs-sm;
+      color: $gray-500;
       font-weight: 400;
       margin-top: 0.4rem;
       margin-bottom: $space-x-small;
-
-      @include tablet {
-        font-size: $fs-sm;
-      }
     }
   }
 
@@ -246,7 +229,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: #d1d5db;
+      background: $gray-300;
       border-radius: 10rem;
       cursor: pointer;
 
@@ -255,7 +238,7 @@
       }
     }
 
-    scrollbar-color: #d1d5db $gray-100;
+    scrollbar-color: $gray-300 $gray-100;
     scrollbar-width: thin;
 
     @include tablet {
@@ -348,7 +331,7 @@
     @include border-radius;
     overflow: hidden;
     position: relative;
-    color: white;
+    color: $main-white;
 
     &__img {
       height: 36rem;
@@ -381,7 +364,7 @@
     }
 
     &__desc {
-      font-size: 1.3rem;
+      font-size: $fs-sm;
       line-height: 1.5;
       text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
       margin-bottom: $space-x-small;
@@ -389,7 +372,6 @@
 
       @include tablet {
         text-align: left;
-        font-size: $fs-sm;
       }
     }
   }
@@ -447,7 +429,7 @@
   }
 
   &__label {
-    font-size: 1rem;
+    font-size: $fs-xs;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -457,7 +439,7 @@
   &__heading {
     font-size: $fs-lg;
     font-weight: 700;
-    color: white;
+    color: $main-white;
     line-height: 1.2;
 
     @include tablet {
@@ -466,7 +448,7 @@
   }
 
   &__sub {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.5;
     display: none;
@@ -480,12 +462,12 @@
     margin-top: $space-x-small;
     display: inline-flex;
     align-items: center;
-    background: white;
+    background: $main-white;
     color: $main-teal;
     font-weight: 700;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     padding: 1.2rem;
-    border-radius: $border-radius-main;
+    border-radius: $border-radius;
     width: 100%;
     justify-content: center;
     white-space: nowrap;
@@ -494,12 +476,11 @@
 
     @include tablet {
       width: fit-content;
-      font-size: $fs-sm;
       padding: 1rem 2rem;
     }
 
     &:hover {
-      background: #f0f9ff;
+      background: $gray-100;
     }
   }
 }
