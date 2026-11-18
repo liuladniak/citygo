@@ -53,7 +53,7 @@ $border-radius: 1.6rem;
 $border-radius-small: 0.8rem;
 
 // Main typeface (self-hosted via @fontsource/poppins, see main.tsx)
-$font-main: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$font-main: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
 
 // TYPE SCALE (see client/DESIGN.md). 10px root: 1.6rem = 16px.
 $fs-xs: 1.2rem;
