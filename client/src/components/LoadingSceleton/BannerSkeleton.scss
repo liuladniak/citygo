@@ -38,7 +38,7 @@
 
   .skeleton-text-overlay {
     background: rgba(0, 0, 0, 0.3);
-    color: #fff;
+    color: $main-white;
     padding: 20px;
     border-radius: 5px;
     font-size: $fs-xs;
@@ -71,7 +71,7 @@
     transition: background 0.3s ease;
 
     &.active {
-      background: #fff;
+      background: $main-white;
     }
   }
 }
