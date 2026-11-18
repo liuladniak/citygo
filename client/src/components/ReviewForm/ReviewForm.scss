@@ -17,7 +17,7 @@
   }
 
   &__tour {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $main-teal;
     font-weight: 600;
   }
@@ -29,7 +29,7 @@
   }
 
   &__label {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $charcoal;
   }
@@ -41,7 +41,7 @@
 
   &__input,
   &__textarea {
-    border: 1px solid #ddd;
+    border: 1px solid $gray-200;
     border-radius: $border-radius;
     padding: 1rem 1.4rem;
     font-size: $fs-sm;
@@ -57,7 +57,7 @@
   }
 
   &__count {
-    font-size: 1.1rem;
+    font-size: $fs-xs;
     color: $gray-400;
     text-align: right;
   }
@@ -94,7 +94,7 @@
     background: rgba(0, 0, 0, 0.6);
     color: white;
     border: none;
-    font-size: 1rem;
+    font-size: $fs-xs;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -112,9 +112,9 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.8rem 1.6rem;
-    border: 1px dashed #d1d5db;
+    border: 1px dashed $gray-300;
     border-radius: $border-radius;
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 500;
     color: $gray-500;
     cursor: pointer;
@@ -129,13 +129,13 @@
   }
 
   &__progress {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $main-teal;
     font-weight: 500;
   }
 
   &__error {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     color: $main-maroon;
     font-weight: 500;
   }
