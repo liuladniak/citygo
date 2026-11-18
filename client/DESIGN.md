@@ -194,7 +194,7 @@ Mobile first, with the mixins only (`@include tablet { … }`). No hand-written
 
 | Element | Radius |
 |---|---|
-| Small controls, tags | 0.8rem |
+| Small controls, tags, skeleton text lines | `$border-radius-small` (0.8rem) |
 | Cards, buttons, inputs, modals | `$border-radius` (1.6rem) |
 | Hero and large feature containers | `$border-radius-main` (3rem) |
 | Pills, avatars | full (`10rem` or `50%`) |
@@ -319,7 +319,9 @@ includes `TourCard`, the filters, `CustomSelect` and the tour skeleton card; Tou
 details includes the booking form, mobile booking bar, gallery, reviews, star rating
 and Why Us; Booking is the cart, checkout form, order summary and cart item card;
 Destinations includes the testimonials block; Profile includes the tabs and field
-styles; Manage bookings includes the booking status badge). Next: the radius sweep, the remaining
+styles; Manage bookings includes the booking status badge). The radius sweep is done too: every radius is `$border-radius-small`, `$border-radius`,
+`$border-radius-main` or a pill, except the Milo widget's own bubble radii and a few
+single-corner shapes. Next: the remaining
 `_globals.scss` sizes, then the Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
 at 365px, 768px and 1281px.
 
