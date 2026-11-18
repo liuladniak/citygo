@@ -295,12 +295,12 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 20 declarations, 8 raw values |
-| Text below 12px (`1rem`, `1.1rem`) | 5 uses |
-| Hex colours in component SCSS (target: tokens only) | 13 distinct, 22 uses |
-| Box-shadow declarations not on a shadow token (target 0) | 10 uses, 9 distinct variants |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 3 declarations, 3 raw values (the root size and two `_globals.scss` headings) |
+| Text below 12px (`1rem`, `1.1rem`) | 0 uses |
+| Hex colours in component SCSS (target: tokens only) | 3 distinct, 4 uses (two `#000` photo backdrops, the Milo navy, one `#fff` in `_globals.scss`) |
+| Box-shadow declarations not on a shadow token (target 0) | 7 uses, 5 distinct variants (the exceptions listed above and the Stats block shadows) |
 | Grey text lighter than `$gray-500` (fails AA on white) | up to 21 uses of `$gray-400` (placeholders and icons are allowed) |
-| Hand-written `@media (max-width: …)` instead of mixins | 1 (`Signup`) |
+| Hand-written `@media (max-width: …)` instead of mixins | 0 |
 | Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
 | Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
 
@@ -312,14 +312,15 @@ swapped in. What remains needs a visual decision per page: snapping odd sizes
 Order of work: tokens are done, and **Home, Tours, Tour details, Booking, Destinations,
 Wishlist, Profile, Manage bookings, About, Careers, Experience, Custom itinerary,
 Cookie policy, Article, Travel guide, Login (which Sign up and Reset password share),
-Help & Contact and the Milo chat widget are migrated, and so are the shared `Button` and
+Help & Contact, the Milo chat widget and the smaller components (review form, date picker,
+stats, review card, video, lightbox, banner skeleton, story cards and the rest) are migrated, and so are the shared `Button` and
 `Modal`, the header, the footer, the newsletter block and the cookie banner** (Tours
 includes `TourCard`, the filters, `CustomSelect` and the tour skeleton card; Tour
 details includes the booking form, mobile booking bar, gallery, reviews, star rating
 and Why Us; Booking is the cart, checkout form, order summary and cart item card;
 Destinations includes the testimonials block; Profile includes the tabs and field
-styles; Manage bookings includes the booking status badge). Next: the smaller components (review form, date picker, stats), then
-the Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
+styles; Manage bookings includes the booking status badge). Next: the radius sweep, the remaining
+`_globals.scss` sizes, then the Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
 at 365px, 768px and 1281px.
 
 ## 9. Decisions
