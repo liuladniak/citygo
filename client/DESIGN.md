@@ -8,7 +8,8 @@ look different: this site is a marketing and booking experience, the dashboard i
 a work tool.
 
 Tokens live in `src/styles/partials/_variables.scss`. Sizes are in `rem` on a
-**10px root** (`1.6rem` = 16px).
+**10px root** (`html { font-size: 62.5% }`, so `1.6rem` = 16px at the default and it
+scales with the visitor's browser font setting).
 
 Principles, in order:
 
@@ -295,14 +296,12 @@ touch a file.
 
 | Gap | Count |
 |---|---|
-| Font sizes not yet on a `$fs-*` token (target: 0) | 3 declarations, 3 raw values (the root size and two `_globals.scss` headings) |
+| Font sizes not yet on a `$fs-*` token (target: 0) | 0 |
 | Text below 12px (`1rem`, `1.1rem`) | 0 uses |
-| Hex colours in component SCSS (target: tokens only) | 3 distinct, 4 uses (two `#000` photo backdrops, the Milo navy, one `#fff` in `_globals.scss`) |
+| Hex colours in component SCSS (target: tokens only) | 2 distinct, 3 uses (two `#000` photo backdrops and the Milo navy, all documented exceptions) |
 | Box-shadow declarations not on a shadow token (target 0) | 7 uses, 5 distinct variants (the exceptions listed above and the Stats block shadows) |
 | Grey text lighter than `$gray-500` (fails AA on white) | up to 21 uses of `$gray-400` (placeholders and icons are allowed) |
 | Hand-written `@media (max-width: …)` instead of mixins | 0 |
-| Root size fixed at `10px`, which ignores the visitor's browser font setting | `html { font-size: 10px }`; use `62.5%` (same default, scales with settings) |
-| Roboto `@font-face` rules that no longer resolve (the build warns) and unused font files | `_typography.scss`, `assets/fonts/static/Roboto` |
 
 Counts are of live SCSS (comment lines excluded, `_variables.scss` excluded), last
 measured after the Booking migration. The tokens exist and the exact matches are
@@ -321,8 +320,8 @@ and Why Us; Booking is the cart, checkout form, order summary and cart item card
 Destinations includes the testimonials block; Profile includes the tabs and field
 styles; Manage bookings includes the booking status badge). The radius sweep is done too: every radius is `$border-radius-small`, `$border-radius`,
 `$border-radius-main` or a pill, except the Milo widget's own bubble radii and a few
-single-corner shapes. Next: the remaining
-`_globals.scss` sizes, then the Roboto and root-size cleanups. Each page is its own PR with before and after screenshots
+single-corner shapes. The `_globals.scss` sizes, the root size (now `62.5%`) and the unused Roboto files are
+done as well, so the gaps table above is at its targets. Each page is its own PR with before and after screenshots
 at 365px, 768px and 1281px.
 
 ## 9. Decisions
