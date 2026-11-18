@@ -22,7 +22,7 @@
   &-heading--main {
     font-size: $fs-4xl;
     z-index: 0;
-    color: #fff;
+    color: $main-white;
   }
 
   &__heading {
@@ -44,8 +44,10 @@
     gap: $space-large;
     margin: $space-large auto;
 
-    @media (max-width: 768px) {
-      flex-direction: column;
+    flex-direction: column;
+
+    @include tablet {
+      flex-direction: row;
     }
 
     &__col {
@@ -84,7 +86,7 @@
     }
 
     &__desc {
-      font-size: 1.5rem;
+      font-size: $fs-md;
       color: $gray-600;
       line-height: 1.5;
     }
@@ -100,27 +102,28 @@
 }
 
 .form-section {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  border-radius: $border-radius;
+  box-shadow: $shadow-card;
+  border-radius: 0;
   @include layout-constrain;
-  margin: 0 auto $space-large;
+  margin: 0 0 $space-large;
   display: flex;
+  flex-direction: column;
   gap: 0;
   overflow: hidden;
-  background: white;
+  background: $main-white;
 
-  @media (max-width: 900px) {
-    flex-direction: column;
+  @include tablet {
+    margin: 0 auto $space-large;
+    border-radius: $border-radius;
   }
 
-  @media (max-width: 600px) {
-    margin: 0 0 $space-large;
-    border-radius: 0;
+  @include desktop-s {
+    flex-direction: row;
   }
 }
 
 .form-heading {
-  font-size: 3.4rem;
+  font-size: $fs-4xl;
   text-align: center;
   margin-bottom: 2.4rem;
 }
@@ -128,35 +131,35 @@
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 1.2rem;
   flex: 1;
-  padding: $space-large;
+  padding: 2rem 1.6rem;
 
-  @media (max-width: 900px) {
+  @include tablet {
+    gap: 1.6rem;
     padding: $space-medium;
   }
 
-  @media (max-width: 600px) {
-    padding: 2rem 1.6rem;
-    gap: 1.2rem;
+  @include desktop-s {
+    padding: $space-large;
   }
 
   &__header {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.4rem;
 
-    @media (max-width: 600px) {
-      margin-bottom: 0.4rem;
+    @include tablet {
+      margin-bottom: 0.8rem;
     }
   }
 
   &__title {
-    font-size: $fs-2xl;
+    font-size: $fs-xl;
     font-weight: 700;
     color: $charcoal;
     margin: 0 0 0.4rem;
 
-    @media (max-width: 600px) {
-      font-size: $fs-xl;
+    @include tablet {
+      font-size: $fs-2xl;
     }
   }
 
@@ -169,12 +172,12 @@
   &__name,
   &__row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.6rem;
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
 
-    @media (max-width: 600px) {
-      grid-template-columns: 1fr;
-      gap: 1.2rem;
+    @include tablet {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.6rem;
     }
   }
 
@@ -185,7 +188,7 @@
   }
 
   &__label {
-    font-size: 1.3rem;
+    font-size: $fs-sm;
     font-weight: 600;
     color: $charcoal;
   }
@@ -198,7 +201,7 @@
   &__optional {
     font-size: $fs-xs;
     font-weight: 400;
-    color: $gray-400;
+    color: $gray-500;
     margin-left: 0.4rem;
   }
 
@@ -211,7 +214,7 @@
     color: $charcoal;
     width: 100%;
     box-sizing: border-box;
-    background: white;
+    background: $main-white;
     transition:
       border-color 0.2s,
       box-shadow 0.2s;
@@ -223,7 +226,7 @@
     &:focus {
       outline: none;
       border-color: $main-teal;
-      box-shadow: 0 0 0 3px rgba(30, 85, 109, 0.1);
+      box-shadow: $focus-ring;
     }
 
     &--error {
@@ -237,11 +240,11 @@
 
   &__textarea {
     resize: vertical;
-    min-height: 12rem;
+    min-height: 10rem;
     line-height: 1.6;
 
-    @media (max-width: 600px) {
-      min-height: 10rem;
+    @include tablet {
+      min-height: 12rem;
     }
   }
 
@@ -254,40 +257,40 @@
 
   &__error {
     font-size: $fs-xs;
-    color: $danger;
+    color: $error-text;
   }
 
   &__count {
     font-size: $fs-xs;
-    color: $gray-400;
+    color: $gray-500;
     margin-left: auto;
   }
 
   &__server-error {
-    font-size: 1.3rem;
-    color: #b91c1c;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+    font-size: $fs-sm;
+    color: $error-text;
+    background: $danger-bg;
+    border: 1px solid $danger-border;
     border-radius: 0.8rem;
     padding: 1rem 1.2rem;
   }
 
   &__submit {
     background: $main-maroon;
-    color: white;
+    color: $main-white;
     border: none;
     border-radius: 0.8rem;
     padding: 1.3rem 2.4rem;
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
     transition: opacity 0.2s;
-    align-self: flex-start;
+    align-self: stretch;
+    text-align: center;
 
-    @media (max-width: 600px) {
-      align-self: stretch;
-      text-align: center;
+    @include tablet {
+      align-self: flex-start;
     }
 
     &:hover:not(:disabled) {
@@ -305,22 +308,22 @@
   display: flex;
   align-items: flex-start;
   gap: 1.2rem;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: $success-bg;
+  border: 1px solid $success-border;
   border-radius: 0.8rem;
   padding: 2rem;
-  color: #166534;
+  color: $success-text;
 
   &__title {
-    font-size: 1.5rem;
+    font-size: $fs-md;
     font-weight: 600;
-    color: #166534;
+    color: $success-text;
     margin: 0 0 0.4rem;
   }
 
   &__text {
     font-size: $fs-sm;
-    color: #166534;
+    color: $success-text;
     margin: 0;
   }
 }
@@ -328,7 +331,7 @@
 .contact-img {
   flex: 1;
   overflow: hidden;
-  min-height: 40rem;
+  min-height: 20rem;
 
   img {
     width: 100%;
@@ -337,12 +340,12 @@
     display: block;
   }
 
-  @media (max-width: 900px) {
+  @include tablet {
     min-height: 25rem;
   }
 
-  @media (max-width: 600px) {
-    min-height: 20rem;
+  @include desktop-s {
+    min-height: 40rem;
   }
 }
 
