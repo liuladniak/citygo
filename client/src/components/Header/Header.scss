@@ -410,6 +410,10 @@
 .btn.nav__item-link {
   gap: 0.8rem;
   width: 100%;
+  background: none;
+  color: inherit;
+  line-height: inherit;
+  text-align: left;
   padding: 1.4rem 2.4rem;
   border-bottom: 1px solid $gray-100;
   border-radius: 0;
