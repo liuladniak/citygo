@@ -112,7 +112,7 @@
       font-size: $fs-xs;
       background: $gray-100;
       padding: 0.2rem 0.6rem;
-      border-radius: 0.4rem;
+      border-radius: $border-radius-small;
       color: $charcoal;
     }
   }
@@ -149,7 +149,7 @@
       font-size: $fs-xs;
       background: $gray-100;
       padding: 0.2rem 0.6rem;
-      border-radius: 0.4rem;
+      border-radius: $border-radius-small;
       color: $charcoal;
     }
   }

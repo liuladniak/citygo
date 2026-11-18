@@ -52,7 +52,7 @@
     display: grid;
     grid-template-rows: 7rem 7rem 1rem 7rem;
     grid-template-columns: 1fr 1rem 1fr 1fr;
-    border-radius: 16px;
+    border-radius: $border-radius;
     text-align: left;
     position: relative;
     overflow: hidden;

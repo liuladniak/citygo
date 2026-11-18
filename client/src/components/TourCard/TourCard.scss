@@ -110,7 +110,7 @@
     background-color: $main-teal;
     color: white;
     padding: 0.3rem 0.8rem;
-    border-radius: 3rem;
+    border-radius: $border-radius-main;
   }
 
   &__highlights-list {
@@ -203,7 +203,7 @@
   right: 0.8rem;
   background: rgba(0, 0, 0, 0.65);
   align-items: center;
-  border-radius: 1.6rem;
+  border-radius: $border-radius;
 }
 
 .slider-button.slider-button__card--prev,
