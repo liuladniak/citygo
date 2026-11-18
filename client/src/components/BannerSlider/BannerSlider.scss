@@ -87,7 +87,7 @@
     }
 
     @include desktop-s {
-      font-size: 3.6rem;
+      font-size: $fs-4xl;
       max-width: 50%;
     }
   }

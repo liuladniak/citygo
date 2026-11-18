@@ -3,10 +3,10 @@
 
 .signup-name-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 1.2rem;
 
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
+  @include mobile-m {
+    grid-template-columns: 1fr 1fr;
   }
 }
