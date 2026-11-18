@@ -198,7 +198,7 @@
 
 .contact-input {
   border: 1px solid $gray-200;
-  border-radius: 0.8rem;
+  border-radius: $border-radius-small;
   padding: 1.1rem 1.4rem;
   font-size: $fs-sm;
   font-family: inherit;

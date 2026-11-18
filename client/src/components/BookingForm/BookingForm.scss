@@ -167,7 +167,7 @@
     text-decoration: underline;
     color: $charcoal !important;
     border: none !important;
-    border-radius: 3rem !important;
+    border-radius: $border-radius-main !important;
     font-size: $fs-sm;
     align-self: center;
     padding: 0.4rem 1.2rem !important;

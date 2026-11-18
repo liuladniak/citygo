@@ -44,7 +44,7 @@
   padding: 0.4rem 0;
   background-color: white;
   z-index: 1000;
-  border-radius: 1.2rem;
+  border-radius: $border-radius;
   max-height: 0;
   overflow: hidden;
   opacity: 0;
@@ -74,7 +74,7 @@
     left: 0;
     right: 0;
     box-shadow: $shadow-raised;
-    border-radius: 1.2rem;
+    border-radius: $border-radius;
     background: white;
   }
 }
