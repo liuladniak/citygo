@@ -70,7 +70,7 @@
     background: linear-gradient(90deg, $gray-100 25%, $gray-200 50%, $gray-100 75%);
     background-size: 200% 100%;
     animation: shimmer 1.4s infinite;
-    border-radius: 0.4rem;
+    border-radius: $border-radius-small;
     width: 100%;
 
     &--short {
@@ -95,7 +95,7 @@
     background: none;
     border: 1px solid $warning-border;
     color: $warning-text;
-    border-radius: 0.6rem;
+    border-radius: $border-radius-small;
     padding: 0.6rem 1.4rem;
     font-size: $fs-sm;
     cursor: pointer;

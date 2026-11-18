@@ -9,7 +9,7 @@
   align-items: center;
   padding: 0.8rem 1.6rem;
   font-size: $fs-sm;
-  border-radius: 0.8rem;
+  border-radius: $border-radius-small;
   transition: all 0.2s ease-in-out;
   color: $gray-600;
   background-color: $gray-100;

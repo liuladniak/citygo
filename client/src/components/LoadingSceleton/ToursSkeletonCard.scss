@@ -18,7 +18,7 @@ $shimmer: linear-gradient(100deg, $gray-200 40%, $gray-100 50%, $gray-200 60%);
   flex-basis: 37.8rem;
   height: 320px;
   background: $gray-100;
-  border-radius: 12px;
+  border-radius: $border-radius;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@ $shimmer: linear-gradient(100deg, $gray-200 40%, $gray-100 50%, $gray-200 60%);
 .skeleton-image {
   width: 100%;
   height: 160px;
-  border-radius: 8px;
+  border-radius: $border-radius;
   background: $shimmer;
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
@@ -48,7 +48,7 @@ $shimmer: linear-gradient(100deg, $gray-200 40%, $gray-100 50%, $gray-200 60%);
   background: $shimmer;
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
-  border-radius: 4px;
+  border-radius: $border-radius-small;
 }
 
 .skeleton-text {
@@ -57,7 +57,7 @@ $shimmer: linear-gradient(100deg, $gray-200 40%, $gray-100 50%, $gray-200 60%);
   background: $shimmer;
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
-  border-radius: 4px;
+  border-radius: $border-radius-small;
 }
 
 .skeleton-text.short {

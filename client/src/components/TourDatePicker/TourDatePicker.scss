@@ -8,7 +8,7 @@
   .react-datepicker {
     border: none;
     border: 1px solid rgb(221, 221, 221);
-    border-radius: 12px;
+    border-radius: $border-radius;
     overflow: hidden;
     font-family: "Arial, sans-serif";
     font-size: $fs-xs;
@@ -133,7 +133,7 @@
   width: 200px;
   background-color: white;
   box-shadow: $shadow-raised;
-  border-radius: 12px;
+  border-radius: $border-radius;
   padding: 20px;
   z-index: 1000;
   position: absolute;
