@@ -198,8 +198,17 @@
           background-color: $main-teal;
           color: $main-white;
           font-weight: 600;
-          padding: 0.5rem 1.2rem;
+          padding: 0;
           border-radius: $border-radius-small;
+        }
+
+        .nav__item-link {
+          @include desktop-s {
+            display: flex;
+            align-items: center;
+            min-height: 4rem;
+            padding: 0 1.2rem;
+          }
         }
       }
     }
