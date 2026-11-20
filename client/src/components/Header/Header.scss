@@ -198,8 +198,17 @@
           background-color: $main-teal;
           color: $main-white;
           font-weight: 600;
-          padding: 0.5rem 1.2rem;
+          padding: 0;
           border-radius: $border-radius-small;
+        }
+
+        .nav__item-link {
+          @include desktop-s {
+            display: flex;
+            align-items: center;
+            min-height: 4rem;
+            padding: 0 1.2rem;
+          }
         }
       }
     }
@@ -410,6 +419,10 @@
 .btn.nav__item-link {
   gap: 0.8rem;
   width: 100%;
+  background: none;
+  color: inherit;
+  line-height: inherit;
+  text-align: left;
   padding: 1.4rem 2.4rem;
   border-bottom: 1px solid $gray-100;
   border-radius: 0;

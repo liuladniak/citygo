@@ -32,9 +32,7 @@ function Header() {
     (state) => state.currency.selectedCurrency,
   );
   const currencyOptions = ["USD", "EUR", "TRY"];
-  console.log("user for initials:", user?.first_name, user?.last_name);
   const totalBookings = useSelector(selectTotalBookings);
-  // const exchangeRates = useSelector((state) => state.currency.exchangeRates);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -65,12 +63,6 @@ function Header() {
     dispatch(fetchExchangeRates());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (Object.keys(exchangeRates).length === 0) {
-  //     dispatch(fetchExchangeRates());
-  //   }
-  // }, [dispatch, exchangeRates]);
-
   const handleCurrencyChange = (currency) => {
     dispatch(setCurrency(currency));
   };
@@ -89,7 +81,7 @@ function Header() {
       </Link>
 
       <div className="burger-wrp">
-        <li className="nav__item--phone-mobile" onClick={closeMenu}>
+        <div className="nav__item--phone-mobile" onClick={closeMenu}>
           <a
             className="nav__item-link nav__item-link--phone"
             href="tel:+12344555656"
@@ -97,7 +89,7 @@ function Header() {
             <span className="phone-text">+1 (234) 455 56-56</span>
             <img className="nav__icon" src={phoneIcon} alt="phone icon" />
           </a>
-        </li>
+        </div>
 
         <div className="burger-wrp" onClick={toggleMenu}>
           <span className="burger-title">{isOpen ? "Close" : "Menu"}</span>
@@ -171,37 +163,43 @@ function Header() {
           {isLoggedIn ? (
             <li className="nav__list-item manage-bookings">
               <div ref={ref} className="dropdown-wrapper btn--dropdown">
-                <div onClick={toggleDropdown} className="btn nav__item-link ">
-                  <div className="nav-hamburger">
+                <button
+                  type="button"
+                  onClick={toggleDropdown}
+                  className="btn nav__item-link"
+                  aria-haspopup="true"
+                  aria-expanded={isComponentVisible}
+                >
+                  <span className="nav-hamburger">
                     <img
                       className="nav-hamburger__icon"
                       src={HamburgerIcon}
                       alt="Hamburger Icon"
                     />
-                    <div className="nav-hamburger__text">
+                    <span className="nav-hamburger__text">
                       <span>My Account</span>
                       {isComponentVisible ? (
                         <Icon iconPath={iconArrowUp} />
                       ) : (
                         <Icon iconPath={iconArrowDown} />
                       )}
-                    </div>
-                  </div>
+                    </span>
+                  </span>
 
-                  <div className="user-avatar btn--manage-bookings">
-                    <div className="user-avatar-initials">
+                  <span className="user-avatar btn--manage-bookings">
+                    <span className="user-avatar-initials">
                       {getInitials(user?.first_name, user?.last_name)}
-                    </div>
-                  </div>
-                  <div className="user-avatar__menu">
+                    </span>
+                  </span>
+                  <span className="user-avatar__menu">
                     <span>My Account</span>
                     {isComponentVisible ? (
                       <Icon iconPath={iconArrowUp} />
                     ) : (
                       <Icon iconPath={iconArrowDown} />
                     )}
-                  </div>
-                </div>
+                  </span>
+                </button>
                 <ul
                   className={`dropdown-menu ${
                     isComponentVisible && "dropdown--visible"
