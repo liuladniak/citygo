@@ -2,6 +2,7 @@ import express from "express";
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import "dotenv/config";
+import { buildNextCursor, parseCursor } from "../lib/activityCursor.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
@@ -10,9 +11,7 @@ router.get("/", async (req, res) => {
   try {
     const { limit = 5, cursor } = req.query;
     const pageSize = Math.min(parseInt(limit) || 5, 50);
-    const cursorId = cursor
-      ? JSON.parse(Buffer.from(cursor, "base64").toString())
-      : null;
+    const cursorId = parseCursor(cursor);
 
     let bookingQuery = knex("booking_activity_log")
       .leftJoin("bookings", "booking_activity_log.booking_id", "bookings.id")
@@ -63,17 +62,7 @@ router.get("/", async (req, res) => {
       )
       .slice(0, pageSize);
 
-    let nextCursor = null;
-    if (merged.length === pageSize) {
-      const lastBooking = merged.filter((r) => r.source === "booking").at(-1);
-      const lastTour = merged.filter((r) => r.source === "tour").at(-1);
-      nextCursor = Buffer.from(
-        JSON.stringify({
-          booking_id: lastBooking?.id ?? null,
-          tour_id: lastTour?.id ?? null,
-        })
-      ).toString("base64");
-    }
+    const nextCursor = buildNextCursor(merged, pageSize, cursorId);
 
     res.json({ data: merged, nextCursor });
   } catch (err) {
