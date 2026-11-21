@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import { env } from "./config/env.js";
 
 import path from "path";
 import { dirname } from "path";
@@ -43,13 +42,11 @@ const app = express();
 // One proxy hop (Nginx Proxy Manager) sits in front of the API, so req.ip and the
 // rate limiters see the real visitor IP from X-Forwarded-For.
 app.set("trust proxy", 1);
-const PORT = process.env.PORT || 8080;
+const PORT = env.PORT;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticFilesPath = path.resolve("public");
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map((origin) =>
-  origin.trim().replace(/\/$/, ""),
-);
+const allowedOrigins = env.ALLOWED_ORIGINS;
 
 app.use(
   cors({
@@ -63,7 +60,7 @@ app.use(
   }),
 );
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   app.use(morgan("dev"));
   console.log("Morgan logging in dev mode");
 } else {
@@ -136,9 +133,9 @@ const realtime = createRealtime(server, {
   store: dbStore,
   authenticateAgent: authenticateToken,
   allowedOrigins,
-  agentName: process.env.MILO_AGENT_NAME,
+  agentName: env.MILO_AGENT_NAME,
   notify: notifyTelegram,
-  consoleUrl: process.env.MILO_CONSOLE_URL,
+  consoleUrl: env.MILO_CONSOLE_URL,
 });
 // Requests nobody picks up within 5 minutes become "missed".
 cron.schedule("* * * * *", () => {
