@@ -15,7 +15,6 @@ const ReviewTour = ({ bookings }) => {
   const dispatch = useDispatch();
   const [editingBooking, setEditingBooking] = useState(null);
   const [editingDetail, setEditingDetail] = useState(null);
-  console.log("CART BOOKINGS 123", bookings);
   const handleRemoveBooking = (id) => {
     dispatch(removeBooking(id));
   };
@@ -23,7 +22,6 @@ const ReviewTour = ({ bookings }) => {
   const handleUpdateBooking = (updatedBooking) => {
     dispatch(updateBooking(updatedBooking));
   };
-  console.log("Editing booking", editingBooking);
   return (
     <div className="review-tour">
       <ul className="review-tour__list">

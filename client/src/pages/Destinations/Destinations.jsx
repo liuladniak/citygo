@@ -96,16 +96,11 @@ const Destinations = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        console.log("Fetching articles");
         const response = await axios.get(
           `${API_URL}/api/articles?limit=9&page=1`,
         );
         setArticles(response.data.data.slice(0, 1));
         setArticlesSmall(response.data.data.slice(1, 4));
-        console.log(
-          "articles response data ARticles SMALL:",
-          response.data.data.slice(1, 4),
-        );
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching articles:", error);

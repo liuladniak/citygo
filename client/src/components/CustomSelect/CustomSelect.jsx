@@ -81,7 +81,6 @@ function CustomSelect({
           </li>
         )}
         {options.map((option, index) => {
-          console.log("option for time slot", option.label, options);
           return (
             <li
               key={index}

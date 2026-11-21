@@ -306,7 +306,6 @@ function Login() {
             type="button"
             className="login-demo__btn"
             onClick={() => {
-              console.log("creds:", TEST_EMAIL, TEST_PASSWORD);
               handlePrefillTest();
             }}
           >

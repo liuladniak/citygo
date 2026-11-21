@@ -17,8 +17,6 @@ const ReviewForm = ({ bookingId, tourName, onSubmitted }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [uploadProgress, setUploadProgress] = useState("");
-  console.log("API_URL:", API_URL);
-  console.log("posting to:", `${API_URL}/api/reviews`);
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const remaining = MAX_PHOTOS - photos.length;
@@ -98,13 +96,6 @@ const ReviewForm = ({ bookingId, tourName, onSubmitted }) => {
       } = await supabase.auth.getSession();
       const token = session?.access_token;
       const photoUrls = photos.length > 0 ? await uploadPhotos() : [];
-      console.log("submitting review:", {
-        booking_id: bookingId,
-        rating,
-        title,
-        body,
-        photos: photoUrls,
-      });
       await axios.post(
         `${API_URL}/api/reviews`,
         { booking_id: bookingId, rating, title, body, photos: photoUrls },

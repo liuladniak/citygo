@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BookingForm.scss";
 import TourDatePicker from "../TourDatePicker/TourDatePicker";
@@ -6,7 +6,7 @@ import Button from "../Button/Button";
 import useComponentVisible from "../../hooks/useComponentVisible";
 import calendarIcon from "../../assets/icons/calendar.svg";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addBooking } from "../../features/cart/cartSlice";
 import { v4 as uuidv4 } from "uuid";
 import CustomSelect from "../CustomSelect/CustomSelect";
@@ -38,13 +38,11 @@ const BookingForm = ({
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const bookings = useSelector((state) => state.cart.bookings);
   const toggleDropdown = () => {
     setIsComponentVisible(!isComponentVisible);
   };
 
   const handleDateSelected = (date) => {
-    console.log(date);
     setSelectedDate(date);
   };
 
@@ -103,18 +101,7 @@ const BookingForm = ({
     navigate("/cart");
   };
 
-  useEffect(() => {
-    console.log("Updated cart bookings:", bookings);
-  }, [bookings]);
-
   const totalGuests = adults + children;
-
-  console.log(
-    "TIME slot options",
-    timeSlotOptions,
-    "Selected time slot",
-    selectedTimeSlot,
-  );
 
   return (
     <div className="booking-form-wrp">

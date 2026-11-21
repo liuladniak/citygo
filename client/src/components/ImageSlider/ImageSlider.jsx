@@ -5,7 +5,6 @@ import iconRight from "../../assets/icons/chevron-right-white.svg";
 
 const ImageSlider = ({ images, startIndex, className }) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
-  const API_URL = import.meta.env.VITE_API_URL;
   const nextSlide = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -20,7 +19,6 @@ const ImageSlider = ({ images, startIndex, className }) => {
     setCurrentIndex(newIndex);
   };
 
-  console.log(`${API_URL}/${images[currentIndex]}`, "image slider path");
   return (
     <div className={`image-slider image-slider--card ${className}`}>
       <img className="slider-image" src={images[currentIndex]} alt="" />

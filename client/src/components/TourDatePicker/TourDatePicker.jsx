@@ -65,7 +65,6 @@ const TourDatePicker = ({
       setIsComponentVisible(true);
     }
   };
-  console.log(selectedDate, "selectedDate");
   return (
     <div className="tour-date-picker">
       <DatePicker
