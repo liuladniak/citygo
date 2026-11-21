@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { apiErrorMessage } from "@/lib/apiError";
 
 interface Props {
   open: boolean;
@@ -37,8 +38,8 @@ export default function ConfirmBookingDialog({
       });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to confirm booking");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to confirm booking"));
     } finally {
       setIsConfirming(false);
     }

@@ -32,6 +32,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import ItineraryEditor from "@/components/itinerary/ItineraryEditor";
+import { apiErrorMessage } from "@/lib/apiError";
 
 const CATEGORIES = [
   "Guided tour",
@@ -183,8 +184,8 @@ export default function AddTour() {
       });
       toast.success("Tour created successfully");
       navigate(`/tours/${data.tour.slug}`);
-    } catch (err: any) {
-      toast.error(err.response?.data?.message ?? "Failed to create tour");
+    } catch (err) {
+      toast.error(apiErrorMessage(err, "Failed to create tour", "message"));
     } finally {
       setIsSaving(false);
     }

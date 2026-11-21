@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { apiErrorMessage } from "@/lib/apiError";
 
 const POSITIONS = [
   "Lead Guide",
@@ -102,8 +103,8 @@ export default function AddEmployeeModal({ open, onClose, onSuccess }: Props) {
       });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to create employee");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to create employee"));
     } finally {
       setIsSaving(false);
     }

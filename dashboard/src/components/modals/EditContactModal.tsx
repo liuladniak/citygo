@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { apiErrorMessage } from "@/lib/apiError";
 
 export default function EditContactModal({
   open,
@@ -46,8 +47,8 @@ export default function EditContactModal({
       await axios.patch(`/api/bookings/${booking.id}`, form);
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to save");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to save"));
     } finally {
       setIsSaving(false);
     }

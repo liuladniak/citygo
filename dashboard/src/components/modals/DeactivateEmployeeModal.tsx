@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { apiErrorMessage } from "@/lib/apiError";
 
 const REASONS = [
   { value: "resigned", label: "Resigned" },
@@ -56,8 +57,8 @@ export default function DeactivateEmployeeModal({
       });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to deactivate employee");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to deactivate employee"));
     } finally {
       setIsSaving(false);
     }

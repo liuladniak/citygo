@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { DetailedBooking } from "@/types/booking";
+import { apiErrorMessage } from "@/lib/apiError";
 
 
 function Counter({
@@ -136,8 +137,8 @@ export default function EditGuestsModal({
 
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to save");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to save"));
     }
   };
 
