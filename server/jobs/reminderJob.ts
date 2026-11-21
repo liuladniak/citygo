@@ -1,10 +1,8 @@
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import "dotenv/config";
 import { notificationQueue } from "../queues/notificationQueue.js";
 import { format, addDays } from "date-fns";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 
 interface Booking {
   id: number;
