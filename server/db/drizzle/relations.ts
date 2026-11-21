@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { tourTimeSlots, bookings, users, bookingGuests, bookingGuestNames, usersInAuth, userRoles, bookingPayments, bookingsOld, tours, highlights, images, bookingAssignments, employees, tourRecurringUnavailabilities, tourUnavailableDates, authors, articles, tourItineraryCoordinates, bookingActivityLog, reviews, passwordResetTokens, tourActivityLog, tasks, taskComments } from "./schema";
+import { tourTimeSlots, bookings, users, bookingGuests, bookingGuestNames, usersInAuth, userRoles, bookingPayments, bookingsOld, tours, highlights, images, bookingAssignments, employees, tourRecurringUnavailabilities, tourUnavailableDates, authors, articles, tourItineraryCoordinates, bookingActivityLog, reviews, passwordResetTokens, tourActivityLog, tasks, taskComments } from "./schema.js";
 
 export const bookingsRelations = relations(bookings, ({one, many}) => ({
 	tourTimeSlot: one(tourTimeSlots, {
