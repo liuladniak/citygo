@@ -116,15 +116,15 @@ export function ActivityFeed() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchActivities = useCallback(async (cursorParam?: string) => {
-    try {
-      const res = await axios.get(`/api/activity`, {
-        params: { limit: 5, ...(cursorParam && { cursor: cursorParam }) },
-      });
-      return res.data;
-    } catch (err) {
-      console.error("Activity feed error:", err);
-      setError("Failed to load activity");
-    }
+    const res = await axios.get(`/api/activity`, {
+      params: { limit: 5, ...(cursorParam && { cursor: cursorParam }) },
+    });
+    const body = res.data;
+    return {
+      rows: (Array.isArray(body?.data) ? body.data : []) as ActivityLog[],
+      nextCursor:
+        typeof body?.nextCursor === "string" ? body.nextCursor : null,
+    };
   }, []);
 
   useEffect(() => {
@@ -132,11 +132,12 @@ export function ActivityFeed() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await fetchActivities();
-        setActivities(data.data);
-        setCursor(data.nextCursor);
-        setHasMore(!!data.nextCursor);
-      } catch {
+        const page = await fetchActivities();
+        setActivities(page.rows);
+        setCursor(page.nextCursor);
+        setHasMore(!!page.nextCursor);
+      } catch (err) {
+        console.error("Activity feed error:", err);
         setError("Failed to load activity");
       } finally {
         setIsLoading(false);
@@ -149,11 +150,12 @@ export function ActivityFeed() {
     if (!cursor) return;
     setIsLoadingMore(true);
     try {
-      const data = await fetchActivities(cursor);
-      setActivities((prev) => [...prev, ...data.data]);
-      setCursor(data.nextCursor);
-      setHasMore(!!data.nextCursor);
-    } catch {
+      const page = await fetchActivities(cursor);
+      setActivities((prev) => [...prev, ...page.rows]);
+      setCursor(page.nextCursor);
+      setHasMore(!!page.nextCursor);
+    } catch (err) {
+      console.error("Activity feed error:", err);
       setError("Failed to load more");
     } finally {
       setIsLoadingMore(false);

@@ -11,8 +11,8 @@ import {
   TrendingUp,
   TrendingDown,
   Euro,
+  type LucideIcon,
 } from "lucide-react";
-
 
 interface DashboardStats {
   tours_today: number;
@@ -38,6 +38,28 @@ interface WeatherData {
     temp_min: number;
     condition: string;
   }[];
+}
+
+function toNumber(value: unknown): number {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function normalizeStats(raw: unknown): DashboardStats {
+  if (!raw || typeof raw !== "object") {
+    throw new Error("Unexpected dashboard stats response");
+  }
+  const r = raw as Record<string, unknown>;
+  return {
+    tours_today: toNumber(r.tours_today),
+    guests_today: toNumber(r.guests_today),
+    currently_running: toNumber(r.currently_running),
+    revenue_today: toNumber(r.revenue_today),
+    expected_revenue_today: toNumber(r.expected_revenue_today),
+    urgent_tasks: toNumber(r.urgent_tasks),
+    unpaid_bookings: toNumber(r.unpaid_bookings),
+    tours_trend: toNumber(r.tours_trend),
+  };
 }
 
 function wmoToCondition(code: number): string {
@@ -97,7 +119,7 @@ function StatCard({
   title: string;
   value: string | number;
   subtitle?: string;
-  icon: any;
+  icon: LucideIcon;
   iconClass?: string;
   trend?: number;
   valueClass?: string;
@@ -198,7 +220,7 @@ export default function MainStats() {
       const { data } = await axios.get(
         `/api/bookings/stats/dashboard`
       );
-      return data;
+      return normalizeStats(data);
     },
     refetchInterval: 5 * 60 * 1000,
   });
