@@ -3,10 +3,7 @@ import initKnex from "knex";
 import knexConfig from "../knexfile.js";
 import "dotenv/config";
 import { requireRole } from "../middleware/auth.js";
-import {
-  sendGuideAssignment,
-  sendGuideUnassignment,
-} from "../services/emailService.js";
+import { guideAssignmentJob, guideUnassignmentJob } from "../lib/guideEmail.js";
 import { notificationQueue } from "../queues/notificationQueue.js";
 import { getRedis } from "../lib/redis.js";
 import {
@@ -614,12 +611,15 @@ router.post(
 
       if (guide?.email) {
         const fullBooking = await getFullBooking(id);
-        sendGuideAssignment({
-          guideName: `${guide.first_name} ${guide.last_name}`,
-          guideEmail: guide.email,
-          booking: fullBooking,
+        const job = guideAssignmentJob(
+          { name: `${guide.first_name} ${guide.last_name}`, email: guide.email },
+          fullBooking,
           role,
-        });
+        );
+        // The assignment is already saved, so a queue problem must not fail the request.
+        notificationQueue
+          .add("guide-assignment", job)
+          .catch((err) => console.error("Queue guide-assignment failed:", err));
       }
 
       res.status(201).json({ data: assignment });
@@ -669,11 +669,15 @@ router.delete(
 
         if (assignment.guide_email) {
           const fullBooking = await getFullBooking(id);
-          sendGuideUnassignment({
-            guideName: assignment.guide_name,
-            guideEmail: assignment.guide_email,
-            booking: fullBooking,
-          });
+          const job = guideUnassignmentJob(
+            { name: assignment.guide_name, email: assignment.guide_email },
+            fullBooking,
+          );
+          notificationQueue
+            .add("guide-unassignment", job)
+            .catch((err) =>
+              console.error("Queue guide-unassignment failed:", err),
+            );
         }
       }
 
