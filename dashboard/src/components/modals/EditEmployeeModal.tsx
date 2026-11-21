@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabaseClient";
+import { apiErrorMessage } from "@/lib/apiError";
 
 const POSITIONS = [
   "Lead Guide",
@@ -138,8 +139,8 @@ export default function EditEmployeeModal({
       });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to save changes");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to save changes"));
     } finally {
       setIsSaving(false);
     }

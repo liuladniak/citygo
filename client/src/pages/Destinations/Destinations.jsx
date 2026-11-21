@@ -233,7 +233,7 @@ const Destinations = () => {
       </div>
 
       <Link to="/travel-guide" className="destinations-stories">
-        <h3 className="destinations-heading">Get ideas from latest articles</h3>
+        <h2 className="destinations-heading">Get ideas from latest articles</h2>
         <div className="destinations-stories__cols">
           <div className="destinations-stories__col--1">
             <StoryCard article={articles} />
@@ -270,10 +270,10 @@ const Destinations = () => {
       </div>
       <Testimonials />
       <div className="destinations-glimpse">
-        <h3 className="destinations-heading">
+        <h2 className="destinations-heading">
           Glimpse into your next experience
-        </h3>
-        <h2>Connect with us on our Instagram page #CityGo</h2>
+        </h2>
+        <p>Connect with us on our Instagram page #CityGo</p>
         <div>
           <div className="destinations-img">
             <div className="glimpse-el">
@@ -302,7 +302,7 @@ const Destinations = () => {
       </div>
 
       <div className="destinations-faq">
-        <h3 className="destinations-heading">FAQ</h3>
+        <h2 className="destinations-heading">FAQ</h2>
         <Accordion items={faqs} />
       </div>
     </div>

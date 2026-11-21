@@ -259,9 +259,9 @@ Planned, not built yet:
 
 - **Touch targets:** controls are 40px high on touch screens and keep the compact
   36px on mouse screens. This is done with the `pointer-coarse:` variant in
-  `components/ui/button.tsx`, not with screen width, so a tablet gets the larger
-  targets too. Never set a button height by hand. (Decided; the `Button` change
-  ships in its own PR.)
+  `components/ui/` (button, input, select, tabs), not with screen width, so a
+  tablet gets the larger targets too. Checkbox and switch keep their look but get
+  a 40px hit area. Never set a button height by hand.
 - **`Card` vs `Panel`:** `Panel` is the standard for any titled section. `Card`
   stays only as a low-level shadcn primitive for stat tiles and clickable cards.
   There is no mass migration: switch a page when you touch it, and the page

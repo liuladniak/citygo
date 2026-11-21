@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import BackButton from "@/components/ui/BackButton";
 import { AvailabilityCalendar } from "@/components/AvailabilityCalendar";
+import { apiErrorMessage, apiErrorData } from "@/lib/apiError";
 
 interface Tour {
   id: number;
@@ -1192,16 +1193,15 @@ const AddBooking = () => {
             guide_id: assignment.guide_id,
             role: assignment.role,
           });
-        } catch (err: any) {
-          console.error("assignment failed:", err.response?.data);
+        } catch (err) {
+          console.error("assignment failed:", apiErrorData(err));
         }
       }
 
       navigate(`/bookings/${bookingId}`);
-    } catch (err: any) {
+    } catch (err) {
       setSubmitError(
-        err.response?.data?.error ??
-          "Failed to create booking. Please try again.",
+        apiErrorMessage(err, "Failed to create booking. Please try again."),
       );
     } finally {
       setIsSubmitting(false);

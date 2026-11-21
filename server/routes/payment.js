@@ -4,6 +4,7 @@ import axios from "axios";
 import "dotenv/config";
 import initKnex from "knex";
 import knexConfig from "../knexfile.js";
+import { normalizeTourDate, isPastDay } from "../lib/tourDate.js";
 
 const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
@@ -187,14 +188,12 @@ router.post("/create-payment-intent", async (req, res) => {
         parseInt(children)
       );
 
-      const sanitizedBookingDate = new Date(tour_date);
-      if (isNaN(sanitizedBookingDate.getTime())) {
+      const bookingDay = normalizeTourDate(tour_date);
+      if (!bookingDay) {
         return res.status(400).json({ error: "Invalid booking date format." });
       }
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (sanitizedBookingDate < today) {
+      if (isPastDay(bookingDay)) {
         return res
           .status(400)
           .json({ error: "Tour date must be in the future." });
@@ -204,9 +203,7 @@ router.post("/create-payment-intent", async (req, res) => {
       metadata[`${prefix}user_id`] = user_id;
       metadata[`${prefix}tour_id`] = tour_id;
       metadata[`${prefix}time_slot_id`] = time_slot_id;
-      metadata[`${prefix}tour_date`] = sanitizedBookingDate
-        .toISOString()
-        .split("T")[0];
+      metadata[`${prefix}tour_date`] = bookingDay;
       metadata[`${prefix}adults`] = adults;
       metadata[`${prefix}children`] = children;
       metadata[`${prefix}infants`] = infants;

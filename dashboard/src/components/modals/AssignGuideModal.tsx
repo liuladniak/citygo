@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { X, UserPlus, Loader2 } from "lucide-react";
+import { apiErrorMessage, apiErrorData } from "@/lib/apiError";
 
 interface Guide {
   id: number;
@@ -78,20 +79,20 @@ export function AssignGuideModal({
               params: { date: bookingDate },
             })
             .catch((err) => {
-              console.error("guides failed:", err.response?.data);
+              console.error("guides failed:", apiErrorData(err));
               throw err;
             }),
           axios
             .get(`/api/bookings/${bookingId}/assignments`)
             .catch((err) => {
-              console.error("assignments failed:", err.response?.data);
+              console.error("assignments failed:", apiErrorData(err));
               throw err;
             }),
         ]);
         setGuides(guidesRes.data.data);
         setAssignments(assignmentsRes.data.data);
-      } catch (err: any) {
-        console.error("Failed to load guide data:", err.response?.data);
+      } catch (err) {
+        console.error("Failed to load guide data:", apiErrorData(err));
         setError("Failed to load guide data");
       } finally {
         setIsLoading(false);
@@ -117,8 +118,8 @@ export function AssignGuideModal({
       ]);
       setSelectedGuide("");
       setSelectedRole("");
-    } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to assign guide");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to assign guide"));
     } finally {
       setIsSaving(false);
     }

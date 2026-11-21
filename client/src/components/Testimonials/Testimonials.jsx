@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 const Testimonials = () => {
   return (
     <div className="destinations-testimonials">
-      <h3 className="destinations-heading">User stories</h3>
+      <h2 className="destinations-heading">User stories</h2>
       <div className="testimonials-list">
         <div className="testimonials-item">
           <StarIcon />

@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { apiErrorMessage } from "@/lib/apiError";
 
 const CANCELLATION_REASONS = [
   { value: "customer_request", label: "Customer Request" },
@@ -97,8 +98,8 @@ export default function CancelBookingDialog({
       });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to cancel booking");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to cancel booking"));
     } finally {
       setIsCancelling(false);
     }

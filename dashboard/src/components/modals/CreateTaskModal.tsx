@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
+import { apiErrorMessage } from "@/lib/apiError";
 
 
 interface Employee {
@@ -88,8 +89,8 @@ export default function CreateTaskModal({
       });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to create task");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to create task"));
     } finally {
       setIsSaving(false);
     }

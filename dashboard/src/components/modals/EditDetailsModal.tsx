@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { formatTime } from "@/lib/utils";
 import apiClient from "@/lib/apiClient";
 import { AvailabilityCalendar } from "../AvailabilityCalendar";
+import { apiErrorMessage } from "@/lib/apiError";
 
 export default function EditDetailsModal({
   open,
@@ -97,8 +98,8 @@ export default function EditDetailsModal({
       await axios.patch(`/api/bookings/${booking.id}`, changes);
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Failed to save");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Failed to save"));
     } finally {
       setIsSaving(false);
     }
