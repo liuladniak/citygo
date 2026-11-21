@@ -1,9 +1,7 @@
 import express from "express";
 import "dotenv/config";
 
-import initKnex from "knex";
-import configuration from "../knexfile.js";
-const knex = initKnex(configuration["development"]);
+import { knex } from "../db/knex.js";
 
 const router = express.Router();
 

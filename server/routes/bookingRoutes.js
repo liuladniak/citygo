@@ -1,6 +1,5 @@
 import express from "express";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import "dotenv/config";
 import { requireRole } from "../middleware/auth.js";
 import { guideAssignmentJob, guideUnassignmentJob } from "../lib/guideEmail.js";
@@ -12,7 +11,6 @@ import {
   REMINDER_BLOCK_MESSAGES,
 } from "../lib/reminder.js";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 const VALID_STATUSES = [
   "draft",

@@ -1,10 +1,8 @@
 import express from "express";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import "dotenv/config";
 import { buildNextCursor, parseCursor } from "../lib/activityCursor.js";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 
 router.get("/", async (req, res) => {

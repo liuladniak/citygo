@@ -1,6 +1,5 @@
 import express from "express";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import { getAiItinerary } from "../services/aiService.js";
 import axios from "axios";
 import { redact } from "../lib/redact.js";
@@ -9,7 +8,6 @@ import { getRedis } from "../lib/redis.js";
 import { isOwner } from "../lib/ownerKey.js";
 import { getLimits } from "../lib/aiCaps.js";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 
 const getTourContext = async (message) => {

@@ -1,9 +1,7 @@
 import express from "express";
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
+import { knex } from "../db/knex.js";
 import "dotenv/config";
 const router = express.Router();
 router.post(
