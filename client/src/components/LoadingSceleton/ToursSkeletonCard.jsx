@@ -1,6 +1,6 @@
 import "./ToursSkeletonCard.scss";
 
-const ToursSkeletonCard = ({ className }) => {
+const ToursSkeletonCard = ({ className = "" }) => {
   return (
     <div className={`skeleton-card ${className}`}>
       <div className="skeleton-image"></div>
