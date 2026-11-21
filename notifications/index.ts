@@ -309,6 +309,87 @@ const worker = new Worker(
         break;
       }
 
+      case "guide-assignment": {
+        const html = `
+          <div style="${baseStyle}">
+            <div style="background:#8b5cf6;padding:24px 32px;border-radius:12px 12px 0 0">
+              <h1 style="color:white;margin:0;font-size:22px">New Tour Assignment 📋</h1>
+              <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours — Staff Notification</p>
+            </div>
+            <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+              <p style="font-size:16px">Hi <strong>${esc(d.guideName)}</strong>,</p>
+              <p>You have been assigned to a tour as <strong>${esc(d.role)}</strong>.</p>
+              <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:20px 0">
+                <table style="width:100%;border-collapse:collapse;font-size:14px">
+                  <tr><td style="padding:6px 0;color:#666">Tour</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.tourName)}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Date</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${formatDate(d.tourDate)}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Time</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.startTime ? `${d.startTime}${d.endTime ? ` – ${d.endTime}` : ""}` : "—")}</td></tr>
+                  ${
+                    d.meetingPoint
+                      ? `
+                  <tr><td style="padding:6px 0;color:#666">Meeting Point</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.meetingPoint)}</td></tr>`
+                      : ""
+                  }
+                  <tr><td style="padding:6px 0;color:#666">Guests</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.guests || "—")}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Your Role</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.role)}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Booking Ref</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.bookingReference)}</td></tr>
+                </table>
+              </div>
+              <p style="font-size:14px;color:#666">Please log in to the CityGo dashboard for full booking details.</p>
+              <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;font-size:12px;color:#aaa;text-align:center">
+                CityGo Tours · Staff Portal
+              </div>
+            </div>
+          </div>`;
+        await sendEmail(
+          d.to,
+          `Tour Assignment — ${d.tourName} on ${formatDate(d.tourDate)}`,
+          html,
+        );
+        break;
+      }
+
+      case "guide-unassignment": {
+        const html = `
+          <div style="${baseStyle}">
+            <div style="background:#6b7280;padding:24px 32px;border-radius:12px 12px 0 0">
+              <h1 style="color:white;margin:0;font-size:22px">Tour Assignment Removed</h1>
+              <p style="color:rgba(255,255,255,0.85);margin:4px 0 0">CityGo Tours — Staff Notification</p>
+            </div>
+            <div style="background:white;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px">
+              <p style="font-size:16px">Hi <strong>${esc(d.guideName)}</strong>,</p>
+              <p>You have been removed from the following tour assignment:</p>
+              <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:20px 0">
+                <table style="width:100%;border-collapse:collapse;font-size:14px">
+                  <tr><td style="padding:6px 0;color:#666">Tour</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.tourName)}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Date</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${formatDate(d.tourDate)}</td></tr>
+                  <tr><td style="padding:6px 0;color:#666">Booking Ref</td>
+                      <td style="padding:6px 0;font-weight:600;text-align:right">${esc(d.bookingReference)}</td></tr>
+                </table>
+              </div>
+              <p style="font-size:14px;color:#666">If you have questions, please contact your manager.</p>
+              <div style="border-top:1px solid #e5e7eb;margin-top:24px;padding-top:16px;font-size:12px;color:#aaa;text-align:center">
+                CityGo Tours · Staff Portal
+              </div>
+            </div>
+          </div>`;
+        await sendEmail(
+          d.to,
+          `Assignment Removed — ${d.tourName} on ${formatDate(d.tourDate)}`,
+          html,
+        );
+        break;
+      }
+
       default:
         console.warn(`[Notifications] Unknown job type: ${job.name}`);
     }
