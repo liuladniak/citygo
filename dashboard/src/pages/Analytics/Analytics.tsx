@@ -35,6 +35,17 @@ import {
 } from "lucide-react";
 
 
+
+// Chart text and tooltips follow the theme so they stay readable in dark mode.
+const AXIS_TICK = { fontSize: 12, fill: "var(--muted-foreground)" };
+const TOOLTIP_STYLE = {
+  background: "var(--popover)",
+  color: "var(--popover-foreground)",
+  border: "1px solid var(--border)",
+  borderRadius: 8,
+  fontSize: 12,
+};
+
 const COLORS = [
   "#3b82f6",
   "#10b981",
@@ -253,13 +264,14 @@ export default function Analytics() {
                     strokeDasharray="3 3"
                     className="stroke-border"
                   />
-                  <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                  <XAxis dataKey="month" tick={AXIS_TICK} />
                   <YAxis
-                    tick={{ fontSize: 12 }}
+                    tick={AXIS_TICK}
                     tickFormatter={(v) => `€${v}`}
                   />
                   <Tooltip
-                    formatter={(value: any) => [`€${value}`, "Revenue"]}
+                    formatter={(value) => [`€${value}`, "Revenue"]}
+                    contentStyle={TOOLTIP_STYLE}
                   />
                   <Line
                     type="monotone"
@@ -292,14 +304,14 @@ export default function Analytics() {
                       strokeDasharray="3 3"
                       className="stroke-border"
                     />
-                    <XAxis type="number" tick={{ fontSize: 11 }} />
+                    <XAxis type="number" tick={AXIS_TICK} />
                     <YAxis
                       type="category"
                       dataKey="name"
-                      tick={{ fontSize: 11 }}
+                      tick={AXIS_TICK}
                       width={160}
                     />
-                    <Tooltip />
+                    <Tooltip contentStyle={TOOLTIP_STYLE} />
                     <Bar
                       dataKey="bookings"
                       fill="#3b82f6"
@@ -323,9 +335,9 @@ export default function Analytics() {
                       strokeDasharray="3 3"
                       className="stroke-border"
                     />
-                    <XAxis dataKey="slot" tick={{ fontSize: 11 }} />
-                    <YAxis tick={{ fontSize: 11 }} />
-                    <Tooltip />
+                    <XAxis dataKey="slot" tick={AXIS_TICK} />
+                    <YAxis tick={AXIS_TICK} />
+                    <Tooltip contentStyle={TOOLTIP_STYLE} />
                     <Bar
                       dataKey="bookings"
                       fill="#8b5cf6"
@@ -358,7 +370,7 @@ export default function Analytics() {
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip contentStyle={TOOLTIP_STYLE} />
                   </PieChart>
                 </ResponsiveContainer>
                 <ul className="space-y-1.5 text-sm">
