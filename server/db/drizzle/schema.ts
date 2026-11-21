@@ -1,3 +1,4 @@
+import { authUsers } from "drizzle-orm/supabase"
 import { pgTable, index, foreignKey, unique, check, serial, integer, boolean, date, time, text, varchar, char, timestamp, numeric, pgPolicy, uuid, smallint, pgView, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
@@ -113,7 +114,7 @@ export const userRoles = pgTable("user_roles", {
 }, (table) => [
 	foreignKey({
 			columns: [table.userId],
-			foreignColumns: [users.id],
+			foreignColumns: [authUsers.id],
 			name: "user_roles_user_id_fkey"
 		}).onDelete("cascade"),
 	unique("user_roles_user_id_unique").on(table.userId),
@@ -555,10 +556,13 @@ export const taskComments = pgTable("task_comments", {
 			name: "task_comments_task_id_fkey"
 		}).onDelete("cascade"),
 ]);
+// Supabase's own auth.users table (uuid ids). Not managed by this repo.
+export const usersInAuth = authUsers;
+
 export const tourRatingSummary = pgView("tour_rating_summary", {	tourId: integer("tour_id"),
 	avgRating: numeric("avg_rating"),
 	reviewCount: integer("review_count"),
-}).with({"securityInvoker":"on"}).as(sql`SELECT reviews.tour_id, round(avg(reviews.rating), 1) AS avg_rating, count(*)::integer AS review_count FROM reviews GROUP BY reviews.tour_id`);
+}).with({ securityInvoker: true }).as(sql`SELECT reviews.tour_id, round(avg(reviews.rating), 1) AS avg_rating, count(*)::integer AS review_count FROM reviews GROUP BY reviews.tour_id`);
 // Milo conversations: what visitors typed or tapped, and what Milo answered.
 // One row per message, ordered by id within a session_id. Text is redacted before
 // insert and rows are deleted after 90 days. Written only by the server
