@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { apiErrorStatus } from "@/lib/apiError";
 
 const DAYS = [
   "Sunday",
@@ -119,8 +120,8 @@ export default function AvailabilityManager({ slug }: Props) {
       invalidate();
       toast.success("Recurring block added");
     },
-    onError: (err: any) => {
-      if (err.response?.status === 409)
+    onError: (err: unknown) => {
+      if (apiErrorStatus(err) === 409)
         toast.error("This day is already blocked");
       else toast.error("Failed to add recurring block");
     },

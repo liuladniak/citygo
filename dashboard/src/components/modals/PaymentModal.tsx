@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { apiErrorMessage } from "@/lib/apiError";
 
 export default function PaymentModal({
   open,
@@ -51,8 +52,8 @@ export default function PaymentModal({
       });
       onSuccess();
       onClose();
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? "Payment failed");
+    } catch (err) {
+      setError(apiErrorMessage(err, "Payment failed"));
     } finally {
       setIsSaving(false);
     }
