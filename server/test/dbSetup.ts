@@ -6,6 +6,7 @@ import { mkdtempSync, chmodSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import net from "node:net";
+import { randomBytes } from "node:crypto";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { pushSchema } from "drizzle-kit/api";
@@ -24,7 +25,8 @@ const freePort = () =>
     });
   });
 const USER = "postgres";
-const PASSWORD = "postgres";
+// A new random password for every run; the database is deleted afterwards.
+const PASSWORD = randomBytes(16).toString("hex");
 const DB = "citygo_test";
 
 export default async function setup() {
