@@ -23,7 +23,8 @@
     "seed:highlights": "knex seed:run --specific=seed_highlights.js",
     "seed:images": "knex seed:run --specific=seed_images.js",
     "seed:bookings": "knex seed:run --specific=seed_bookings.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:db": "vitest run --config vitest.db.config.ts"
   },
   "author": "Liu Ladniak",
   "license": "ISC",
@@ -60,6 +61,7 @@
     "@types/node-cron": "^3.0.11",
     "@types/pg": "^8.23.1",
     "drizzle-kit": "^0.31.10",
+    "embedded-postgres": "^18.7.0-beta.19",
     "socket.io-client": "^4.8.4",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
