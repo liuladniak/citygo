@@ -85,11 +85,9 @@ const Tab1Content = ({ user, session }) => {
       const token = session?.access_token;
       if (!token) return;
 
-      const response = await axios.put(`${API_URL}/auth/profile`, updatedData, {
+      await axios.put(`${API_URL}/auth/profile`, updatedData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      console.log("Profile updated:", response.data);
 
       setIsEditing({
         legalName: false,

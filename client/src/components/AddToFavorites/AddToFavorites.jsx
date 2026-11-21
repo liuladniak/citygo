@@ -12,7 +12,6 @@ const AddToFavorites = ({ tour }) => {
   const favorites = useSelector((state) => state.wishlist.favorites);
 
   const isLiked = favorites.some((favorite) => favorite.id === tour.id);
-  console.log(favorites, isLiked, "wishlist");
   const handleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
