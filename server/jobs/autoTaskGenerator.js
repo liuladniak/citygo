@@ -1,8 +1,6 @@
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import { autoTaskKind, findUnresolved } from "../lib/autoTaskConditions.js";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 
 const AUTO_TASK_TYPES = {
   ASSIGN_GUIDE: "auto_assign_guide",

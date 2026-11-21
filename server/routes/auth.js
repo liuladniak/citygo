@@ -1,11 +1,9 @@
 import express from "express";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import { createClient } from "@supabase/supabase-js";
 import "dotenv/config";
 
 const router = express.Router();
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY

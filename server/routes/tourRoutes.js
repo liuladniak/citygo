@@ -1,10 +1,8 @@
 import express from "express";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import { requireAuth, requireRole } from "../middleware/auth.js";
 import "dotenv/config";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 
 const logTourActivity = async (tourId, action, message, actorId = null) => {

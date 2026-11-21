@@ -1,12 +1,10 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import "dotenv/config";
 import { sendWelcome } from "../services/emailService.js";
 import { notificationQueue } from "../queues/notificationQueue.js";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 console.log("Passport config loading...");
 console.log("CLIENT_ID exists:", !!process.env.GOOGLE_CLIENT_ID);
 console.log("CLIENT_SECRET exists:", !!process.env.GOOGLE_CLIENT_SECRET);

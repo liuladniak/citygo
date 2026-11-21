@@ -2,11 +2,9 @@ import express from "express";
 import Stripe from "stripe";
 import axios from "axios";
 import "dotenv/config";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import { normalizeTourDate, isPastDay } from "../lib/tourDate.js";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const CLIENT_URLS = process.env.ALLOWED_ORIGINS.split(",");

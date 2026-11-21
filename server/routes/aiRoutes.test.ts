@@ -11,15 +11,12 @@ vi.mock("../lib/aiCaps.js", () => ({
   getLimits: () => ({ perIp: 5, global: 150 }),
 }));
 vi.mock("../lib/redis.js", () => ({ getRedis: () => ({}) }));
-vi.mock("knex", () => ({
-  default: () => {
-    const q: any = () => q;
-    for (const m of ["leftJoin", "select", "where", "orderBy"]) q[m] = () => q;
-    q.then = (resolve: (v: unknown[]) => void) => resolve([]);
-    return q;
-  },
-}));
-vi.mock("../knexfile.js", () => ({ default: {} }));
+vi.mock("../db/knex.js", () => {
+  const q: any = () => q;
+  for (const m of ["leftJoin", "select", "where", "orderBy"]) q[m] = () => q;
+  q.then = (resolve: (v: unknown[]) => void) => resolve([]);
+  return { knex: () => q };
+});
 vi.mock("../services/aiService.js", () => ({ getAiItinerary: vi.fn() }));
 
 import aiRoutes from "./aiRoutes.js";

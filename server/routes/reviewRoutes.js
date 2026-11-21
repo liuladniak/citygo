@@ -1,11 +1,9 @@
 import express from "express";
-import initKnex from "knex";
-import knexConfig from "../knexfile.js";
+import { knex } from "../db/knex.js";
 import { requireRole } from "../middleware/auth.js";
 import "dotenv/config";
 import { requireClientAuth } from "../middleware/clientAuth.js";
 
-const knex = initKnex(knexConfig[process.env.NODE_ENV || "development"]);
 const router = express.Router();
 
 const getInternalUserId = async (supabaseId) => {

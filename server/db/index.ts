@@ -1,14 +1,13 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "./drizzle/schema.js";
-import "dotenv/config";
+import { env } from "../config/env.js";
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: env.DATABASE_URL,
+  max: env.DB_POOL_MAX,
   ssl:
-    process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: false }
-      : false,
+    env.isProduction ? { rejectUnauthorized: false } : false,
 });
 
 export const db = drizzle(pool, { schema });
