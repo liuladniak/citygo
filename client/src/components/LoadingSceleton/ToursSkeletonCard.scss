@@ -16,7 +16,7 @@ $shimmer: linear-gradient(100deg, $gray-200 40%, $gray-100 50%, $gray-200 60%);
 
 .skeleton-card {
   flex-basis: 37.8rem;
-  height: 320px;
+  height: 42rem;
   background: $gray-100;
   border-radius: $border-radius;
   padding: 16px;
@@ -25,11 +25,20 @@ $shimmer: linear-gradient(100deg, $gray-200 40%, $gray-100 50%, $gray-200 60%);
   gap: 12px;
   box-shadow: $shadow-card;
   overflow: hidden;
+
+  @include tablet {
+    height: 44rem;
+  }
+
+  @include desktop {
+    height: 46rem;
+  }
 }
 
 .skeleton-image {
   width: 100%;
-  height: 160px;
+  flex: 1;
+  min-height: 16rem;
   border-radius: $border-radius;
   background: $shimmer;
   background-size: 200% 100%;
