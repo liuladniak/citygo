@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "@/lib/apiClient";
 import { format, subMonths, subYears, startOfYear } from "date-fns";
+import type { LucideIcon } from "lucide-react";
+import { normalizeAnalytics } from "@/lib/analytics";
 import {
   LineChart,
   Line,
@@ -95,7 +97,7 @@ function KPICard({
   title: string;
   value: string;
   subtitle?: string;
-  icon: any;
+  icon: LucideIcon;
   iconClass?: string;
   trend?: number;
   trendLabel?: string;
@@ -139,7 +141,7 @@ export default function Analytics() {
   const [range, setRange] = useState("3m");
   const { from, to } = getDateRange(range);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["analytics", from, to],
     queryFn: async () => {
       const { data } = await axios.get(
@@ -148,36 +150,15 @@ export default function Analytics() {
           params: { dateFrom: from, dateTo: to },
         }
       );
-      return data;
+      return normalizeAnalytics(data);
     },
   });
 
-  const revenueData =
-    data?.revenue_over_time?.map((r: any) => ({
-      month: r.month,
-      revenue: parseFloat(r.revenue),
-      bookings: parseInt(r.bookings),
-    })) ?? [];
-
-  const tourData =
-    data?.bookings_by_tour?.map((t: any) => ({
-      name:
-        t.tour_name.length > 25 ? t.tour_name.slice(0, 25) + "…" : t.tour_name,
-      bookings: parseInt(t.bookings),
-      revenue: parseFloat(t.revenue ?? 0),
-    })) ?? [];
-
-  const sourceData =
-    data?.bookings_by_source?.map((s: any) => ({
-      name: s.source.replace("_", " "),
-      value: parseInt(s.count),
-    })) ?? [];
-
-  const slotData =
-    data?.popular_time_slots?.map((s: any) => ({
-      slot: s.slot.slice(0, 5) + "–" + s.slot.slice(9, 14),
-      bookings: parseInt(s.bookings),
-    })) ?? [];
+  const revenueData = data?.revenueOverTime ?? [];
+  const tourData = data?.bookingsByTour ?? [];
+  const sourceData = data?.bookingsBySource ?? [];
+  const slotData = data?.popularTimeSlots ?? [];
+  const guides = data?.revenuePerGuide ?? [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 space-y-6">
@@ -206,39 +187,43 @@ export default function Analytics() {
         <div className="flex items-center justify-center h-64 text-muted-foreground text-sm">
           Loading analytics...
         </div>
+      ) : isError || !data ? (
+        <div className="flex items-center justify-center h-64 text-destructive text-sm">
+          Could not load analytics. Try again in a moment.
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <KPICard
               title="Total Revenue"
-              value={`€${data?.kpis?.total_revenue?.toLocaleString()}`}
+              value={`€${(data?.kpis.totalRevenue ?? 0).toLocaleString()}`}
               icon={Euro}
               iconClass="text-emerald-700 dark:text-emerald-400"
-              trend={data?.mom_growth?.revenue_growth}
+              trend={data?.revenueGrowth}
               trendLabel="vs last month"
             />
             <KPICard
               title="Total Bookings"
-              value={data?.kpis?.total_bookings}
+              value={String(data?.kpis.totalBookings ?? 0)}
               icon={Calendar}
               iconClass="text-blue-600 dark:text-blue-400"
-              trend={data?.mom_growth?.bookings_growth}
+              trend={data?.bookingsGrowth}
               trendLabel="vs last month"
             />
             <KPICard
               title="Cancellation Rate"
-              value={`${data?.kpis?.cancellation_rate}%`}
+              value={`${data?.kpis.cancellationRate ?? 0}%`}
               subtitle="of all bookings"
               icon={XCircle}
               iconClass={
-                data?.kpis?.cancellation_rate > 15
+                (data?.kpis.cancellationRate ?? 0) > 15
                   ? "text-destructive"
                   : "text-muted-foreground"
               }
             />
             <KPICard
               title="Avg Group Size"
-              value={`${data?.kpis?.avg_group_size} guests`}
+              value={`${data?.kpis.avgGroupSize ?? 0} guests`}
               subtitle="per booking"
               icon={Users}
               iconClass="text-purple-600 dark:text-purple-400"
@@ -252,8 +237,8 @@ export default function Analytics() {
                   Revenue Over Time
                 </CardTitle>
                 <p className="text-xs text-muted-foreground">
-                  {data?.kpis?.total_bookings} bookings · €
-                  {data?.kpis?.total_revenue?.toLocaleString()} total
+                  {data?.kpis.totalBookings ?? 0} bookings · €
+                  {(data?.kpis.totalRevenue ?? 0).toLocaleString()} total
                 </p>
               </div>
             </CardHeader>
@@ -366,7 +351,7 @@ export default function Analytics() {
                       outerRadius={80}
                       dataKey="value"
                     >
-                      {sourceData.map((_: any, i: number) => (
+                      {sourceData.map((_, i) => (
                         <Cell key={i} fill={COLORS[i % COLORS.length]} />
                       ))}
                     </Pie>
@@ -374,7 +359,7 @@ export default function Analytics() {
                   </PieChart>
                 </ResponsiveContainer>
                 <ul className="space-y-1.5 text-sm">
-                  {sourceData.map((entry: any, i: number) => (
+                  {sourceData.map((entry, i) => (
                     <li key={entry.name} className="flex items-center gap-2">
                       <span
                         className="size-2.5 shrink-0 rounded-full"
@@ -399,7 +384,7 @@ export default function Analytics() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {data?.revenue_per_guide?.map((g: any, i: number) => (
+                  {guides.map((g, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs font-semibold text-muted-foreground shrink-0">
                         {i + 1}
@@ -407,10 +392,10 @@ export default function Analytics() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-medium truncate">
-                            {g.guide_name}
+                            {g.guideName}
                           </p>
                           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400 shrink-0 ml-2">
-                            €{parseFloat(g.revenue).toLocaleString()}
+                            €{g.revenue.toLocaleString()}
                           </p>
                         </div>
                         <div className="flex items-center gap-2 mt-0.5">
@@ -419,7 +404,7 @@ export default function Analytics() {
                           </p>
                           <span className="text-muted-foreground">·</span>
                           <p className="text-xs text-muted-foreground">
-                            {g.tours_led} tours
+                            {g.toursLed} tours
                           </p>
                         </div>
                         <div className="mt-1 h-1 bg-muted rounded-full overflow-hidden">
@@ -427,11 +412,9 @@ export default function Analytics() {
                             className="h-full bg-emerald-500 rounded-full"
                             style={{
                               width: `${
-                                (parseFloat(g.revenue) /
-                                  parseFloat(
-                                    data.revenue_per_guide[0].revenue
-                                  )) *
-                                100
+                                guides[0].revenue > 0
+                                  ? (g.revenue / guides[0].revenue) * 100
+                                  : 0
                               }%`,
                             }}
                           />
