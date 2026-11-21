@@ -57,7 +57,9 @@ const Dashboard = () => {
             limit: 5,
           },
         });
-        setBookings(response.data.data);
+        setBookings(
+          Array.isArray(response.data?.data) ? response.data.data : [],
+        );
       } catch {
         console.error("There was an error fetching the bookings data!");
       } finally {
