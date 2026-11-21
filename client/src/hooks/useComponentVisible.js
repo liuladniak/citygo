@@ -11,10 +11,16 @@ export default function useComponentVisible(initialIsVisible) {
     }
   };
 
+  const handleEscape = (event) => {
+    if (event.key === "Escape") setIsComponentVisible(false);
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 

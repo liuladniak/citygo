@@ -42,9 +42,20 @@
 
   &__empty {
     @include layout-constrain;
-    font-size: $fs-xl;
-    color: $gray-500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-medium;
     margin: $space-large auto;
     text-align: center;
+  }
+
+  &__empty-text {
+    font-size: $fs-xl;
+    color: $gray-500;
+  }
+
+  &__browse.btn {
+    width: fit-content;
   }
 }

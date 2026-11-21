@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import TourCard from "../../components/TourCard/TourCard";
 import { useEffect, useState } from "react";
 import Loader from "../../components/UI/Loader";
+import Button from "../../components/Button/Button";
 import axios from "axios";
 
 const Wishlist = () => {
@@ -63,9 +64,14 @@ const Wishlist = () => {
           ))}
         </div>
       ) : (
-        <p className="wishlist__empty">
-          Your wishlist is empty. Start adding tours!
-        </p>
+        <div className="wishlist__empty">
+          <p className="wishlist__empty-text">
+            Your wishlist is empty. Start adding tours!
+          </p>
+          <Button to="/tours" className="btn--book wishlist__browse">
+            Browse tours
+          </Button>
+        </div>
       )}
     </div>
   );
