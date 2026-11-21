@@ -1,7 +1,6 @@
 import { formatDateTime } from "../../utils/formatDateTime";
 import "./StoryCard.scss";
 const StoryCard = ({ article }) => {
-  console.log("Story card article:", article);
   if (!article.length) {
     return <div>Loading...</div>;
   }
