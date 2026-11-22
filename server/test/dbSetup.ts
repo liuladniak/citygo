@@ -42,6 +42,8 @@ export default async function setup() {
     password: PASSWORD,
     port: PORT,
     persistent: false,
+    onLog: () => {},
+    onError: () => {},
   });
   await pg.initialise();
   await pg.start();
@@ -69,6 +71,14 @@ export default async function setup() {
     await pool.end();
 
     process.env.DATABASE_URL = url;
+  // Knex (until it is removed) reads the DB_* variables outside production.
+  Object.assign(process.env, {
+    DB_HOST: "localhost",
+    DB_PORT: String(PORT),
+    DB_USER: USER,
+    DB_PASSWORD: PASSWORD,
+    DB_NAME: DB,
+  });
   } catch (err) {
     await cleanup();
     throw err;
