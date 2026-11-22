@@ -16,7 +16,7 @@ import aiRoutes from "./routes/aiRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
 import profileRoutes from "./modules/profile/profile.routes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
-import clientRoutes from "./routes/clientRoutes.js";
+import guestRoutes from "./modules/guest/guest.routes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
 import paymentRoutes from "./modules/payment/payment.routes.js";
@@ -87,7 +87,7 @@ app.use("/api/ai/chat", miloLimiter);
 
 app.use("/auth", profileRoutes);
 app.use("/api/payment", paymentRoutes);
-app.use("/api/client", clientRoutes);
+app.use("/api/client", guestRoutes);
 app.use("/api/tours", tourRoutes);
 app.use("/api/bookings", requireAuth, bookingRoutes);
 app.use("/api/employees", requireAuth, employeeRoutes);
