@@ -22,7 +22,6 @@ import employeeRoutes from "./routes/employeeRoutes.js";
 import paymentRoutes from "./modules/payment/payment.routes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
 import webhook from "./routes/webhook.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import miloRoutes, { deleteOldMiloMessages } from "./routes/miloRoutes.js";
@@ -87,7 +86,6 @@ app.use(metricsMiddleware);
 app.use("/api/ai/chat", miloLimiter);
 
 app.use("/auth", authRoutes);
-app.use("/api/users", userRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/client", clientRoutes);
 app.use("/api/tours", tourRoutes);
