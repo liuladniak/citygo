@@ -4,8 +4,7 @@ import { startApp } from "../../test/app.js";
 import { db, resetDb } from "../../test/db.js";
 import { assignGuide, makeEmployee, makeTour } from "../../test/fixtures.js";
 import { bookings, employees } from "../../db/drizzle/schema.js";
-import { knex } from "../../db/knex.js";
-import employeeRoutes from "../../routes/employeeRoutes.js";
+import employeeRoutes from "./employees.routes.js";
 
 let manager: Awaited<ReturnType<typeof startApp>>;
 let guide: Awaited<ReturnType<typeof startApp>>;
@@ -15,7 +14,6 @@ beforeAll(async () => {
 });
 afterAll(async () => {
   await Promise.all([manager.close(), guide.close()]);
-  await knex.destroy();
 });
 beforeEach(resetDb);
 
@@ -74,10 +72,10 @@ describe("GET /available", () => {
 describe("GET /by-email", () => {
   it("finds an employee by personal or work email", async () => {
     const e = await makeEmployee({ email: "personal@example.test", workEmail: "work@example.test" });
-    expect((await guide.get("/by-email?email=personal@example.test")).body.id).toBe(e.id);
-    expect((await guide.get("/by-email?email=work@example.test")).body.id).toBe(e.id);
-    expect((await guide.get("/by-email?email=nobody@example.test")).status).toBe(404);
-    expect((await guide.get("/by-email")).status).toBe(400);
+    expect((await manager.get("/by-email?email=personal@example.test")).body.id).toBe(e.id);
+    expect((await manager.get("/by-email?email=WORK@example.test")).body.id).toBe(e.id);
+    expect((await manager.get("/by-email?email=nobody@example.test")).status).toBe(404);
+    expect((await manager.get("/by-email")).status).toBe(400);
   });
 });
 
@@ -138,5 +136,69 @@ describe("writing", () => {
     expect((await guide.post("/", { first_name: "a", last_name: "b", position: "Driver" })).status).toBe(403);
     expect((await guide.patch(`/${e.id}`, { phone: "1" })).status).toBe(403);
     expect((await guide.patch(`/${e.id}/deactivate`, { reason: "x" })).status).toBe(403);
+  });
+});
+
+describe("who sees what", () => {
+  it("gives colleagues a short directory and managers the whole record", async () => {
+    await makeEmployee({ phone: "555", emergencyContactName: "Secret Person" });
+    const short = (await guide.get("/")).body.data[0];
+    expect(Object.keys(short).sort()).toEqual(["first_name", "id", "last_name", "position", "profile_image", "status"]);
+    expect((await manager.get("/")).body.data[0]).toHaveProperty("emergency_contact_name", "Secret Person");
+  });
+
+  it("shows a person their own record, but only the short card for someone else", async () => {
+    const me = await makeEmployee({ email: "guide@example.test", phone: "555" });
+    const other = await makeEmployee({ phone: "777" });
+    expect((await guide.get(`/${me.id}`)).body).toMatchObject({ phone: "555", stats: { total_tours: 0, tours_this_month: 0 } });
+    const card = (await guide.get(`/${other.id}`)).body;
+    expect(card).not.toHaveProperty("phone");
+    expect(card.first_name).toBe(other.firstName);
+    expect((await guide.get("/by-email?email=guide@example.test")).body.id).toBe(me.id);
+    expect((await guide.get(`/by-email?email=${other.email}`)).status).toBe(403);
+  });
+
+  it("lets a person edit their own basics and notification choices, but not their position or anyone else", async () => {
+    const me = await makeEmployee({ email: "guide@example.test", position: "Driver" });
+    const other = await makeEmployee({ phone: "777" });
+    const res = await guide.patch(`/${me.id}`, { phone: "999", notif_daily_schedule: true, position: "Admin", status: "inactive" });
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ phone: "999", notif_daily_schedule: true, position: "Driver", status: "active" });
+    expect((await guide.patch(`/${other.id}`, { phone: "1" })).status).toBe(403);
+    expect((await guide.patch(`/${me.id}`, { position: "Admin" })).status).toBe(403);
+  });
+
+  it("rejects bad input", async () => {
+    const e = await makeEmployee();
+    expect((await manager.patch(`/${e.id}`, { email: "nope" })).status).toBe(400);
+    expect((await manager.patch(`/${e.id}`, { phone: "1".repeat(21) })).status).toBe(400);
+    expect((await manager.patch(`/${e.id}`, { shift_start: "25:00" })).status).toBe(400);
+    expect((await manager.patch(`/${e.id}`, { contract_start: "2026-02-30" })).status).toBe(400);
+    expect((await manager.patch(`/${e.id}/deactivate`, {})).status).toBe(400);
+  });
+
+  it("stores a cleared field as empty rather than blank text", async () => {
+    const e = await makeEmployee({ workEmail: "w@example.test" });
+    const res = await manager.patch(`/${e.id}`, { work_email: "", shift_start: "" });
+    expect(res.body).toMatchObject({ work_email: null, shift_start: null });
+  });
+});
+
+describe("GET /availability", () => {
+  it("shows today's status for active staff, using the company's timezone for today", async () => {
+    const { nowInZone } = await import("../../lib/clock.js");
+    const g = await makeEmployee({ firstName: "Aaron", position: "Lead Guide" });
+    await makeEmployee({ firstName: "Gone", status: "inactive" });
+    const today = nowInZone("Europe/Istanbul").date;
+    const b = await bookingOn(today);
+    await db.update(bookings).set({ startTime: "00:00:00", endTime: "23:59:59" }).where(eq(bookings.id, b.id));
+    await assignGuide(b.id, g.id);
+    const removed = await bookingOn(today);
+    await assignGuide(removed.id, g.id, { status: "removed" });
+
+    const res = await manager.get("/availability");
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0]).toMatchObject({ id: g.id, availability: "on_tour", on_tour_now: true, current_booking_id: b.id, tours_today: 1 });
   });
 });
