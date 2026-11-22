@@ -3,3 +3,4 @@ process.env.STRIPE_SECRET_KEY ??= "sk_test_dummy";
 process.env.ALLOWED_ORIGINS ??= "http://localhost:5173";
 process.env.SUPABASE_URL ??= "http://localhost:54321";
 process.env.SUPABASE_SERVICE_KEY ??= "dummy";
+process.env.STRIPE_WEBHOOK_SECRET ??= "whsec_test";

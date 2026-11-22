@@ -27,3 +27,21 @@ export async function makeTour(overrides: Partial<NewTour> = {}) {
     .returning();
   return row;
 }
+
+import { users, tourTimeSlots } from "../db/drizzle/schema.js";
+
+export async function makeUser(overrides: Partial<typeof users.$inferInsert> = {}) {
+  const [row] = await db
+    .insert(users)
+    .values({ firstName: "Test", lastName: "Traveller", email: "traveller@example.test", ...overrides })
+    .returning();
+  return row;
+}
+
+export async function makeTimeSlot(tourId: number, overrides: Partial<typeof tourTimeSlots.$inferInsert> = {}) {
+  const [row] = await db
+    .insert(tourTimeSlots)
+    .values({ tourId, startTime: "09:00:00", endTime: "13:00:00", ...overrides })
+    .returning();
+  return row;
+}

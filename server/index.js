@@ -72,6 +72,14 @@ const miloLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+// Stripe signs the raw request body, so this route must come before express.json(),
+// which would replace the body with a parsed object and break signature checks.
+app.use(
+  "/api/payment/webhook",
+  express.raw({ type: "application/json" }),
+  webhook,
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(staticFilesPath));
@@ -96,11 +104,6 @@ app.use("/api/milo/review", miloReviewRoutes);
 app.use("/api/milo", miloRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/contact", contactRoutes);
-app.use(
-  "/api/payment/webhook",
-  express.raw({ type: "application/json" }),
-  webhook,
-);
 app.get("/metrics", async (req, res) => {
   res.set("Content-Type", promClient.register.contentType);
   res.end(await promClient.register.metrics());
