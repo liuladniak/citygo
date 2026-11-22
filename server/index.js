@@ -13,7 +13,7 @@ import { requireAuth, authenticateToken } from "./middleware/auth.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import activityRoutes from "./modules/activity/activity.routes.js";
 import aiRoutes from "./routes/aiRoutes.js";
-import articleRoutes from "./routes/articleRoutes.js";
+import articleRoutes from "./modules/articles/articles.routes.js";
 import authRoutes from "./routes/auth.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";

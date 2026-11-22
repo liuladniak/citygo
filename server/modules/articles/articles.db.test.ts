@@ -1,15 +1,28 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { vi } from "vitest";
 import { startApp } from "../../test/app.js";
 import { resetDb } from "../../test/db.js";
+import { db } from "../../test/db.js";
+import { articleImages } from "../../db/drizzle/schema.js";
+import { eq } from "drizzle-orm";
 import { addArticleImage, makeArticle, makeAuthor } from "../../test/fixtures.js";
-import { knex } from "../../db/knex.js";
-import articles from "../../routes/articleRoutes.js";
+import articles from "./articles.routes.js";
+
+vi.mock("../../middleware/auth.js", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../middleware/auth.js")>()),
+  requireAuth: (_req: unknown, _res: unknown, next: () => void) => next(),
+}));
 
 let app: Awaited<ReturnType<typeof startApp>>;
-beforeAll(async () => (app = await startApp(articles)));
+let staff: typeof app;
+let visitor: typeof app;
+beforeAll(async () => {
+  app = await startApp(articles);
+  staff = await startApp(articles, { role: "manager" });
+  visitor = await startApp(articles, { role: "guide" });
+});
 afterAll(async () => {
-  await app.close();
-  await knex.destroy();
+  await Promise.all([app.close(), staff.close(), visitor.close()]);
 });
 beforeEach(resetDb);
 
@@ -76,5 +89,58 @@ describe("GET /:slug", () => {
     const res = await app.get("/nope");
     expect(res.status).toBe(404);
     expect(res.body.message).toBe("Article not found");
+  });
+});
+
+describe("writing articles", () => {
+  const body = { title: "New", content: "<p>Hi</p>", category: "food", slug: "new-one" };
+
+  it("only lets admins and managers write", async () => {
+    expect((await app.post("/", body)).status).toBe(403);
+    expect((await visitor.post("/", body)).status).toBe(403);
+    expect((await visitor.put("/1", { title: "x" })).status).toBe(403);
+    expect((await staff.post("/", body)).status).toBe(201);
+  });
+
+  it("creates an article with its images, and rejects a taken slug", async () => {
+    const created = await staff.post("/", { ...body, images: [{ url: "/a.jpg", caption: " Cover " }, { url: "/b.jpg" }] });
+    expect(created.body).toMatchObject({ title: "New", slug: "new-one", category: "food" });
+    const read = await app.get("/new-one");
+    expect(read.body.images).toEqual([{ url: "/a.jpg", caption: "Cover" }, { url: "/b.jpg", caption: null }]);
+
+    const again = await staff.post("/", body);
+    expect(again.status).toBe(409);
+  });
+
+  it("validates input", async () => {
+    expect((await staff.post("/", { ...body, slug: "Not A Slug" })).status).toBe(400);
+    expect((await staff.post("/", { title: "x" })).status).toBe(400);
+  });
+
+  it("replaces images on update, leaves them alone when none are sent, and 404s for unknown ids", async () => {
+    const article = await makeArticle();
+    await addArticleImage(article.id, "/old.jpg");
+
+    await staff.put(`/${article.id}`, { title: "Renamed" });
+    expect((await db.select().from(articleImages).where(eq(articleImages.articleId, article.id)))).toHaveLength(1);
+
+    const res = await staff.put(`/${article.id}`, { images: [{ url: "/new1.jpg" }, { url: "/new2.jpg" }] });
+    expect(res.status).toBe(200);
+    const urls = (await db.select().from(articleImages).where(eq(articleImages.articleId, article.id))).map((i) => i.imageUrl);
+    expect(urls).toEqual(["/new1.jpg", "/new2.jpg"]);
+
+    expect((await staff.put("/999999", { title: "x" })).status).toBe(404);
+  });
+});
+
+describe("GET /:slug related", () => {
+  it("shows each related article once even when it has several images", async () => {
+    const main = await makeArticle({ category: "food", slug: "m" });
+    const other = await makeArticle({ category: "food", slug: "o" });
+    await addArticleImage(other.id, "/1.jpg");
+    await addArticleImage(other.id, "/2.jpg");
+    const res = await app.get(`/${main.slug}`);
+    expect(res.body.related).toHaveLength(1);
+    expect(res.body.related[0].image_url).toBe("/1.jpg");
   });
 });
