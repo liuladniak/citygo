@@ -10,7 +10,7 @@ import morgan from "morgan";
 import { promClient, metricsMiddleware } from "./metrics.js";
 
 import { requireAuth, authenticateToken } from "./middleware/auth.js";
-import contactRoutes from "./routes/contactRoutes.js";
+import contactRoutes from "./modules/contact/contact.routes.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
