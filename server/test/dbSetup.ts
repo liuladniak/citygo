@@ -66,7 +66,8 @@ export default async function setup() {
       if not exists (select 1 from pg_roles where rolname='service_role') then create role service_role; end if;
     end $$;
   `);
-    const { apply } = await pushSchema(schema, drizzle(pool), ["public"]);
+    await pool.query(`alter database ${DB} set timezone to 'UTC'`);
+  const { apply } = await pushSchema(schema, drizzle(pool), ["public"]);
     await apply();
     await pool.end();
 

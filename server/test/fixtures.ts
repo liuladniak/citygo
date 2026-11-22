@@ -45,3 +45,53 @@ export async function makeTimeSlot(tourId: number, overrides: Partial<typeof tou
     .returning();
   return row;
 }
+
+import { articles, authors, articleImages, bookings } from "../db/drizzle/schema.js";
+
+export async function makeBooking(overrides: Partial<typeof bookings.$inferInsert> = {}) {
+  const [row] = await db
+    .insert(bookings)
+    .values({
+      tourDate: "2099-06-01",
+      isCustomTour: true, // custom bookings carry their own times; regular ones need a time slot
+      startTime: "09:00:00",
+      endTime: "13:00:00",
+      primaryContactName: "Test Guest",
+      status: "confirmed",
+      source: "website",
+      bookingReference: `BK-TEST-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+      ...overrides,
+    })
+    .returning();
+  return row;
+}
+
+export async function makeAuthor(overrides: Partial<typeof authors.$inferInsert> = {}) {
+  const [row] = await db
+    .insert(authors)
+    .values({ name: "Mehmet Kaya", bio: "Istanbul local", profileImage: "/authors/mehmet.jpg", ...overrides })
+    .returning();
+  return row;
+}
+
+let articleCount = 0;
+export async function makeArticle(overrides: Partial<typeof articles.$inferInsert> = {}) {
+  articleCount += 1;
+  const [row] = await db
+    .insert(articles)
+    .values({
+      title: `Article ${articleCount}`,
+      content: "<p>Body</p>",
+      category: "food",
+      slug: `article-${articleCount}`,
+      description: "Short description",
+      ...overrides,
+    })
+    .returning();
+  return row;
+}
+
+export async function addArticleImage(articleId: number, imageUrl: string, caption: string | null = null) {
+  const [row] = await db.insert(articleImages).values({ articleId, imageUrl, caption }).returning();
+  return row;
+}
