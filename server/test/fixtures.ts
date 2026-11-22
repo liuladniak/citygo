@@ -95,3 +95,30 @@ export async function addArticleImage(articleId: number, imageUrl: string, capti
   const [row] = await db.insert(articleImages).values({ articleId, imageUrl, caption }).returning();
   return row;
 }
+
+import { bookingAssignments, employees } from "../db/drizzle/schema.js";
+
+let employeeCount = 0;
+export async function makeEmployee(overrides: Partial<typeof employees.$inferInsert> = {}) {
+  employeeCount += 1;
+  const [row] = await db
+    .insert(employees)
+    .values({
+      firstName: "Guide",
+      lastName: `Number${employeeCount}`,
+      position: "Lead Guide",
+      status: "active",
+      email: `guide${employeeCount}@example.test`,
+      ...overrides,
+    })
+    .returning();
+  return row;
+}
+
+export async function assignGuide(bookingId: number, guideId: number, overrides: Partial<typeof bookingAssignments.$inferInsert> = {}) {
+  const [row] = await db
+    .insert(bookingAssignments)
+    .values({ bookingId, guideId, role: "lead_guide", status: "active", ...overrides })
+    .returning();
+  return row;
+}
