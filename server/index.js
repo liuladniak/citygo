@@ -24,7 +24,7 @@ import taskRoutes from "./routes/taskRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import webhook from "./routes/webhook.js";
-import reviewRoutes from "./routes/reviewRoutes.js";
+import reviewRoutes from "./modules/reviews/reviews.routes.js";
 import miloRoutes, { deleteOldMiloMessages } from "./routes/miloRoutes.js";
 import miloHandoffRoutes from "./routes/miloHandoffRoutes.js";
 import miloReviewRoutes from "./routes/miloReviewRoutes.js";

@@ -4,8 +4,7 @@ import { startApp } from "../../test/app.js";
 import { db, resetDb } from "../../test/db.js";
 import { makeTour, makeUser } from "../../test/fixtures.js";
 import { bookings, reviews } from "../../db/drizzle/schema.js";
-import { knex } from "../../db/knex.js";
-import reviewRoutes from "../../routes/reviewRoutes.js";
+import reviewRoutes from "./reviews.routes.js";
 
 // Sign-in is Supabase's job; the tests only decide who is "signed in".
 const auth = vi.hoisted(() => ({ supabaseId: "" as string }));
@@ -22,10 +21,7 @@ const OTHER = "22222222-2222-4222-8222-222222222222";
 
 let app: Awaited<ReturnType<typeof startApp>>;
 beforeAll(async () => (app = await startApp(reviewRoutes)));
-afterAll(async () => {
-  await app.close();
-  await knex.destroy();
-});
+afterAll(() => app.close());
 
 let me: Awaited<ReturnType<typeof makeUser>>;
 let other: Awaited<ReturnType<typeof makeUser>>;
@@ -98,9 +94,9 @@ describe("GET /tour/:tourId", () => {
 describe("POST /", () => {
   it("lets a guest review their own completed booking once", async () => {
     const b = await makeBooking(me.id);
-    const res = await app.post("/", { booking_id: b.id, ...review, title: "  Great  ", body: "  Loved it  ", photos: ["/a.jpg"] });
+    const res = await app.post("/", { booking_id: b.id, ...review, title: "  Great  ", body: "  Loved it  ", photos: ["https://cdn.example.test/a.jpg"] });
     expect(res.status).toBe(201);
-    expect(res.body).toMatchObject({ booking_id: b.id, tour_id: tour.id, user_id: me.id, rating: 5, title: "Great", body: "Loved it", photos: ["/a.jpg"] });
+    expect(res.body).toMatchObject({ booking_id: b.id, tour_id: tour.id, user_id: me.id, rating: 5, title: "Great", body: "Loved it", photos: ["https://cdn.example.test/a.jpg"] });
 
     const again = await app.post("/", { booking_id: b.id, ...review });
     expect(again.status).toBe(409);
@@ -121,7 +117,9 @@ describe("POST /", () => {
     expect((await app.post("/", { booking_id: b.id, rating: 0, body: "x" })).status).toBe(400);
     expect((await app.post("/", { booking_id: b.id, rating: 5 })).status).toBe(400);
     expect((await app.post("/", { rating: 5, body: "x" })).status).toBe(400);
-    expect((await app.post("/", { booking_id: b.id, rating: 5, body: "x", photos: ["1", "2", "3", "4"] })).status).toBe(400);
+    const link = "https://cdn.example.test/a.jpg";
+    expect((await app.post("/", { booking_id: b.id, rating: 5, body: "x", photos: [link, link, link, link] })).status).toBe(400);
+    expect((await app.post("/", { booking_id: b.id, rating: 5, body: "x", photos: ["javascript:alert(1)"] })).status).toBe(400);
   });
 
   it("needs a signed-in guest who exists in our users table", async () => {
