@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "declaration": false, "noEmit": false },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "public",
+    "test",
+    "**/*.test.ts",
+    "vitest.config.ts",
+    "vitest.db.config.ts",
+    "drizzle.config.ts"
+  ]
+}
