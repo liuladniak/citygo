@@ -32,6 +32,7 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 - Skip: styling, thin wrappers around libraries, and one-off scripts.
 - Add the tests in the same PR as the feature and run them before opening the PR.
 - Tools: `vitest` in `client/` (`npm run test:run`), `vitest` in `server/` (`npm test`). The dashboard has no test runner yet.
+- Server database tests: `cd server && npm run test:db` runs `*.db.test.ts` against a throwaway local Postgres built from `db/drizzle/schema.ts` (no Supabase needed). Use them for routes that read or write money, bookings or other data; helpers are in `server/test/`.
 
 ## Run locally
 - client: `cd client && npm run dev`
@@ -64,4 +65,4 @@ Keep tests few and high-value. Do not aim for coverage numbers.
 
 ## Roadmap
 - Milo chat: guided FAQ chips first, then a rate-limited AI fallback, then a human handoff (Socket.IO + Telegram) with recorded transcripts.
-- Finish the TS and Drizzle migration of server routes.
+- Finish the TS and Drizzle migration of server routes. Target layout: one folder per feature in `server/modules/<name>/` (`*.routes.ts` wires `validate()` and a controller, `*.controller.ts` stays thin, `*.service.ts` holds the logic and Drizzle queries, `*.schemas.ts` holds the zod schemas). Errors are thrown as `HttpError` (`lib/errors.ts`) and answered by `middleware/errorHandler.ts`. `modules/payment/` is the first finished example; migrate the other routes the same way and delete the old `routes/` and `controllers/` files as they go.

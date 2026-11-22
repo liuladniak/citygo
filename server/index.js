@@ -19,7 +19,7 @@ import bookingRoutes from "./routes/bookingRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
-import paymentRoutes from "./routes/payment.js";
+import paymentRoutes from "./modules/payment/payment.routes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
