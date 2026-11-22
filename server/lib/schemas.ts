@@ -6,7 +6,7 @@ import { normalizeTourDate } from "./tourDate.js";
 // Control characters except tab and newline; they have no place in names or messages.
 const CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
-const clean = (value: string) => value.normalize("NFC").replace(CONTROL_CHARS, "").trim();
+export const clean = (value: string) => value.normalize("NFC").replace(CONTROL_CHARS, "").trim();
 
 /** Plain text, cleaned and length-limited. Never rendered as HTML anywhere. */
 export const text = (max: number, min = 0) =>

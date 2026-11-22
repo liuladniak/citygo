@@ -6,10 +6,12 @@ type Options = {
   /** Pretend the request is signed in with this role. Leave out for a public route. */
   role?: string | null;
   mountAt?: string;
+  /** Sent with every request, for example an Authorization header. */
+  headers?: Record<string, string>;
 };
 
 /** Mounts one router the way index.js does, with a fake sign-in, and returns a tiny client. */
-export async function startApp(router: Router, { role, mountAt = "/" }: Options = {}) {
+export async function startApp(router: Router, { role, mountAt = "/", headers = {} }: Options = {}) {
   const app = express();
   app.use(express.json());
   app.use((req, _res, next) => {
@@ -29,7 +31,7 @@ export async function startApp(router: Router, { role, mountAt = "/" }: Options 
   const call = async (method: string, path: string, body?: unknown) => {
     const res = await fetch(base + path, {
       method,
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...headers },
       body: body === undefined ? undefined : JSON.stringify(body),
     });
     const text = await res.text();
