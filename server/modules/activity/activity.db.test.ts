@@ -3,15 +3,11 @@ import { startApp } from "../../test/app.js";
 import { db, resetDb } from "../../test/db.js";
 import { makeBooking, makeTour } from "../../test/fixtures.js";
 import { bookingActivityLog, tourActivityLog } from "../../db/drizzle/schema.js";
-import { knex } from "../../db/knex.js";
-import activity from "../../routes/activityRoutes.js";
+import activity from "./activity.routes.js";
 
 let app: Awaited<ReturnType<typeof startApp>>;
 beforeAll(async () => (app = await startApp(activity)));
-afterAll(async () => {
-  await app.close();
-  await knex.destroy();
-});
+afterAll(() => app.close());
 beforeEach(resetDb);
 
 const at = (minute: number) => `2026-11-20 10:${String(minute).padStart(2, "0")}:00`;

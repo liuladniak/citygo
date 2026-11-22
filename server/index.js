@@ -11,7 +11,7 @@ import { promClient, metricsMiddleware } from "./metrics.js";
 
 import { requireAuth, authenticateToken } from "./middleware/auth.js";
 import contactRoutes from "./routes/contactRoutes.js";
-import activityRoutes from "./routes/activityRoutes.js";
+import activityRoutes from "./modules/activity/activity.routes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
 import authRoutes from "./routes/auth.js";
