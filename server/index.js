@@ -37,6 +37,7 @@ import rateLimit from "express-rate-limit";
 
 import generateAutoTasks from "./jobs/autoTaskGenerator.js";
 import { sendReminders } from "./jobs/reminderJob.js";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 // One proxy hop (Nginx Proxy Manager) sits in front of the API, so req.ip and the
@@ -144,9 +145,8 @@ cron.schedule("* * * * *", () => {
 
 generateAutoTasks();
 
-app.use((req, res) => {
-  res.status(404).send("Route not found");
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
