@@ -8,5 +8,6 @@ const config = knexConfig[env.NODE_ENV === "test" ? "development" : env.NODE_ENV
 
 export const knex = initKnex({
   ...config,
+  debug: env.NODE_ENV === "test" ? false : config.debug,
   pool: { min: 0, max: env.DB_POOL_MAX },
 });
