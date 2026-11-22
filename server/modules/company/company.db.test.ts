@@ -2,14 +2,16 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { startApp } from "../../test/app.js";
 import { db, resetDb } from "../../test/db.js";
 import { companySettings } from "../../db/drizzle/schema.js";
-import { knex } from "../../db/knex.js";
-import company from "../../routes/companyRoutes.js";
+import company from "./company.routes.js";
 
 let app: Awaited<ReturnType<typeof startApp>>;
-beforeAll(async () => (app = await startApp(company)));
+let guide: typeof app;
+beforeAll(async () => {
+  app = await startApp(company, { role: "manager" });
+  guide = await startApp(company, { role: "guide" });
+});
 afterAll(async () => {
-  await app.close();
-  await knex.destroy();
+  await Promise.all([app.close(), guide.close()]);
 });
 beforeEach(async () => {
   await resetDb();
@@ -63,5 +65,23 @@ describe("availability", () => {
     expect((await app.post("/availability/recurring", {})).status).toBe(400);
     const list = await app.get("/availability");
     expect(list.body.recurring).toMatchObject([{ day_of_week: 0, reason: "Sunday off" }]);
+  });
+});
+
+describe("permissions", () => {
+  it("lets any signed-in role read, but only managers change settings and availability", async () => {
+    expect((await guide.get("/settings")).status).toBe(200);
+    expect((await guide.get("/availability")).status).toBe(200);
+    expect((await guide.patch("/settings", { city: "Ankara" })).status).toBe(403);
+    expect((await guide.post("/availability/dates", { date: "2026-12-25" })).status).toBe(403);
+    expect((await guide.delete("/availability/recurring/1")).status).toBe(403);
+    expect((await app.get("/settings")).body.city).toBeNull();
+  });
+
+  it("rejects bad input", async () => {
+    expect((await app.patch("/settings", { timezone: "Mars/Base" })).status).toBe(400);
+    expect((await app.patch("/settings", { email: "nope" })).status).toBe(400);
+    expect((await app.post("/availability/dates", { date: "2026-02-30" })).status).toBe(400);
+    expect((await app.post("/availability/recurring", { day_of_week: 9 })).status).toBe(400);
   });
 });

@@ -17,7 +17,7 @@ import articleRoutes from "./routes/articleRoutes.js";
 import authRoutes from "./routes/auth.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
-import companyRoutes from "./routes/companyRoutes.js";
+import companyRoutes from "./modules/company/company.routes.js";
 import employeeRoutes from "./routes/employeeRoutes.js";
 import paymentRoutes from "./modules/payment/payment.routes.js";
 import taskRoutes from "./routes/taskRoutes.js";
