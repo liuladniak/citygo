@@ -1,3 +1,5 @@
+// The VPS runs in UTC; tests must too, so timestamps match production.
+process.env.TZ = "UTC";
 // Dummy values so route modules that read env at import time can load in database tests.
 process.env.STRIPE_SECRET_KEY ??= "sk_test_dummy";
 process.env.ALLOWED_ORIGINS ??= "http://localhost:5173";
