@@ -1,8 +1,6 @@
 import { env } from "./config/env.js";
 
 import path from "path";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
 
 import cors from "cors";
 import cron from "node-cron";
@@ -44,8 +42,6 @@ const app = express();
 // rate limiters see the real visitor IP from X-Forwarded-For.
 app.set("trust proxy", 1);
 const PORT = env.PORT;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const staticFilesPath = path.resolve("public");
 const allowedOrigins = env.ALLOWED_ORIGINS;
 
@@ -78,7 +74,7 @@ const miloLimiter = rateLimit({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(staticFilesPath));
 app.use(metricsMiddleware);
 app.use("/api/ai/chat", miloLimiter);
 
