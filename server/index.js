@@ -14,7 +14,7 @@ import contactRoutes from "./routes/contactRoutes.js";
 import activityRoutes from "./routes/activityRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import articleRoutes from "./routes/articleRoutes.js";
-import authRoutes from "./routes/auth.js";
+import profileRoutes from "./modules/profile/profile.routes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
@@ -85,7 +85,7 @@ app.use(express.static(staticFilesPath));
 app.use(metricsMiddleware);
 app.use("/api/ai/chat", miloLimiter);
 
-app.use("/auth", authRoutes);
+app.use("/auth", profileRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/client", clientRoutes);
 app.use("/api/tours", tourRoutes);
