@@ -5,18 +5,20 @@ import { errorHandler, notFoundHandler } from "../middleware/errorHandler.js";
 type Options = {
   /** Pretend the request is signed in with this role. Leave out for a public route. */
   role?: string | null;
+  /** Email of the pretend signed-in user, for routes that match it to an employee. */
+  email?: string;
   mountAt?: string;
   /** Sent with every request, for example an Authorization header. */
   headers?: Record<string, string>;
 };
 
 /** Mounts one router the way index.js does, with a fake sign-in, and returns a tiny client. */
-export async function startApp(router: Router, { role, mountAt = "/", headers = {} }: Options = {}) {
+export async function startApp(router: Router, { role, email, mountAt = "/", headers = {} }: Options = {}) {
   const app = express();
   app.use(express.json());
   app.use((req, _res, next) => {
     if (role !== undefined) {
-      Object.assign(req, { user: { id: "00000000-0000-0000-0000-000000000001" }, role });
+      Object.assign(req, { user: { id: "00000000-0000-0000-0000-000000000001", email }, role });
     }
     next();
   });
