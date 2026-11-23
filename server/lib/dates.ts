@@ -7,3 +7,10 @@ export function toIsoTimestamp(value: string | null): string | null {
   if (value === null) return null;
   return new Date(`${value.replace(" ", "T")}Z`).toISOString();
 }
+
+/** The day `n` days after a YYYY-MM-DD day, as YYYY-MM-DD. */
+export function addDaysToDay(day: string, n: number): string {
+  const d = new Date(`${day}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
