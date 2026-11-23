@@ -20,7 +20,7 @@ import guestRoutes from "./modules/guest/guest.routes.js";
 import companyRoutes from "./modules/company/company.routes.js";
 import employeeRoutes from "./modules/employees/employees.routes.js";
 import paymentRoutes from "./modules/payment/payment.routes.js";
-import taskRoutes from "./routes/taskRoutes.js";
+import taskRoutes from "./modules/tasks/tasks.routes.js";
 import tourRoutes from "./routes/tourRoutes.js";
 import webhook from "./routes/webhook.js";
 import reviewRoutes from "./modules/reviews/reviews.routes.js";

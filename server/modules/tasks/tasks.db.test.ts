@@ -4,8 +4,7 @@ import { startApp } from "../../test/app.js";
 import { db, resetDb } from "../../test/db.js";
 import { makeComment, makeEmployee, makeTask, makeTour } from "../../test/fixtures.js";
 import { bookingAssignments, bookingPayments, bookings, taskComments, tasks } from "../../db/drizzle/schema.js";
-import { knex } from "../../db/knex.js";
-import taskRoutes from "../../routes/taskRoutes.js";
+import taskRoutes from "./tasks.routes.js";
 
 let manager: Awaited<ReturnType<typeof startApp>>;
 let guide: Awaited<ReturnType<typeof startApp>>;
@@ -18,7 +17,6 @@ beforeAll(async () => {
 });
 afterAll(async () => {
   await Promise.all([manager.close(), guide.close()]);
-  await knex.destroy();
 });
 beforeEach(async () => {
   await resetDb();
@@ -222,5 +220,43 @@ describe("bulk close", () => {
     expect((await manager.post("/bulk-close", { ids: Array.from({ length: 201 }, (_, i) => i + 1), action: "done" })).status).toBe(400);
     expect((await manager.post("/bulk-close", { ids: [1], action: "explode" })).status).toBe(400);
     expect((await manager.post("/bulk-close/preview", {})).status).toBe(400);
+  });
+});
+
+describe("who did it, and what is allowed", () => {
+  it("records the signed-in person, not whoever the request claims", async () => {
+    const created = await manager.post("/", { title: "Spoof", created_by: worker.id });
+    expect(created.body.created_by).toBe(boss.id);
+
+    const t = await makeTask();
+    const done = await manager.patch(`/${t.id}`, { status: "done", completed_by: worker.id });
+    expect(done.body.completed_by).toBe(boss.id);
+    const reopened = await manager.patch(`/${t.id}`, { status: "open" });
+    expect(reopened.body.completed_by).toBeNull();
+
+    const comment = await manager.post(`/${t.id}/comments`, { content: "Hi", author_id: worker.id });
+    expect(comment.body.author_id).toBe(boss.id);
+  });
+
+  it("cannot dismiss through the single-task update, which skips the manager rule", async () => {
+    const t = await makeTask();
+    expect((await guide.patch(`/${t.id}`, { status: "dismissed" })).status).toBe(400);
+  });
+
+  it("takes ids as text from select boxes and blank as none", async () => {
+    const t = await makeTask({ assignedTo: worker.id });
+    const res = await manager.patch(`/${t.id}`, { assigned_to: "", due_date: "2026-12-05" });
+    expect(res.body).toMatchObject({ assigned_to: null, assignee_name: null, due_date: "2026-12-05T00:00:00.000Z" });
+    expect((await manager.patch(`/${t.id}`, { assigned_to: String(boss.id) })).body.assigned_to).toBe(boss.id);
+  });
+
+  it("rejects bad input and unknown tasks", async () => {
+    const t = await makeTask();
+    expect((await manager.post("/", { title: "x", priority: "whenever" })).status).toBe(400);
+    expect((await manager.post("/", { title: "x", due_date: "not a date" })).status).toBe(400);
+    expect((await manager.get("/abc")).status).toBe(400);
+    expect((await manager.get("/?assigned_to=abc")).status).toBe(400);
+    expect((await manager.post("/999999/comments", { content: "x" })).status).toBe(404);
+    expect((await manager.patch(`/${t.id}`, { title: "" })).status).toBe(400);
   });
 });

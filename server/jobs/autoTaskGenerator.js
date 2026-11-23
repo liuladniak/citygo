@@ -1,4 +1,5 @@
 import { knex } from "../db/knex.js";
+import { db } from "../db/index.js";
 import { autoTaskKind, findUnresolved } from "../lib/autoTaskConditions.js";
 
 
@@ -132,7 +133,7 @@ const generateAutoTasks = async () => {
       .whereIn("status", ["open", "in_progress"])
       .whereNull("archived_at");
 
-    const stillOpen = await findUnresolved(knex, openAuto);
+    const stillOpen = await findUnresolved(db, openAuto);
     const fixedIds = openAuto
       .filter((t) => autoTaskKind(t.title) && !stillOpen.has(t.id))
       .map((t) => t.id);
