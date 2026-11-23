@@ -122,3 +122,20 @@ export async function assignGuide(bookingId: number, guideId: number, overrides:
     .returning();
   return row;
 }
+
+import { tasks, taskComments } from "../db/drizzle/schema.js";
+
+let taskCount = 0;
+export async function makeTask(overrides: Partial<typeof tasks.$inferInsert> = {}) {
+  taskCount += 1;
+  const [row] = await db
+    .insert(tasks)
+    .values({ title: `Task ${taskCount}`, type: "general", priority: "normal", status: "open", ...overrides })
+    .returning();
+  return row;
+}
+
+export async function makeComment(taskId: number, content: string, authorId: number | null = null) {
+  const [row] = await db.insert(taskComments).values({ taskId, content, authorId }).returning();
+  return row;
+}
