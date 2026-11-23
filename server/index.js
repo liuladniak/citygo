@@ -106,7 +106,7 @@ app.get("/metrics", async (req, res) => {
   res.set("Content-Type", promClient.register.contentType);
   res.end(await promClient.register.metrics());
 });
-cron.schedule("0 * * * *", generateAutoTasks);
+cron.schedule("0 * * * *", () => generateAutoTasks());
 cron.schedule(
   "0 7 * * *",
   () => {

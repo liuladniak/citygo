@@ -19,3 +19,16 @@ export function nowInZone(timeZone: string = DEFAULT_TIMEZONE, at: Date = new Da
     time: `${get("hour")}:${get("minute")}:${get("second")}`,
   };
 }
+
+/** The real instant at which it is `date` `time` on the wall clock of the given timezone. */
+export function zonedToInstant(date: string, time: string, timeZone: string = DEFAULT_TIMEZONE): Date {
+  const wall = new Date(`${date}T${time.slice(0, 8).padEnd(8, ":00")}Z`).getTime();
+  const offsetAt = (instant: number) => {
+    const { date: d, time: t } = nowInZone(timeZone, new Date(instant));
+    return new Date(`${d}T${t}Z`).getTime() - instant;
+  };
+  // Twice, because the offset itself can change (daylight saving) between the guess and the answer.
+  let instant = wall - offsetAt(wall);
+  instant = wall - offsetAt(instant);
+  return new Date(instant);
+}
