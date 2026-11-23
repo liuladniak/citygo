@@ -39,26 +39,9 @@ export function unresolvedReason(kind: string | null, booking: BookingFacts | un
   }
 }
 
-type TaskLike = { id: number; title: string; booking_id: number | null; is_auto_generated: boolean | null };
-
-/** For auto tasks: task id to the reason the work is not done yet. Resolved tasks are absent. */
-export async function findUnresolved(executor: Pick<typeof db, "select">, tasks: TaskLike[]) {
-  const result = new Map<number, string>();
-  const auto = tasks.filter((t) => t.is_auto_generated && t.booking_id && autoTaskKind(t.title));
-  if (auto.length === 0) return result;
-
-  const bookingIds = [...new Set(auto.map((t) => t.booking_id as number))];
-  const [rows, paid, guides] = await Promise.all([
-    executor
-      .select({
-        id: bookings.id,
-        status: bookings.status,
-        booking_reference: bookings.bookingReference,
-        total_price: bookings.totalPrice,
-        meeting_point: bookings.meetingPoint,
-      })
-      .from(bookings)
-      .where(inArray(bookings.id, bookingIds)),
+/** Paid amount and active guide count for each booking id, two queries for the whole list. */
+export async function loadPaidAndGuides(executor: Pick<typeof db, "select">, bookingIds: number[]) {
+  const [paid, guides] = await Promise.all([
     executor
       .select({ bookingId: bookingPayments.bookingId, total: sql<string>`sum(${bookingPayments.amount})` })
       .from(bookingPayments)
@@ -70,12 +53,35 @@ export async function findUnresolved(executor: Pick<typeof db, "select">, tasks:
       .where(and(inArray(bookingAssignments.bookingId, bookingIds), eq(bookingAssignments.status, "active")))
       .groupBy(bookingAssignments.bookingId),
   ]);
-
   const paidBy = new Map(paid.map((p) => [p.bookingId, p.total]));
   const guidesBy = new Map(guides.map((g) => [g.bookingId, g.total]));
-  const facts = new Map<number, BookingFacts>(
-    rows.map(({ id, ...b }) => [id, { ...b, amount_paid: paidBy.get(id) ?? "0", guide_count: guidesBy.get(id) ?? 0 }]),
-  );
+  return (id: number) => ({ amount_paid: paidBy.get(id) ?? "0", guide_count: guidesBy.get(id) ?? 0 });
+}
+
+type TaskLike = { id: number; title: string; booking_id: number | null; is_auto_generated: boolean | null };
+
+/** For auto tasks: task id to the reason the work is not done yet. Resolved tasks are absent. */
+export async function findUnresolved(executor: Pick<typeof db, "select">, tasks: TaskLike[]) {
+  const result = new Map<number, string>();
+  const auto = tasks.filter((t) => t.is_auto_generated && t.booking_id && autoTaskKind(t.title));
+  if (auto.length === 0) return result;
+
+  const bookingIds = [...new Set(auto.map((t) => t.booking_id as number))];
+  const [rows, countsFor] = await Promise.all([
+    executor
+      .select({
+        id: bookings.id,
+        status: bookings.status,
+        booking_reference: bookings.bookingReference,
+        total_price: bookings.totalPrice,
+        meeting_point: bookings.meetingPoint,
+      })
+      .from(bookings)
+      .where(inArray(bookings.id, bookingIds)),
+    loadPaidAndGuides(executor, bookingIds),
+  ]);
+
+  const facts = new Map<number, BookingFacts>(rows.map(({ id, ...b }) => [id, { ...b, ...countsFor(id) }]));
 
   for (const t of auto) {
     const reason = unresolvedReason(autoTaskKind(t.title), facts.get(t.booking_id as number));
