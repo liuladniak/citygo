@@ -43,6 +43,24 @@ export async function requireAuth(req, res, next) {
   next();
 }
 
+// For public pages that show a bit more to signed-in staff (draft tours, say).
+// A missing or bad token simply means "visitor"; it is never an error here.
+export async function optionalAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith("Bearer ")) {
+    try {
+      const auth = await authenticateToken(authHeader.split(" ")[1]);
+      if (auth) {
+        req.user = auth.user;
+        req.role = auth.role;
+      }
+    } catch (err) {
+      console.error("optionalAuth failed:", err.message);
+    }
+  }
+  next();
+}
+
 export function requireRole(...roles) {
   return (req, res, next) => {
     if (!req.role || !roles.includes(req.role)) {
