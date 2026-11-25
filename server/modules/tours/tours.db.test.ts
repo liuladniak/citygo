@@ -7,13 +7,13 @@ import {
   agencyRecurringUnavailabilities, agencyUnavailableDates, bookings, companySettings, highlights, images,
   reviews, tourActivityLog, tourItineraryCoordinates, tourRecurringUnavailabilities, tourTimeSlots, tourUnavailableDates, tours,
 } from "../../db/drizzle/schema.js";
-import { knex } from "../../db/knex.js";
-import tourRoutes from "../../routes/tourRoutes.js";
+import tourRoutes from "./tours.routes.js";
 
 // Sign-in is Supabase's job; roles come from the test app.
 vi.mock("../../middleware/auth.js", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../../middleware/auth.js")>()),
   requireAuth: (_req: unknown, _res: unknown, next: () => void) => next(),
+  optionalAuth: (_req: unknown, _res: unknown, next: () => void) => next(),
 }));
 
 let visitor: Awaited<ReturnType<typeof startApp>>;
@@ -26,7 +26,6 @@ beforeAll(async () => {
 });
 afterAll(async () => {
   await Promise.all([visitor.close(), manager.close(), guide.close()]);
-  await knex.destroy();
 });
 beforeEach(resetDb);
 
@@ -267,5 +266,29 @@ describe("blocking dates for one tour", () => {
     expect((await manager.delete(`/blk/recurring-unavailabilities/${w.body.id}`)).status).toBe(200);
     expect((await guide.post("/blk/unavailable-dates", { date: "2026-12-26" })).status).toBe(403);
     expect((await manager.post("/missing/unavailable-dates", { date: "2026-12-26" })).status).toBe(404);
+  });
+});
+
+describe("rules added in the migration", () => {
+  it("hides draft tours from visitors everywhere, but not from staff", async () => {
+    const draft = await tour({ status: "draft" });
+    expect((await visitor.get(`/${draft.slug}`)).status).toBe(404);
+    expect((await visitor.get("/?status=draft")).body.total).toBe(0);
+    expect((await visitor.get(`/specific-tours?ids=${draft.id}`)).body).toEqual([]);
+    expect((await manager.get(`/${draft.slug}`)).status).toBe(200);
+  });
+
+  it("rejects bad ids and caps the page size", async () => {
+    expect((await visitor.get("/specific-tours?ids=abc")).status).toBe(400);
+    await tour();
+    expect((await visitor.get("/?limit=9999")).body.totalPages).toBe(1);
+  });
+
+  it("only removes a blocked date that belongs to the tour in the URL", async () => {
+    const a = await tour();
+    const b = await tour();
+    const [row] = await db.insert(tourUnavailableDates).values({ tourId: a.id, unavailableDate: "2026-12-24" }).returning();
+    await manager.delete(`/${b.slug}/unavailable-dates/${row.id}`);
+    expect(await db.select().from(tourUnavailableDates).where(eq(tourUnavailableDates.tourId, a.id))).toHaveLength(1);
   });
 });
