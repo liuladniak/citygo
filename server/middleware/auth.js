@@ -69,3 +69,11 @@ export function requireRole(...roles) {
     next();
   };
 }
+
+// Any signed-in person with a staff role. A guest with a Supabase account has no role.
+export function requireStaff(req, res, next) {
+  if (!req.role) {
+    return res.status(403).json({ error: "Insufficient permissions" });
+  }
+  next();
+}
