@@ -9,13 +9,14 @@ import express from "express";
 import morgan from "morgan";
 import { promClient, metricsMiddleware } from "./metrics.js";
 
-import { requireAuth, authenticateToken } from "./middleware/auth.js";
+import { requireAuth, requireStaff, authenticateToken } from "./middleware/auth.js";
 import contactRoutes from "./modules/contact/contact.routes.js";
 import activityRoutes from "./modules/activity/activity.routes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import articleRoutes from "./modules/articles/articles.routes.js";
 import profileRoutes from "./modules/profile/profile.routes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import ownBookingRoutes from "./modules/bookings/bookings.routes.js";
 import guestRoutes from "./modules/guest/guest.routes.js";
 import companyRoutes from "./modules/company/company.routes.js";
 import employeeRoutes from "./modules/employees/employees.routes.js";
@@ -89,7 +90,8 @@ app.use("/auth", profileRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/client", guestRoutes);
 app.use("/api/tours", tourRoutes);
-app.use("/api/bookings", requireAuth, bookingRoutes);
+// Guests may only read their own bookings; everything else here is staff-only.
+app.use("/api/bookings", requireAuth, ownBookingRoutes, requireStaff, bookingRoutes);
 app.use("/api/employees", requireAuth, employeeRoutes);
 app.use("/api/activity", requireAuth, activityRoutes);
 app.use("/api/tasks", requireAuth, taskRoutes);
