@@ -44,7 +44,7 @@ const Account = () => {
   const fetchBookings = async (userId, token) => {
     try {
       const response = await axios.get(
-        `${API_URL}/api/bookings?userId=${userId}`,
+        `${API_URL}/api/client/bookings`,
         {
           headers: { Authorization: "Bearer " + token },
         },
