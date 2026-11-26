@@ -21,7 +21,7 @@ import companyRoutes from "./modules/company/company.routes.js";
 import employeeRoutes from "./modules/employees/employees.routes.js";
 import paymentRoutes from "./modules/payment/payment.routes.js";
 import taskRoutes from "./modules/tasks/tasks.routes.js";
-import tourRoutes from "./routes/tourRoutes.js";
+import tourRoutes from "./modules/tours/tours.routes.js";
 import webhook from "./routes/webhook.js";
 import reviewRoutes from "./modules/reviews/reviews.routes.js";
 import miloRoutes, { deleteOldMiloMessages } from "./routes/miloRoutes.js";
