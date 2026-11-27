@@ -14,3 +14,12 @@ export function addDaysToDay(day: string, n: number): string {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 }
+
+/** The same day one month earlier, held to the end of a shorter month (31 Mar becomes 28 Feb). */
+export function sameDayLastMonth(day: string): string {
+  const [y, m, d] = day.split("-").map(Number);
+  const year = m === 1 ? y - 1 : y;
+  const month = m === 1 ? 12 : m - 1;
+  const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  return `${year}-${String(month).padStart(2, "0")}-${String(Math.min(d, lastDay)).padStart(2, "0")}`;
+}
