@@ -1,7 +1,8 @@
 import { and, asc, count, desc, eq, gte, inArray, lt, or, sql } from "drizzle-orm";
+import { companyTimezone } from "../../lib/companyTimezone.js";
 import { db } from "../../db/index.js";
-import { bookingAssignments, bookings, companySettings, employees, tours } from "../../db/drizzle/schema.js";
-import { DEFAULT_TIMEZONE, nowInZone } from "../../lib/clock.js";
+import { bookingAssignments, bookings, employees, tours } from "../../db/drizzle/schema.js";
+import { nowInZone } from "../../lib/clock.js";
 import { forbidden, notFound } from "../../lib/errors.js";
 import { isoTimestamps, snakeColumns } from "../../lib/rows.js";
 import { describeAvailability } from "./availability.js";
@@ -31,11 +32,6 @@ const isSelf = (row: { email: string | null; work_email: string | null }, viewer
   sameEmail(row.email, viewer.email) || sameEmail(row.work_email, viewer.email);
 
 const withIso = (row: Record<string, unknown>) => isoTimestamps(employees, row);
-
-async function companyTimezone() {
-  const [row] = await db.select({ timezone: companySettings.timezone }).from(companySettings).limit(1);
-  return row?.timezone || DEFAULT_TIMEZONE;
-}
 
 /** Everyone sees the short directory; managers get the whole record. */
 export async function listEmployees(viewer: Viewer) {
